@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const run = async () => {
-    const directoryPath = path.join(__dirname, 'build');
+    const directoryPath = path.join(__dirname, 'build/charts');
     const files = fs.readdirSync(directoryPath);
     files.forEach(function (file) {
         if(file.endsWith('.json')){
