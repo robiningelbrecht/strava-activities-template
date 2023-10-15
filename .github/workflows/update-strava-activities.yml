@@ -31,6 +31,7 @@ jobs:
           
           # Copy all files from template to this repo.
           rm -Rf config/* && mv -f strava-activities-template/config/* config/
+          rm -Rf migrations/* && mv -f strava-activities-template/migrations/* migrations/
           rm -Rf public/* & mv -f strava-activities-template/public/* public/
           rm -Rf src/* && mv -f strava-activities-template/src/* src/
           rm -Rf templates/* && mv -f strava-activities-template/templates/* templates/
@@ -60,6 +61,8 @@ jobs:
           echo STRAVA_CLIENT_SECRET=${{ secrets.STRAVA_CLIENT_SECRET }} >> .env
           echo STRAVA_REFRESH_TOKEN=${{ secrets.STRAVA_REFRESH_TOKEN }} >> .env
           echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
+          
+          ./vendor/bin/doctrine-migrations migrate --no-interaction
           
           bin/console app:strava:import-data
           bin/console app:strava:build-files
