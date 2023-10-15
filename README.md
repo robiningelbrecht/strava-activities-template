@@ -49,7 +49,7 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
       ![Workflow permissions](files/install/workflow-permissions.png)
 * The last thing you need to do is edit the `update-strava-activities.yml` file:
     * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/edit/master/.github/workflows/update-strava-activities.yml
-    * Uncomment line 3, 4 and 5 by removing the `#` character
+    * Uncomment line 2, 3, 4 and 5 by removing the `#` character
     * Scroll down to
     ```yml
     name: Commit and push changes
