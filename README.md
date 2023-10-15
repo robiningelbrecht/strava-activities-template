@@ -50,7 +50,7 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
     * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/edit/master/.github/workflows/update-strava-activities.yml
     * Then edit the `update-strava-activities.yml` file and scroll own to:
         ```yml
-        name: Import latest version of template
+        name: Commit and push changes
         run: |
           git config --global user.name 'YOUR_GITHUB_USERNAME'
           git config --global user.email 'YOUR_GITHUB_USERNAME@users.noreply.github.com'
