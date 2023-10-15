@@ -18,6 +18,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Import latest version of template
+        run: |
+          git remote add template https://github.com/robiningelbrecht/strava-activities-template
+          git fetch template
+          git merge --no-ff --no-commit template/master --allow-unrelated-histories
+          git reset HEAD README.md
+          git checkout README.md
+
       - name: Update strava activities
         run: |
           composer install --prefer-dist
