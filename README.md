@@ -23,8 +23,7 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
 
 * Make sure your logged in with your GitHub account
 * Start off by showing some ❤️ and give this repo a star
-* [Fork this repository](https://github.com/robiningelbrecht/strava-activities-template/fork)
-  (forking is fancy word for copying)
+* [Create a new repository](https://github.com/new?template_name=strava-activities-template&template_owner=robiningelbrecht) using this template
 * Navigate to your newly created repository `Actions secrets and variables` page (https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/settings/secrets/actions)
   Keep this page open, you will need to add several secrets here
 * Next, navigate to your [Strava API settings page](https://www.strava.com/settings/api).
