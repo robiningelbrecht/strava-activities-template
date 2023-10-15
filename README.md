@@ -77,10 +77,6 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
   Strava's API has a rate limit of 100 request per 15 minutes and a 1000 requests per day. We have to make sure
   this limit is not exceeded. See https://developers.strava.com/docs/rate-limits/. If you have more than 500 activities,
   you might run into the daily rate limit. If you do so, the app will import the remaining activities the next day(s).
-* Features still to add / finish
-    * Create fancy HTML version
-    * Display per activity weather data
-
 ## 💡Feature request?
 
 For any feedback, help or feature requests, please [open a new issue](https://github.com/robiningelbrecht/strava-activities-template/issues/new)
