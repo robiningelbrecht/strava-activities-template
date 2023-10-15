@@ -48,19 +48,13 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
       ![Workflow permissions](files/install/workflow-permissions.png)
 * The last thing you need to do configure the automated workflow.
   * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/edit/master/.github/workflows
-  * Create a new file called `update-strava-activities.yml` and copy over the contents from `update-strava-activities.ymy.dist`
-  * Edit the `update-strava-activities.yml` file:
-      * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/edit/master/.github/workflows/update-strava-activities.yml
-      * Scroll down to
+  * Create a new file called `update-strava-activities.yml` and copy over the contents from `update-strava-activities.yml.dist`
+  * Then edit the `update-strava-activities.yml` file and scroll own to:
       ```yml
-      name: Commit and push changes
+      name: Import latest version of template
       run: |
         git config --global user.name 'YOUR_GITHUB_USERNAME'
         git config --global user.email 'YOUR_GITHUB_USERNAME@users.noreply.github.com'
-        git add .
-        git status
-        git diff --staged --quiet || git commit -m"Updated strava activities"
-        git push
       ```
 
       * Replace `YOUR_GITHUB_USERNAME` with your own username

@@ -25,7 +25,6 @@ jobs:
           git remote add template https://github.com/robiningelbrecht/strava-activities-template
           git fetch template
           git merge template/master --allow-unrelated-histories
-          git diff --staged --quiet || git commit -m"Updated to latest template version"
 
       - name: Update strava activities
         run: |
