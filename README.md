@@ -46,9 +46,8 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
     * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/settings/actions
     * Scroll down to `Workflow permissions` and make sure `Read and write permissions` is checked
       ![Workflow permissions](files/install/workflow-permissions.png)
-* The last thing you need to do configure the automated workflow.
-    * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/edit/master/.github/workflows
-    * Create a new file called `update-strava-activities.yml` and copy over the contents from `update-strava-activities.yml.dist`
+* The last thing you need to do is edit the `update-strava-activities.yml` file:
+    * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/edit/master/.github/workflows/update-strava-activities.yml
     * Then edit the `update-strava-activities.yml` file and scroll own to:
         ```yml
         name: Import latest version of template

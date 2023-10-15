@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Update to latestest version of template
+      - name: Update to latest version of template
         run: |
           git clone https://github.com/robiningelbrecht/strava-activities-template.git
           
@@ -30,6 +30,9 @@ jobs:
           mv -f strava-activities-template/composer.json composer.json
           mv -f strava-activities-template/composer.lock composer.lock
           mv -f strava-activities-template/vercel.json vercel.json
+          
+          # Delete install files
+          rm -Rf files/install
           
           rm -Rf strava-activities-template
 
