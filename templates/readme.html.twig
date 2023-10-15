@@ -1,0 +1,189 @@
+{% autoescape false %}
+<p align="center">
+    <img src="public/strava.png"
+         alt="Strava">
+</p>
+
+Since I began cycling `{{ totals.getTotalDays() }} days` ago on `{{ totals.getStartDate().format('d-m-Y') }}`,
+I had `{{ totals.getTotalDaysOfCycling() }} cycling days`.<br />
+I recorded a total distance of `{{ totals.getDistance()|number_format(0, '.', ' ') }} km`
+(`{{ (totals.getDistance() / 40075)|number_format(2, '.', ' ') }}` trips around the world 🌍 and
+`{{ (totals.getDistance() / 384400)|number_format(3, '.', ' ') }}` trips to the moon 🌕),
+an elevation of `{{ totals.getElevation()|number_format(0, '.', ' ') }} m`
+(`{{ (totals.getElevation() / 8849)|number_format(1, '.', ' ') }}` times Mount Everest 🏔)
+and a total time of `{{ totals.getMovingTimeFormatted() }}` 🎉
+
+That's a daily average of `{{ totals.getDailyAverage()|number_format(0, '.', ' ') }} km`,
+a weekly average of `{{ totals.getWeeklyAverage()|number_format(0, '.', ' ') }} km` and a
+monthly average of `{{ totals.getMonthlyAverage()|number_format(0, '.', ' ') }} km` 🐣
+
+I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (totals.getCalories() / 270)|number_format(0, '.', ' ') }}` pizza slices 🍕
+
+---
+
+<kbd><a href="#weekly-distances">Weekly distances</a></kbd> |
+<kbd><a href="#activities">Activities</a></kbd> |
+<kbd><a href="#monthly-stats">Monthly stats</a></kbd> |
+<kbd><a href="#activity-heatmap">Activity heatmap</a></kbd> |
+<kbd><a href="#stats-per-bike">Stats per bike</a></kbd> |
+{% if powerOutputs is not empty %}
+<kbd><a href="#best-power-outputs-over-time">Power outputs</a></kbd> |
+{% endif %}
+<kbd><a href="#eddington-chart">Eddington</a></kbd> |
+{% if challenges is not empty %}
+<kbd><a href="#completed-challenges">Completed challenges</a></kbd>
+{% endif %}
+
+## Weekly distances
+
+<img src="build/chart.svg" alt="Weekly distances"/>
+
+## Activities
+
+{{ allActivities }}
+
+## Monthly stats
+
+<table>
+    <thead>
+    <tr>
+        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th># of rides</th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/distance.svg" width="30" alt="distance" title="distance"/></th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/activity-ride.svg" width="30" alt="Gear" title="Gear"/></th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/elevation.svg" width="30" alt="elevation" title="elevation"/></th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/time.svg" width="30" alt="time" title="time"/></th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/challenge2.svg" width="30" alt="completed challenges" title="completed challenges"/></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for statistic in monthlyStatistics.getRows() %}
+        <tr>
+            <td align="center">{{ statistic.month }}</td>
+            <td align="center">{{ statistic.numberOfRides }}</td>
+            <td align="center">{{ statistic.totalDistance|number_format(0, '.', ' ') }} <sup><sub>km</sub></sup></td>
+            <td>
+                <ul>
+                    {% for gear in statistic.gears %}
+                        <li><b>{{ gear.name ?: 'Other' }}</b>: {{ gear.distance }} <sup><sub>km</sub></sup></li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td align="center">{{ statistic.totalElevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></td>
+            <td align="center">{{ statistic.movingTime }}</td>
+            <td align="center">{{ statistic.challengesCompleted }}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td align="center" rowspan="3"><b>Totals</b></td>
+        <td align="center"><b>On Zwift</b></td>
+        <td align="center" colspan="2"><b>{{ monthlyStatistics.getTotalsForZwift().totalDistance|number_format(0, '.', ' ') }} <sup><sub>km</sub></sup></b></td>
+        <td align="center"><b>{{ monthlyStatistics.getTotalsForZwift().totalElevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></b></td>
+        <td align="center" colspan="2"><b>{{ monthlyStatistics.getTotalsForZwift().movingTime }}</b></td>
+    </tr>
+    <tr>
+        <td align="center"><b>Outside</b></td>
+        <td align="center" colspan="2"><b>{{ monthlyStatistics.getTotalsForOutsideBikeRides().totalDistance|number_format(0, '.', ' ') }} <sup><sub>km</sub></sup></b></td>
+        <td align="center"><b>{{ monthlyStatistics.getTotalsForOutsideBikeRides().totalElevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></b></td>
+        <td align="center" colspan="2"><b>{{ monthlyStatistics.getTotalsForOutsideBikeRides().movingTime }}</b></td>
+    </tr>
+    <tr>
+        <td align="center"><b>Total</b></td>
+        <td align="center" colspan="2"><b>{{ monthlyStatistics.getTotals().totalDistance|number_format(0, '.', ' ') }} <sup><sub>km</sub></sup></b></td>
+        <td align="center"><b>{{ monthlyStatistics.getTotals().totalElevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></b></td>
+        <td align="center" colspan="2"><b>{{ monthlyStatistics.getTotals().movingTime }}</b></td>
+    </tr>
+    </tbody>
+</table>
+
+## Activity heatmap
+
+<img src="build/chart-activities-heatmap.svg" alt="Heatmap"/>
+
+<img src="build/chart-weekday-stats.svg" alt="Weekly distances"/>
+
+## Stats per bike
+
+<table>
+    <thead>
+    <tr>
+        <th></th>
+        <th># of rides</th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/distance.svg" width="30" alt="distance" title="distance"/></th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/elevation.svg" width="30" alt="elevation" title="elevation"/></th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/time.svg" width="30" alt="time" title="time"/></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for statistic in bikeStatistics.getRows() %}
+        <tr>
+            <td align="center">{{ statistic.name }}</td>
+            <td align="center">{{ statistic.numberOfRides }}</td>
+            <td align="center">{{ statistic.distance|number_format(0, '.', ' ') }} <sup><sub>km</sub></sup></td>
+            <td align="center">{{ statistic.elevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></td>
+            <td align="center">{{ statistic.movingTime }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% if powerOutputs is not empty %}
+## Best power outputs over time
+
+<table>
+    <tr>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/time.svg" width="30" alt="time" title="time"/></th>
+        <th align="center" colspan="2"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/average-watt.svg" width="30" alt="average watts" title="average watts"/></th>
+        <th></th>
+    </tr>
+    {% for powerOutput in powerOutputs %}
+        {% set activity = powerOutput.getActivity() %}
+        <tr>
+            <td align="center">{{ powerOutput.getTime() }}</td>
+            <td align="center">{{ powerOutput.getPower() }} <sup><sub>w</sub></sup></td>
+            <td align="center">{{ powerOutput.getRelativePower() }} <sup><sub>w/kg</sub></sup></td>
+            <td>
+                <img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/{{ activity.getType().getIcon() }}.svg" width="12" alt="virtual ride" title="virtual ride"/>
+                <a href="{{ activity.getUrl() }}">
+                    {{ activity.getName()|length > 70 ? activity.getName()|slice(0, 67) ~ '...' : activity.getName() }}
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+## Eddington chart
+
+> The Eddington number in the context of cycling is defined as the maximum number E such that the cyclist has cycled at least E km on at least E days.
+>
+> For example, an Eddington number of 70 would imply that the cyclist has cycled at least 70 km in a day on at least 70 occasions.
+> Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably) require more than five new long-distance rides, since any rides shorter than 75 km will no longer be included in the reckoning.
+
+<img src="build/chart-activities-eddington.svg" alt="Eddington"/>
+
+<table align="center">
+    <tr>
+        <th align="center">Eddington</th>
+    {% for eddingtonNumber,daysNeeded in eddington.getRidesToCompleteForFutureNumbers()|slice(0, 11, true) %}
+        <th align="center">{{ eddingtonNumber }} <sup><sub>km</sub></sup></th>
+    {% endfor %}
+    </tr>
+    <tr>
+        <td align="center">Days needed</td>
+    {% for eddingtonNumber,daysNeeded in eddington.getRidesToCompleteForFutureNumbers()|slice(0, 11, true) %}
+        <td align="center">{{ daysNeeded }}</td>
+    {% endfor %}
+    </tr>
+</table>
+
+{% if challenges is not empty %}
+## Completed challenges
+
+{% for challenge in challenges %}<a href="{{ challenge.getUrl() }}"><img src="{{ challenge.getRemoteImagePath() }}" alt="{{ challenge.getName()|replace({'"':'\''}) }}" title="{{ challenge.getName()|replace({'"':'\''}) }}" width="75" /></a>{% endfor %}
+{% endif %}
+
+## Want to have these statistics for yourself?
+
+Follow [this tutorial](INSTALL.md)
+{% endautoescape %}

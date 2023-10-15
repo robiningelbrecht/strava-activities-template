@@ -1,0 +1,76 @@
+{% extends "html/base.html.twig" %}
+
+{% block breadcrumbs %}
+    <li>
+        <div class="flex items-center">
+            <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+            <a href="#" data-router-navigate="eddington.html" class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white">Eddington</a>
+        </div>
+    </li>
+{% endblock %}
+{% block content %}
+{% autoescape false %}
+    <!-- EDDINGTON -->
+    <div class="grid grid-cols-1 mb-4">
+        <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+            <blockquote class="p-4 my-4 border-l-4 border-gray-300 bg-gray-50 dark:border-gray-500 dark:bg-gray-800">
+                <p class="italic leading-relaxed text-gray-600 dark:text-white mb-4">The Eddington number in the context of cycling is defined as the maximum number E such that the cyclist has cycled at least E km on at least E days.</p>
+                <p class="italic leading-relaxed text-gray-600 dark:text-white">For example, an Eddington number of 70 would imply that the cyclist has cycled at least 70 km in a day on at least 70 occasions.
+                    Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably)
+                    require more than five new long-distance rides, since any rides shorter than 75 km will no longer be included in the reckoning.</p>
+            </blockquote>
+            <div class="h-64" data-echarts-options='{{ eddingtonChart }}'></div>
+            <div class="mt-10">
+                <h3 class="font-bold mb-2">Days needed</h3>
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            {% for eddingtonNumber,daysNeeded in eddington.getRidesToCompleteForFutureNumbers() %}
+                                <th scope="col" class="px-6 py-3">
+                                    {{ eddingtonNumber }}<span class="text-xs">km</span>
+                                </th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            {% for eddingtonNumber,daysNeeded in eddington.getRidesToCompleteForFutureNumbers() %}
+                                <td class="px-6 py-2">
+                                    {{ daysNeeded }}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mt-10">
+                <h3 class="font-bold mb-2">History</h3>
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            {% for eddingtonNumber,dateAchieved in eddington.getEddingtonHistory() %}
+                                <th scope="col" class="px-6 py-3">
+                                    {{ eddingtonNumber }}<span class="text-xs">km</span>
+                                </th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            {% for eddingtonNumber,dateAchieved in eddington.getEddingtonHistory() %}
+                                <td class="px-6 py-2 truncate">
+                                    {{ dateAchieved.format('d-m-Y') }}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endautoescape %}
+{% endblock %}

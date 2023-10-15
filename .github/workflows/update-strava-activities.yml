@@ -1,0 +1,92 @@
+name: Update strava activities
+on:
+#  workflow_dispatch:
+#  schedule:
+#    - cron:  '30 18 * * *'
+jobs:
+  update-strava-history:
+    name: Update strava activities
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/marketplace/actions/setup-php-action
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      # https://github.com/marketplace/actions/checkout
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Update strava activities
+        run: |
+          composer install --prefer-dist
+          
+          touch .env
+
+          echo ENVIRONMENT=dev >> .env
+          echo DISPLAY_ERROR_DETAILS=1 >> .env
+          echo LOG_ERRORS=0 >> .env
+          echo LOG_ERROR_DETAILS=0 >> .env
+          echo STRAVA_CLIENT_ID=${{ secrets.STRAVA_CLIENT_ID }} >> .env
+          echo STRAVA_CLIENT_SECRET=${{ secrets.STRAVA_CLIENT_SECRET }} >> .env
+          echo STRAVA_REFRESH_TOKEN=${{ secrets.STRAVA_REFRESH_TOKEN }} >> .env
+          echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
+          
+          bin/console app:strava:import-data
+          bin/console app:strava:build-files
+      - name: Generate weekly chart
+        id: chart
+        uses: robiningelbrecht/apache-echarts-action@v1.1.0
+        with:
+          width: 1000
+          height: 300
+          pass-options-as: file
+          chart-option: 'build/chart.json'
+      - name: Generate weekday chart
+        id: chart_weekday
+        uses: robiningelbrecht/apache-echarts-action@v1.1.0
+        with:
+          width: 1000
+          height: 300
+          pass-options-as: file
+          chart-option: 'build/chart-weekday-stats.json'
+      - name: Generate yearly heatmap chart
+        id: chart_activities_heatmap
+        uses: robiningelbrecht/apache-echarts-action@v1.1.0
+        with:
+          width: 1000
+          height: 180
+          pass-options-as: file
+          chart-option: 'build/chart-activities-heatmap.json'
+      - name: Generate eddington chart
+        id: chart_activities_eddington
+        uses: robiningelbrecht/apache-echarts-action@v1.1.0
+        with:
+          width: 1000
+          height: 300
+          pass-options-as: file
+          chart-option: 'build/chart-activities-eddington.json'
+      - name: Save generated charts
+        run: |
+          cat <<EOF > build/chart.svg
+          ${{ steps.chart.outputs.svg }}
+          EOF
+          cat <<EOF > build/chart-weekday-stats.svg
+          ${{ steps.chart_weekday.outputs.svg }}
+          EOF
+          cat <<EOF > build/chart-activities-heatmap.svg
+          ${{ steps.chart_activities_heatmap.outputs.svg }}
+          EOF
+          cat <<EOF > build/chart-activities-eddington.svg
+          ${{ steps.chart_activities_eddington.outputs.svg }}
+          EOF
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'YOUR_GITHUB_USERNAME'
+          git config --global user.email 'YOUR_GITHUB_USERNAME@users.noreply.github.com'
+          git add .
+          git status
+          git diff --staged --quiet || git commit -m"Updated strava activities"
+          git push
+          
