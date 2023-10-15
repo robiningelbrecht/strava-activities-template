@@ -27,7 +27,7 @@ final readonly class BuildWeeklyDistanceChartCommandHandler implements CommandHa
 
         $allActivities = $this->stravaActivityRepository->findAll();
         $this->filesystem->write(
-            'build/chart.json',
+            'build/chart-1000-300.json',
             Json::encode(
                 WeeklyDistanceChartBuilder::fromActivities(
                     activities: $allActivities,

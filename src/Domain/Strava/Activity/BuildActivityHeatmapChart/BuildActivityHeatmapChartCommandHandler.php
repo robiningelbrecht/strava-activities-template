@@ -26,7 +26,7 @@ final readonly class BuildActivityHeatmapChartCommandHandler implements CommandH
         assert($command instanceof BuildActivityHeatmapChart);
 
         $this->filesystem->write(
-            'build/chart-activities-heatmap.json',
+            'build/chart-activities-heatmap-1000-180.json',
             Json::encode(
                 ActivityHeatmapChartBuilder::fromActivities(
                     activities: $this->stravaActivityRepository->findAll(),
