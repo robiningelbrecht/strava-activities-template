@@ -25,7 +25,7 @@ final readonly class BuildEddingtonChartCommandHandler implements CommandHandler
         $eddington = Eddington::fromActivities($this->stravaActivityRepository->findAll());
 
         $this->filesystem->write(
-            'build/chart-activities-eddington_1000_300.json',
+            'build/charts/chart-activities-eddington_1000_300.json',
             Json::encode(
                 EddingtonChartBuilder::fromEddington($eddington)->build(),
                 JSON_PRETTY_PRINT

@@ -23,7 +23,7 @@ final readonly class BuildWeekdayStatsChartCommandHandler implements CommandHand
         assert($command instanceof BuildWeekdayStatsChart);
 
         $this->filesystem->write(
-            'build/chart-weekday-stats_1000_300.json',
+            'build/charts/chart-weekday-stats_1000_300.json',
             Json::encode(
                 WeekdayStatsChartsBuilder::fromActivities(
                     $this->stravaActivityRepository->findAll(),
