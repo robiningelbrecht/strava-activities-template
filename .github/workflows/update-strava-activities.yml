@@ -14,6 +14,12 @@ jobs:
         with:
           php-version: '8.2'
 
+      # https://github.com/marketplace/actions/setup-node-js-environment
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
       # https://github.com/marketplace/actions/checkout
       - name: Checkout
         uses: actions/checkout@v4
@@ -53,52 +59,11 @@ jobs:
           
           bin/console app:strava:import-data
           bin/console app:strava:build-files
-      - name: Generate weekly chart
-        id: chart
-        uses: robiningelbrecht/apache-echarts-action@v1.1.0
-        with:
-          width: 1000
-          height: 300
-          pass-options-as: file
-          chart-option: 'build/chart.json'
-      - name: Generate weekday chart
-        id: chart_weekday
-        uses: robiningelbrecht/apache-echarts-action@v1.1.0
-        with:
-          width: 1000
-          height: 300
-          pass-options-as: file
-          chart-option: 'build/chart-weekday-stats.json'
-      - name: Generate yearly heatmap chart
-        id: chart_activities_heatmap
-        uses: robiningelbrecht/apache-echarts-action@v1.1.0
-        with:
-          width: 1000
-          height: 180
-          pass-options-as: file
-          chart-option: 'build/chart-activities-heatmap.json'
-      - name: Generate eddington chart
-        id: chart_activities_eddington
-        uses: robiningelbrecht/apache-echarts-action@v1.1.0
-        with:
-          width: 1000
-          height: 300
-          pass-options-as: file
-          chart-option: 'build/chart-activities-eddington.json'
-      - name: Save generated charts
+
+      - name: Generate charts
         run: |
-          cat <<EOF > build/chart.svg
-          ${{ steps.chart.outputs.svg }}
-          EOF
-          cat <<EOF > build/chart-weekday-stats.svg
-          ${{ steps.chart_weekday.outputs.svg }}
-          EOF
-          cat <<EOF > build/chart-activities-heatmap.svg
-          ${{ steps.chart_activities_heatmap.outputs.svg }}
-          EOF
-          cat <<EOF > build/chart-activities-eddington.svg
-          ${{ steps.chart_activities_eddington.outputs.svg }}
-          EOF
+          npm ci
+          node echarts.js
       - name: Commit and push changes
         run: |
           git config --global user.name 'YOUR_GITHUB_USERNAME'
