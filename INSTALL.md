@@ -46,23 +46,25 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
     * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/settings/actions
     * Scroll down to `Workflow permissions` and make sure `Read and write permissions` is checked
       ![Workflow permissions](files/install/workflow-permissions.png)
-* The last thing you need to do is edit the `update-strava-activities.yml` file:
-    * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/edit/master/.github/workflows/update-strava-activities.yml
-    * Uncomment line 4 and 5 by removing the `#` character
-    * Scroll down to
-    ```yml
-    name: Commit and push changes
-    run: |
-      git config --global user.name 'YOUR_GITHUB_USERNAME'
-      git config --global user.email 'YOUR_GITHUB_USERNAME@users.noreply.github.com'
-      git add .
-      git status
-      git diff --staged --quiet || git commit -m"Updated strava activities"
-      git push
-    ```
+* The last thing you need to do configure the automated workflow.
+  * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/edit/master/.github/workflows
+  * Create a new file called `update-strava-activities.yml` and copy over the contents from `update-strava-activities.ymy.dist`
+  * Edit the `update-strava-activities.yml` file:
+      * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/edit/master/.github/workflows/update-strava-activities.yml
+      * Scroll down to
+      ```yml
+      name: Commit and push changes
+      run: |
+        git config --global user.name 'YOUR_GITHUB_USERNAME'
+        git config --global user.email 'YOUR_GITHUB_USERNAME@users.noreply.github.com'
+        git add .
+        git status
+        git diff --staged --quiet || git commit -m"Updated strava activities"
+        git push
+      ```
 
-    * Replace `YOUR_GITHUB_USERNAME` with your own username
-    * Click `commit changes` at the top right-hand corner
+      * Replace `YOUR_GITHUB_USERNAME` with your own username
+      * Click `commit changes` at the top right-hand corner
 
 ## Some things to consider
 
