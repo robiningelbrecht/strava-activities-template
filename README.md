@@ -62,11 +62,19 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
 ## Hosting the HTML version
 
 There's also a HTML versions available with a lot more features. You can easily host this for free
-on https://vercel.com
+on https://vercel.com:
+
+* Create an account and login
+* Make sure your connect to your GirHub account (https://vercel.com/account/login-connections)
+* Create a new project and reference your repository
+* For the `Framework preset` setting use `Other`
+* Make sure the `Root directory` is set to `build/html`
+* You can uncheck the option `Include source files outside of the Root Directory in the Build Step.`
+* You should be good to go
 
 ## Some things to consider
 
-* Any new features or updates added to the template, will automatically end up in your repository 🪄
+* Any new feature or update added to the template, will automatically end up in your repository 🪄
 * Only (virtual) bike rides are imported, other sports are not relevant for these stats
 * Because of technical (Strava) limitations, not all Strava challenges
   can be imported. Only the visible ones on your public profile can be imported
