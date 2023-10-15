@@ -24,9 +24,7 @@ jobs:
           git config --global user.email 'YOUR_GITHUB_USERNAME@users.noreply.github.com'
           git remote add template https://github.com/robiningelbrecht/strava-activities-template
           git fetch template
-          git merge --no-ff --no-commit template/master --allow-unrelated-histories
-          git reset HEAD README.md
-          git checkout -- README.md
+          git merge template/master --allow-unrelated-histories
           git diff --staged --quiet || git commit -m"Updated to latest template version"
 
       - name: Update strava activities
