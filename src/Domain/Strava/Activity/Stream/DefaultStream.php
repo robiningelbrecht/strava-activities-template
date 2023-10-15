@@ -3,12 +3,21 @@
 namespace App\Domain\Strava\Activity\Stream;
 
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity]
 final class DefaultStream implements ActivityStream
 {
     private array $bestAverageForTimeIntervals = [];
 
     private function __construct(
+        #[ORM\Id, ORM\Column(type: 'string')]
+        private readonly string $activityId,
+        #[ORM\Id, ORM\Column(type: 'string')]
+        private readonly StreamType $streamType,
+        #[ORM\Column(type: 'datetime_immutable')]
+        private readonly SerializableDateTime $createdOn,
+        #[ORM\Column(type: 'json')]
         private readonly array $data
     ) {
     }

@@ -3,10 +3,15 @@
 namespace App\Domain\Strava\Gear;
 
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity]
 class Gear implements \JsonSerializable
 {
     private function __construct(
+        #[ORM\Id, ORM\Column(type: 'string', unique: true)]
+        private readonly string $gearId,
+        #[ORM\Column(type: 'json')]
         private array $data
     ) {
     }

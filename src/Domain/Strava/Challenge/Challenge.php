@@ -3,10 +3,17 @@
 namespace App\Domain\Strava\Challenge;
 
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use Doctrine\ORM\Mapping as ORM;
 
-class Challenge
+#[ORM\Entity]
+final class Challenge implements \JsonSerializable
 {
     private function __construct(
+        #[ORM\Id, ORM\Column(type: 'string', unique: true)]
+        private readonly string $challengeId,
+        #[ORM\Column(type: 'datetime_immutable')]
+        private readonly SerializableDateTime $createdOn,
+        #[ORM\Column(type: 'json')]
         private array $data
     ) {
     }
@@ -64,7 +71,7 @@ class Challenge
 
     public function getCreatedOn(): SerializableDateTime
     {
-        return SerializableDateTime::fromTimestamp($this->data['createdOn']);
+        return $this->createdOn;
     }
 
     public function jsonSerialize(): array

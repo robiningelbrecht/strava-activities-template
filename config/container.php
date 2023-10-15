@@ -1,9 +1,5 @@
 <?php
 
-use App\Domain\Strava\Activity\StravaActivityRepository;
-use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
-use App\Domain\Strava\Challenge\StravaChallengeRepository;
-use App\Domain\Strava\Gear\StravaGearRepository;
 use App\Domain\Strava\StravaClientId;
 use App\Domain\Strava\StravaClientSecret;
 use App\Domain\Strava\StravaRefreshToken;
@@ -11,12 +7,16 @@ use App\Infrastructure\Console\ConsoleCommandContainer;
 use App\Infrastructure\Environment\Environment;
 use App\Infrastructure\Environment\Settings;
 use App\Infrastructure\Twig\TwigBuilder;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMSetup;
 use Dotenv\Dotenv;
 use Lcobucci\Clock\Clock;
 use Lcobucci\Clock\SystemClock;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Local\LocalFilesystemAdapter;
-use SleekDB\Store;
 use Symfony\Component\Console\Application;
 use Twig\Environment as TwigEnvironment;
 use Twig\Loader\FilesystemLoader;
@@ -32,6 +32,22 @@ return [
     // Twig Environment.
     FilesystemLoader::class => DI\create(FilesystemLoader::class)->constructor($appRoot.'/templates'),
     TwigEnvironment::class => DI\factory([TwigBuilder::class, 'build']),
+    // Doctrine Dbal.
+    Connection::class => function (Settings $settings): Connection {
+        return DriverManager::getConnection($settings->get('doctrine.connection'));
+    },
+    // Doctrine EntityManager.
+    EntityManager::class => function (Settings $settings): EntityManager {
+        $config = ORMSetup::createAttributeMetadataConfiguration(
+            $settings->get('doctrine.metadata_dirs'),
+            $settings->get('doctrine.dev_mode'),
+        );
+
+        $connection = DriverManager::getConnection($settings->get('doctrine.connection'), $config);
+
+        return new EntityManager($connection, $config);
+    },
+    EntityManagerInterface::class => DI\get(EntityManager::class),
     // Console command application.
     Application::class => function (ConsoleCommandContainer $consoleCommandContainer) {
         $application = new Application();
@@ -49,22 +65,6 @@ return [
     StravaClientId::class => StravaClientId::fromString($_ENV['STRAVA_CLIENT_ID']),
     StravaClientSecret::class => StravaClientSecret::fromString($_ENV['STRAVA_CLIENT_SECRET']),
     StravaRefreshToken::class => StravaRefreshToken::fromString($_ENV['STRAVA_REFRESH_TOKEN']),
-    StravaActivityRepository::class => DI\autowire()->constructorParameter('store', new Store('activities', $appRoot.'/database', [
-        'auto_cache' => false,
-        'timeout' => false,
-    ])),
-    StravaChallengeRepository::class => DI\autowire()->constructorParameter('store', new Store('challenges', $appRoot.'/database', [
-        'auto_cache' => false,
-        'timeout' => false,
-    ])),
-    StravaGearRepository::class => DI\autowire()->constructorParameter('store', new Store('gears', $appRoot.'/database', [
-        'auto_cache' => false,
-        'timeout' => false,
-    ])),
-    StravaActivityStreamRepository::class => DI\autowire()->constructorParameter('store', new Store('activity-streams', $appRoot.'/database', [
-        'auto_cache' => false,
-        'timeout' => false,
-    ])),
     // File system.
     Filesystem::class => DI\autowire()->constructorParameter('adapter', new LocalFilesystemAdapter(
         Settings::getAppRoot()
