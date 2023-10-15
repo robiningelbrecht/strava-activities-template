@@ -1,8 +1,8 @@
 name: Update strava activities
 on:
   workflow_dispatch:
-  schedule:
-    - cron:  '30 18 * * *'
+  #schedule:
+  #  - cron:  '30 18 * * *'
 jobs:
   update-strava-history:
     name: Update strava activities
