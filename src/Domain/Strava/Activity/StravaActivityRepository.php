@@ -97,7 +97,7 @@ final class StravaActivityRepository
 
         $this->connection->executeStatement($sql, [
             'activityId' => $activity->getId(),
-            'gearId' => $activity->getGearId(),
+            'data' => Json::encode($activity->getData()),
         ]);
     }
 

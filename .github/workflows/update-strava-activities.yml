@@ -44,6 +44,8 @@ jobs:
           
           # Delete install files
           rm -Rf files/install
+          # Delete test suite
+          rm -Rf tests
           
           rm -Rf strava-activities-template
 
