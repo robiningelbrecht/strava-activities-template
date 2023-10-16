@@ -41,7 +41,7 @@ final readonly class StravaActivityStreamRepository
         );
     }
 
-    public function findByActivityAndStreamTypes(string $activityId, array $streamTypes): array
+    public function findByActivityAndStreamTypes(int $activityId, array $streamTypes): array
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
@@ -69,6 +69,9 @@ final readonly class StravaActivityStreamRepository
         ]);
     }
 
+    /**
+     * @param array<mixed> $result
+     */
     private function buildFromResult(array $result): ActivityStream
     {
         return DefaultStream::fromState(

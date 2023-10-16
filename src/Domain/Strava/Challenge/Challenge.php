@@ -8,6 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 final class Challenge
 {
+    /**
+     * @param array<mixed> $data
+     */
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string', unique: true)]
         private readonly string $challengeId,
@@ -18,6 +21,9 @@ final class Challenge
     ) {
     }
 
+    /**
+     * @param array<mixed> $data
+     */
     public static function fromState(
         string $challengeId,
         SerializableDateTime $createdOn,
@@ -30,6 +36,9 @@ final class Challenge
         );
     }
 
+    /**
+     * @param array<mixed> $data
+     */
     public static function create(
         string $challengeId,
         SerializableDateTime $createdOn,
@@ -86,6 +95,9 @@ final class Challenge
         return $this->createdOn;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getData(): array
     {
         return $this->data;

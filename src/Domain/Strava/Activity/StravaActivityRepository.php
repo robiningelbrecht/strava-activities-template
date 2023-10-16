@@ -101,6 +101,9 @@ final class StravaActivityRepository
         ]);
     }
 
+    /**
+     * @param array<mixed> $result
+     */
     private function buildFromResult(array $result): Activity
     {
         return Activity::fromState(

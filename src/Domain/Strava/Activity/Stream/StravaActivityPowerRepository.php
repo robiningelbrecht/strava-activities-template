@@ -18,7 +18,7 @@ final class StravaActivityPowerRepository
     ) {
     }
 
-    public function findBestForActivity(string $activityId): array
+    public function findBestForActivity(int $activityId): array
     {
         if (array_key_exists($activityId, StravaActivityPowerRepository::$cachedPowerOutputs)) {
             return StravaActivityPowerRepository::$cachedPowerOutputs[$activityId];

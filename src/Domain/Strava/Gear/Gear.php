@@ -8,6 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class Gear
 {
+    /**
+     * @param array<mixed> $data
+     */
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string', unique: true)]
         private readonly string $gearId,
@@ -20,6 +23,9 @@ class Gear
     ) {
     }
 
+    /**
+     * @param array<mixed> $data
+     */
     public static function create(
         string $gearId,
         array $data,
@@ -34,6 +40,9 @@ class Gear
         );
     }
 
+    /**
+     * @param array<mixed> $data
+     */
     public static function fromState(
         string $gearId,
         array $data,
@@ -75,7 +84,7 @@ class Gear
 
     public function updateDistance(float $distance, float $convertedDistance): void
     {
-        $this->distanceInMeter = $distance;
+        $this->distanceInMeter = (int) $distance;
         $this->data['converted_distance'] = $convertedDistance;
     }
 
@@ -84,6 +93,9 @@ class Gear
         return $this->createdOn;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getData(): array
     {
         return $this->data;

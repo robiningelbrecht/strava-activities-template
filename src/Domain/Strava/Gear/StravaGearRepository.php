@@ -72,6 +72,9 @@ final readonly class StravaGearRepository
         ]);
     }
 
+    /**
+     * @param array<mixed> $result
+     */
     private function buildFromResult(array $result): Gear
     {
         return Gear::fromState(

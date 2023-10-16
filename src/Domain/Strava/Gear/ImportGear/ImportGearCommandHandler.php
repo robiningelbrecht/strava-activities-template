@@ -38,7 +38,7 @@ final readonly class ImportGearCommandHandler implements CommandHandler
             try {
                 $stravaGear = $this->strava->getGear($gearId);
             } catch (ClientException $exception) {
-                if (429 !== $exception->getResponse()?->getStatusCode()) {
+                if (429 !== $exception->getResponse()->getStatusCode()) {
                     // Re-throw, we only want to catch "429 Too Many Requests".
                     throw $exception;
                 }

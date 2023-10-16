@@ -57,6 +57,9 @@ final readonly class StravaChallengeRepository
         ]);
     }
 
+    /**
+     * @param array<mixed> $result
+     */
     private function buildFromResult(array $result): Challenge
     {
         return Challenge::fromState(
