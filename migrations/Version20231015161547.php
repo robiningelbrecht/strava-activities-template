@@ -30,7 +30,7 @@ final class Version20231015161547 extends AbstractMigration
         , data CLOB NOT NULL --(DC2Type:json)
         , PRIMARY KEY(activityId, streamType))');
         $this->addSql('CREATE TABLE Gear (gearId VARCHAR(255) NOT NULL, createdOn DATETIME NOT NULL --(DC2Type:datetime_immutable)
-        , distance DOUBLE PRECISION NOT NULL, data CLOB NOT NULL --(DC2Type:json)
+        , distanceInMeter INTEGER NOT NULL, data CLOB NOT NULL --(DC2Type:json)
         , PRIMARY KEY(gearId))');
     }
 

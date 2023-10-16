@@ -43,7 +43,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
                 continue;
             }
             $activity->enrichWithGearName(
-                $this->stravaGearRepository->findOneBy($activity->getGearId())->getName()
+                $this->stravaGearRepository->find($activity->getGearId())->getName()
             );
         }
         $allChallenges = $this->stravaChallengeRepository->findAll();

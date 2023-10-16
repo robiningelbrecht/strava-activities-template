@@ -13,8 +13,8 @@ class Gear
         private readonly string $gearId,
         #[ORM\Column(type: 'datetime_immutable')]
         private readonly SerializableDateTime $createdOn,
-        #[ORM\Column(type: 'float')]
-        private float $distance,
+        #[ORM\Column(type: 'integer')]
+        private int $distanceInMeter,
         #[ORM\Column(type: 'json')]
         private array $data
     ) {
@@ -23,13 +23,13 @@ class Gear
     public static function create(
         string $gearId,
         array $data,
-        float $distance,
+        int $distanceInMeter,
         SerializableDateTime $createdOn
     ): self {
         return new self(
             gearId: $gearId,
             createdOn: $createdOn,
-            distance: $distance,
+            distanceInMeter: $distanceInMeter,
             data: $data
         );
     }
@@ -37,13 +37,13 @@ class Gear
     public static function fromState(
         string $gearId,
         array $data,
-        float $distance,
+        int $distanceInMeter,
         SerializableDateTime $createdOn
     ): self {
         return new self(
             gearId: $gearId,
             createdOn: $createdOn,
-            distance: $distance,
+            distanceInMeter: $distanceInMeter,
             data: $data
         );
     }
@@ -58,9 +58,14 @@ class Gear
         return $this->data['name'];
     }
 
-    public function getDistance(): float
+    public function getDistanceInMeter(): int
     {
-        return round($this->distance / 1000);
+        return $this->distanceInMeter;
+    }
+
+    public function getDistanceInKm(): float
+    {
+        return round($this->distanceInMeter / 1000);
     }
 
     public function isRetired(): bool
@@ -70,7 +75,7 @@ class Gear
 
     public function updateDistance(float $distance, float $convertedDistance): void
     {
-        $this->distance = $distance;
+        $this->distanceInMeter = $distance;
         $this->data['converted_distance'] = $convertedDistance;
     }
 

@@ -68,7 +68,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 continue;
             }
             $activity->enrichWithGearName(
-                $this->stravaGearRepository->findOneBy($activity->getGearId())->getName()
+                $this->stravaGearRepository->find($activity->getGearId())->getName()
             );
         }
 

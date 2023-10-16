@@ -28,7 +28,7 @@ final readonly class BikeStatistics
 
             return [
                 'name' => sprintf('%s%s', $bike->getName(), $bike->isRetired() ? ' ☠️' : ''),
-                'distance' => $bike->getDistance(),
+                'distance' => $bike->getDistanceInKm(),
                 'numberOfRides' => count($activitiesWithBike),
                 'movingTime' => CarbonInterval::seconds(array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $activitiesWithBike)))->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),
                 'elevation' => array_sum(array_map(fn (Activity $activity) => $activity->getElevation(), $activitiesWithBike)),
@@ -39,7 +39,7 @@ final readonly class BikeStatistics
         $statistics[] = [
             'name' => 'Other',
             'distance' => array_sum(array_map(fn (Activity $activity) => $activity->getDistance(), $this->activities)) -
-                array_sum(array_map(fn (Gear $bike) => $bike->getDistance(), $this->bikes)),
+                array_sum(array_map(fn (Gear $bike) => $bike->getDistanceInKm(), $this->bikes)),
             'numberOfRides' => count($activitiesWithOtherBike),
             'movingTime' => CarbonInterval::seconds(array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $activitiesWithOtherBike)))->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),
             'elevation' => array_sum(array_map(fn (Activity $activity) => $activity->getElevation(), $activitiesWithOtherBike)),

@@ -51,14 +51,14 @@ final readonly class ImportGearCommandHandler implements CommandHandler
             }
 
             try {
-                $gear = $this->stravaGearRepository->findOneBy($gearId);
+                $gear = $this->stravaGearRepository->find($gearId);
                 $gear->updateDistance($stravaGear['distance'], $stravaGear['converted_distance']);
                 $this->stravaGearRepository->update($gear);
             } catch (EntityNotFound) {
                 $gear = Gear::create(
                     gearId: $gearId,
                     data: $stravaGear,
-                    distance: $stravaGear['distance'],
+                    distanceInMeter: $stravaGear['distance'],
                     createdOn: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
                 );
                 $this->stravaGearRepository->add($gear);
