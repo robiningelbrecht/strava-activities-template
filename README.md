@@ -52,7 +52,7 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
     * Uncomment line 4 and 5 by removing the `#` character
     * Scroll own to:
         ```yml
-        name: Commit and push changes
+        name: Initialize GIT
         run: |
           git config --global user.name 'YOUR_GITHUB_USERNAME'
           git config --global user.email 'YOUR_GITHUB_USERNAME@users.noreply.github.com'
