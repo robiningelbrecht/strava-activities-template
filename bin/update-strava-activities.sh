@@ -31,17 +31,6 @@ git diff --staged --quiet || git commit -m"Updated template to latest version"
 
 composer install --prefer-dist
 
-# Install env file.
-echo ENVIRONMENT=dev >> .env
-echo DISPLAY_ERROR_DETAILS=1 >> .env
-echo LOG_ERRORS=0 >> .env
-echo LOG_ERROR_DETAILS=0 >> .env
-echo DATABASE_NAME="database/db.strava" >> .env
-echo STRAVA_CLIENT_ID=${{ secrets.STRAVA_CLIENT_ID }} >> .env
-echo STRAVA_CLIENT_SECRET=${{ secrets.STRAVA_CLIENT_SECRET }} >> .env
-echo STRAVA_REFRESH_TOKEN=${{ secrets.STRAVA_REFRESH_TOKEN }} >> .env
-echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
-
 # Run migrations.
 ./vendor/bin/doctrine-migrations migrate --no-interaction
 
