@@ -9,46 +9,65 @@ use App\Infrastructure\ValueObject\Geography\Longitude;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Weight;
 use Carbon\CarbonInterval;
+use Doctrine\ORM\Mapping as ORM;
 
-class Activity implements \JsonSerializable
+#[ORM\Entity]
+final class Activity
 {
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
     private ?string $gearName;
     private array $bestPowerOutputs;
 
     private function __construct(
-        private array $data
+        #[ORM\Id, ORM\Column(type: 'string', unique: true)]
+        private readonly int $activityId,
+        #[ORM\Column(type: 'datetime_immutable')]
+        private readonly SerializableDateTime $startDateTime,
+        #[ORM\Column(type: 'json')]
+        private array $data,
+        #[ORM\Column(type: 'string', nullable: true)]
+        private readonly ?string $gearId = null,
     ) {
         $this->gearName = null;
         $this->bestPowerOutputs = [];
     }
 
-    public static function create(array $data): self
-    {
-        $data['start_date_timestamp'] = SerializableDateTime::createFromFormat(
-            self::DATE_TIME_FORMAT,
-            $data['start_date_local']
-        )->getTimestamp();
-
-        return new self($data);
+    public static function create(
+        int $activityId,
+        SerializableDateTime $startDateTime,
+        array $data,
+        string $gearId = null,
+    ): self {
+        return new self(
+            activityId: $activityId,
+            startDateTime: $startDateTime,
+            data: $data,
+            gearId: $gearId
+        );
     }
 
-    public static function fromMap(array $data): self
-    {
-        return new self($data);
+    public static function fromState(
+        int $activityId,
+        SerializableDateTime $startDateTime,
+        array $data,
+        string $gearId = null,
+    ): self {
+        return new self(
+            activityId: $activityId,
+            startDateTime: $startDateTime,
+            data: $data,
+            gearId: $gearId
+        );
     }
 
     public function getId(): int
     {
-        return (int) $this->data['id'];
+        return $this->activityId;
     }
 
     public function getStartDate(): SerializableDateTime
     {
-        return SerializableDateTime::createFromFormat(
-            self::DATE_TIME_FORMAT,
-            $this->data['start_date_local']
-        );
+        return $this->startDateTime;
     }
 
     public function getType(): ActivityType
@@ -78,7 +97,7 @@ class Activity implements \JsonSerializable
 
     public function getGearId(): ?string
     {
-        return $this->data['gear_id'] ?? null;
+        return $this->gearId;
     }
 
     public function getGearName(): ?string
@@ -277,7 +296,7 @@ class Activity implements \JsonSerializable
         return Weight::fromKilograms($this->data['athlete_weight']);
     }
 
-    public function jsonSerialize(): array
+    public function getData(): array
     {
         return $this->data;
     }

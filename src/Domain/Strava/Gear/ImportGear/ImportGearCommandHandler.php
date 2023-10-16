@@ -32,7 +32,7 @@ final readonly class ImportGearCommandHandler implements CommandHandler
         assert($command instanceof ImportGear);
         $command->getOutput()->writeln('Importing gear...');
 
-        $gearIds = $this->stravaActivityRepository->findUniqueGearIds();
+        $gearIds = array_filter($this->stravaActivityRepository->findUniqueGearIds());
 
         foreach ($gearIds as $gearId) {
             try {
@@ -51,16 +51,19 @@ final readonly class ImportGearCommandHandler implements CommandHandler
             }
 
             try {
-                $gear = $this->stravaGearRepository->findOneBy($gearId);
+                $gear = $this->stravaGearRepository->find($gearId);
                 $gear->updateDistance($stravaGear['distance'], $stravaGear['converted_distance']);
+                $this->stravaGearRepository->update($gear);
             } catch (EntityNotFound) {
                 $gear = Gear::create(
+                    gearId: $gearId,
                     data: $stravaGear,
+                    distanceInMeter: $stravaGear['distance'],
                     createdOn: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
                 );
+                $this->stravaGearRepository->add($gear);
             }
             $command->getOutput()->writeln(sprintf('  => Imported/updated gear "%s"', $gear->getName()));
-            $this->stravaGearRepository->save($gear);
         }
     }
 }

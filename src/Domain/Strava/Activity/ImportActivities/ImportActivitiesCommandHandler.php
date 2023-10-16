@@ -12,6 +12,7 @@ use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Exception\EntityNotFound;
+use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use GuzzleHttp\Exception\ClientException;
 use League\Flysystem\Filesystem;
 use Ramsey\Uuid\Rfc4122\UuidV5;
@@ -41,16 +42,24 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
             }
 
             try {
-                $activity = $this->stravaActivityRepository->findOneBy($stravaActivity['id']);
+                $activity = $this->stravaActivityRepository->find($stravaActivity['id']);
                 $activity->updateKudoCount($stravaActivity['kudos_count'] ?? 0);
                 $this->stravaActivityRepository->update($activity);
                 $command->getOutput()->writeln(sprintf('  => Updated activity "%s"', $activity->getName()));
             } catch (EntityNotFound) {
                 try {
-                    $activity = Activity::create([
-                        ...$this->strava->getActivity($stravaActivity['id']),
-                        'athlete_weight' => $athlete['weight'],
-                    ]);
+                    $activity = Activity::create(
+                        activityId: $stravaActivity['id'],
+                        startDateTime: SerializableDateTime::createFromFormat(
+                            Activity::DATE_TIME_FORMAT,
+                            $stravaActivity['start_date_local']
+                        ),
+                        data: [
+                            ...$this->strava->getActivity($stravaActivity['id']),
+                            'athlete_weight' => $athlete['weight'],
+                        ],
+                        gearId: $stravaActivity['gear_id'] ?? null
+                    );
 
                     $localImagePaths = [];
 

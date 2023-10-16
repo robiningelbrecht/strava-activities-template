@@ -2,47 +2,80 @@
 
 namespace App\Domain\Strava\Activity\Stream;
 
-use SleekDB\Store;
+use App\Infrastructure\Repository\ProvideSqlConvert;
+use App\Infrastructure\Serialization\Json;
+use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use Doctrine\DBAL\Connection;
 
 final readonly class StravaActivityStreamRepository
 {
+    use ProvideSqlConvert;
+
     public function __construct(
-        private Store $store
+        private Connection $connection
     ) {
     }
 
     public function hasOneForActivity(int $activityId): bool
     {
-        if (!$this->store->findOneBy(['activityId', '==', $activityId])) {
-            return false;
-        }
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select('*')
+            ->from('ActivityStream')
+            ->andWhere('activityId = :activityId')
+            ->setParameter('activityId', $activityId);
 
-        return true;
+        return !empty($queryBuilder->executeQuery()->fetchOne());
     }
 
     public function findByStreamType(StreamType $streamType): array
     {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select('*')
+            ->from('ActivityStream')
+            ->andWhere('streamType = :streamType')
+            ->setParameter('streamType', $streamType->value);
+
         return array_map(
-            fn (array $row) => DefaultStream::fromMap($row),
-            $this->store->findBy([
-                ['type', '==', $streamType->value],
-            ])
+            fn (array $result) => $this->buildFromResult($result),
+            $queryBuilder->executeQuery()->fetchAllAssociative()
         );
     }
 
     public function findByActivityAndStreamTypes(string $activityId, array $streamTypes): array
     {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select('*')
+            ->from('ActivityStream')
+            ->andWhere('activityId = :activityId')
+            ->setParameter('activityId', $activityId)
+            ->andWhere('streamType IN ('.$this->toWhereInValueForEnums($streamTypes).')');
+
         return array_map(
-            fn (array $row) => DefaultStream::fromMap($row),
-            $this->store->findBy([
-                ['activityId', '==', $activityId],
-                ['type', 'IN', array_map(fn (StreamType $stream) => $stream->value, $streamTypes)],
-            ])
+            fn (array $result) => $this->buildFromResult($result),
+            $queryBuilder->executeQuery()->fetchAllAssociative()
         );
     }
 
     public function add(ActivityStream $stream): void
     {
-        $this->store->insert($stream->jsonSerialize());
+        $sql = 'INSERT INTO ActivityStream (activityId, streamType, data, createdOn)
+        VALUES (:activityId, :streamType, :data, :createdOn)';
+
+        $this->connection->executeStatement($sql, [
+            'activityId' => $stream->getActivityId(),
+            'streamType' => $stream->getStreamType()->value,
+            'data' => Json::encode($stream->getData()),
+            'createdOn' => $stream->getCreatedOn(),
+        ]);
+    }
+
+    private function buildFromResult(array $result): ActivityStream
+    {
+        return DefaultStream::fromState(
+            activityId: $result['activityId'],
+            streamType: StreamType::from($result['streamType']),
+            streamData: Json::decode($result['data']),
+            createdOn: SerializableDateTime::fromString($result['createdOn']),
+        );
     }
 }

@@ -67,7 +67,7 @@ final class StravaActivityPowerRepository
             foreach (self::TIME_INTERVAL_IN_SECONDS as $timeIntervalInSeconds) {
                 $power = $stream->getBestAverageForTimeInterval($timeIntervalInSeconds);
                 if (!isset($best[$timeIntervalInSeconds]) || $best[$timeIntervalInSeconds]->getPower() < $power) {
-                    $activity = $this->stravaActivityRepository->findOneBy($stream->getActivityId());
+                    $activity = $this->stravaActivityRepository->find($stream->getActivityId());
                     $interval = CarbonInterval::seconds($timeIntervalInSeconds);
 
                     $best[$timeIntervalInSeconds] = PowerOutput::fromState(

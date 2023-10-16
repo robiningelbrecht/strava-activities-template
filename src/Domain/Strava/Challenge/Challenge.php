@@ -3,29 +3,48 @@
 namespace App\Domain\Strava\Challenge;
 
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use Doctrine\ORM\Mapping as ORM;
 
-class Challenge
+#[ORM\Entity]
+final class Challenge
 {
     private function __construct(
+        #[ORM\Id, ORM\Column(type: 'string', unique: true)]
+        private readonly string $challengeId,
+        #[ORM\Column(type: 'datetime_immutable')]
+        private readonly SerializableDateTime $createdOn,
+        #[ORM\Column(type: 'json')]
         private array $data
     ) {
     }
 
-    public static function fromMap(array $data): self
-    {
-        return new self($data);
+    public static function fromState(
+        string $challengeId,
+        SerializableDateTime $createdOn,
+        array $data
+    ): self {
+        return new self(
+            challengeId: $challengeId,
+            createdOn: $createdOn,
+            data: $data,
+        );
     }
 
-    public static function create(array $data, SerializableDateTime $createdOn): self
-    {
-        $data['createdOn'] = $createdOn->getTimestamp();
-
-        return new self($data);
+    public static function create(
+        string $challengeId,
+        SerializableDateTime $createdOn,
+        array $data
+    ): self {
+        return new self(
+            challengeId: $challengeId,
+            createdOn: $createdOn,
+            data: $data,
+        );
     }
 
     public function getId(): string
     {
-        return $this->data['challenge_id'];
+        return $this->challengeId;
     }
 
     public function getName(): string
@@ -64,10 +83,10 @@ class Challenge
 
     public function getCreatedOn(): SerializableDateTime
     {
-        return SerializableDateTime::fromTimestamp($this->data['createdOn']);
+        return $this->createdOn;
     }
 
-    public function jsonSerialize(): array
+    public function getData(): array
     {
         return $this->data;
     }

@@ -3,12 +3,22 @@
 namespace App\Domain\Strava\Activity\Stream;
 
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity]
+#[ORM\Table(name: 'ActivityStream')]
 final class DefaultStream implements ActivityStream
 {
     private array $bestAverageForTimeIntervals = [];
 
     private function __construct(
+        #[ORM\Id, ORM\Column(type: 'string')]
+        private readonly string $activityId,
+        #[ORM\Id, ORM\Column(type: 'string')]
+        private readonly StreamType $streamType,
+        #[ORM\Column(type: 'datetime_immutable')]
+        private readonly SerializableDateTime $createdOn,
+        #[ORM\Column(type: 'json')]
         private readonly array $data
     ) {
     }
@@ -19,32 +29,46 @@ final class DefaultStream implements ActivityStream
         array $streamData,
         SerializableDateTime $createdOn
     ): self {
-        return new self([
-            'type' => $streamType->value,
-            'activityId' => $activityId,
-            'data' => $streamData,
-            'createdOn' => $createdOn->getTimestamp(),
-        ]);
+        return new self(
+            activityId: $activityId,
+            streamType: $streamType,
+            createdOn: $createdOn,
+            data: $streamData,
+        );
     }
 
-    public static function fromMap(array $data): self
-    {
-        return new self($data);
+    public static function fromState(
+        string $activityId,
+        StreamType $streamType,
+        array $streamData,
+        SerializableDateTime $createdOn
+    ): self {
+        return new self(
+            activityId: $activityId,
+            streamType: $streamType,
+            createdOn: $createdOn,
+            data: $streamData,
+        );
     }
 
     public function getName(): string
     {
-        return $this->data['activityId'].' - '.$this->getType()->value;
+        return $this->getActivityId().' - '.$this->getStreamType()->value;
+    }
+
+    public function getCreatedOn(): SerializableDateTime
+    {
+        return $this->createdOn;
     }
 
     public function getActivityId(): string
     {
-        return $this->data['activityId'];
+        return $this->activityId;
     }
 
-    public function getType(): StreamType
+    public function getStreamType(): StreamType
     {
-        return StreamType::from($this->data['type']);
+        return $this->streamType;
     }
 
     public function getData(): array
@@ -92,10 +116,5 @@ final class DefaultStream implements ActivityStream
         }
 
         return $bestSequence;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->data;
     }
 }

@@ -3,29 +3,54 @@
 namespace App\Domain\Strava\Gear;
 
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use Doctrine\ORM\Mapping as ORM;
 
-class Gear implements \JsonSerializable
+#[ORM\Entity]
+class Gear
 {
     private function __construct(
+        #[ORM\Id, ORM\Column(type: 'string', unique: true)]
+        private readonly string $gearId,
+        #[ORM\Column(type: 'datetime_immutable')]
+        private readonly SerializableDateTime $createdOn,
+        #[ORM\Column(type: 'integer')]
+        private int $distanceInMeter,
+        #[ORM\Column(type: 'json')]
         private array $data
     ) {
     }
 
-    public static function create(array $data, SerializableDateTime $createdOn): self
-    {
-        $data['createdOn'] = $createdOn->getTimestamp();
-
-        return new self($data);
+    public static function create(
+        string $gearId,
+        array $data,
+        int $distanceInMeter,
+        SerializableDateTime $createdOn
+    ): self {
+        return new self(
+            gearId: $gearId,
+            createdOn: $createdOn,
+            distanceInMeter: $distanceInMeter,
+            data: $data
+        );
     }
 
-    public static function fromMap(array $data): self
-    {
-        return new self($data);
+    public static function fromState(
+        string $gearId,
+        array $data,
+        int $distanceInMeter,
+        SerializableDateTime $createdOn
+    ): self {
+        return new self(
+            gearId: $gearId,
+            createdOn: $createdOn,
+            distanceInMeter: $distanceInMeter,
+            data: $data
+        );
     }
 
     public function getId(): string
     {
-        return $this->data['id'];
+        return $this->gearId;
     }
 
     public function getName(): string
@@ -33,9 +58,14 @@ class Gear implements \JsonSerializable
         return $this->data['name'];
     }
 
-    public function getDistance(): float
+    public function getDistanceInMeter(): int
     {
-        return round($this->data['distance'] / 1000);
+        return $this->distanceInMeter;
+    }
+
+    public function getDistanceInKm(): float
+    {
+        return round($this->distanceInMeter / 1000);
     }
 
     public function isRetired(): bool
@@ -45,11 +75,16 @@ class Gear implements \JsonSerializable
 
     public function updateDistance(float $distance, float $convertedDistance): void
     {
-        $this->data['distance'] = $distance;
+        $this->distanceInMeter = $distance;
         $this->data['converted_distance'] = $convertedDistance;
     }
 
-    public function jsonSerialize(): array
+    public function getCreatedOn(): SerializableDateTime
+    {
+        return $this->createdOn;
+    }
+
+    public function getData(): array
     {
         return $this->data;
     }

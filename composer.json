@@ -10,13 +10,15 @@
   "require": {
     "php": "^8.2",
     "ext-json": "*",
+    "doctrine/dbal": "^3.7",
+    "doctrine/migrations": "^3.6",
+    "doctrine/orm": "^2.16",
     "guzzlehttp/guzzle": "^7.0",
     "lcobucci/clock": "^2.2",
     "league/flysystem": "^3.0",
     "nesbot/carbon": "^2.67",
     "php-di/php-di": "^6.4",
     "php-di/slim-bridge": "^3.2",
-    "rakibtg/sleekdb": "^2.15",
     "ramsey/uuid": "^4.3",
     "slim/psr7": "^1.5",
     "slim/slim": "^4.11",
@@ -30,8 +32,8 @@
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.9",
     "phpstan/phpstan": "^1.8",
-    "phpunit/phpunit": "^9.5",
-    "spatie/phpunit-snapshot-assertions": "^4.2"
+    "phpunit/phpunit": "^10.0",
+    "spatie/phpunit-snapshot-assertions": "^5.0"
   },
   "autoload": {
     "psr-4": {

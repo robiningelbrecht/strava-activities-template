@@ -3,12 +3,14 @@
 namespace App\Domain\Strava\Challenge;
 
 use App\Infrastructure\Exception\EntityNotFound;
-use SleekDB\Store;
+use App\Infrastructure\Serialization\Json;
+use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use Doctrine\DBAL\Connection;
 
 final readonly class StravaChallengeRepository
 {
     public function __construct(
-        private Store $store
+        private Connection $connection
     ) {
     }
 
@@ -17,23 +19,50 @@ final readonly class StravaChallengeRepository
      */
     public function findAll(): array
     {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select('*')
+            ->from('Challenge')
+            ->orderBy('createdOn', 'DESC');
+
         return array_map(
-            fn (array $row) => Challenge::fromMap($row),
-            $this->store->findAll(['createdOn' => 'desc'])
+            fn (array $result) => $this->buildFromResult($result),
+            $queryBuilder->executeQuery()->fetchAllAssociative()
         );
     }
 
-    public function findOneBy(int $id): Challenge
+    public function find(string $id): Challenge
     {
-        if (!$row = $this->store->findOneBy(['challenge_id', '==', $id])) {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select('*')
+            ->from('Challenge')
+            ->andWhere('challengeId = :challengeId')
+            ->setParameter('challengeId', $id);
+
+        if (!$result = $queryBuilder->executeQuery()->fetchAssociative()) {
             throw new EntityNotFound(sprintf('Challenge "%s" not found', $id));
         }
 
-        return Challenge::fromMap($row);
+        return $this->buildFromResult($result);
     }
 
     public function add(Challenge $challenge): void
     {
-        $this->store->insert($challenge->jsonSerialize());
+        $sql = 'INSERT INTO Challenge (challengeId, createdOn, data)
+        VALUES (:challengeId, :createdOn, :data)';
+
+        $this->connection->executeStatement($sql, [
+            'challengeId' => $challenge->getId(),
+            'createdOn' => $challenge->getCreatedOn(),
+            'data' => Json::encode($challenge->getData()),
+        ]);
+    }
+
+    private function buildFromResult(array $result): Challenge
+    {
+        return Challenge::fromState(
+            challengeId: $result['challengeId'],
+            createdOn: SerializableDateTime::fromString($result['createdOn']),
+            data: Json::decode($result['data']),
+        );
     }
 }
