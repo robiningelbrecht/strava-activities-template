@@ -8,10 +8,13 @@ interface ActivityStream
 {
     public function getName(): string;
 
-    public function getActivityId(): string;
+    public function getActivityId(): int;
 
     public function getStreamType(): StreamType;
 
+    /**
+     * @return array<mixed>
+     */
     public function getData(): array;
 
     public function getCreatedOn(): SerializableDateTime;

@@ -36,7 +36,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
 
         $athlete = $this->strava->getAthlete();
 
-        foreach ($this->strava->getActivities() ?? [] as $stravaActivity) {
+        foreach ($this->strava->getActivities() as $stravaActivity) {
             if (!$activityType = ActivityType::tryFrom($stravaActivity['type'])) {
                 continue;
             }
@@ -48,12 +48,14 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                 $command->getOutput()->writeln(sprintf('  => Updated activity "%s"', $activity->getName()));
             } catch (EntityNotFound) {
                 try {
+                    /** @var SerializableDateTime $startDate */
+                    $startDate = SerializableDateTime::createFromFormat(
+                        Activity::DATE_TIME_FORMAT,
+                        $stravaActivity['start_date_local']
+                    );
                     $activity = Activity::create(
                         activityId: $stravaActivity['id'],
-                        startDateTime: SerializableDateTime::createFromFormat(
-                            Activity::DATE_TIME_FORMAT,
-                            $stravaActivity['start_date_local']
-                        ),
+                        startDateTime: $startDate,
                         data: [
                             ...$this->strava->getActivity($stravaActivity['id']),
                             'athlete_weight' => $athlete['weight'],
@@ -70,7 +72,9 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                                 continue;
                             }
 
-                            $extension = pathinfo(parse_url($photo['urls'][5000], PHP_URL_PATH), PATHINFO_EXTENSION);
+                            /** @var string $urlPath */
+                            $urlPath = parse_url($photo['urls'][5000], PHP_URL_PATH);
+                            $extension = pathinfo($urlPath, PATHINFO_EXTENSION);
                             $imagePath = sprintf('files/activities/%s.%s', UuidV5::uuid1(), $extension);
                             $this->filesystem->write(
                                 $imagePath,
@@ -95,7 +99,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                     // Try to avoid Strava rate limits.
                     sleep(10);
                 } catch (ClientException $exception) {
-                    if (429 !== $exception->getResponse()?->getStatusCode()) {
+                    if (429 !== $exception->getResponse()->getStatusCode()) {
                         // Re-throw, we only want to catch "429 Too Many Requests".
                         throw $exception;
                     }

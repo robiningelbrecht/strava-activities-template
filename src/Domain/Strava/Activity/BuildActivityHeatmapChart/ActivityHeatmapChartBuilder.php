@@ -12,16 +12,27 @@ final class ActivityHeatmapChartBuilder
     private bool $animation;
     private ?string $backgroundColor;
 
+    /**
+     * @param Activity[] $activities
+     */
     private function __construct(
         private readonly array $activities,
         private readonly SerializableDateTime $now,
     ) {
         $this->animation = false;
         $this->backgroundColor = '#ffffff';
-        $this->fromDate = SerializableDateTime::createFromFormat('Y-m-d', $this->now->modify('-11 months')->format('Y-m-01'));
-        $this->toDate = SerializableDateTime::createFromFormat('Y-m-d', $this->now->format('Y-m-t'));
+
+        /** @var SerializableDateTime $fromDate */
+        $fromDate = SerializableDateTime::createFromFormat('Y-m-d', $this->now->modify('-11 months')->format('Y-m-01'));
+        $this->fromDate = $fromDate;
+        /** @var SerializableDateTime $toDate */
+        $toDate = SerializableDateTime::createFromFormat('Y-m-d', $this->now->format('Y-m-t'));
+        $this->toDate = $toDate;
     }
 
+    /**
+     * @param Activity[] $activities
+     */
     public static function fromActivities(
         array $activities,
         SerializableDateTime $now,
@@ -46,6 +57,9 @@ final class ActivityHeatmapChartBuilder
         return $this;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function build(): array
     {
         return [
@@ -134,6 +148,9 @@ final class ActivityHeatmapChartBuilder
         ];
     }
 
+    /**
+     * @return array<mixed>
+     */
     private function getData(): array
     {
         $activities = array_filter(

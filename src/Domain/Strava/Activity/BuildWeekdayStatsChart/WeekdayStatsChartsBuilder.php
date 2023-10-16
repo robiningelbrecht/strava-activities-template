@@ -10,6 +10,9 @@ final class WeekdayStatsChartsBuilder
     private bool $animation;
     private ?string $backgroundColor;
 
+    /**
+     * @param Activity[] $activities
+     */
     private function __construct(
         private readonly array $activities,
     ) {
@@ -17,6 +20,9 @@ final class WeekdayStatsChartsBuilder
         $this->backgroundColor = '#ffffff';
     }
 
+    /**
+     * @param Activity[] $activities
+     */
     public static function fromActivities(
         array $activities,
     ): self {
@@ -37,6 +43,9 @@ final class WeekdayStatsChartsBuilder
         return $this;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function build(): array
     {
         return [
@@ -79,6 +88,9 @@ final class WeekdayStatsChartsBuilder
         ];
     }
 
+    /**
+     * @return array<mixed>
+     */
     private function getData(): array
     {
         $statistics = [];

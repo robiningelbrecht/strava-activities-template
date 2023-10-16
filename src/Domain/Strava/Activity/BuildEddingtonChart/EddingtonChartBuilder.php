@@ -33,6 +33,9 @@ final class EddingtonChartBuilder
         return $this;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function build(): array
     {
         $longestDistanceInADay = $this->eddington->getLongestDistanceInADay();

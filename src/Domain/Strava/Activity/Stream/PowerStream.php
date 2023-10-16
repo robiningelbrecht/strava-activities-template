@@ -27,7 +27,7 @@ final readonly class PowerStream implements ActivityStream
         return $this->activityStream->getCreatedOn();
     }
 
-    public function getActivityId(): string
+    public function getActivityId(): int
     {
         return $this->activityStream->getActivityId();
     }
@@ -37,6 +37,9 @@ final readonly class PowerStream implements ActivityStream
         return $this->activityStream->getStreamType();
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getData(): array
     {
         return $this->activityStream->getData();

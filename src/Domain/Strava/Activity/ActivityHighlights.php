@@ -22,7 +22,7 @@ final readonly class ActivityHighlights
 
     public function getHighestAveragePower(): int
     {
-        return max(array_map(fn (Activity $activity) => $activity->getAveragePower(), $this->activities));
+        return (int) max(array_map(fn (Activity $activity) => $activity->getAveragePower(), $this->activities));
     }
 
     public function getFastestAverageSpeed(): float
@@ -32,10 +32,10 @@ final readonly class ActivityHighlights
 
     public function getHighestAverageHeartRate(): int
     {
-        return max(array_map(fn (Activity $activity) => $activity->getAverageHeartRate(), $this->activities));
+        return (int) max(array_map(fn (Activity $activity) => $activity->getAverageHeartRate(), $this->activities));
     }
 
-    public function getLongestMovingTimeFormatted(): string
+    public function getLongestMovingTimeFormatted(): ?string
     {
         $activityWithMaxMovingTime = null;
         foreach ($this->activities as $activity) {
@@ -45,9 +45,16 @@ final readonly class ActivityHighlights
             $activityWithMaxMovingTime = $activity;
         }
 
+        if (!$activityWithMaxMovingTime) {
+            return null;
+        }
+
         return $activityWithMaxMovingTime->getMovingTimeFormatted();
     }
 
+    /**
+     * @param \App\Domain\Strava\Activity\Activity[] $activities
+     */
     public static function fromActivities(array $activities): self
     {
         return new self($activities);

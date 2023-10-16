@@ -9,6 +9,7 @@ use Doctrine\DBAL\Connection;
 
 final class StravaActivityRepository
 {
+    /** @var array<int|string, array<Activity>> */
     private static array $cachedActivities = [];
 
     public function __construct(
@@ -55,6 +56,9 @@ final class StravaActivityRepository
         return StravaActivityRepository::$cachedActivities[$cacheKey];
     }
 
+    /**
+     * @return int[]
+     */
     public function findActivityIds(): array
     {
         $queryBuilder = $this->connection->createQueryBuilder();
@@ -65,6 +69,9 @@ final class StravaActivityRepository
         return $queryBuilder->executeQuery()->fetchFirstColumn();
     }
 
+    /**
+     * @return string[]
+     */
     public function findUniqueGearIds(): array
     {
         $queryBuilder = $this->connection->createQueryBuilder();

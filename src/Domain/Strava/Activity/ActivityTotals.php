@@ -10,12 +10,12 @@ final class ActivityTotals
     private SerializableDateTime $startDate;
 
     private function __construct(
+        /** @var Activity[] */
         private readonly array $activities,
         private readonly SerializableDateTime $now,
     ) {
         $this->startDate = new SerializableDateTime();
         foreach ($this->activities as $activity) {
-            /* @var \App\Domain\Strava\Activity\Activity $activity */
             if ($activity->getStartDate()->isAfterOrOn($this->startDate)) {
                 continue;
             }
@@ -73,7 +73,7 @@ final class ActivityTotals
 
     public function getTotalDays(): int
     {
-        return $this->now->diff($this->startDate)->days;
+        return (int) $this->now->diff($this->startDate)->days;
     }
 
     public function getTotalDaysOfCycling(): int
@@ -81,6 +81,9 @@ final class ActivityTotals
         return count(array_unique(array_map(fn (Activity $activity) => $activity->getStartDate()->format('Ymd'), $this->activities)));
     }
 
+    /**
+     * @param \App\Domain\Strava\Activity\Activity[] $activities
+     */
     public static function fromActivities(array $activities, SerializableDateTime $now): self
     {
         return new self($activities, $now);

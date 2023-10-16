@@ -9,7 +9,7 @@ class Weight
     ) {
     }
 
-    public static function fromKilograms(float $weight): ?self
+    public static function fromKilograms(float $weight): self
     {
         return new self($weight);
     }

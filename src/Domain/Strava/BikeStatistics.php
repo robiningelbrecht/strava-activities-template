@@ -16,11 +16,18 @@ final readonly class BikeStatistics
     ) {
     }
 
+    /**
+     * @param \App\Domain\Strava\Activity\Activity[] $activities
+     * @param \App\Domain\Strava\Gear\Gear[]         $gear
+     */
     public static function fromActivitiesAndGear(array $activities, array $gear): self
     {
         return new self($activities, $gear);
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getRows(): array
     {
         $statistics = array_map(function (Gear $bike) {

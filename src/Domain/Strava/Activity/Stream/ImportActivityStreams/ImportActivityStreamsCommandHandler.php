@@ -42,11 +42,11 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
             try {
                 $stravaStreams = $this->strava->getAllActivityStreams($activityId);
             } catch (ClientException $exception) {
-                if (!in_array($exception->getResponse()?->getStatusCode(), [404, 429])) {
+                if (!in_array($exception->getResponse()->getStatusCode(), [404, 429])) {
                     // Re-throw, we only want to catch "429 Too Many Requests".
                     throw $exception;
                 }
-                if (429 === $exception->getResponse()?->getStatusCode()) {
+                if (429 === $exception->getResponse()->getStatusCode()) {
                     // This will allow initial imports with a lot of activities to proceed the next day.
                     // This occurs when we exceed Strava API rate limits.
                     $this->reachedStravaApiRateLimits->markAsReached();
@@ -54,7 +54,7 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
 
                     break;
                 }
-                if (404 === $exception->getResponse()?->getStatusCode()) {
+                if (404 === $exception->getResponse()->getStatusCode()) {
                     continue;
                 }
             }

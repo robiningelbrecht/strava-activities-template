@@ -16,8 +16,12 @@ final class Activity
 {
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
     private ?string $gearName;
+    /** @var array<mixed> */
     private array $bestPowerOutputs;
 
+    /**
+     * @param array<mixed> $data
+     */
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string', unique: true)]
         private readonly int $activityId,
@@ -32,6 +36,9 @@ final class Activity
         $this->bestPowerOutputs = [];
     }
 
+    /**
+     * @param array<mixed> $data
+     */
     public static function create(
         int $activityId,
         SerializableDateTime $startDateTime,
@@ -46,6 +53,9 @@ final class Activity
         );
     }
 
+    /**
+     * @param array<mixed> $data
+     */
     public static function fromState(
         int $activityId,
         SerializableDateTime $startDateTime,
@@ -115,11 +125,17 @@ final class Activity
         return $this->bestPowerOutputs[$timeInterval] ?? null;
     }
 
+    /**
+     * @param array<mixed> $bestPowerOutputs
+     */
     public function enrichWithBestPowerOutputs(array $bestPowerOutputs): void
     {
         $this->bestPowerOutputs = $bestPowerOutputs;
     }
 
+    /**
+     * @param array<mixed> $weather
+     */
     public function updateWeather(array $weather): void
     {
         $this->data['weather'] = $weather;
@@ -151,11 +167,17 @@ final class Activity
         return null;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getLocalImagePaths(): array
     {
         return $this->data['localImagePaths'] ?? [];
     }
 
+    /**
+     * @return array<string>
+     */
     public function getRemoteImagePaths(): array
     {
         return array_map(
@@ -169,6 +191,9 @@ final class Activity
         return $this->data['total_photo_count'] ?? 0;
     }
 
+    /**
+     * @param array<string> $localImagePaths
+     */
     public function updateLocalImagePaths(array $localImagePaths): void
     {
         $this->data['localImagePaths'] = $localImagePaths;
@@ -186,7 +211,7 @@ final class Activity
 
     public function getElevation(): int
     {
-        return round($this->data['total_elevation_gain']);
+        return (int) round($this->data['total_elevation_gain']);
     }
 
     public function getCalories(): int
@@ -197,7 +222,7 @@ final class Activity
     public function getAveragePower(): ?int
     {
         if (isset($this->data['average_watts'])) {
-            return round($this->data['average_watts']);
+            return (int) round($this->data['average_watts']);
         }
 
         return null;
@@ -206,7 +231,7 @@ final class Activity
     public function getMaxPower(): ?int
     {
         if (isset($this->data['max_watts'])) {
-            return round($this->data['max_watts']);
+            return (int) round($this->data['max_watts']);
         }
 
         return null;
@@ -225,7 +250,7 @@ final class Activity
     public function getAverageHeartRate(): ?int
     {
         if (isset($this->data['average_heartrate'])) {
-            return round($this->data['average_heartrate']);
+            return (int) round($this->data['average_heartrate']);
         }
 
         return null;
@@ -234,7 +259,7 @@ final class Activity
     public function getMaxHeartRate(): ?int
     {
         if (isset($this->data['max_heartrate'])) {
-            return round($this->data['max_heartrate']);
+            return (int) round($this->data['max_heartrate']);
         }
 
         return null;
@@ -242,7 +267,7 @@ final class Activity
 
     public function getAverageCadence(): ?int
     {
-        return !empty($this->data['average_cadence']) ? round($this->data['average_cadence']) : null;
+        return !empty($this->data['average_cadence']) ? (int) round($this->data['average_cadence']) : null;
     }
 
     public function getMaxCadence(): ?int
@@ -288,7 +313,7 @@ final class Activity
             return null;
         }
 
-        return round(($this->getMovingTime() * $this->getAverageHeartRate()) / (240 * 3600) * 100);
+        return (int) round(($this->getMovingTime() * $this->getAverageHeartRate()) / (240 * 3600) * 100);
     }
 
     public function getAthleteWeight(): Weight
@@ -296,6 +321,9 @@ final class Activity
         return Weight::fromKilograms($this->data['athlete_weight']);
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getData(): array
     {
         return $this->data;

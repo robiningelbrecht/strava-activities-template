@@ -27,6 +27,9 @@ final readonly class StravaActivityStreamRepository
         return !empty($queryBuilder->executeQuery()->fetchOne());
     }
 
+    /**
+     * @return \App\Domain\Strava\Activity\Stream\ActivityStream[]
+     */
     public function findByStreamType(StreamType $streamType): array
     {
         $queryBuilder = $this->connection->createQueryBuilder();
@@ -41,6 +44,11 @@ final readonly class StravaActivityStreamRepository
         );
     }
 
+    /**
+     * @param \App\Domain\Strava\Activity\Stream\StreamType[] $streamTypes
+     *
+     * @return \App\Domain\Strava\Activity\Stream\ActivityStream[]
+     */
     public function findByActivityAndStreamTypes(int $activityId, array $streamTypes): array
     {
         $queryBuilder = $this->connection->createQueryBuilder();

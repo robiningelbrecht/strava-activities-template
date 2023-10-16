@@ -9,11 +9,15 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'ActivityStream')]
 final class DefaultStream implements ActivityStream
 {
+    /** @var array<mixed> */
     private array $bestAverageForTimeIntervals = [];
 
+    /**
+     * @param array<mixed> $data
+     */
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string')]
-        private readonly string $activityId,
+        private readonly int $activityId,
         #[ORM\Id, ORM\Column(type: 'string')]
         private readonly StreamType $streamType,
         #[ORM\Column(type: 'datetime_immutable')]
@@ -23,8 +27,11 @@ final class DefaultStream implements ActivityStream
     ) {
     }
 
+    /**
+     * @param array<mixed> $streamData
+     */
     public static function create(
-        string $activityId,
+        int $activityId,
         StreamType $streamType,
         array $streamData,
         SerializableDateTime $createdOn
@@ -37,8 +44,11 @@ final class DefaultStream implements ActivityStream
         );
     }
 
+    /**
+     * @param array<mixed> $streamData
+     */
     public static function fromState(
-        string $activityId,
+        int $activityId,
         StreamType $streamType,
         array $streamData,
         SerializableDateTime $createdOn
@@ -61,7 +71,7 @@ final class DefaultStream implements ActivityStream
         return $this->createdOn;
     }
 
-    public function getActivityId(): string
+    public function getActivityId(): int
     {
         return $this->activityId;
     }
@@ -71,6 +81,9 @@ final class DefaultStream implements ActivityStream
         return $this->streamType;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getData(): array
     {
         return $this->data;
@@ -88,11 +101,14 @@ final class DefaultStream implements ActivityStream
             return null;
         }
 
-        $this->bestAverageForTimeIntervals[$timeIntervalInSeconds] = round(array_sum($bestSequence) / $timeIntervalInSeconds);
+        $this->bestAverageForTimeIntervals[$timeIntervalInSeconds] = (int) round(array_sum($bestSequence) / $timeIntervalInSeconds);
 
         return $this->bestAverageForTimeIntervals[$timeIntervalInSeconds];
     }
 
+    /**
+     * @return array<mixed>
+     */
     private function getBestSequence(int $sequenceLength): array
     {
         $best = 0;

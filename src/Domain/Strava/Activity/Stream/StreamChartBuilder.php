@@ -33,6 +33,9 @@ final class StreamChartBuilder
         return $this;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function build(): array
     {
         $data = $this->stream->getData();

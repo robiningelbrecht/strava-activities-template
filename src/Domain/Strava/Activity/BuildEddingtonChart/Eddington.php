@@ -7,6 +7,7 @@ use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 final class Eddington
 {
     private const DATE_FORMAT = 'Y-m-d';
+    /** @var array<string, int|float> */
     private static array $distancesPerDay = [];
 
     private function __construct(
@@ -15,6 +16,9 @@ final class Eddington
     ) {
     }
 
+    /**
+     * @return array<mixed>
+     */
     private function getDistancesPerDay(): array
     {
         if (!empty(Eddington::$distancesPerDay)) {
@@ -35,9 +39,12 @@ final class Eddington
 
     public function getLongestDistanceInADay(): int
     {
-        return round(max($this->getDistancesPerDay()));
+        return (int) round(max($this->getDistancesPerDay()));
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getTimesCompletedData(): array
     {
         $data = [];
@@ -63,6 +70,9 @@ final class Eddington
         return $number;
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function getRidesToCompleteForFutureNumbers(): array
     {
         $futureNumbers = [];
@@ -75,6 +85,9 @@ final class Eddington
         return $futureNumbers;
     }
 
+    /**
+     * @return array<int, SerializableDateTime>
+     */
     public function getEddingtonHistory(): array
     {
         $history = [];
@@ -99,6 +112,9 @@ final class Eddington
         return $history;
     }
 
+    /**
+     * @param \App\Domain\Strava\Activity\Activity[] $activities
+     */
     public static function fromActivities(array $activities): self
     {
         return new self($activities);
