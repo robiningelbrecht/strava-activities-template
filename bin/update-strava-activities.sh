@@ -39,9 +39,9 @@ composer install --prefer-dist
 ./vendor/bin/doctrine-migrations migrate --no-interaction
 
 # Copy a backup of the database... just to be sure.
-cp database/db.strava database/db.strava-
+#cp database/db.strava database/db.strava-
 # Keep the 3 most recent ones, remove older ones.
-ls -ltr database | grep db. | head -n -3 | xargs --no-run-if-empty rm -Rf
+#ls -ltr database | grep db. | head -n -3 | xargs --no-run-if-empty rm -Rf
 
 # Update strava stats.
 bin/console app:strava:import-data
