@@ -3,6 +3,7 @@
 namespace App\Tests\Domain\Strava\Activity;
 
 use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\DatabaseTestCase;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
@@ -21,6 +22,12 @@ class StravaActivityRepositoryTest extends DatabaseTestCase
             $activity,
             $this->stravaActivityRepository->find($activity->getId())
         );
+    }
+
+    public function testItShouldThrowWhenNotFound(): void
+    {
+        $this->expectException(EntityNotFound::class);
+        $this->stravaActivityRepository->find(1);
     }
 
     public function testItShouldThrowOnDuplicateActivity(): void

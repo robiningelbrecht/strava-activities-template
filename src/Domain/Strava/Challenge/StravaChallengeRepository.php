@@ -30,7 +30,7 @@ final readonly class StravaChallengeRepository
         );
     }
 
-    public function find(int $id): Challenge
+    public function find(string $id): Challenge
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')

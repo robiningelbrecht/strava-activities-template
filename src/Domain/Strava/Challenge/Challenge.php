@@ -85,4 +85,9 @@ final class Challenge
     {
         return $this->createdOn;
     }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
 }
