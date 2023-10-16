@@ -11,14 +11,14 @@ use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final class DefaultStreamBuilder
 {
-    private string $activityId;
+    private int $activityId;
     private StreamType $streamType;
     private SerializableDateTime $createdOn;
     private array $data;
 
     private function __construct()
     {
-        $this->activityId = '1234';
+        $this->activityId = 1234;
         $this->streamType = StreamType::WATTS;
         $this->createdOn = SerializableDateTime::fromString('2023-10-10');
         $this->data = [];
@@ -39,7 +39,7 @@ final class DefaultStreamBuilder
         );
     }
 
-    public function withActivityId(string $activityId): self
+    public function withActivityId(int $activityId): self
     {
         $this->activityId = $activityId;
 
