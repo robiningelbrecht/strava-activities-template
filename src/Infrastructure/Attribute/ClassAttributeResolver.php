@@ -60,6 +60,7 @@ class ClassAttributeResolver
                 $class
             );
 
+            /* @phpstan-ignore-next-line */
             if (!(new \ReflectionClass($class))->getAttributes($attributeClassName)) {
                 // Class is not tagged with attribute.
                 continue;

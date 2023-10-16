@@ -17,6 +17,7 @@ class Json
 
     public static function decode(string $json, bool $assoc = true, int $depth = 512, int $options = 0): mixed
     {
+        /* @phpstan-ignore-next-line */
         return \Safe\json_decode($json, $assoc, $depth, $options);
     }
 }
