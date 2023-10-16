@@ -18,7 +18,9 @@ final class ActivityBuilder
     {
         $this->activityId = 903645;
         $this->startDateTime = SerializableDateTime::fromString('2023-10-10');
-        $this->data = [];
+        $this->data = [
+            'kudos_count' => 1,
+        ];
         $this->gearId = null;
     }
 
@@ -35,5 +37,26 @@ final class ActivityBuilder
             data: $this->data,
             gearId: $this->gearId
         );
+    }
+
+    public function withActivityId(int $activityId): self
+    {
+        $this->activityId = $activityId;
+
+        return $this;
+    }
+
+    public function withGearId(string $gearId): self
+    {
+        $this->gearId = $gearId;
+
+        return $this;
+    }
+
+    public function withStartDateTime(SerializableDateTime $startDateTime): self
+    {
+        $this->startDateTime = $startDateTime;
+
+        return $this;
     }
 }
