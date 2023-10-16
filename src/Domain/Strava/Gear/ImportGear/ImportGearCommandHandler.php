@@ -32,7 +32,7 @@ final readonly class ImportGearCommandHandler implements CommandHandler
         assert($command instanceof ImportGear);
         $command->getOutput()->writeln('Importing gear...');
 
-        $gearIds = $this->stravaActivityRepository->findUniqueGearIds();
+        $gearIds = array_filter($this->stravaActivityRepository->findUniqueGearIds());
 
         foreach ($gearIds as $gearId) {
             try {
