@@ -18,11 +18,15 @@ mv -f strava-activities-template/package.json package.json
 mv -f strava-activities-template/package-lock.json package-lock.json
 mv -f strava-activities-template/vercel.json vercel.json
 
+# Make sure database and migration directories exist
+mkdir -p database
+mkdir -p migrations
+
 # Delete install files
 rm -Rf files/install
 # Delete test suite
 rm -Rf tests
-
+# Delete template again.
 rm -Rf strava-activities-template
 
 git add .
