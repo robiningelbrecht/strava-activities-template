@@ -34,7 +34,7 @@ return [
         // of valid parameters: https://www.doctrine-project.org/projects/doctrine-dbal/en/current/reference/configuration.html
         'connection' => [
             'driver' => 'pdo_sqlite',
-            'path' => Settings::getAppRoot().'/database/db.strava',
+            'path' => Settings::getAppRoot().'/'.$_ENV['DATABASE_NAME'],
         ],
         'migrations' => [
             'table_storage' => [
