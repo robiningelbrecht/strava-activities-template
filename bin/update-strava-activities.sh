@@ -8,7 +8,7 @@ git clone https://github.com/robiningelbrecht/strava-activities-template.git
 rm -Rf bin/* && mv -f strava-activities-template/bin/* bin/
 rm -Rf config/* && mv -f strava-activities-template/config/* config/
 rm -Rf migrations/* && mv -f strava-activities-template/migrations/* migrations/
-rm -Rf public/* & mv -f strava-activities-template/public/* public/
+rm -Rf public/* && mv -f strava-activities-template/public/* public/
 rm -Rf src/* && mv -f strava-activities-template/src/* src/
 rm -Rf templates/* && mv -f strava-activities-template/templates/* templates/
 mv -f strava-activities-template/echart.js echart.js
