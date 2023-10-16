@@ -73,7 +73,7 @@ final class DefaultStream implements ActivityStream
 
     public function getData(): array
     {
-        return $this->data['data'] ?? [];
+        return $this->data;
     }
 
     public function getBestAverageForTimeInterval(int $timeIntervalInSeconds): ?int
