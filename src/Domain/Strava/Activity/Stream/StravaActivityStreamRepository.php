@@ -2,12 +2,15 @@
 
 namespace App\Domain\Strava\Activity\Stream;
 
+use App\Infrastructure\Repository\ProvideSqlConvert;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Doctrine\DBAL\Connection;
 
 final readonly class StravaActivityStreamRepository
 {
+    use ProvideSqlConvert;
+
     public function __construct(
         private Connection $connection
     ) {
@@ -45,8 +48,7 @@ final readonly class StravaActivityStreamRepository
             ->from('ActivityStream')
             ->andWhere('activityId = :activityId')
             ->setParameter('activityId', $activityId)
-            ->andWhere('streamType IN (:streamTypes)')
-            ->setParameter('streamTypes', array_map(fn (StreamType $stream) => $stream->value, $streamTypes));
+            ->andWhere('streamType IN ('.$this->toWhereInValueForEnums($streamTypes).')');
 
         return array_map(
             fn (array $result) => $this->buildFromResult($result),
