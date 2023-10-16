@@ -189,7 +189,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 
             if ($cadenceStreams = array_filter(
                 $streams,
-                fn (ActivityStream $stream) => StreamType::CADENCE === $stream->getType()
+                fn (ActivityStream $stream) => StreamType::CADENCE === $stream->getStreamType()
             )) {
                 $activity->enrichWithMaxCadence(max(reset($cadenceStreams)->getData()));
             }

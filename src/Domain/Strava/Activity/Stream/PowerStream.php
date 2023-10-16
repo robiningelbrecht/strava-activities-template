@@ -2,6 +2,7 @@
 
 namespace App\Domain\Strava\Activity\Stream;
 
+use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Weight;
 
 final readonly class PowerStream implements ActivityStream
@@ -21,14 +22,19 @@ final readonly class PowerStream implements ActivityStream
         return $this->activityStream->getName();
     }
 
+    public function getCreatedOn(): SerializableDateTime
+    {
+        return $this->activityStream->getCreatedOn();
+    }
+
     public function getActivityId(): string
     {
         return $this->activityStream->getActivityId();
     }
 
-    public function getType(): StreamType
+    public function getStreamType(): StreamType
     {
-        return $this->activityStream->getType();
+        return $this->activityStream->getStreamType();
     }
 
     public function getData(): array
@@ -48,10 +54,5 @@ final readonly class PowerStream implements ActivityStream
         }
 
         return null;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->activityStream->jsonSerialize();
     }
 }

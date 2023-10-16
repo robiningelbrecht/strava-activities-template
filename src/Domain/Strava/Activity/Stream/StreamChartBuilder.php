@@ -49,7 +49,7 @@ final class StreamChartBuilder
             ],
             'tooltip' => [
                 'trigger' => 'axis',
-                'formatter' => '<b>{c0}</b> '.$this->stream->getType()->value,
+                'formatter' => '<b>{c0}</b> '.$this->stream->getStreamType()->value,
             ],
             'xAxis' => [
                 'show' => false,

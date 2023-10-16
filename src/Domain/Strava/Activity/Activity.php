@@ -62,7 +62,7 @@ final class Activity
 
     public function getId(): int
     {
-        return (int) $this->data['id'];
+        return $this->activityId;
     }
 
     public function getStartDate(): SerializableDateTime
