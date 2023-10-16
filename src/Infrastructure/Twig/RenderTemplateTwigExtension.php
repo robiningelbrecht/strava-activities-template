@@ -11,6 +11,9 @@ final readonly class RenderTemplateTwigExtension
     ) {
     }
 
+    /**
+     * @param array<mixed> $context
+     */
     public function render(string $template, array $context = []): string
     {
         return $this->twig->render($template, $context);

@@ -7,6 +7,9 @@ final class DateCollection
     /** @var \App\Infrastructure\ValueObject\Time\SerializableDateTime[] */
     private array $datesIndexedByDate;
 
+    /**
+     * @param \App\Infrastructure\ValueObject\Time\SerializableDateTime[] $dates
+     */
     private function __construct(array $dates)
     {
         $this->datesIndexedByDate = [];
@@ -19,6 +22,9 @@ final class DateCollection
         \ksort($this->datesIndexedByDate);
     }
 
+    /**
+     * @param \App\Infrastructure\ValueObject\Time\SerializableDateTime[] $dates
+     */
     public static function fromDates(array $dates): self
     {
         return new self($dates);

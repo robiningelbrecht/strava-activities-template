@@ -18,6 +18,9 @@ final readonly class OpenMeteo
     ) {
     }
 
+    /**
+     * @param array<mixed> $options
+     */
     private function request(
         string $path,
         string $method = 'GET',
@@ -28,6 +31,9 @@ final readonly class OpenMeteo
         return $response->getBody()->getContents();
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getWeatherStats(
         Latitude $latitude,
         Longitude $longitude,

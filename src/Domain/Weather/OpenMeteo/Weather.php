@@ -4,11 +4,17 @@ namespace App\Domain\Weather\OpenMeteo;
 
 final readonly class Weather implements \JsonSerializable
 {
+    /**
+     * @param array<mixed> $data
+     */
     private function __construct(
         private array $data
     ) {
     }
 
+    /**
+     * @param array<mixed> $data
+     */
     public static function fromMap(array $data): self
     {
         return new self($data);
@@ -42,7 +48,8 @@ final readonly class Weather implements \JsonSerializable
             $degrees >= 168.75 && $degrees < 213.75 => 'S',
             $degrees >= 213.75 && $degrees < 258.75 => 'SW',
             $degrees >= 258.75 && $degrees < 303.75 => 'W',
-            $degrees >= 303.75 && $degrees < 348.75 => 'NW'
+            $degrees >= 303.75 && $degrees < 348.75 => 'NW',
+            default => throw new \RuntimeException('What world do you live in??')
         };
     }
 
@@ -64,9 +71,13 @@ final readonly class Weather implements \JsonSerializable
             20,22,23,24,26,36,37,38,39,70,71,72,73,74,75,76,77,78,85,86,87,88,94 => 'Snowy',
             21,25,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,80,81,82,83,84,91,92,93 => 'Rainy',
             79 => 'Cold',
+            default => throw new \RuntimeException('Unsupported weather code')
         };
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function jsonSerialize(): array
     {
         return $this->data;

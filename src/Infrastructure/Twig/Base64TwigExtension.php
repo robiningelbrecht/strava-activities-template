@@ -15,13 +15,13 @@ final readonly class Base64TwigExtension
             $binary = file_get_contents($asset);
         }
 
-        return sprintf('data:image/%s;base64,%s', $extension, base64_encode($binary));
+        return sprintf('data:image/%s;base64,%s', $extension, base64_encode($binary ?: ''));
     }
 
     public static function font(string $name): string
     {
         $binary = file_get_contents(Settings::getAppRoot().'/public/assets/font/'.$name);
 
-        return sprintf('data:application/font-woff;charset=utf-8;base64,%s', base64_encode($binary));
+        return sprintf('data:application/font-woff;charset=utf-8;base64,%s', base64_encode($binary ?: ''));
     }
 }

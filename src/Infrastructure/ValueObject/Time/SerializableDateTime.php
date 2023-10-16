@@ -4,16 +4,20 @@ namespace App\Infrastructure\ValueObject\Time;
 
 class SerializableDateTime extends \DateTimeImmutable implements \JsonSerializable, \Stringable
 {
-    public static function createFromFormat(string $format, string $datetime, $timezone = null): self
+    public static function createFromFormat(string $format, string $datetime, $timezone = null): self|false
     {
+        if (!$datetime = parent::createFromFormat($format, $datetime, $timezone)) {
+            return false;
+        }
+
         return self::fromString(
-            parent::createFromFormat($format, $datetime, $timezone)->format('Y-m-d H:i:s')
+            $datetime->format('Y-m-d H:i:s')
         );
     }
 
     public static function fromString(string $string): self
     {
-        return new static($string);
+        return new self($string);
     }
 
     public static function fromTimestamp(int $unixTimestamp): self

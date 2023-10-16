@@ -7,12 +7,17 @@ use App\Infrastructure\ValueObject\Time\DateCollection;
 
 final readonly class Trivia
 {
+    /**
+     * @param \App\Domain\Strava\Activity\Activity[] $activities
+     */
     private function __construct(
-        /* @var \App\Domain\Strava\Activity\Activity[] */
         private array $activities,
     ) {
     }
 
+    /**
+     * @param \App\Domain\Strava\Activity\Activity[] $activities
+     */
     public static function fromActivities(array $activities): self
     {
         return new self($activities);

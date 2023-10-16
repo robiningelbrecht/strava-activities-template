@@ -4,7 +4,12 @@ namespace App\Infrastructure\ValueObject\Geography;
 
 abstract readonly class FloatLiteral
 {
-    protected function __construct(private float $float)
+    final private function __construct(private float $float)
+    {
+        $this->guardValid($this->float);
+    }
+
+    protected function guardValid(float $float): void
     {
     }
 

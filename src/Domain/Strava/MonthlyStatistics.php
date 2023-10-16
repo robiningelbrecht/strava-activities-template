@@ -28,11 +28,18 @@ final class MonthlyStatistics
         }
     }
 
+    /**
+     * @param Activity[]  $activities
+     * @param Challenge[] $challenges
+     */
     public static function fromActivitiesAndChallenges(array $activities, array $challenges, SerializableDateTime $now): self
     {
         return new self($activities, $challenges, $now);
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getRows(): array
     {
         $statistics = [];
@@ -100,11 +107,17 @@ final class MonthlyStatistics
         return $statistics;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getTotals(): array
     {
         return $this->getTotalsForActivities($this->activities);
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getTotalsForOutsideBikeRides(): array
     {
         $outsideBikeRides = array_filter(
@@ -115,6 +128,9 @@ final class MonthlyStatistics
         return $this->getTotalsForActivities($outsideBikeRides);
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getTotalsForZwift(): array
     {
         $virtualRides = array_filter(
@@ -125,6 +141,11 @@ final class MonthlyStatistics
         return $this->getTotalsForActivities($virtualRides);
     }
 
+    /**
+     * @param Activity[] $activities
+     *
+     * @return array<mixed>
+     */
     private function getTotalsForActivities(array $activities): array
     {
         return [

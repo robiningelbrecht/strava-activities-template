@@ -9,6 +9,7 @@ use GuzzleHttp\RequestOptions;
 
 final class Strava
 {
+    /** @var array<mixed> */
     private static array $cachedAthlete = [];
 
     public function __construct(
@@ -19,6 +20,9 @@ final class Strava
     ) {
     }
 
+    /**
+     * @param array<mixed> $options
+     */
     private function request(
         string $path,
         string $method = 'GET',
@@ -46,6 +50,9 @@ final class Strava
         return Json::decode($response)['access_token'] ?? throw new \RuntimeException('Could not fetch Strava accessToken');
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getAthlete(): array
     {
         if (!empty(Strava::$cachedAthlete)) {
@@ -61,6 +68,9 @@ final class Strava
         return Strava::$cachedAthlete;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getActivities(): array
     {
         $allActivities = [];
@@ -83,6 +93,9 @@ final class Strava
         return $allActivities;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getActivity(int $id): array
     {
         return Json::decode($this->request('api/v3/activities/'.$id, 'GET', [
@@ -92,6 +105,9 @@ final class Strava
         ]));
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getActivityZones(int $id): array
     {
         return Json::decode($this->request('api/v3/activities/'.$id.'/zones', 'GET', [
@@ -101,6 +117,9 @@ final class Strava
         ]));
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getAllActivityStreams(int $id): array
     {
         return Json::decode($this->request('api/v3/activities/'.$id.'/streams', 'GET', [
@@ -113,6 +132,9 @@ final class Strava
         ]));
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getActivityPhotos(int $activityId): array
     {
         return Json::decode($this->request('api/v3/activities/'.$activityId.'/photos', 'GET', [
@@ -125,6 +147,9 @@ final class Strava
         ]));
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getGear(string $id): array
     {
         return Json::decode($this->request('api/v3/gear/'.$id, 'GET', [
@@ -134,6 +159,9 @@ final class Strava
         ]));
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getChallenges(): array
     {
         $athleteId = $this->getAthlete()['id'];
@@ -172,7 +200,7 @@ final class Strava
         return $challenges;
     }
 
-    public function downloadImage($uri): string
+    public function downloadImage(string $uri): string
     {
         $response = $this->client->request('GET', $uri);
 

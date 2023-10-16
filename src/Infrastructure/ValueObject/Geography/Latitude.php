@@ -4,16 +4,10 @@ namespace App\Infrastructure\ValueObject\Geography;
 
 final readonly class Latitude extends FloatLiteral
 {
-    public function __construct(float $latitude)
+    protected function guardValid(float $float): void
     {
-        $this->guardValid($latitude);
-        parent::__construct($latitude);
-    }
-
-    private function guardValid(float $latitude): void
-    {
-        if (\abs($latitude) > 90) {
-            throw new \InvalidArgumentException('Invalid latitude value: '.$latitude);
+        if (\abs($float) > 90) {
+            throw new \InvalidArgumentException('Invalid latitude value: '.$float);
         }
     }
 }
