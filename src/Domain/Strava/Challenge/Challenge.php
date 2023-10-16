@@ -6,7 +6,7 @@ use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-final class Challenge implements \JsonSerializable
+final class Challenge
 {
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string', unique: true)]
@@ -18,21 +18,33 @@ final class Challenge implements \JsonSerializable
     ) {
     }
 
-    public static function fromMap(array $data): self
-    {
-        return new self($data);
+    public static function fromState(
+        string $challengeId,
+        SerializableDateTime $createdOn,
+        array $data
+    ): self {
+        return new self(
+            challengeId: $challengeId,
+            createdOn: $createdOn,
+            data: $data,
+        );
     }
 
-    public static function create(array $data, SerializableDateTime $createdOn): self
-    {
-        $data['createdOn'] = $createdOn->getTimestamp();
-
-        return new self($data);
+    public static function create(
+        string $challengeId,
+        SerializableDateTime $createdOn,
+        array $data
+    ): self {
+        return new self(
+            challengeId: $challengeId,
+            createdOn: $createdOn,
+            data: $data,
+        );
     }
 
     public function getId(): string
     {
-        return $this->data['challenge_id'];
+        return $this->challengeId;
     }
 
     public function getName(): string
@@ -72,10 +84,5 @@ final class Challenge implements \JsonSerializable
     public function getCreatedOn(): SerializableDateTime
     {
         return $this->createdOn;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->data;
     }
 }

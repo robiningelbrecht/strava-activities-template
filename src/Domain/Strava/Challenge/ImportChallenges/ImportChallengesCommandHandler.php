@@ -40,11 +40,12 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
 
         foreach ($challenges as $challengeData) {
             try {
-                $this->stravaChallengeRepository->findOneBy($challengeData['challenge_id']);
+                $this->stravaChallengeRepository->find($challengeData['challenge_id']);
             } catch (EntityNotFound) {
                 $challenge = Challenge::create(
-                    $challengeData,
-                    SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
+                    challengeId: $challengeData['challenge_id'],
+                    createdOn: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
+                    data: $challengeData,
                 );
                 if ($url = $challenge->getLogoUrl()) {
                     $imagePath = sprintf('files/challenges/%s.png', UuidV5::uuid1());
