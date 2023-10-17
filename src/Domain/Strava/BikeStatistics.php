@@ -43,6 +43,10 @@ final readonly class BikeStatistics
         }, $this->bikes);
 
         $activitiesWithOtherBike = array_filter($this->activities, fn (Activity $activity) => empty($activity->getGearId()));
+        if (0 === count($activitiesWithOtherBike)) {
+            return $statistics;
+        }
+
         $statistics[] = [
             'name' => 'Other',
             'distance' => array_sum(array_map(fn (Activity $activity) => $activity->getDistance(), $this->activities)) -
