@@ -44,6 +44,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
             try {
                 $activity = $this->stravaActivityRepository->find($stravaActivity['id']);
                 $activity->updateKudoCount($stravaActivity['kudos_count'] ?? 0);
+                $activity->updateGearId($stravaActivity['gear_id'] ?? null);
                 $this->stravaActivityRepository->update($activity);
                 $command->getOutput()->writeln(sprintf('  => Updated activity "%s"', $activity->getName()));
             } catch (EntityNotFound) {

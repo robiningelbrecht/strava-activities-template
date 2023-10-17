@@ -30,7 +30,7 @@ final class Activity
         #[ORM\Column(type: 'json')]
         private array $data,
         #[ORM\Column(type: 'string', nullable: true)]
-        private readonly ?string $gearId = null,
+        private ?string $gearId = null,
     ) {
         $this->gearName = null;
         $this->bestPowerOutputs = [];
@@ -108,6 +108,11 @@ final class Activity
     public function getGearId(): ?string
     {
         return $this->gearId;
+    }
+
+    public function updateGearId(string $gearId = null): void
+    {
+        $this->gearId = $gearId;
     }
 
     public function getGearName(): ?string
