@@ -1,7 +1,7 @@
 name: CI
 on:
   workflow_dispatch:
-  Òpull_request:
+  pull_request:
 jobs:
   ci:
     name: Run CI
