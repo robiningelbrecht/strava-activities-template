@@ -18,7 +18,7 @@
   </testsuites>
   <source>
     <include>
-      <directory>src</directory>
+      <directory>src/Domain</directory>
     </include>
   </source>
 </phpunit>
