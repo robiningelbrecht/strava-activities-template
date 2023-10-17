@@ -7,6 +7,7 @@ const run = async () => {
     const files = fs.readdirSync(directoryPath);
     files.forEach(function (file) {
         if(file.endsWith('.json')){
+            const absolutePath = directoryPath+'/'+file;
             const data = fs.readFileSync(absolutePath);
             const chartData = JSON.parse(data);
 
@@ -17,7 +18,6 @@ const run = async () => {
                 height: chartData.height
             });
 
-            const absolutePath = directoryPath+'/'+file;
             const fileName = absolutePath.replace('.json', '.svg');
             try {
                 chart.setOption(chartData.options);
