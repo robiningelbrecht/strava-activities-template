@@ -120,6 +120,7 @@ class StravaActivityRepositoryTest extends DatabaseTestCase
         $activity = ActivityBuilder::fromDefaults()
             ->withActivityId(1)
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 14:00:34'))
+            ->withGearId('1')
             ->build();
         $this->stravaActivityRepository->add($activity);
 
@@ -129,11 +130,17 @@ class StravaActivityRepositoryTest extends DatabaseTestCase
         );
 
         $activity->updateKudoCount(3);
+        $activity->updateGearId('10');
         $this->stravaActivityRepository->update($activity);
 
         $this->assertEquals(
             3,
             $this->stravaActivityRepository->find(1)->getKudoCount()
+        );
+
+        $this->assertEquals(
+            '10',
+            $this->stravaActivityRepository->find(1)->getGearId()
         );
     }
 

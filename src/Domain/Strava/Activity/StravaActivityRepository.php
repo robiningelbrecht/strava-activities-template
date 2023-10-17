@@ -99,8 +99,7 @@ final class StravaActivityRepository
     public function update(Activity $activity): void
     {
         $sql = 'UPDATE Activity 
-        SET data = :data,
-        gearId = gearId
+        SET data = :data, gearId = :gearId
         WHERE activityId = :activityId';
 
         $this->connection->executeStatement($sql, [
