@@ -59,4 +59,11 @@ final class ActivityBuilder
 
         return $this;
     }
+
+    public function withData(array $data): self
+    {
+        $this->data = $data;
+
+        return $this;
+    }
 }

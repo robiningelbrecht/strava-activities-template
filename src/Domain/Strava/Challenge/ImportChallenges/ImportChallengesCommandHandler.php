@@ -11,7 +11,7 @@ use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Lcobucci\Clock\Clock;
-use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 use Ramsey\Uuid\Rfc4122\UuidV5;
 
 #[AsCommandHandler]
@@ -20,7 +20,7 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
     public function __construct(
         private Strava $strava,
         private StravaChallengeRepository $stravaChallengeRepository,
-        private Filesystem $filesystem,
+        private FilesystemOperator $filesystem,
         private Clock $clock
     ) {
     }

@@ -10,7 +10,7 @@ use Doctrine\DBAL\Connection;
 final class StravaActivityRepository
 {
     /** @var array<int|string, array<Activity>> */
-    private static array $cachedActivities = [];
+    public static array $cachedActivities = [];
 
     public function __construct(
         private readonly Connection $connection

@@ -6,7 +6,7 @@ use App\Domain\Strava\Activity\StravaActivityRepository;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
-use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 use Twig\Environment;
 
 #[AsCommandHandler]
@@ -14,7 +14,7 @@ final readonly class BuildLatestStravaActivitiesCommandHandler implements Comman
 {
     public function __construct(
         private StravaActivityRepository $stravaActivityRepository,
-        private Filesystem $filesystem,
+        private FilesystemOperator $filesystem,
         private Environment $twig,
     ) {
     }

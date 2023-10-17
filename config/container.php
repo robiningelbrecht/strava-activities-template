@@ -16,6 +16,7 @@ use Dotenv\Dotenv;
 use Lcobucci\Clock\Clock;
 use Lcobucci\Clock\SystemClock;
 use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use Symfony\Component\Console\Application;
 use Twig\Environment as TwigEnvironment;
@@ -66,7 +67,7 @@ return [
     StravaClientSecret::class => StravaClientSecret::fromString($_ENV['STRAVA_CLIENT_SECRET']),
     StravaRefreshToken::class => StravaRefreshToken::fromString($_ENV['STRAVA_REFRESH_TOKEN']),
     // File system.
-    Filesystem::class => DI\autowire()->constructorParameter('adapter', new LocalFilesystemAdapter(
+    FilesystemOperator::class => DI\create(Filesystem::class)->constructor(new LocalFilesystemAdapter(
         Settings::getAppRoot()
     )),
 ];

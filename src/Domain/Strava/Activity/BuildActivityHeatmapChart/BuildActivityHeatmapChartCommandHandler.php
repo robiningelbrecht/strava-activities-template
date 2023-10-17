@@ -9,14 +9,14 @@ use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Lcobucci\Clock\Clock;
-use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 
 #[AsCommandHandler]
 final readonly class BuildActivityHeatmapChartCommandHandler implements CommandHandler
 {
     public function __construct(
         private StravaActivityRepository $stravaActivityRepository,
-        private Filesystem $filesystem,
+        private FilesystemOperator $filesystem,
         private Clock $clock
     ) {
     }

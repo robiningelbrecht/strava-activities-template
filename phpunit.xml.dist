@@ -19,6 +19,7 @@
   <source>
     <include>
       <directory>src/Domain</directory>
+      <directory>src/Console</directory>
     </include>
   </source>
 </phpunit>
