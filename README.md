@@ -79,7 +79,8 @@ on https://vercel.com:
 * Any new feature or update added to the template, will automatically end up in your repository 🪄
 * Only (virtual) bike rides are imported, other sports are not relevant for these stats
 * Because of technical (Strava) limitations, not all Strava challenges
-  can be imported. Only the visible ones on your public profile can be imported
+  can be imported. Only the visible ones on your public profile can be imported 
+  (please be sure that your profile is public, otherwise this won't work)
 * Strava statistics will be re-calculated once a day. If you want to
   re-calculate these manually, navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/actions/workflows/update-strava-activities.yml
   and click `Run workflow` at the right-hand side
