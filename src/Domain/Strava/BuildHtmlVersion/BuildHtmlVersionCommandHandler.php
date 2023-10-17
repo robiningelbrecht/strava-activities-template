@@ -27,7 +27,7 @@ use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Lcobucci\Clock\Clock;
-use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 use Twig\Environment;
 
 #[AsCommandHandler]
@@ -41,7 +41,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         private StravaActivityPowerRepository $stravaActivityPowerRepository,
         private StravaActivityStreamRepository $stravaActivityStreamRepository,
         private Environment $twig,
-        private Filesystem $filesystem,
+        private FilesystemOperator $filesystem,
         private Clock $clock,
     ) {
     }

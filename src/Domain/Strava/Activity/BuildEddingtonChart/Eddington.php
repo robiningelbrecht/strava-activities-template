@@ -39,6 +39,10 @@ final class Eddington
 
     public function getLongestDistanceInADay(): int
     {
+        if (empty($this->getDistancesPerDay())) {
+            return 0;
+        }
+
         return (int) round(max($this->getDistancesPerDay()));
     }
 

@@ -53,6 +53,9 @@ final class ActivityTotals
     public function getDailyAverage(): float
     {
         $diff = $this->getStartDate()->diff($this->now);
+        if (0 === $diff->days) {
+            return 0;
+        }
 
         return $this->getDistance() / $diff->days;
     }
@@ -60,6 +63,9 @@ final class ActivityTotals
     public function getWeeklyAverage(): float
     {
         $diff = $this->getStartDate()->diff($this->now);
+        if (0 === $diff->days) {
+            return 0;
+        }
 
         return $this->getDistance() / ceil($diff->days / 7);
     }
@@ -67,6 +73,9 @@ final class ActivityTotals
     public function getMonthlyAverage(): float
     {
         $diff = $this->getStartDate()->diff($this->now);
+        if (0 === $diff->days) {
+            return 0;
+        }
 
         return $this->getDistance() / (($diff->y * 12) + $diff->m + 1);
     }

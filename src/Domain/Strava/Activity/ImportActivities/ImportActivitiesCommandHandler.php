@@ -14,7 +14,7 @@ use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use GuzzleHttp\Exception\ClientException;
-use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 use Ramsey\Uuid\Rfc4122\UuidV5;
 
 #[AsCommandHandler]
@@ -24,7 +24,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
         private Strava $strava,
         private OpenMeteo $openMeteo,
         private StravaActivityRepository $stravaActivityRepository,
-        private Filesystem $filesystem,
+        private FilesystemOperator $filesystem,
         private ReachedStravaApiRateLimits $reachedStravaApiRateLimits
     ) {
     }

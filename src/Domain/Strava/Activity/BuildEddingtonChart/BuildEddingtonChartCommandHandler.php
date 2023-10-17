@@ -7,14 +7,14 @@ use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Serialization\Json;
-use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 
 #[AsCommandHandler]
 final readonly class BuildEddingtonChartCommandHandler implements CommandHandler
 {
     public function __construct(
         private StravaActivityRepository $stravaActivityRepository,
-        private Filesystem $filesystem,
+        private FilesystemOperator $filesystem,
     ) {
     }
 

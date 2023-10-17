@@ -52,4 +52,18 @@ final class DefaultStreamBuilder
 
         return $this;
     }
+
+    public function withCreatedOn(SerializableDateTime $createdOn): self
+    {
+        $this->createdOn = $createdOn;
+
+        return $this;
+    }
+
+    public function withData(array $data): self
+    {
+        $this->data = $data;
+
+        return $this;
+    }
 }

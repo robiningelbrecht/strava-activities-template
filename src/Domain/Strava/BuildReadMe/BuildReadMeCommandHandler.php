@@ -15,7 +15,7 @@ use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Lcobucci\Clock\Clock;
-use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 use Twig\Environment;
 
 #[AsCommandHandler]
@@ -27,7 +27,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
         private StravaGearRepository $stravaGearRepository,
         private StravaActivityPowerRepository $stravaActivityPowerRepository,
         private Environment $twig,
-        private Filesystem $filesystem,
+        private FilesystemOperator $filesystem,
         private Clock $clock,
     ) {
     }

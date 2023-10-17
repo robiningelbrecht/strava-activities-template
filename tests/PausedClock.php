@@ -4,7 +4,7 @@ namespace App\Tests;
 
 use Lcobucci\Clock\Clock;
 
-class PausedClock implements Clock
+readonly class PausedClock implements Clock
 {
     private function __construct(
         private \DateTimeImmutable $pausedOn)
