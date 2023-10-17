@@ -2,8 +2,8 @@ name: CI
 on:
   workflow_dispatch:
 jobs:
-  update-strava-history:
-    name: Update strava activities
+  ci:
+    name: Run CI
     runs-on: ubuntu-latest
     steps:
       # https://github.com/marketplace/actions/setup-php-action
