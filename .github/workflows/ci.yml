@@ -33,6 +33,3 @@ jobs:
       - name: Run test suite
         run: vendor/bin/phpunit --testsuite unit --fail-on-incomplete  --log-junit junit.xml --coverage-clover clover.xml
 
-      - name: Update Strava activities
-        run: bin/update-strava-activities.sh
-
