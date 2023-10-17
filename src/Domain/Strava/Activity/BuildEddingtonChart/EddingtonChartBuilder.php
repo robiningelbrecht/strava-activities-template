@@ -43,6 +43,7 @@ final class EddingtonChartBuilder
         $eddingtonNumber = $this->eddington->getNumber();
 
         $yAxisMaxValue = ceil(max($timesCompletedData) / 30) * 30;
+        $yAxisInterval = ceil(($yAxisMaxValue / 5) / 30) * 30;
 
         $timesCompletedDataForChart = $timesCompletedData;
         $timesCompletedDataForChart[$eddingtonNumber] = [
@@ -78,7 +79,7 @@ final class EddingtonChartBuilder
                         'show' => true,
                     ],
                     'max' => $yAxisMaxValue,
-                    'interval' => 30,
+                    'interval' => $yAxisInterval,
                 ],
                 [
                     'type' => 'value',
