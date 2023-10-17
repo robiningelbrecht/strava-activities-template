@@ -25,10 +25,13 @@ final readonly class BuildWeekdayStatsChartCommandHandler implements CommandHand
         $this->filesystem->write(
             'build/charts/chart-weekday-stats_1000_300.json',
             Json::encode(
-                WeekdayStatsChartsBuilder::fromActivities(
-                    $this->stravaActivityRepository->findAll(),
-                )
-                ->build(),
+                [
+                    'width' => 1000,
+                    'height' => 300,
+                    'options' => WeekdayStatsChartsBuilder::fromActivities(
+                        $this->stravaActivityRepository->findAll(),
+                    )->build(),
+                ],
                 JSON_PRETTY_PRINT
             ),
         );

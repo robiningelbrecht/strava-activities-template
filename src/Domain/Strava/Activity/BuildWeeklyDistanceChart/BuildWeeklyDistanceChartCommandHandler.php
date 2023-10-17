@@ -29,10 +29,14 @@ final readonly class BuildWeeklyDistanceChartCommandHandler implements CommandHa
         $this->filesystem->write(
             'build/charts/chart_1000_300.json',
             Json::encode(
-                WeeklyDistanceChartBuilder::fromActivities(
-                    activities: $allActivities,
-                    now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
-                )->build(),
+                [
+                    'width' => 1000,
+                    'height' => 300,
+                    'options' => WeeklyDistanceChartBuilder::fromActivities(
+                        activities: $allActivities,
+                        now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
+                    )->build(),
+                ],
                 JSON_PRETTY_PRINT
             ),
         );

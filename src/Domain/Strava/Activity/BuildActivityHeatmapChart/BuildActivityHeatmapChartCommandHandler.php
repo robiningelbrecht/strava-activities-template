@@ -28,10 +28,14 @@ final readonly class BuildActivityHeatmapChartCommandHandler implements CommandH
         $this->filesystem->write(
             'build/charts/chart-activities-heatmap_1000_180.json',
             Json::encode(
-                ActivityHeatmapChartBuilder::fromActivities(
-                    activities: $this->stravaActivityRepository->findAll(),
-                    now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
-                )->build(),
+                [
+                    'width' => 1000,
+                    'height' => 180,
+                    'options' => ActivityHeatmapChartBuilder::fromActivities(
+                        activities: $this->stravaActivityRepository->findAll(),
+                        now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
+                    )->build(),
+                ],
                 JSON_PRETTY_PRINT),
         );
     }

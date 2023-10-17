@@ -27,7 +27,11 @@ final readonly class BuildEddingtonChartCommandHandler implements CommandHandler
         $this->filesystem->write(
             'build/charts/chart-activities-eddington_1000_300.json',
             Json::encode(
-                EddingtonChartBuilder::fromEddington($eddington)->build(),
+                [
+                    'width' => 1000,
+                    'height' => 300,
+                    'options' => EddingtonChartBuilder::fromEddington($eddington)->build(),
+                ],
                 JSON_PRETTY_PRINT
             ),
         );
