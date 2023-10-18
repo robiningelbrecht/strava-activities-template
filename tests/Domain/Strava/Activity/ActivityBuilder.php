@@ -53,6 +53,13 @@ final class ActivityBuilder
         return $this;
     }
 
+    public function withoutGearId(): self
+    {
+        $this->gearId = null;
+
+        return $this;
+    }
+
     public function withStartDateTime(SerializableDateTime $startDateTime): self
     {
         $this->startDateTime = $startDateTime;

@@ -49,8 +49,7 @@ final readonly class BikeStatistics
 
         $statistics[] = [
             'name' => 'Other',
-            'distance' => array_sum(array_map(fn (Activity $activity) => $activity->getDistance(), $this->activities)) -
-                array_sum(array_map(fn (Gear $bike) => $bike->getDistanceInKm(), $this->bikes)),
+            'distance' => array_sum(array_map(fn (Activity $activity) => $activity->getDistance(), $activitiesWithOtherBike)),
             'numberOfRides' => count($activitiesWithOtherBike),
             'movingTime' => CarbonInterval::seconds(array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $activitiesWithOtherBike)))->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),
             'elevation' => array_sum(array_map(fn (Activity $activity) => $activity->getElevation(), $activitiesWithOtherBike)),
