@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Strava;
 use App\Infrastructure\DependencyInjection\ContainerFactory;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Lcobucci\Clock\Clock;
@@ -26,10 +27,17 @@ abstract class ContainerTestCase extends TestCase
     {
         if (!self::$container) {
             self::$container = ContainerFactory::createForTestSuite();
-            self::$container->set(FilesystemOperator::class, new SpyFileSystem());
+            self::$container->set(
+                name: FilesystemOperator::class,
+                value: new SpyFileSystem()
+            );
             self::$container->set(
                 name: Clock::class,
                 value: PausedClock::on(SerializableDateTime::fromString('2023-10-17 16:15:04'))
+            );
+            self::$container->set(
+                name: Strava::class,
+                value: $this->createMock(Strava::class)
             );
         }
 

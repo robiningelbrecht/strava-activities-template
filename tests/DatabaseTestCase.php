@@ -3,13 +3,11 @@
 namespace App\Tests;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 
 abstract class DatabaseTestCase extends ContainerTestCase
 {
-    private static bool $testDatabaseCreated = false;
     protected static ?Connection $connection = null;
 
     protected function setUp(): void
@@ -20,21 +18,7 @@ abstract class DatabaseTestCase extends ContainerTestCase
             self::$connection = $this->getContainer()->get(Connection::class);
         }
 
-        if (!self::$testDatabaseCreated) {
-            $this->createTestDatabase();
-            self::$testDatabaseCreated = true;
-        }
-
-        $this->getConnection()->beginTransaction();
-    }
-
-    public function tearDown(): void
-    {
-        try {
-            $this->getConnection()->rollBack();
-        } catch (ConnectionException) {
-        } catch (\PDOException) {
-        }
+        $this->createTestDatabase();
     }
 
     public function getConnection(): Connection
@@ -49,7 +33,7 @@ abstract class DatabaseTestCase extends ContainerTestCase
 
         $schemaTool = new SchemaTool($entityManager);
         $classes = $entityManager->getMetadataFactory()->getAllMetadata();
-        $schemaTool->dropSchema($classes);
+        $schemaTool->dropDatabase();
         $schemaTool->createSchema($classes);
     }
 }

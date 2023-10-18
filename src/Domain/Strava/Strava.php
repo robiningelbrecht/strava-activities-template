@@ -7,7 +7,7 @@ use App\Infrastructure\Serialization\Json;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 
-final class Strava
+class Strava
 {
     /** @var array<mixed> */
     private static array $cachedAthlete = [];
