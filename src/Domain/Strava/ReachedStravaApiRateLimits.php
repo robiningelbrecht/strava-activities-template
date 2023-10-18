@@ -6,12 +6,12 @@ namespace App\Domain\Strava;
 
 use League\Flysystem\FilesystemOperator;
 
-readonly class ReachedStravaApiRateLimits
+class ReachedStravaApiRateLimits
 {
     private const RATE_LIMIT_FILE = 'RATE_LIMITS_REACHED';
 
     public function __construct(
-        private FilesystemOperator $filesystem,
+        private readonly FilesystemOperator $filesystem,
     ) {
     }
 
