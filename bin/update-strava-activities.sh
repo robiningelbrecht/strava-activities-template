@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-# Clone template
-git clone https://github.com/robiningelbrecht/strava-activities-template.git
-
 # Copy all files from template to this repo.
 rm -Rf bin/* && mv -f strava-activities-template/bin/* bin/
 rm -Rf config/* && mv -f strava-activities-template/config/* config/

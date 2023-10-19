@@ -43,6 +43,11 @@ jobs:
             echo STRAVA_REFRESH_TOKEN=${{ secrets.STRAVA_REFRESH_TOKEN }} >> .env
             echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
 
+      - name: Install template and update build file
+        run: |
+          git clone https://github.com/robiningelbrecht/strava-activities-template.git
+          mv -f strava-activities-template/bin/update-strava-activities.sh bin/update-strava-activities.sh
+
       - name: Update Strava activities
         run: bin/update-strava-activities.sh
 
