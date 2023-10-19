@@ -102,3 +102,9 @@ on https://vercel.com:
 ## 💡Feature request?
 
 For any feedback, help or feature requests, please [open a new issue](https://github.com/robiningelbrecht/strava-activities-template/issues/new)
+
+## Change Log
+All notable changes to this project will be documented in this file.
+
+* __[2023-10-19]__: Fixed bug when deploying new template version
+* __[2023-10-15]__: Initial release of the template

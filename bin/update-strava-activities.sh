@@ -11,6 +11,15 @@ rm -Rf migrations/* && mv -f strava-activities-template/migrations/* migrations/
 rm -Rf public/* && mv -f strava-activities-template/public/* public/
 rm -Rf src/* && mv -f strava-activities-template/src/* src/
 rm -Rf templates/* && mv -f strava-activities-template/templates/* templates/
+## Build asset files
+mv -f strava-activities-template/build/html/echarts/echart.min.js build/html/echarts/echart.min.js
+mv -f strava-activities-template/build/html/flowbite/flowbite.js build/html/flowbite/flowbite.js
+mv -f strava-activities-template/build/html/flowbite/flowbite.min.css build/html/flowbite/flowbite.min.css
+mv -f strava-activities-template/build/html/dark-mode-toggle.js build/html/dark-mode-toggle.js
+mv -f strava-activities-template/build/html/favicon.ico build/html/favicon.ico
+mv -f strava-activities-template/build/html/placeholder.webp build/html/placeholder.webp
+mv -f strava-activities-template/build/html/router.js build/html/router.js
+
 mv -f strava-activities-template/echart.js echart.js
 mv -f strava-activities-template/composer.json composer.json
 mv -f strava-activities-template/composer.lock composer.lock
