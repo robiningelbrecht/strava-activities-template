@@ -232,6 +232,31 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
     </tr>
 </table>
 
+## Distance breakdown
+
+<table>
+    <thead>
+    <tr>
+        <th></th>
+        <th># of rides</th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/distance.svg" width="30" alt="distance" title="distance"/></th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/elevation.svg" width="30" alt="elevation" title="elevation"/></th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/time.svg" width="30" alt="time" title="time"/></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for statistic in distanceBreakdown.getRows(20) %}
+        <tr>
+            <td align="center">{{ statistic.label }}</td>
+            <td align="center">{{ statistic.numberOfRides }}</td>
+            <td align="center">{{ statistic.totalDistance|number_format(0, '.', ' ') }} <sup><sub>km</sub></sup></td>
+            <td align="center">{{ statistic.totalElevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></td>
+            <td align="center">{{ statistic.movingTimeForHumans }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
 {% if challenges is not empty %}
 ## Completed challenges
 

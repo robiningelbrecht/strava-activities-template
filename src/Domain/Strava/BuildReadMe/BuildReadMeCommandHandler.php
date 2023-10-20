@@ -10,6 +10,7 @@ use App\Domain\Strava\Activity\StravaActivityRepository;
 use App\Domain\Strava\Activity\Stream\StravaActivityPowerRepository;
 use App\Domain\Strava\BikeStatistics;
 use App\Domain\Strava\Challenge\StravaChallengeRepository;
+use App\Domain\Strava\DistanceBreakdown;
 use App\Domain\Strava\Gear\StravaGearRepository;
 use App\Domain\Strava\MonthlyStatistics;
 use App\Infrastructure\Attribute\AsCommandHandler;
@@ -70,6 +71,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
             'eddington' => Eddington::fromActivities($allActivities),
             'weekdayStats' => WeekdayStats::fromActivities($allActivities),
             'daytimeStats' => DaytimeStats::fromActivities($allActivities),
+            'distanceBreakdown' => DistanceBreakdown::fromActivities($allActivities),
         ]));
     }
 }
