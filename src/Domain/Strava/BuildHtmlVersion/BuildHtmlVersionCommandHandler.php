@@ -7,6 +7,7 @@ use App\Domain\Strava\Activity\ActivityTotals;
 use App\Domain\Strava\Activity\BuildActivityHeatmapChart\ActivityHeatmapChartBuilder;
 use App\Domain\Strava\Activity\BuildEddingtonChart\Eddington;
 use App\Domain\Strava\Activity\BuildEddingtonChart\EddingtonChartBuilder;
+use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStatsChartsBuilder;
 use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\WeeklyDistanceChartBuilder;
 use App\Domain\Strava\Activity\Image\ActivityBasedImageRepository;
@@ -58,6 +59,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $allImages = $this->activityBasedImageRepository->findAll();
         $eddington = Eddington::fromActivities($allActivities);
         $activityHighlights = ActivityHighlights::fromActivities($allActivities);
+        $weekdayStats = WeekdayStats::fromActivities($allActivities);
 
         foreach ($allActivities as $activity) {
             $activity->enrichWithBestPowerOutputs(
@@ -96,9 +98,9 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                         $allActivities,
                         $now,
                     )
-                    ->withAnimation(true)
-                    ->withoutBackgroundColor()
-                    ->build(),
+                        ->withAnimation(true)
+                        ->withoutBackgroundColor()
+                        ->build(),
                 ),
                 'bikeStatistics' => BikeStatistics::fromActivitiesAndGear(
                     activities: $allActivities,
@@ -110,15 +112,16 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                         activities: $allActivities,
                         now: $now,
                     )
-                    ->withAnimation(true)
-                    ->build()
+                        ->withAnimation(true)
+                        ->build()
                 ),
                 'weekdayStatsChart' => Json::encode(
-                    WeekdayStatsChartsBuilder::fromActivities($allActivities)
-                    ->withoutBackgroundColor()
-                    ->withAnimation(true)
-                    ->build(),
+                    WeekdayStatsChartsBuilder::fromWeekdayStats($weekdayStats)
+                        ->withoutBackgroundColor()
+                        ->withAnimation(true)
+                        ->build(),
                 ),
+                'weekdayStats' => $weekdayStats,
                 'trivia' => Trivia::fromActivities($allActivities),
             ]),
         );
@@ -157,9 +160,9 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     EddingtonChartBuilder::fromEddington(
                         Eddington::fromActivities($allActivities)
                     )
-                    ->withAnimation(true)
-                    ->withoutBackgroundColor()
-                    ->build(),
+                        ->withAnimation(true)
+                        ->withoutBackgroundColor()
+                        ->build(),
                 ),
                 'eddington' => $eddington,
             ]),

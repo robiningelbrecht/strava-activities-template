@@ -2,31 +2,22 @@
 
 namespace App\Domain\Strava\Activity\BuildWeekdayStatsChart;
 
-use App\Domain\Strava\Activity\Activity;
-use Carbon\CarbonInterval;
-
 final class WeekdayStatsChartsBuilder
 {
     private bool $animation;
     private ?string $backgroundColor;
 
-    /**
-     * @param Activity[] $activities
-     */
     private function __construct(
-        private readonly array $activities,
+        private WeekdayStats $weekdayStats,
     ) {
         $this->animation = false;
         $this->backgroundColor = '#ffffff';
     }
 
-    /**
-     * @param Activity[] $activities
-     */
-    public static function fromActivities(
-        array $activities,
+    public static function fromWeekdayStats(
+        WeekdayStats $weekdayStats,
     ): self {
-        return new self($activities);
+        return new self($weekdayStats);
     }
 
     public function withAnimation(bool $flag): self
@@ -67,11 +58,12 @@ final class WeekdayStatsChartsBuilder
             'series' => [
                 [
                     'type' => 'pie',
+                    'itemStyle' => [
+                        'borderColor' => '#fff',
+                        'borderWidth' => 2,
+                    ],
                     'label' => [
-                        'alignTo' => 'edge',
-                        'minMargin' => 5,
-                        'edgeDistance' => 10,
-                        'formatter' => "{weekday|{@[1]}}\n{sub|{@[2]} rides, {@[3]} km, {@[4]}}",
+                        'formatter' => "{weekday|{b}}\n{sub|{d}%}",
                         'lineHeight' => 15,
                         'rich' => [
                             'weekday' => [
@@ -93,32 +85,12 @@ final class WeekdayStatsChartsBuilder
      */
     private function getData(): array
     {
-        $statistics = [];
-        $daysOfTheWeekMap = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-        $totalMovingTime = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $this->activities));
-
-        foreach ([1, 2, 3, 4, 5, 6, 0] as $weekDay) {
-            $statistics[$weekDay] = [
-                'numberOfRides' => 0,
-                'totalDistance' => 0,
-                'movingTime' => 0,
-                'percentage' => 0,
-            ];
-        }
-
-        foreach ($this->activities as $activity) {
-            $weekDay = $activity->getStartDate()->format('w');
-
-            ++$statistics[$weekDay]['numberOfRides'];
-            $statistics[$weekDay]['totalDistance'] += $activity->getDistance();
-            $statistics[$weekDay]['movingTime'] += $activity->getMovingTime();
-            $statistics[$weekDay]['percentage'] = round($statistics[$weekDay]['movingTime'] / $totalMovingTime * 100);
-        }
-
         $data = [];
-        foreach ($statistics as $weekday => $statistic) {
-            $movingTime = CarbonInterval::seconds($statistic['movingTime'])->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']);
-            $data[] = [$statistic['percentage'], $daysOfTheWeekMap[$weekday], $statistic['numberOfRides'], $statistic['totalDistance'], $movingTime];
+        foreach ($this->weekdayStats->getData() as $weekday => $statistic) {
+            $data[] = [
+                'value' => $statistic['percentage'],
+                'name' => $weekday,
+            ];
         }
 
         return $data;

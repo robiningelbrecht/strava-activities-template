@@ -28,8 +28,8 @@ final readonly class BuildWeekdayStatsChartCommandHandler implements CommandHand
                 [
                     'width' => 1000,
                     'height' => 300,
-                    'options' => WeekdayStatsChartsBuilder::fromActivities(
-                        $this->stravaActivityRepository->findAll(),
+                    'options' => WeekdayStatsChartsBuilder::fromWeekdayStats(
+                        WeekdayStats::fromActivities($this->stravaActivityRepository->findAll()),
                     )->build(),
                 ],
                 JSON_PRETTY_PRINT
