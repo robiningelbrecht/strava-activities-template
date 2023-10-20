@@ -108,6 +108,8 @@ All notable changes to this project will be documented in this file.
 
 #### [2023-10-20]
 
+* Added daytime stats
+* Monthly stats: filter out months that have no activities (thanks to m.deleye)
 * Add sorting to the activity list
 * Reworked weekday stats
 
@@ -117,4 +119,8 @@ All notable changes to this project will be documented in this file.
 
 ### [2023-10-15]
 
-* Initial release of the template
+* Initial stable release of the template
+
+### [2023-10-12]
+
+* Bug fixes while importing large sets of Strava activities (thanks to [rubenbuysse](https://github.com/rubenbuysse) for testing)

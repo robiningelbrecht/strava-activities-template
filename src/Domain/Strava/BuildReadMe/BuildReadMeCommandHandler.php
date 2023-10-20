@@ -3,6 +3,7 @@
 namespace App\Domain\Strava\BuildReadMe;
 
 use App\Domain\Strava\Activity\ActivityTotals;
+use App\Domain\Strava\Activity\BuildDaytimeStatsChart\DaytimeStats;
 use App\Domain\Strava\Activity\BuildEddingtonChart\Eddington;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\StravaActivityRepository;
@@ -68,6 +69,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
             'challenges' => $allChallenges,
             'eddington' => Eddington::fromActivities($allActivities),
             'weekdayStats' => WeekdayStats::fromActivities($allActivities),
+            'daytimeStats' => DaytimeStats::fromActivities($allActivities),
         ]));
     }
 }

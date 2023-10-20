@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Domain\Strava\Activity\BuildActivityHeatmapChart\BuildActivityHeatmapChart;
+use App\Domain\Strava\Activity\BuildDaytimeStatsChart\BuildDaytimeStatsChart;
 use App\Domain\Strava\Activity\BuildEddingtonChart\BuildEddingtonChart;
 use App\Domain\Strava\Activity\BuildLatestStravaActivities\BuildLatestStravaActivities;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\BuildWeekdayStatsChart;
@@ -40,6 +41,8 @@ class BuildStravaActivityFilesConsoleCommand extends Command
         $this->commandBus->dispatch(new BuildWeeklyDistanceChart());
         $output->writeln('Building weekday stats chart...');
         $this->commandBus->dispatch(new BuildWeekdayStatsChart());
+        $output->writeln('Building daytime stats chart...');
+        $this->commandBus->dispatch(new BuildDaytimeStatsChart());
         $output->writeln('Building activity heatmap chart...');
         $this->commandBus->dispatch(new BuildActivityHeatmapChart());
         $output->writeln('Building Eddington chart...');
