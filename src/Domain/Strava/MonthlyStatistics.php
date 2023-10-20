@@ -3,6 +3,7 @@
 namespace App\Domain\Strava;
 
 use App\Domain\Strava\Activity\Activity;
+use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityType;
 use App\Domain\Strava\Challenge\Challenge;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -13,8 +14,7 @@ final class MonthlyStatistics
     private SerializableDateTime $startDate;
 
     private function __construct(
-        /** @var \App\Domain\Strava\Activity\Activity[] */
-        private readonly array $activities,
+        private readonly ActivityCollection $activities,
         /** @var \App\Domain\Strava\Challenge\Challenge[] */
         private readonly array $challenges,
         private readonly SerializableDateTime $now,
@@ -29,10 +29,12 @@ final class MonthlyStatistics
     }
 
     /**
-     * @param Activity[]  $activities
      * @param Challenge[] $challenges
      */
-    public static function fromActivitiesAndChallenges(array $activities, array $challenges, SerializableDateTime $now): self
+    public static function fromActivitiesAndChallenges(
+        ActivityCollection $activities,
+        array $challenges,
+        SerializableDateTime $now): self
     {
         return new self($activities, $challenges, $now);
     }
@@ -111,7 +113,7 @@ final class MonthlyStatistics
      */
     public function getTotals(): array
     {
-        return $this->getTotalsForActivities($this->activities);
+        return $this->getTotalsForActivities($this->activities->toArray());
     }
 
     /**
@@ -120,7 +122,7 @@ final class MonthlyStatistics
     public function getTotalsForOutsideBikeRides(): array
     {
         $outsideBikeRides = array_filter(
-            $this->activities,
+            $this->activities->toArray(),
             fn (Activity $activity) => ActivityType::RIDE === $activity->getType()
         );
 
@@ -133,7 +135,7 @@ final class MonthlyStatistics
     public function getTotalsForZwift(): array
     {
         $virtualRides = array_filter(
-            $this->activities,
+            $this->activities->toArray(),
             fn (Activity $activity) => ActivityType::VIRTUAL_RIDE === $activity->getType()
         );
 

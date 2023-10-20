@@ -25,7 +25,6 @@ final readonly class BuildWeeklyDistanceChartCommandHandler implements CommandHa
     {
         assert($command instanceof BuildWeeklyDistanceChart);
 
-        $allActivities = $this->stravaActivityRepository->findAll();
         $this->filesystem->write(
             'build/charts/chart_1000_300.json',
             Json::encode(
@@ -33,7 +32,7 @@ final readonly class BuildWeeklyDistanceChartCommandHandler implements CommandHa
                     'width' => 1000,
                     'height' => 300,
                     'options' => WeeklyDistanceChartBuilder::fromActivities(
-                        activities: $allActivities,
+                        activities: $this->stravaActivityRepository->findAll(),
                         now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
                     )->build(),
                 ],

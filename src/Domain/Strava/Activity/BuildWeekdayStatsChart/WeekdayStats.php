@@ -5,23 +5,18 @@ declare(strict_types=1);
 namespace App\Domain\Strava\Activity\BuildWeekdayStatsChart;
 
 use App\Domain\Strava\Activity\Activity;
+use App\Domain\Strava\Activity\ActivityCollection;
 use Carbon\CarbonInterval;
 
 final readonly class WeekdayStats
 {
-    /**
-     * @param Activity[] $activities
-     */
     private function __construct(
-        private array $activities,
+        private ActivityCollection $activities,
     ) {
     }
 
-    /**
-     * @param Activity[] $activities
-     */
     public static function fromActivities(
-        array $activities,
+        ActivityCollection $activities,
     ): self {
         return new self($activities);
     }
@@ -33,7 +28,7 @@ final readonly class WeekdayStats
     {
         $statistics = [];
         $daysOfTheWeekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        $totalMovingTime = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $this->activities));
+        $totalMovingTime = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $this->activities->toArray()));
 
         foreach ([1, 2, 3, 4, 5, 6, 0] as $weekDay) {
             $statistics[$daysOfTheWeekMap[$weekDay]] = [

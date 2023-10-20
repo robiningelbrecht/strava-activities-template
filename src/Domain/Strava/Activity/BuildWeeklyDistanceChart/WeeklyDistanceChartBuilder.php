@@ -2,7 +2,7 @@
 
 namespace App\Domain\Strava\Activity\BuildWeeklyDistanceChart;
 
-use App\Domain\Strava\Activity\Activity;
+use App\Domain\Strava\Activity\ActivityCollection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final class WeeklyDistanceChartBuilder
@@ -10,21 +10,15 @@ final class WeeklyDistanceChartBuilder
     private bool $animation;
     private ?string $backgroundColor;
 
-    /**
-     * @param Activity[] $activities
-     */
     private function __construct(
-        private readonly array $activities,
+        private readonly ActivityCollection $activities,
         private readonly SerializableDateTime $now,
     ) {
         $this->animation = false;
         $this->backgroundColor = '#ffffff';
     }
 
-    /**
-     * @param Activity[] $activities
-     */
-    public static function fromActivities(array $activities, SerializableDateTime $now): self
+    public static function fromActivities(ActivityCollection $activities, SerializableDateTime $now): self
     {
         return new self($activities, $now);
     }

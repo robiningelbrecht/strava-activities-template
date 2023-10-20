@@ -91,7 +91,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $this->filesystem->write(
             'build/html/dashboard.html',
             $this->twig->load('html/dashboard.html.twig')->render([
-                'mostRecentActivities' => array_slice($allActivities, 0, 5),
+                'mostRecentActivities' => array_slice($allActivities->toArray(), 0, 5),
                 'activityHighlights' => $activityHighlights,
                 'intro' => ActivityTotals::fromActivities(
                     $allActivities,

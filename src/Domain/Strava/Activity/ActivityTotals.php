@@ -10,8 +10,7 @@ final class ActivityTotals
     private SerializableDateTime $startDate;
 
     private function __construct(
-        /** @var Activity[] */
-        private readonly array $activities,
+        private readonly ActivityCollection $activities,
         private readonly SerializableDateTime $now,
     ) {
         $this->startDate = new SerializableDateTime();
@@ -25,22 +24,22 @@ final class ActivityTotals
 
     public function getDistance(): float
     {
-        return array_sum(array_map(fn (Activity $activity) => $activity->getDistance(), $this->activities));
+        return array_sum(array_map(fn (Activity $activity) => $activity->getDistance(), $this->activities->toArray()));
     }
 
     public function getElevation(): int
     {
-        return array_sum(array_map(fn (Activity $activity) => $activity->getElevation(), $this->activities));
+        return array_sum(array_map(fn (Activity $activity) => $activity->getElevation(), $this->activities->toArray()));
     }
 
     public function getCalories(): int
     {
-        return array_sum(array_map(fn (Activity $activity) => $activity->getCalories(), $this->activities));
+        return array_sum(array_map(fn (Activity $activity) => $activity->getCalories(), $this->activities->toArray()));
     }
 
     public function getMovingTimeFormatted(): string
     {
-        $seconds = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $this->activities));
+        $seconds = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $this->activities->toArray()));
 
         return CarbonInterval::seconds($seconds)->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']);
     }
@@ -87,13 +86,10 @@ final class ActivityTotals
 
     public function getTotalDaysOfCycling(): int
     {
-        return count(array_unique(array_map(fn (Activity $activity) => $activity->getStartDate()->format('Ymd'), $this->activities)));
+        return count(array_unique(array_map(fn (Activity $activity) => $activity->getStartDate()->format('Ymd'), $this->activities->toArray())));
     }
 
-    /**
-     * @param \App\Domain\Strava\Activity\Activity[] $activities
-     */
-    public static function fromActivities(array $activities, SerializableDateTime $now): self
+    public static function fromActivities(ActivityCollection $activities, SerializableDateTime $now): self
     {
         return new self($activities, $now);
     }

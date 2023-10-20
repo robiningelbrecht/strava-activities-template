@@ -5,22 +5,17 @@ declare(strict_types=1);
 namespace App\Domain\Strava;
 
 use App\Domain\Strava\Activity\Activity;
+use App\Domain\Strava\Activity\ActivityCollection;
 use Carbon\CarbonInterval;
 
 final readonly class DistanceBreakdown
 {
-    /**
-     * @param Activity[] $activities
-     */
     private function __construct(
-        private array $activities,
+        private ActivityCollection $activities,
     ) {
     }
 
-    /**
-     * @param \App\Domain\Strava\Activity\Activity[] $activities
-     */
-    public static function fromActivities(array $activities): self
+    public static function fromActivities(ActivityCollection $activities): self
     {
         return new self($activities);
     }
@@ -33,7 +28,7 @@ final readonly class DistanceBreakdown
         $statistics = [];
         $longestDistanceForActivity = max(array_map(
             fn (Activity $activity) => $activity->getDistance(),
-            $this->activities
+            $this->activities->toArray()
         ));
 
         $range = range($breakdownOnKm, ceil($longestDistanceForActivity / $breakdownOnKm) * $breakdownOnKm, $breakdownOnKm);

@@ -5,23 +5,18 @@ declare(strict_types=1);
 namespace App\Domain\Strava\Activity\BuildDaytimeStatsChart;
 
 use App\Domain\Strava\Activity\Activity;
+use App\Domain\Strava\Activity\ActivityCollection;
 use Carbon\CarbonInterval;
 
 final readonly class DaytimeStats
 {
-    /**
-     * @param Activity[] $activities
-     */
     private function __construct(
-        private array $activities,
+        private ActivityCollection $activities,
     ) {
     }
 
-    /**
-     * @param Activity[] $activities
-     */
     public static function fromActivities(
-        array $activities,
+        ActivityCollection $activities,
     ): self {
         return new self($activities);
     }
@@ -32,7 +27,7 @@ final readonly class DaytimeStats
     public function getData(): array
     {
         $statistics = [];
-        $totalMovingTime = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $this->activities));
+        $totalMovingTime = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $this->activities->toArray()));
 
         foreach (Daytime::cases() as $daytime) {
             $statistics[$daytime->value] = [
