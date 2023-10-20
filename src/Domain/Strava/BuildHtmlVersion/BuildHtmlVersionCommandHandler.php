@@ -21,6 +21,7 @@ use App\Domain\Strava\Activity\Stream\StreamChartBuilder;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\BikeStatistics;
 use App\Domain\Strava\Challenge\StravaChallengeRepository;
+use App\Domain\Strava\DistanceBreakdown;
 use App\Domain\Strava\Gear\StravaGearRepository;
 use App\Domain\Strava\MonthlyStatistics;
 use App\Domain\Strava\Trivia;
@@ -132,6 +133,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                         ->build(),
                 ),
                 'daytimeStats' => $dayTimeStats,
+                'distanceBreakdown' => DistanceBreakdown::fromActivities($allActivities),
                 'trivia' => Trivia::fromActivities($allActivities),
             ]),
         );

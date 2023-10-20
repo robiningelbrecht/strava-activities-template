@@ -351,6 +351,62 @@
                 </table>
             </div>
         </div>
+        <!-- DISTANCE BREAKDOWN -->
+        <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+            <h3 class="mb-4 text-lg font-semibold">
+                Distance breakdown
+            </h3>
+            <div class="relative overflow-x-auto">
+                <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-2 py-3">
+
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            # rides
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center justify-center">
+                                {{ svgDistance }}
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center justify-center">
+                                {{ svgElevation }}
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center justify-center">
+                                {{ svgTime }}
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for statistic in distanceBreakdown.getRows(20) %}
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <div>{{ statistic.label }}</div>
+                            </th>
+                            <td class="px-6 py-2">
+                                {{ statistic.numberOfRides }}
+                            </td>
+                            <td class="px-6 py-2 truncate">
+                                {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                            </td>
+                            <td class="px-6 py-2 truncate">
+                                {{ statistic.totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                            </td>
+                            <td class="px-6 py-2 truncate">
+                                {{ statistic.movingTimeForHumans }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <!-- TRIVIA -->
         <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <h3 class="mb-4 text-lg font-semibold">
