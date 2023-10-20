@@ -118,4 +118,8 @@ All notable changes to this project will be documented in this file.
 
 ### [2023-10-15]
 
-* Initial release of the template
+* Initial stable release of the template
+
+### [2023-10-12]
+
+* Bug fixes while importing large sets of Strava activities (thanks to [rubenbuysse](https://github.com/rubenbuysse) for testing)
