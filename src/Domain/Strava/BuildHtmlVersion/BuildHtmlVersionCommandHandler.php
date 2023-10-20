@@ -184,9 +184,9 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             'build/html/monthly-stats.html',
             $this->twig->load('html/monthly-stats.html.twig')->render([
                 'monthlyStatistics' => MonthlyStatistics::fromActivitiesAndChallenges(
-                    $allActivities,
-                    $allChallenges,
-                    SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
+                    activities: $allActivities,
+                    challenges: $allChallenges,
+                    now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
                 ),
             ]),
         );

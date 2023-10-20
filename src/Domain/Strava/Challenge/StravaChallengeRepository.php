@@ -14,20 +14,17 @@ final readonly class StravaChallengeRepository
     ) {
     }
 
-    /**
-     * @return \App\Domain\Strava\Challenge\Challenge[]
-     */
-    public function findAll(): array
+    public function findAll(): ChallengeCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('Challenge')
             ->orderBy('createdOn', 'DESC');
 
-        return array_map(
+        return ChallengeCollection::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),
             $queryBuilder->executeQuery()->fetchAllAssociative()
-        );
+        ));
     }
 
     public function find(string $id): Challenge

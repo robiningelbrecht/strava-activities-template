@@ -6,6 +6,7 @@ use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityType;
 use App\Domain\Strava\Challenge\Challenge;
+use App\Domain\Strava\Challenge\ChallengeCollection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Carbon\CarbonInterval;
 
@@ -15,8 +16,7 @@ final class MonthlyStatistics
 
     private function __construct(
         private readonly ActivityCollection $activities,
-        /** @var \App\Domain\Strava\Challenge\Challenge[] */
-        private readonly array $challenges,
+        private readonly ChallengeCollection $challenges,
         private readonly SerializableDateTime $now,
     ) {
         $this->startDate = new SerializableDateTime();
@@ -28,12 +28,9 @@ final class MonthlyStatistics
         }
     }
 
-    /**
-     * @param Challenge[] $challenges
-     */
     public static function fromActivitiesAndChallenges(
         ActivityCollection $activities,
-        array $challenges,
+        ChallengeCollection $challenges,
         SerializableDateTime $now): self
     {
         return new self($activities, $challenges, $now);
@@ -62,7 +59,7 @@ final class MonthlyStatistics
                 'totalElevation' => 0,
                 'movingTime' => 0,
                 'challengesCompleted' => count(array_filter(
-                    $this->challenges,
+                    $this->challenges->toArray(),
                     fn (Challenge $challenge) => $challenge->getCreatedOn()->format('Ym') == $date->format('Ym')
                 )),
                 'gears' => [],
