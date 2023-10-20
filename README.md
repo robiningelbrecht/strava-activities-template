@@ -108,6 +108,7 @@ All notable changes to this project will be documented in this file.
 
 #### [2023-10-20]
 
+* Added daytime stats
 * Monthly stats: filter out months that have no activities (thanks to m.deleye)
 * Add sorting to the activity list
 * Reworked weekday stats
