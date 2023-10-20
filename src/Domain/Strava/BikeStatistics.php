@@ -5,23 +5,22 @@ namespace App\Domain\Strava;
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Gear\Gear;
+use App\Domain\Strava\Gear\GearCollection;
 use Carbon\CarbonInterval;
 
 final readonly class BikeStatistics
 {
     private function __construct(
         private ActivityCollection $activities,
-        /** @var \App\Domain\Strava\Gear\Gear[] */
-        private array $bikes,
+        private GearCollection $bikes,
     ) {
     }
 
-    /**
-     * @param \App\Domain\Strava\Gear\Gear[] $gear
-     */
-    public static function fromActivitiesAndGear(ActivityCollection $activities, array $gear): self
+    public static function fromActivitiesAndGear(
+        ActivityCollection $activities,
+        GearCollection $bikes): self
     {
-        return new self($activities, $gear);
+        return new self($activities, $bikes);
     }
 
     /**
@@ -39,7 +38,7 @@ final readonly class BikeStatistics
                 'movingTime' => CarbonInterval::seconds(array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $activitiesWithBike)))->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),
                 'elevation' => array_sum(array_map(fn (Activity $activity) => $activity->getElevation(), $activitiesWithBike)),
             ];
-        }, $this->bikes);
+        }, $this->bikes->toArray());
 
         $activitiesWithOtherBike = array_filter($this->activities->toArray(), fn (Activity $activity) => empty($activity->getGearId()));
         if (0 === count($activitiesWithOtherBike)) {

@@ -108,7 +108,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 ),
                 'bikeStatistics' => BikeStatistics::fromActivitiesAndGear(
                     activities: $allActivities,
-                    gear: $allBikes
+                    bikes: $allBikes
                 ),
                 'powerOutputs' => $this->stravaActivityPowerRepository->findBest(),
                 'activityHeatmapChart' => Json::encode(

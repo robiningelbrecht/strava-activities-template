@@ -14,20 +14,17 @@ final readonly class StravaGearRepository
     ) {
     }
 
-    /**
-     * @return \App\Domain\Strava\Gear\Gear[]
-     */
-    public function findAll(): array
+    public function findAll(): GearCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('Gear')
             ->orderBy('distanceInMeter', 'DESC');
 
-        return array_map(
+        return GearCollection::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),
             $queryBuilder->executeQuery()->fetchAllAssociative()
-        );
+        ));
     }
 
     public function find(string $id): Gear

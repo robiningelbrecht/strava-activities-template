@@ -65,7 +65,10 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
                 $allChallenges,
                 SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
             ),
-            'bikeStatistics' => BikeStatistics::fromActivitiesAndGear($allActivities, $allBikes),
+            'bikeStatistics' => BikeStatistics::fromActivitiesAndGear(
+                activities: $allActivities,
+                bikes: $allBikes
+            ),
             'powerOutputs' => $this->stravaActivityPowerRepository->findBest(),
             'challenges' => $allChallenges,
             'eddington' => Eddington::fromActivities($allActivities),
