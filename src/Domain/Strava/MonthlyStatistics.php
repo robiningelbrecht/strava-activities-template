@@ -100,9 +100,6 @@ final class MonthlyStatistics
         $statistics = array_filter($statistics, fn (array $statistic) => $statistic['numberOfRides'] > 0);
 
         foreach ($statistics as &$statistic) {
-            if (0 == $statistic['movingTime']) {
-                continue;
-            }
             $statistic['movingTime'] = CarbonInterval::seconds($statistic['movingTime'])->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']);
         }
 
