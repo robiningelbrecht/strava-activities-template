@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Domain\Strava\Activity\BuildDaytimeStatsChart;
 
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
-use MongoDB\Driver\Exception\RuntimeException;
 
 enum Daytime: string
 {
@@ -24,7 +23,7 @@ enum Daytime: string
             $hour >= 17 && $hour < 23 => self::EVENING, //  17 -23
             $hour >= 23,
             $hour >= 0 => self::NIGHT, // 0 - 6,
-            default => throw new RuntimeException('Could not determine daytime'),
+            default => throw new \RuntimeException('Could not determine daytime'),
         };
     }
 
