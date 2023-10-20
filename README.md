@@ -106,5 +106,14 @@ For any feedback, help or feature requests, please [open a new issue](https://gi
 ## Change Log
 All notable changes to this project will be documented in this file.
 
-* __[2023-10-19]__: Fixed bug when deploying new template version
-* __[2023-10-15]__: Initial release of the template
+#### [2023-10-20]
+
+* Reworked weekday stats
+
+#### [2023-10-19]
+
+* Fixed bug when deploying new template version
+
+### [2023-10-15]
+
+* Initial release of the template
