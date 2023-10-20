@@ -27,10 +27,7 @@ final readonly class StravaActivityStreamRepository
         return !empty($queryBuilder->executeQuery()->fetchOne());
     }
 
-    /**
-     * @return \App\Domain\Strava\Activity\Stream\ActivityStream[]
-     */
-    public function findByStreamType(StreamType $streamType): array
+    public function findByStreamType(StreamType $streamType): ActivityStreamCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
@@ -38,30 +35,25 @@ final readonly class StravaActivityStreamRepository
             ->andWhere('streamType = :streamType')
             ->setParameter('streamType', $streamType->value);
 
-        return array_map(
+        return ActivityStreamCollection::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),
             $queryBuilder->executeQuery()->fetchAllAssociative()
-        );
+        ));
     }
 
-    /**
-     * @param \App\Domain\Strava\Activity\Stream\StreamType[] $streamTypes
-     *
-     * @return \App\Domain\Strava\Activity\Stream\ActivityStream[]
-     */
-    public function findByActivityAndStreamTypes(int $activityId, array $streamTypes): array
+    public function findByActivityAndStreamTypes(int $activityId, StreamTypeCollection $streamTypes): ActivityStreamCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('ActivityStream')
             ->andWhere('activityId = :activityId')
             ->setParameter('activityId', $activityId)
-            ->andWhere('streamType IN ('.$this->toWhereInValueForEnums($streamTypes).')');
+            ->andWhere('streamType IN ('.$this->toWhereInValueForCollection($streamTypes).')');
 
-        return array_map(
+        return ActivityStreamCollection::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),
             $queryBuilder->executeQuery()->fetchAllAssociative()
-        );
+        ));
     }
 
     public function add(ActivityStream $stream): void
