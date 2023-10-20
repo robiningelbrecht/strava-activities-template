@@ -241,8 +241,56 @@
             <h3 class="mb-4 text-lg font-semibold">
                 Stats per weekday
             </h3>
+            <div class="h-80" data-echarts-options='{{ weekdayStatsChart }}'></div>
             <div class="relative overflow-x-auto">
-                <div class="h-80 min-w-[650px]" data-echarts-options='{{ weekdayStatsChart }}'></div>
+                <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-2 py-3">
+
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            # rides
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center justify-center">
+                                {{ svgDistance }}
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center justify-center">
+                                {{ svgElevation }}
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center justify-center">
+                                {{ svgTime }}
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for weekday, statistic in weekdayStats.getData() %}
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{ weekday }}
+                            </th>
+                            <td class="px-6 py-2">
+                                {{ statistic.numberOfRides }}
+                            </td>
+                            <td class="px-6 py-2 truncate">
+                                {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                            </td>
+                            <td class="px-6 py-2 truncate">
+                                {{ statistic.totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                            </td>
+                            <td class="px-6 py-2 truncate">
+                                {{ statistic.movingTimeForHumans }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
         <!-- TRIVIA -->

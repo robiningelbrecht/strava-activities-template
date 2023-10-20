@@ -4,6 +4,7 @@ namespace App\Domain\Strava\BuildReadMe;
 
 use App\Domain\Strava\Activity\ActivityTotals;
 use App\Domain\Strava\Activity\BuildEddingtonChart\Eddington;
+use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\StravaActivityRepository;
 use App\Domain\Strava\Activity\Stream\StravaActivityPowerRepository;
 use App\Domain\Strava\BikeStatistics;
@@ -66,6 +67,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
             'powerOutputs' => $this->stravaActivityPowerRepository->findBest(),
             'challenges' => $allChallenges,
             'eddington' => Eddington::fromActivities($allActivities),
+            'weekdayStats' => WeekdayStats::fromActivities($allActivities),
         ]));
     }
 }
