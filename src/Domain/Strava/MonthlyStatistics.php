@@ -97,6 +97,8 @@ final class MonthlyStatistics
             $statistics[$month]['gears'] = $gears;
         }
 
+        $statistics = array_filter($statistics, fn (array $statistic) => $statistic['numberOfRides'] > 0);
+
         foreach ($statistics as &$statistic) {
             if (0 == $statistic['movingTime']) {
                 continue;
