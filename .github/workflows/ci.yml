@@ -41,4 +41,5 @@ jobs:
           files: clover.xml
           fail_ci_if_error: true # optional (default = false)
           verbose: true # optional (default = false)
+          token: ${{ secrets.CODECOV_TOKEN }}
 
