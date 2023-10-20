@@ -108,6 +108,7 @@ All notable changes to this project will be documented in this file.
 
 #### [2023-10-20]
 
+* Add sorting to the activity list
 * Reworked weekday stats
 
 #### [2023-10-19]

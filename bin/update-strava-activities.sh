@@ -19,6 +19,7 @@ mv -f strava-activities-template/build/html/dark-mode-toggle.js build/html/dark-
 mv -f strava-activities-template/build/html/favicon.ico build/html/favicon.ico
 mv -f strava-activities-template/build/html/placeholder.webp build/html/placeholder.webp
 mv -f strava-activities-template/build/html/router.js build/html/router.js
+mv -f strava-activities-template/build/html/sortable.min.js build/html/sortable.min.js
 
 mv -f strava-activities-template/echart.js echart.js
 mv -f strava-activities-template/composer.json composer.json
