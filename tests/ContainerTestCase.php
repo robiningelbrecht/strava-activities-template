@@ -5,7 +5,10 @@ namespace App\Tests;
 use App\Domain\Strava\Activity\StravaActivityRepository;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\DependencyInjection\ContainerFactory;
+use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use App\Tests\Domain\Strava\SpyStrava;
+use GuzzleHttp\Client;
 use Lcobucci\Clock\Clock;
 use League\Flysystem\FilesystemOperator;
 use PHPUnit\Framework\TestCase;
@@ -37,7 +40,11 @@ abstract class ContainerTestCase extends TestCase
             );
             self::$container->set(
                 name: Strava::class,
-                value: $this->createMock(Strava::class)
+                value: new SpyStrava($this->createMock(Client::class))
+            );
+            self::$container->set(
+                name: Sleep::class,
+                value: new NullSleep()
             );
         }
 

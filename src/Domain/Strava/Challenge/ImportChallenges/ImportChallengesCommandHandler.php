@@ -9,6 +9,7 @@ use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Exception\EntityNotFound;
+use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Lcobucci\Clock\Clock;
 use League\Flysystem\FilesystemOperator;
@@ -21,7 +22,8 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
         private Strava $strava,
         private StravaChallengeRepository $stravaChallengeRepository,
         private FilesystemOperator $filesystem,
-        private Clock $clock
+        private Clock $clock,
+        private Sleep $sleep
     ) {
     }
 
@@ -58,7 +60,7 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
                 }
                 $this->stravaChallengeRepository->add($challenge);
                 $command->getOutput()->writeln(sprintf('  => Imported challenge "%s"', $challenge->getName()));
-                sleep(1); // Make sure timestamp is increased by at least one.
+                $this->sleep->sweetDreams(1); // Make sure timestamp is increased by at least one.
             }
         }
     }

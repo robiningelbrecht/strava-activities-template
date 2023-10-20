@@ -3,11 +3,14 @@
 namespace App\Tests\Domain\Strava\Activity\ImportActivities;
 
 use App\Domain\Strava\Activity\ImportActivities\ImportActivities;
+use App\Domain\Strava\Activity\StravaActivityRepository;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
+use App\Tests\Domain\Strava\Activity\ActivityBuilder;
+use App\Tests\Domain\Strava\SpyStrava;
 use App\Tests\SpyOutput;
-use PHPUnit\Framework\MockObject\MockObject;
+use League\Flysystem\FilesystemOperator;
 use Spatie\Snapshots\MatchesSnapshots;
 
 class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
@@ -15,20 +18,26 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
     use MatchesSnapshots;
 
     private CommandBus $commandBus;
-    private MockObject $strava;
+    private SpyStrava $strava;
 
     public function testHandle(): void
     {
         $output = new SpyOutput();
+        $this->strava->setMaxNumberOfCallsBeforeTriggering429(6);
 
-        $this->strava
-            ->expects($this->once())
-            ->method('getAthlete')
-            ->willReturn([]);
+        $this->getContainer()->get(StravaActivityRepository::class)->add(
+            ActivityBuilder::fromDefaults()
+                ->withActivityId(2)
+                ->build()
+        );
 
         $this->commandBus->dispatch(new ImportActivities($output));
 
         $this->assertMatchesTextSnapshot($output);
+
+        /** @var \App\Tests\SpyFileSystem $fileSystem */
+        $fileSystem = $this->getContainer()->get(FilesystemOperator::class);
+        $this->assertMatchesJsonSnapshot($fileSystem->getWrites());
     }
 
     protected function setUp(): void

@@ -11,6 +11,7 @@ use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Exception\EntityNotFound;
+use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use GuzzleHttp\Exception\ClientException;
 use Lcobucci\Clock\Clock;
@@ -23,7 +24,8 @@ final readonly class ImportGearCommandHandler implements CommandHandler
         private StravaActivityRepository $stravaActivityRepository,
         private StravaGearRepository $stravaGearRepository,
         private Clock $clock,
-        private ReachedStravaApiRateLimits $reachedStravaApiRateLimits
+        private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
+        private Sleep $sleep
     ) {
     }
 
@@ -64,6 +66,8 @@ final readonly class ImportGearCommandHandler implements CommandHandler
                 $this->stravaGearRepository->add($gear);
             }
             $command->getOutput()->writeln(sprintf('  => Imported/updated gear "%s"', $gear->getName()));
+            // Try to avoid Strava rate limits.
+            $this->sleep->sweetDreams(10);
         }
     }
 }

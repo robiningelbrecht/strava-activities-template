@@ -6,6 +6,8 @@ use App\Domain\Strava\StravaRefreshToken;
 use App\Infrastructure\Console\ConsoleCommandContainer;
 use App\Infrastructure\Environment\Environment;
 use App\Infrastructure\Environment\Settings;
+use App\Infrastructure\Time\Sleep;
+use App\Infrastructure\Time\SystemSleep;
 use App\Infrastructure\Twig\TwigBuilder;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -30,6 +32,7 @@ $dotenv->load();
 return [
     // Clock.
     Clock::class => DI\factory([SystemClock::class, 'fromSystemTimezone']),
+    Sleep::class => DI\create(SystemSleep::class),
     // Twig Environment.
     FilesystemLoader::class => DI\create(FilesystemLoader::class)->constructor($appRoot.'/templates'),
     TwigEnvironment::class => DI\factory([TwigBuilder::class, 'build']),

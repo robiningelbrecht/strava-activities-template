@@ -12,6 +12,7 @@ use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Exception\EntityNotFound;
+use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use GuzzleHttp\Exception\ClientException;
 use League\Flysystem\FilesystemOperator;
@@ -25,7 +26,8 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
         private OpenMeteo $openMeteo,
         private StravaActivityRepository $stravaActivityRepository,
         private FilesystemOperator $filesystem,
-        private ReachedStravaApiRateLimits $reachedStravaApiRateLimits
+        private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
+        private Sleep $sleep,
     ) {
     }
 
@@ -98,7 +100,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                     $this->stravaActivityRepository->add($activity);
                     $command->getOutput()->writeln(sprintf('  => Imported activity "%s"', $activity->getName()));
                     // Try to avoid Strava rate limits.
-                    sleep(10);
+                    $this->sleep->sweetDreams(10);
                 } catch (ClientException $exception) {
                     if (429 !== $exception->getResponse()->getStatusCode()) {
                         // Re-throw, we only want to catch "429 Too Many Requests".

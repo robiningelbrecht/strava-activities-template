@@ -20,6 +20,7 @@ final class ActivityBuilder
         $this->startDateTime = SerializableDateTime::fromString('2023-10-10');
         $this->data = [
             'kudos_count' => 1,
+            'name' => 'Test activity',
         ];
         $this->gearId = null;
     }
