@@ -26,6 +26,7 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
 <kbd><a href="#monthly-stats">Monthly stats</a></kbd> |
 <kbd><a href="#activity-heatmap">Activity heatmap</a></kbd> |
 <kbd><a href="#stats-per-weekday">Stats per weekday</a></kbd> |
+<kbd><a href="#daytime-stats">Daytime stats</a></kbd> |
 <kbd><a href="#stats-per-bike">Stats per bike</a></kbd> |
 {% if powerOutputs is not empty %}
 <kbd><a href="#best-power-outputs-over-time">Power outputs</a></kbd> |
@@ -119,6 +120,34 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
     {% for weekday, statistic in weekdayStats.getData() %}
         <tr>
             <td align="center">{{ weekday }}</td>
+            <td align="center">{{ statistic.numberOfRides }}</td>
+            <td align="center">{{ statistic.totalDistance|number_format(0, '.', ' ') }} <sup><sub>km</sub></sup></td>
+            <td align="center">{{ statistic.totalElevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></td>
+            <td align="center">{{ statistic.movingTimeForHumans }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+## Daytime stats
+
+<img src="build/charts/chart-daytime-stats.svg" alt="Daytime stats"/>
+
+<table>
+    <thead>
+    <tr>
+        <th></th>
+        <th># of rides</th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/distance.svg" width="30" alt="distance" title="distance"/></th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/elevation.svg" width="30" alt="elevation" title="elevation"/></th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/time.svg" width="30" alt="time" title="time"/></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for statistic in daytimeStats.getData() %}
+        <tr>
+            <td align="center">{{ statistic.daytime.value }} ({{ statistic.daytime.getHours()[0] }}h - {{ statistic.daytime.getHours()[1] }}h)</td>
             <td align="center">{{ statistic.numberOfRides }}</td>
             <td align="center">{{ statistic.totalDistance|number_format(0, '.', ' ') }} <sup><sub>km</sub></sup></td>
             <td align="center">{{ statistic.totalElevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></td>

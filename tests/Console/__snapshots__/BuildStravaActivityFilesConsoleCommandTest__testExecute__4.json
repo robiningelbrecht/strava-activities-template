@@ -1,5 +1,5 @@
 {
-    "commandName": "App.Domain.Strava.Activity.BuildActivityHeatmapChart.BuildActivityHeatmapChart",
+    "commandName": "App.Domain.Strava.Activity.BuildDaytimeStatsChart.BuildDaytimeStatsChart",
     "payload": {
         "metadata": []
     }

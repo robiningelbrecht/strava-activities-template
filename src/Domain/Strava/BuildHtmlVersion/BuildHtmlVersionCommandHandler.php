@@ -5,6 +5,8 @@ namespace App\Domain\Strava\BuildHtmlVersion;
 use App\Domain\Strava\Activity\ActivityHighlights;
 use App\Domain\Strava\Activity\ActivityTotals;
 use App\Domain\Strava\Activity\BuildActivityHeatmapChart\ActivityHeatmapChartBuilder;
+use App\Domain\Strava\Activity\BuildDaytimeStatsChart\DaytimeStats;
+use App\Domain\Strava\Activity\BuildDaytimeStatsChart\DaytimeStatsChartsBuilder;
 use App\Domain\Strava\Activity\BuildEddingtonChart\Eddington;
 use App\Domain\Strava\Activity\BuildEddingtonChart\EddingtonChartBuilder;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
@@ -60,6 +62,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $eddington = Eddington::fromActivities($allActivities);
         $activityHighlights = ActivityHighlights::fromActivities($allActivities);
         $weekdayStats = WeekdayStats::fromActivities($allActivities);
+        $dayTimeStats = DaytimeStats::fromActivities($allActivities);
 
         foreach ($allActivities as $activity) {
             $activity->enrichWithBestPowerOutputs(
@@ -122,6 +125,13 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                         ->build(),
                 ),
                 'weekdayStats' => $weekdayStats,
+                'daytimeStatsChart' => Json::encode(
+                    DaytimeStatsChartsBuilder::fromDaytimeStats($dayTimeStats)
+                        ->withoutBackgroundColor()
+                        ->withAnimation(true)
+                        ->build(),
+                ),
+                'daytimeStats' => $dayTimeStats,
                 'trivia' => Trivia::fromActivities($allActivities),
             ]),
         );
