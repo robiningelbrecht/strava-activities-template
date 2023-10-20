@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Challenge;
 
+use App\Domain\Strava\Challenge\ChallengeCollection;
 use App\Domain\Strava\Challenge\StravaChallengeRepository;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -42,7 +43,7 @@ class StravaChallengeRepositoryTest extends DatabaseTestCase
         $this->stravaChallengeRepository->add($challengeTwo);
 
         $this->assertEquals(
-            [$challengeTwo, $challengeOne],
+            ChallengeCollection::fromArray([$challengeTwo, $challengeOne]),
             $this->stravaChallengeRepository->findAll()
         );
     }

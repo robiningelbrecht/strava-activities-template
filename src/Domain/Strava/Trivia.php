@@ -3,34 +3,29 @@
 namespace App\Domain\Strava;
 
 use App\Domain\Strava\Activity\Activity;
+use App\Domain\Strava\Activity\ActivityCollection;
 use App\Infrastructure\ValueObject\Time\DateCollection;
 
 final readonly class Trivia
 {
-    /**
-     * @param \App\Domain\Strava\Activity\Activity[] $activities
-     */
     private function __construct(
-        private array $activities,
+        private ActivityCollection $activities,
     ) {
     }
 
-    /**
-     * @param \App\Domain\Strava\Activity\Activity[] $activities
-     */
-    public static function fromActivities(array $activities): self
+    public static function fromActivities(ActivityCollection $activities): self
     {
         return new self($activities);
     }
 
     public function getTotalKudosReceived(): int
     {
-        return array_sum(array_map(fn (Activity $activity) => $activity->getKudoCount(), $this->activities));
+        return array_sum(array_map(fn (Activity $activity) => $activity->getKudoCount(), $this->activities->toArray()));
     }
 
     public function getMostKudotedActivity(): Activity
     {
-        $mostKudotedActivity = $this->activities[0];
+        $mostKudotedActivity = $this->activities->toArray()[0];
         foreach ($this->activities as $activity) {
             if ($activity->getKudoCount() < $mostKudotedActivity->getKudoCount()) {
                 continue;
@@ -43,7 +38,7 @@ final readonly class Trivia
 
     public function getFirstActivity(): Activity
     {
-        $fistActivity = $this->activities[0];
+        $fistActivity = $this->activities->toArray()[0];
         foreach ($this->activities as $activity) {
             if ($activity->getStartDate() > $fistActivity->getStartDate()) {
                 continue;
@@ -56,7 +51,7 @@ final readonly class Trivia
 
     public function getEarliestActivity(): Activity
     {
-        $earliestActivity = $this->activities[0];
+        $earliestActivity = $this->activities->toArray()[0];
         foreach ($this->activities as $activity) {
             if ($activity->getStartDate()->getMinutesSinceStartOfDay() > $earliestActivity->getStartDate()->getMinutesSinceStartOfDay()) {
                 continue;
@@ -69,7 +64,7 @@ final readonly class Trivia
 
     public function getLatestActivity(): Activity
     {
-        $latestActivity = $this->activities[0];
+        $latestActivity = $this->activities->toArray()[0];
         foreach ($this->activities as $activity) {
             if ($activity->getStartDate()->getMinutesSinceStartOfDay() < $latestActivity->getStartDate()->getMinutesSinceStartOfDay()) {
                 continue;
@@ -82,7 +77,7 @@ final readonly class Trivia
 
     public function getLongestActivity(): Activity
     {
-        $longestActivity = $this->activities[0];
+        $longestActivity = $this->activities->toArray()[0];
         foreach ($this->activities as $activity) {
             if ($activity->getDistance() < $longestActivity->getDistance()) {
                 continue;
@@ -95,7 +90,7 @@ final readonly class Trivia
 
     public function getActivityWithHighestElevation(): Activity
     {
-        $mostElevationActivity = $this->activities[0];
+        $mostElevationActivity = $this->activities->toArray()[0];
         foreach ($this->activities as $activity) {
             if ($activity->getElevation() < $mostElevationActivity->getElevation()) {
                 continue;
@@ -108,7 +103,7 @@ final readonly class Trivia
 
     public function getFastestActivity(): Activity
     {
-        $fastestActivity = $this->activities[0];
+        $fastestActivity = $this->activities->toArray()[0];
         foreach ($this->activities as $activity) {
             if ($activity->getAverageSpeedInKmPerH() < $fastestActivity->getAverageSpeedInKmPerH()) {
                 continue;
@@ -123,7 +118,7 @@ final readonly class Trivia
     {
         return DateCollection::fromDates(array_map(
             fn (Activity $activity) => $activity->getStartDate(),
-            $this->activities,
+            $this->activities->toArray(),
         ))->countMostConsecutiveDates();
     }
 }

@@ -19,6 +19,7 @@ use App\Domain\Strava\Activity\Stream\StravaActivityPowerRepository;
 use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamChartBuilder;
 use App\Domain\Strava\Activity\Stream\StreamType;
+use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Domain\Strava\BikeStatistics;
 use App\Domain\Strava\Challenge\StravaChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
@@ -91,7 +92,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $this->filesystem->write(
             'build/html/dashboard.html',
             $this->twig->load('html/dashboard.html.twig')->render([
-                'mostRecentActivities' => array_slice($allActivities, 0, 5),
+                'mostRecentActivities' => array_slice($allActivities->toArray(), 0, 5),
                 'activityHighlights' => $activityHighlights,
                 'intro' => ActivityTotals::fromActivities(
                     $allActivities,
@@ -108,7 +109,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 ),
                 'bikeStatistics' => BikeStatistics::fromActivitiesAndGear(
                     activities: $allActivities,
-                    gear: $allBikes
+                    bikes: $allBikes
                 ),
                 'powerOutputs' => $this->stravaActivityPowerRepository->findBest(),
                 'activityHeatmapChart' => Json::encode(
@@ -184,23 +185,23 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             'build/html/monthly-stats.html',
             $this->twig->load('html/monthly-stats.html.twig')->render([
                 'monthlyStatistics' => MonthlyStatistics::fromActivitiesAndChallenges(
-                    $allActivities,
-                    $allChallenges,
-                    SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
+                    activities: $allActivities,
+                    challenges: $allChallenges,
+                    now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
                 ),
             ]),
         );
 
         foreach ($allActivities as $activity) {
             $streams = $this->stravaActivityStreamRepository->findByActivityAndStreamTypes(
-                $activity->getId(),
-                [
+                activityId: $activity->getId(),
+                streamTypes: StreamTypeCollection::fromArray([
                     StreamType::VELOCITY,
                     StreamType::WATTS,
                     StreamType::HEART_RATE,
                     StreamType::CADENCE,
-                ]
-            );
+                ])
+            )->toArray();
 
             if ($cadenceStreams = array_filter(
                 $streams,

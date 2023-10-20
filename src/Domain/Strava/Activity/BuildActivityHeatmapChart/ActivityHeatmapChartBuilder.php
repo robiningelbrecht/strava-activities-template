@@ -3,6 +3,7 @@
 namespace App\Domain\Strava\Activity\BuildActivityHeatmapChart;
 
 use App\Domain\Strava\Activity\Activity;
+use App\Domain\Strava\Activity\ActivityCollection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final class ActivityHeatmapChartBuilder
@@ -12,11 +13,8 @@ final class ActivityHeatmapChartBuilder
     private bool $animation;
     private ?string $backgroundColor;
 
-    /**
-     * @param Activity[] $activities
-     */
     private function __construct(
-        private readonly array $activities,
+        private readonly ActivityCollection $activities,
         private readonly SerializableDateTime $now,
     ) {
         $this->animation = false;
@@ -30,11 +28,8 @@ final class ActivityHeatmapChartBuilder
         $this->toDate = $toDate;
     }
 
-    /**
-     * @param Activity[] $activities
-     */
     public static function fromActivities(
-        array $activities,
+        ActivityCollection $activities,
         SerializableDateTime $now,
     ): self {
         return new self(
@@ -154,7 +149,7 @@ final class ActivityHeatmapChartBuilder
     private function getData(): array
     {
         $activities = array_filter(
-            $this->activities,
+            $this->activities->toArray(),
             fn (Activity $activity) => $activity->getStartDate()->isAfterOrOn($this->fromDate) && $activity->getStartDate()->isBeforeOrOn($this->toDate)
         );
 

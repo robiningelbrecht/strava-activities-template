@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Activity;
 
+use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\StravaActivityRepository;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -59,7 +60,7 @@ class StravaActivityRepositoryTest extends DatabaseTestCase
         $this->stravaActivityRepository->add($activityThree);
 
         $this->assertEquals(
-            [$activityOne, $activityTwo, $activityThree],
+            ActivityCollection::fromArray([$activityOne, $activityTwo, $activityThree]),
             $this->stravaActivityRepository->findAll()
         );
     }

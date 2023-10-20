@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Gear;
 
+use App\Domain\Strava\Gear\GearCollection;
 use App\Domain\Strava\Gear\StravaGearRepository;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Tests\DatabaseTestCase;
@@ -49,7 +50,7 @@ class StravaGearRepositoryTest extends DatabaseTestCase
         $this->stravaGearRepository->add($gearThree);
 
         $this->assertEquals(
-            [$gearTwo, $gearOne, $gearThree],
+            GearCollection::fromArray([$gearTwo, $gearOne, $gearThree]),
             $this->stravaGearRepository->findAll()
         );
     }

@@ -3,8 +3,10 @@
 namespace App\Domain\Strava;
 
 use App\Domain\Strava\Activity\Activity;
+use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityType;
 use App\Domain\Strava\Challenge\Challenge;
+use App\Domain\Strava\Challenge\ChallengeCollection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Carbon\CarbonInterval;
 
@@ -13,10 +15,8 @@ final class MonthlyStatistics
     private SerializableDateTime $startDate;
 
     private function __construct(
-        /** @var \App\Domain\Strava\Activity\Activity[] */
-        private readonly array $activities,
-        /** @var \App\Domain\Strava\Challenge\Challenge[] */
-        private readonly array $challenges,
+        private readonly ActivityCollection $activities,
+        private readonly ChallengeCollection $challenges,
         private readonly SerializableDateTime $now,
     ) {
         $this->startDate = new SerializableDateTime();
@@ -28,11 +28,10 @@ final class MonthlyStatistics
         }
     }
 
-    /**
-     * @param Activity[]  $activities
-     * @param Challenge[] $challenges
-     */
-    public static function fromActivitiesAndChallenges(array $activities, array $challenges, SerializableDateTime $now): self
+    public static function fromActivitiesAndChallenges(
+        ActivityCollection $activities,
+        ChallengeCollection $challenges,
+        SerializableDateTime $now): self
     {
         return new self($activities, $challenges, $now);
     }
@@ -60,7 +59,7 @@ final class MonthlyStatistics
                 'totalElevation' => 0,
                 'movingTime' => 0,
                 'challengesCompleted' => count(array_filter(
-                    $this->challenges,
+                    $this->challenges->toArray(),
                     fn (Challenge $challenge) => $challenge->getCreatedOn()->format('Ym') == $date->format('Ym')
                 )),
                 'gears' => [],
@@ -111,7 +110,7 @@ final class MonthlyStatistics
      */
     public function getTotals(): array
     {
-        return $this->getTotalsForActivities($this->activities);
+        return $this->getTotalsForActivities($this->activities->toArray());
     }
 
     /**
@@ -120,7 +119,7 @@ final class MonthlyStatistics
     public function getTotalsForOutsideBikeRides(): array
     {
         $outsideBikeRides = array_filter(
-            $this->activities,
+            $this->activities->toArray(),
             fn (Activity $activity) => ActivityType::RIDE === $activity->getType()
         );
 
@@ -133,7 +132,7 @@ final class MonthlyStatistics
     public function getTotalsForZwift(): array
     {
         $virtualRides = array_filter(
-            $this->activities,
+            $this->activities->toArray(),
             fn (Activity $activity) => ActivityType::VIRTUAL_RIDE === $activity->getType()
         );
 

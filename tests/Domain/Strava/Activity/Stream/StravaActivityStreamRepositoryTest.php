@@ -2,8 +2,10 @@
 
 namespace App\Tests\Domain\Strava\Activity\Stream;
 
+use App\Domain\Strava\Activity\Stream\ActivityStreamCollection;
 use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
+use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Tests\DatabaseTestCase;
 
 class StravaActivityStreamRepositoryTest extends DatabaseTestCase
@@ -25,7 +27,7 @@ class StravaActivityStreamRepositoryTest extends DatabaseTestCase
         $this->stravaActivityStreamRepository->add($stream);
 
         $this->assertEquals(
-            [$stream],
+            ActivityStreamCollection::fromArray([$stream]),
             $this->stravaActivityStreamRepository->findByStreamType($stream->getStreamType())
         );
     }
@@ -56,8 +58,11 @@ class StravaActivityStreamRepositoryTest extends DatabaseTestCase
         );
 
         $this->assertEquals(
-            [$streamTwo, $streamOne],
-            $this->stravaActivityStreamRepository->findByActivityAndStreamTypes(1, [StreamType::WATTS, StreamType::CADENCE])
+            ActivityStreamCollection::fromArray([$streamTwo, $streamOne]),
+            $this->stravaActivityStreamRepository->findByActivityAndStreamTypes(
+                activityId: 1,
+                streamTypes: StreamTypeCollection::fromArray([StreamType::WATTS, StreamType::CADENCE])
+            )
         );
     }
 
