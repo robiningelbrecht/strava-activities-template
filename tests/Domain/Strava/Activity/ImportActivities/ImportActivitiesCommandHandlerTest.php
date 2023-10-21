@@ -23,11 +23,11 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
     public function testHandle(): void
     {
         $output = new SpyOutput();
-        $this->strava->setMaxNumberOfCallsBeforeTriggering429(6);
+        $this->strava->setMaxNumberOfCallsBeforeTriggering429(8);
 
         $this->getContainer()->get(StravaActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(2)
+                ->withActivityId(3)
                 ->build()
         );
 
