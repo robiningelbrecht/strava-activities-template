@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Tests\Domain\Strava\Activity\ImportActivities;
+namespace App\Tests\Domain\Strava\Gear\ImportGear;
 
-use App\Domain\Strava\Activity\ImportActivities\ImportActivities;
 use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Gear\ImportGear\ImportGear;
+use App\Domain\Strava\Gear\StravaGearRepository;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
 use App\Tests\Domain\Strava\Activity\ActivityBuilder;
+use App\Tests\Domain\Strava\Gear\GearBuilder;
 use App\Tests\Domain\Strava\SpyStrava;
 use App\Tests\SpyOutput;
 use League\Flysystem\FilesystemOperator;
 use Spatie\Snapshots\MatchesSnapshots;
 
-class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
+class ImportGearCommandHandlerTest extends DatabaseTestCase
 {
     use MatchesSnapshots;
 
@@ -23,15 +25,33 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
     public function testHandle(): void
     {
         $output = new SpyOutput();
-        $this->strava->setMaxNumberOfCallsBeforeTriggering429(8);
+        $this->strava->setMaxNumberOfCallsBeforeTriggering429(3);
 
+        $this->getContainer()->get(StravaGearRepository::class)->add(
+            GearBuilder::fromDefaults()
+                ->withGearId('b12659861')
+                ->build()
+        );
         $this->getContainer()->get(StravaActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(4)
+                ->withActivityId(1)
+                ->withGearId('b12659861')
+                ->build()
+        );
+        $this->getContainer()->get(StravaActivityRepository::class)->add(
+            ActivityBuilder::fromDefaults()
+                ->withActivityId(2)
+                ->withGearId('b12659743')
+                ->build()
+        );
+        $this->getContainer()->get(StravaActivityRepository::class)->add(
+            ActivityBuilder::fromDefaults()
+                ->withActivityId(3)
+                ->withGearId('b12659792')
                 ->build()
         );
 
-        $this->commandBus->dispatch(new ImportActivities($output));
+        $this->commandBus->dispatch(new ImportGear($output));
 
         $this->assertMatchesTextSnapshot($output);
 

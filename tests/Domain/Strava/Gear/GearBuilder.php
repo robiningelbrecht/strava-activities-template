@@ -21,6 +21,7 @@ final class GearBuilder
         $this->distanceInMeter = 10023;
         $this->data = [
             'converted_distance' => 100.23,
+            'name' => 'Existing gear',
         ];
     }
 

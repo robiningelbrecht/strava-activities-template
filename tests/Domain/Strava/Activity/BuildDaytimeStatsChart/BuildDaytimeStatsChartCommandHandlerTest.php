@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Tests\Domain\Strava\Activity\BuildWeeklyDistanceChart;
+namespace App\Tests\Domain\Strava\Activity\BuildDaytimeStatsChart;
 
-use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\BuildWeeklyDistanceChart;
+use App\Domain\Strava\Activity\BuildDaytimeStatsChart\BuildDaytimeStatsChart;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
 use App\Tests\ProvideTestData;
 use League\Flysystem\FilesystemOperator;
 use Spatie\Snapshots\MatchesSnapshots;
 
-class BuildWeeklyDistanceChartCommandHandlerTest extends DatabaseTestCase
+class BuildDaytimeStatsChartCommandHandlerTest extends DatabaseTestCase
 {
     use MatchesSnapshots;
     use ProvideTestData;
@@ -20,7 +20,7 @@ class BuildWeeklyDistanceChartCommandHandlerTest extends DatabaseTestCase
     {
         $this->provideFullTestSet();
 
-        $this->commandBus->dispatch(new BuildWeeklyDistanceChart());
+        $this->commandBus->dispatch(new BuildDaytimeStatsChart());
 
         /** @var \App\Tests\SpyFileSystem $fileSystem */
         $fileSystem = $this->getContainer()->get(FilesystemOperator::class);

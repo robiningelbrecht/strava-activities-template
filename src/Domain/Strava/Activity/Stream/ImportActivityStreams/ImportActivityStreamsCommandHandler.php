@@ -11,6 +11,7 @@ use App\Domain\Strava\Strava;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
+use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use GuzzleHttp\Exception\ClientException;
 use Lcobucci\Clock\Clock;
@@ -23,7 +24,8 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
         private StravaActivityRepository $stravaActivityRepository,
         private StravaActivityStreamRepository $stravaActivityStreamRepository,
         private Clock $clock,
-        private ReachedStravaApiRateLimits $reachedStravaApiRateLimits
+        private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
+        private Sleep $sleep,
     ) {
     }
 
@@ -75,7 +77,7 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
             }
 
             // Try to avoid Strava rate limits.
-            sleep(10);
+            $this->sleep->sweetDreams(10);
         }
     }
 }

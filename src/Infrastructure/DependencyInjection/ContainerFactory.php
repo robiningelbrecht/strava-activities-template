@@ -9,7 +9,26 @@ use Psr\Container\ContainerInterface;
 
 class ContainerFactory
 {
-    public static function create(string $dotEnv = '.env'): ContainerInterface
+    public static function create(): ContainerInterface
+    {
+        $builder = self::createBuilder('.env');
+
+        return $builder->build();
+    }
+
+    public static function createForTestSuite(): ContainerInterface
+    {
+        $builder = self::createBuilder('.env.test');
+        $appRoot = Settings::getAppRoot();
+
+        if (file_exists($appRoot.'/config/container_test.php')) {
+            $builder->addDefinitions($appRoot.'/config/container_test.php');
+        }
+
+        return $builder->build();
+    }
+
+    private static function createBuilder(string $dotEnv): ContainerBuilder
     {
         $appRoot = Settings::getAppRoot();
 
@@ -28,11 +47,6 @@ class ContainerFactory
         $containerBuilder->addDefinitions($appRoot.'/config/container.php');
         $containerBuilder->addCompilerPasses(...require $appRoot.'/config/compiler-passes.php');
 
-        return $containerBuilder->build();
-    }
-
-    public static function createForTestSuite(): ContainerInterface
-    {
-        return static::create('.env.test');
+        return $containerBuilder;
     }
 }

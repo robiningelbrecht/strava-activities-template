@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Tests\Domain\Strava\Activity\ImportActivities;
+namespace App\Tests\Domain\Strava\Challenge\ImportChallenges;
 
-use App\Domain\Strava\Activity\ImportActivities\ImportActivities;
-use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Challenge\ImportChallenges\ImportChallenges;
+use App\Domain\Strava\Challenge\StravaChallengeRepository;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
-use App\Tests\Domain\Strava\Activity\ActivityBuilder;
+use App\Tests\Domain\Strava\Challenge\ChallengeBuilder;
 use App\Tests\Domain\Strava\SpyStrava;
 use App\Tests\SpyOutput;
 use League\Flysystem\FilesystemOperator;
 use Spatie\Snapshots\MatchesSnapshots;
 
-class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
+class ImportChallengesCommandHandlerTest extends DatabaseTestCase
 {
     use MatchesSnapshots;
 
@@ -23,15 +23,15 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
     public function testHandle(): void
     {
         $output = new SpyOutput();
-        $this->strava->setMaxNumberOfCallsBeforeTriggering429(8);
+        $this->strava->setMaxNumberOfCallsBeforeTriggering429(3);
 
-        $this->getContainer()->get(StravaActivityRepository::class)->add(
-            ActivityBuilder::fromDefaults()
-                ->withActivityId(4)
+        $this->getContainer()->get(StravaChallengeRepository::class)->add(
+            ChallengeBuilder::fromDefaults()
+                ->withChallengeId('654321')
                 ->build()
         );
 
-        $this->commandBus->dispatch(new ImportActivities($output));
+        $this->commandBus->dispatch(new ImportChallenges($output));
 
         $this->assertMatchesTextSnapshot($output);
 

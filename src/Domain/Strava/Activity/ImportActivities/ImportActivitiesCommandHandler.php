@@ -12,10 +12,11 @@ use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Exception\EntityNotFound;
+use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use App\Infrastructure\ValueObject\UuidFactory;
 use GuzzleHttp\Exception\ClientException;
 use League\Flysystem\FilesystemOperator;
-use Ramsey\Uuid\Rfc4122\UuidV5;
 
 #[AsCommandHandler]
 final readonly class ImportActivitiesCommandHandler implements CommandHandler
@@ -25,7 +26,9 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
         private OpenMeteo $openMeteo,
         private StravaActivityRepository $stravaActivityRepository,
         private FilesystemOperator $filesystem,
-        private ReachedStravaApiRateLimits $reachedStravaApiRateLimits
+        private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
+        private UuidFactory $uuidFactory,
+        private Sleep $sleep,
     ) {
     }
 
@@ -76,7 +79,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                             /** @var string $urlPath */
                             $urlPath = parse_url($photo['urls'][5000], PHP_URL_PATH);
                             $extension = pathinfo($urlPath, PATHINFO_EXTENSION);
-                            $imagePath = sprintf('files/activities/%s.%s', UuidV5::uuid1(), $extension);
+                            $imagePath = sprintf('files/activities/%s.%s', $this->uuidFactory->random(), $extension);
                             $this->filesystem->write(
                                 $imagePath,
                                 $this->strava->downloadImage($photo['urls'][5000])
@@ -98,7 +101,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                     $this->stravaActivityRepository->add($activity);
                     $command->getOutput()->writeln(sprintf('  => Imported activity "%s"', $activity->getName()));
                     // Try to avoid Strava rate limits.
-                    sleep(10);
+                    $this->sleep->sweetDreams(10);
                 } catch (ClientException $exception) {
                     if (429 !== $exception->getResponse()->getStatusCode()) {
                         // Re-throw, we only want to catch "429 Too Many Requests".
