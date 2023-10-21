@@ -132,9 +132,16 @@ class SpyStrava extends Strava
             [
                 'name' => 'Challenge 1',
                 'teaser' => 'Craziest challenge ever',
-                'logo_url' => file_get_contents(Settings::getAppRoot().'/tests/cat.wpb'),
+                'logo_url' => Settings::getAppRoot().'/tests/cat.webp',
                 'url' => 'https://www.strava.com',
                 'challenge_id' => '123456',
+            ],
+            [
+                'name' => 'Challenge 2',
+                'teaser' => 'Craziest challenge ever',
+                'logo_url' => Settings::getAppRoot().'/tests/cat.webp',
+                'url' => 'https://www.strava.com',
+                'challenge_id' => '654321',
             ],
         ];
     }
