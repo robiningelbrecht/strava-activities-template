@@ -117,7 +117,7 @@ final class StravaActivityRepository
             activityId: $result['activityId'],
             startDateTime: SerializableDateTime::fromString($result['startDateTime']),
             data: Json::decode($result['data']),
-            weather: Json::decode($result['weather'] ?? []),
+            weather: Json::decode($result['weather'] ?? '[]'),
             gearId: $result['gearId']
         );
     }
