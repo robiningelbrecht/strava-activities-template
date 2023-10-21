@@ -7,7 +7,9 @@ use App\Domain\Strava\Strava;
 use App\Infrastructure\DependencyInjection\ContainerFactory;
 use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use App\Infrastructure\ValueObject\UuidFactory;
 use App\Tests\Domain\Strava\SpyStrava;
+use App\Tests\Infrastructure\ValueObject\FakeUuidFactory;
 use GuzzleHttp\Client;
 use Lcobucci\Clock\Clock;
 use League\Flysystem\FilesystemOperator;
@@ -45,6 +47,10 @@ abstract class ContainerTestCase extends TestCase
             self::$container->set(
                 name: Sleep::class,
                 value: new NullSleep()
+            );
+            self::$container->set(
+                name: UuidFactory::class,
+                value: new FakeUuidFactory()
             );
         }
 

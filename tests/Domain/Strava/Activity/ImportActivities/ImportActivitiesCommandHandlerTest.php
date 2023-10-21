@@ -27,7 +27,7 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
 
         $this->getContainer()->get(StravaActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(3)
+                ->withActivityId(4)
                 ->build()
         );
 

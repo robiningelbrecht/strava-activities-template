@@ -9,6 +9,8 @@ use App\Infrastructure\Environment\Settings;
 use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\Time\SystemSleep;
 use App\Infrastructure\Twig\TwigBuilder;
+use App\Infrastructure\ValueObject\RandomUuidFactory;
+use App\Infrastructure\ValueObject\UuidFactory;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
@@ -30,9 +32,9 @@ $dotenv = Dotenv::createImmutable($appRoot);
 $dotenv->load();
 
 return [
-    // Clock.
     Clock::class => DI\factory([SystemClock::class, 'fromSystemTimezone']),
     Sleep::class => DI\create(SystemSleep::class),
+    UuidFactory::class => DI\create(RandomUuidFactory::class),
     // Twig Environment.
     FilesystemLoader::class => DI\create(FilesystemLoader::class)->constructor($appRoot.'/templates'),
     TwigEnvironment::class => DI\factory([TwigBuilder::class, 'build']),

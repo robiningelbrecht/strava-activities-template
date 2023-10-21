@@ -14,9 +14,9 @@ use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use App\Infrastructure\ValueObject\UuidFactory;
 use GuzzleHttp\Exception\ClientException;
 use League\Flysystem\FilesystemOperator;
-use Ramsey\Uuid\Rfc4122\UuidV5;
 
 #[AsCommandHandler]
 final readonly class ImportActivitiesCommandHandler implements CommandHandler
@@ -27,6 +27,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
         private StravaActivityRepository $stravaActivityRepository,
         private FilesystemOperator $filesystem,
         private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
+        private UuidFactory $uuidFactory,
         private Sleep $sleep,
     ) {
     }
@@ -78,7 +79,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                             /** @var string $urlPath */
                             $urlPath = parse_url($photo['urls'][5000], PHP_URL_PATH);
                             $extension = pathinfo($urlPath, PATHINFO_EXTENSION);
-                            $imagePath = sprintf('files/activities/%s.%s', UuidV5::uuid1(), $extension);
+                            $imagePath = sprintf('files/activities/%s.%s', $this->uuidFactory->random(), $extension);
                             $this->filesystem->write(
                                 $imagePath,
                                 $this->strava->downloadImage($photo['urls'][5000])
