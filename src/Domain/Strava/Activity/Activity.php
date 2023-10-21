@@ -21,6 +21,7 @@ final class Activity
 
     /**
      * @param array<mixed> $data
+     * @param array<mixed> $weather
      */
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string', unique: true)]
@@ -29,6 +30,8 @@ final class Activity
         private readonly SerializableDateTime $startDateTime,
         #[ORM\Column(type: 'json')]
         private array $data,
+        #[ORM\Column(type: 'json', nullable: true)]
+        private array $weather = [],
         #[ORM\Column(type: 'string', nullable: true)]
         private ?string $gearId = null,
     ) {
@@ -55,17 +58,20 @@ final class Activity
 
     /**
      * @param array<mixed> $data
+     * @param array<mixed> $weather
      */
     public static function fromState(
         int $activityId,
         SerializableDateTime $startDateTime,
         array $data,
+        array $weather = [],
         string $gearId = null,
     ): self {
         return new self(
             activityId: $activityId,
             startDateTime: $startDateTime,
             data: $data,
+            weather: $weather,
             gearId: $gearId
         );
     }
@@ -143,26 +149,34 @@ final class Activity
      */
     public function updateWeather(array $weather): void
     {
-        $this->data['weather'] = $weather;
+        $this->weather = $weather;
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getAllWeatherData(): array
+    {
+        return $this->weather;
     }
 
     public function getWeather(): ?Weather
     {
         $hour = $this->getStartDate()->getHourWithoutLeadingZero();
-        if (!empty($this->data['weather']['hourly']['time'][$hour])) {
+        if (!empty($this->weather['hourly']['time'][$hour])) {
             // Use weather known for the given hour.
             $weather = [];
-            foreach ($this->data['weather']['hourly'] as $metric => $values) {
+            foreach ($this->weather['hourly'] as $metric => $values) {
                 $weather[$metric] = $values[$hour];
             }
 
             return Weather::fromMap($weather);
         }
 
-        if (!empty($this->data['weather']['daily'])) {
+        if (!empty($this->weather['daily'])) {
             // Use weather known for that day.
             $weather = [];
-            foreach ($this->data['weather']['daily'] as $metric => $values) {
+            foreach ($this->weather['daily'] as $metric => $values) {
                 $weather[$metric] = reset($values);
             }
 
