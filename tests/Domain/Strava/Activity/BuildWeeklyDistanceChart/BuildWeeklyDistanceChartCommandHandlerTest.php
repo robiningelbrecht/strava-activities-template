@@ -2,7 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Activity\BuildWeeklyDistanceChart;
 
-use App\Domain\Strava\Activity\BuildWeekdayStatsChart\BuildWeekdayStatsChart;
+use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\BuildWeeklyDistanceChart;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
 use App\Tests\ProvideTestData;
@@ -20,7 +20,7 @@ class BuildWeeklyDistanceChartCommandHandlerTest extends DatabaseTestCase
     {
         $this->provideFullTestSet();
 
-        $this->commandBus->dispatch(new BuildWeekdayStatsChart());
+        $this->commandBus->dispatch(new BuildWeeklyDistanceChart());
 
         /** @var \App\Tests\SpyFileSystem $fileSystem */
         $fileSystem = $this->getContainer()->get(FilesystemOperator::class);
