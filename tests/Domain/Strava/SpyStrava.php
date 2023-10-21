@@ -22,10 +22,10 @@ class SpyStrava extends Strava
     private int $maxNumberOfCallsBeforeTriggering429 = 0;
     private readonly array $activities;
 
-    public function __construct(Client $client)
+    public function __construct()
     {
         parent::__construct(
-            client: $client,
+            client: new Client(),
             stravaClientId: StravaClientId::fromString('clientId'),
             stravaClientSecret: StravaClientSecret::fromString('clientSecret'),
             stravaRefreshToken: StravaRefreshToken::fromString('refreshToken')
