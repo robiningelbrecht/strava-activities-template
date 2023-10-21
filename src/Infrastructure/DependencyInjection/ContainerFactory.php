@@ -11,14 +11,14 @@ class ContainerFactory
 {
     public static function create(): ContainerInterface
     {
-        $builder = static::createBuilder('.env');
+        $builder = self::createBuilder('.env');
 
         return $builder->build();
     }
 
     public static function createForTestSuite(): ContainerInterface
     {
-        $builder = static::createBuilder('.env.test');
+        $builder = self::createBuilder('.env.test');
         $appRoot = Settings::getAppRoot();
 
         if (file_exists($appRoot.'/config/container_test.php')) {
