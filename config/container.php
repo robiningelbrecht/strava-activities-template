@@ -3,6 +3,8 @@
 use App\Domain\Strava\StravaClientId;
 use App\Domain\Strava\StravaClientSecret;
 use App\Domain\Strava\StravaRefreshToken;
+use App\Domain\Weather\OpenMeteo\LiveOpenMeteo;
+use App\Domain\Weather\OpenMeteo\OpenMeteo;
 use App\Infrastructure\Console\ConsoleCommandContainer;
 use App\Infrastructure\Environment\Environment;
 use App\Infrastructure\Environment\Settings;
@@ -35,6 +37,7 @@ return [
     Clock::class => DI\factory([SystemClock::class, 'fromSystemTimezone']),
     Sleep::class => DI\create(SystemSleep::class),
     UuidFactory::class => DI\create(RandomUuidFactory::class),
+    OpenMeteo::class => DI\get(LiveOpenMeteo::class),
     // Twig Environment.
     FilesystemLoader::class => DI\create(FilesystemLoader::class)->constructor($appRoot.'/templates'),
     TwigEnvironment::class => DI\factory([TwigBuilder::class, 'build']),
