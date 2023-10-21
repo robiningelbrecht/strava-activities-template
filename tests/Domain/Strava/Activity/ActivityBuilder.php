@@ -12,6 +12,7 @@ final class ActivityBuilder
     private int $activityId;
     private SerializableDateTime $startDateTime;
     private array $data;
+    private array $weather;
     private ?string $gearId;
 
     private function __construct()
@@ -22,6 +23,7 @@ final class ActivityBuilder
             'kudos_count' => 1,
             'name' => 'Test activity',
         ];
+        $this->weather = [];
         $this->gearId = null;
     }
 
@@ -36,6 +38,7 @@ final class ActivityBuilder
             activityId: $this->activityId,
             startDateTime: $this->startDateTime,
             data: $this->data,
+            weather: $this->weather,
             gearId: $this->gearId
         );
     }
@@ -71,6 +74,13 @@ final class ActivityBuilder
     public function withData(array $data): self
     {
         $this->data = $data;
+
+        return $this;
+    }
+
+    public function withWeather(array $weather): self
+    {
+        $this->weather = $weather;
 
         return $this;
     }

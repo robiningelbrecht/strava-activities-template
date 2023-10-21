@@ -83,13 +83,14 @@ final class StravaActivityRepository
 
     public function add(Activity $activity): void
     {
-        $sql = 'INSERT INTO Activity (activityId, startDateTime, data, gearId)
-        VALUES (:activityId, :startDateTime, :data, :gearId)';
+        $sql = 'INSERT INTO Activity (activityId, startDateTime, data, weather, gearId)
+        VALUES (:activityId, :startDateTime, :data, :weather, :gearId)';
 
         $this->connection->executeStatement($sql, [
             'activityId' => $activity->getId(),
             'startDateTime' => $activity->getStartDate(),
             'data' => Json::encode($activity->getData()),
+            'weather' => Json::encode($activity->getAllWeatherData()),
             'gearId' => $activity->getGearId(),
         ]);
     }
@@ -116,6 +117,7 @@ final class StravaActivityRepository
             activityId: $result['activityId'],
             startDateTime: SerializableDateTime::fromString($result['startDateTime']),
             data: Json::decode($result['data']),
+            weather: Json::decode($result['weather'] ?? []),
             gearId: $result['gearId']
         );
     }
