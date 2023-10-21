@@ -23,8 +23,8 @@ final readonly class ImportGearCommandHandler implements CommandHandler
         private Strava $strava,
         private StravaActivityRepository $stravaActivityRepository,
         private StravaGearRepository $stravaGearRepository,
-        private Clock $clock,
         private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
+        private Clock $clock,
         private Sleep $sleep
     ) {
     }

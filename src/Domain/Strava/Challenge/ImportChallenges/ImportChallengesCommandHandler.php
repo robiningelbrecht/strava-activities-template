@@ -11,9 +11,9 @@ use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use App\Infrastructure\ValueObject\UuidFactory;
 use Lcobucci\Clock\Clock;
 use League\Flysystem\FilesystemOperator;
-use Ramsey\Uuid\Rfc4122\UuidV5;
 
 #[AsCommandHandler]
 final readonly class ImportChallengesCommandHandler implements CommandHandler
@@ -23,6 +23,7 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
         private StravaChallengeRepository $stravaChallengeRepository,
         private FilesystemOperator $filesystem,
         private Clock $clock,
+        private UuidFactory $uuidFactory,
         private Sleep $sleep
     ) {
     }
@@ -50,7 +51,7 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
                     data: $challengeData,
                 );
                 if ($url = $challenge->getLogoUrl()) {
-                    $imagePath = sprintf('files/challenges/%s.png', UuidV5::uuid1());
+                    $imagePath = sprintf('files/challenges/%s.png', $this->uuidFactory->random());
                     $this->filesystem->write(
                         $imagePath,
                         $this->strava->downloadImage($url)
