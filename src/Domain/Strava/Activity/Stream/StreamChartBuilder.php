@@ -87,7 +87,7 @@ final class StreamChartBuilder
                     'itemStyle' => [
                         'color' => '#FAC858',
                     ],
-                    'data' => $this->streams->getByStreamType(StreamType::WATTS)->getData(),
+                    'data' => $this->streams->getByStreamType(StreamType::WATTS)?->getData(),
                 ],
                 [
                     'type' => 'line',
@@ -95,7 +95,7 @@ final class StreamChartBuilder
                     'sampling' => 'lttb',
                     'name' => 'Heartrate',
                     'color' => 'red',
-                    'data' => $this->streams->getByStreamType(StreamType::HEART_RATE)->getData(),
+                    'data' => $this->streams->getByStreamType(StreamType::HEART_RATE)?->getData(),
                 ],
                 [
                     'type' => 'line',
@@ -103,7 +103,7 @@ final class StreamChartBuilder
                     'name' => 'Cadence',
                     'sampling' => 'lttb',
                     'color' => 'rgb(84, 112, 198)',
-                    'data' => $this->streams->getByStreamType(StreamType::CADENCE)->getData(),
+                    'data' => $this->streams->getByStreamType(StreamType::CADENCE)?->getData(),
                 ],
             ],
         ];
