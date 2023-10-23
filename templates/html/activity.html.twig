@@ -199,7 +199,9 @@
             </div>
         {% endif %}
         {% if streamChart %}
-            <div class="h-16" data-echarts-options='{{ streamChart }}'></div>
+            <div class="relative overflow-x-auto">
+                <div class="h-64" data-echarts-options='{{ streamChart }}'></div>
+            </div>
         {% endif %}
     </div>
 {% endautoescape %}

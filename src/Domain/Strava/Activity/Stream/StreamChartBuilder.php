@@ -2,8 +2,12 @@
 
 namespace App\Domain\Strava\Activity\Stream;
 
+use App\Infrastructure\Time\TimeFormatter;
+
 final class StreamChartBuilder
 {
+    use TimeFormatter;
+
     private bool $animation;
     private ?string $backgroundColor;
 
@@ -38,6 +42,13 @@ final class StreamChartBuilder
      */
     public function build(): array
     {
+        $wattStream = $this->streams->getByStreamType(StreamType::WATTS)?->getData() ?? [];
+        $hearRateStream = $this->streams->getByStreamType(StreamType::HEART_RATE)?->getData() ?? [];
+        $cadenceStream = $this->streams->getByStreamType(StreamType::CADENCE)?->getData() ?? [];
+
+        $numberOfDataPointsOnXAxis = min([count($wattStream), count($hearRateStream), count($cadenceStream)]);
+        $xAxisValues = array_map(fn (int $timeInSeconds) => $this->formatDurationForHumans($timeInSeconds), range(0, $numberOfDataPointsOnXAxis));
+
         return [
             'backgroundColor' => $this->backgroundColor,
             'animation' => $this->animation,
@@ -70,6 +81,7 @@ final class StreamChartBuilder
             'xAxis' => [
                 'type' => 'category',
                 'boundaryGap' => false,
+                'data' => $xAxisValues,
             ],
             'yAxis' => [
                 'type' => 'value',
@@ -87,7 +99,7 @@ final class StreamChartBuilder
                     'itemStyle' => [
                         'color' => '#FAC858',
                     ],
-                    'data' => $this->streams->getByStreamType(StreamType::WATTS)?->getData(),
+                    'data' => array_slice($wattStream, 0, $numberOfDataPointsOnXAxis),
                 ],
                 [
                     'type' => 'line',
@@ -95,7 +107,7 @@ final class StreamChartBuilder
                     'sampling' => 'lttb',
                     'name' => 'Heartrate',
                     'color' => 'red',
-                    'data' => $this->streams->getByStreamType(StreamType::HEART_RATE)?->getData(),
+                    'data' => array_slice($hearRateStream, 0, $numberOfDataPointsOnXAxis),
                 ],
                 [
                     'type' => 'line',
@@ -103,7 +115,7 @@ final class StreamChartBuilder
                     'name' => 'Cadence',
                     'sampling' => 'lttb',
                     'color' => 'rgb(84, 112, 198)',
-                    'data' => $this->streams->getByStreamType(StreamType::CADENCE)?->getData(),
+                    'data' => array_slice($cadenceStream, 0, $numberOfDataPointsOnXAxis),
                 ],
             ],
         ];
