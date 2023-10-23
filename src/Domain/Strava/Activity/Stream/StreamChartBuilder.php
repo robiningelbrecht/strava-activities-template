@@ -8,15 +8,15 @@ final class StreamChartBuilder
     private ?string $backgroundColor;
 
     private function __construct(
-        private ActivityStream $stream,
+        private readonly ActivityStreamCollection $streams,
     ) {
         $this->animation = false;
         $this->backgroundColor = '#ffffff';
     }
 
-    public static function fromStream(ActivityStream $stream): self
+    public static function fromStreams(ActivityStreamCollection $streams): self
     {
-        return new self($stream);
+        return new self($streams);
     }
 
     public function withAnimation(bool $flag): self
@@ -38,36 +38,72 @@ final class StreamChartBuilder
      */
     public function build(): array
     {
-        $data = $this->stream->getData();
-
         return [
             'backgroundColor' => $this->backgroundColor,
             'animation' => $this->animation,
-            'grid' => [
-                'left' => 0,
-                'right' => 0,
-                'bottom' => 0,
-                'top' => 10,
-                'containLabel' => true,
+            'legend' => [
+                'show' => true,
             ],
             'tooltip' => [
                 'trigger' => 'axis',
-                'formatter' => '<b>{c0}</b> '.$this->stream->getStreamType()->value,
+            ],
+            'toolbox' => [
+                'feature' => [
+                    'dataZoom' => [
+                        'yAxisIndex' => 'none',
+                    ],
+                    'restore' => [
+                    ],
+                ],
+            ],
+            'dataZoom' => [
+                [
+                    'type' => 'inside',
+                    'start' => 90,
+                    'end' => 100,
+                ],
+                [
+                    'start' => 90,
+                    'end' => 100,
+                ],
             ],
             'xAxis' => [
-                'show' => false,
                 'type' => 'category',
+                'boundaryGap' => false,
             ],
             'yAxis' => [
                 'type' => 'value',
-                'interval' => ceil(max($data) / 10) * 10,
             ],
             'series' => [
                 [
-                    'data' => $this->stream->getData(),
+                    'name' => 'Watts',
                     'type' => 'line',
-                    'smooth' => false,
+                    'areaStyle' => [
+                        'opacity' => 0.3,
+                        'color' => 'rgb(250, 200, 88, 0.3)',
+                    ],
                     'symbol' => 'none',
+                    'sampling' => 'lttb',
+                    'itemStyle' => [
+                        'color' => '#FAC858',
+                    ],
+                    'data' => $this->streams->getByStreamType(StreamType::WATTS)->getData(),
+                ],
+                [
+                    'type' => 'line',
+                    'symbol' => 'none',
+                    'sampling' => 'lttb',
+                    'name' => 'Heartrate',
+                    'color' => 'red',
+                    'data' => $this->streams->getByStreamType(StreamType::HEART_RATE)->getData(),
+                ],
+                [
+                    'type' => 'line',
+                    'symbol' => 'none',
+                    'name' => 'Cadence',
+                    'sampling' => 'lttb',
+                    'color' => 'rgb(84, 112, 198)',
+                    'data' => $this->streams->getByStreamType(StreamType::CADENCE)->getData(),
                 ],
             ],
         ];

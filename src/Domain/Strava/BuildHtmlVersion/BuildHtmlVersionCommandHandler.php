@@ -14,7 +14,6 @@ use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStatsChartsBuilder;
 use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\WeeklyDistanceChartBuilder;
 use App\Domain\Strava\Activity\Image\ActivityBasedImageRepository;
 use App\Domain\Strava\Activity\StravaActivityRepository;
-use App\Domain\Strava\Activity\Stream\ActivityStream;
 use App\Domain\Strava\Activity\Stream\StravaActivityPowerRepository;
 use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamChartBuilder;
@@ -201,13 +200,10 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     StreamType::HEART_RATE,
                     StreamType::CADENCE,
                 ])
-            )->toArray();
+            );
 
-            if ($cadenceStreams = array_filter(
-                $streams,
-                fn (ActivityStream $stream) => StreamType::CADENCE === $stream->getStreamType()
-            )) {
-                $activity->enrichWithMaxCadence(max(reset($cadenceStreams)->getData()));
+            if ($cadenceStream = $streams->getByStreamType(StreamType::CADENCE)) {
+                $activity->enrichWithMaxCadence(max($cadenceStream->getData()));
             }
 
             $this->filesystem->write(
@@ -215,10 +211,11 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 $this->twig->load('html/activity.html.twig')->render([
                     'timeIntervals' => StravaActivityPowerRepository::TIME_INTERVAL_IN_SECONDS,
                     'activity' => $activity,
-                    'charts' => array_map(
-                        fn (ActivityStream $stream) => Json::encode(StreamChartBuilder::fromStream($stream)->build()),
-                        $streams
-                    ),
+                    'streamChart' => $streams->canBuildChartData() ? Json::encode(
+                        StreamChartBuilder::fromStreams($streams)
+                            ->withoutBackgroundColor()
+                            ->build()
+                    ) : null,
                 ]),
             );
         }
