@@ -4,16 +4,18 @@ namespace App\Domain\Strava\Activity;
 
 use App\Domain\Strava\PowerOutput;
 use App\Domain\Weather\OpenMeteo\Weather;
+use App\Infrastructure\Time\TimeFormatter;
 use App\Infrastructure\ValueObject\Geography\Latitude;
 use App\Infrastructure\ValueObject\Geography\Longitude;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Weight;
-use Carbon\CarbonInterval;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 final class Activity
 {
+    use TimeFormatter;
+
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
     private ?string $gearName;
     /** @var array<mixed> */
@@ -306,18 +308,7 @@ final class Activity
 
     public function getMovingTimeFormatted(): string
     {
-        $interval = CarbonInterval::seconds($this->getMovingTime())->cascade();
-
-        $movingTime = implode(':', array_filter(array_map(fn (int $value) => sprintf('%02d', $value), [
-            $interval->minutes,
-            $interval->seconds,
-        ])));
-
-        if ($hours = $interval->hours) {
-            $movingTime = $hours.':'.$movingTime;
-        }
-
-        return ltrim($movingTime, '0');
+        return $this->formatDurationForHumans($this->getMovingTime());
     }
 
     public function getUrl(): string
