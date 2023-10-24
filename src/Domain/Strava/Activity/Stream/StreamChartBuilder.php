@@ -52,6 +52,11 @@ final class StreamChartBuilder
         return [
             'backgroundColor' => $this->backgroundColor,
             'animation' => $this->animation,
+            'grid' => [
+                'left' => '3%',
+                'right' => '4%',
+                'containLabel' => true,
+            ],
             'legend' => [
                 'show' => true,
             ],
@@ -70,11 +75,11 @@ final class StreamChartBuilder
             'dataZoom' => [
                 [
                     'type' => 'inside',
-                    'start' => 90,
+                    'start' => 0,
                     'end' => 100,
                 ],
                 [
-                    'start' => 90,
+                    'start' => 0,
                     'end' => 100,
                 ],
             ],
