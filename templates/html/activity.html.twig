@@ -12,7 +12,7 @@
             {{ activity.getStartDate().format('H:i \\o\\n l, F j, Y') }}
         </span>
     </h5>
-    <div class="max-h-screen overflow-y-auto">
+    <div class="max-h-[85vh] overflow-y-auto">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div>
                 <div class="grid grid-cols-5 gap-2 mb-4">
@@ -199,8 +199,11 @@
             </div>
         {% endif %}
         {% if streamChart %}
-            <div class="relative overflow-x-auto">
-                <div class="h-64" data-echarts-options='{{ streamChart }}'></div>
+            <div class="mt-4">
+                <h3 class="font-bold">Analysis</h3>
+                <div class="relative overflow-x-auto">
+                    <div class="h-64" data-echarts-options='{{ streamChart }}'></div>
+                </div>
             </div>
         {% endif %}
     </div>
