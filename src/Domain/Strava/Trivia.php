@@ -114,11 +114,11 @@ final readonly class Trivia
         return $fastestActivity;
     }
 
-    public function getMostConsecutiveDaysOfCycling(): int
+    public function getMostConsecutiveDaysOfCycling(): DateCollection
     {
         return DateCollection::fromDates(array_map(
             fn (Activity $activity) => $activity->getStartDate(),
             $this->activities->toArray(),
-        ))->countMostConsecutiveDates();
+        ))->getLongestConsecutiveDateRange();
     }
 }

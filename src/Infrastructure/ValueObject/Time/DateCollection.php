@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\ValueObject\Time;
 
-final class DateCollection
+final class DateCollection implements \Countable
 {
     /** @var \App\Infrastructure\ValueObject\Time\SerializableDateTime[] */
     private array $datesIndexedByDate;
@@ -35,29 +35,44 @@ final class DateCollection
         return new self([]);
     }
 
-    public function countMostConsecutiveDates(): int
+    public function getLatestDate(): SerializableDateTime
+    {
+        return \max($this->datesIndexedByDate);
+    }
+
+    public function getEarliestDate(): SerializableDateTime
+    {
+        return \min($this->datesIndexedByDate);
+    }
+
+    public function getLongestConsecutiveDateRange(): DateCollection
     {
         if (0 === count($this->datesIndexedByDate)) {
-            return 0;
+            return DateCollection::empty();
         }
+        $mostConsecutiveDates = [];
+        $currentConsecutiveDates = [];
 
         $keys = \array_keys($this->datesIndexedByDate);
-
-        $delta = 0;
-        $mostConsecutiveDayCount = 0;
-        $currentConsecutiveDayCount = 0;
+        $count = 0;
         foreach ($this->datesIndexedByDate as $date) {
-            if ($delta > 0 && $date->modify('-1 day')->format('Y-m-d') !== $this->datesIndexedByDate[$keys[$delta - 1]]->format('Y-m-d')) {
+            if ($count > 0 && $date->modify('-1 day')->format('Y-m-d') != $this->datesIndexedByDate[$keys[$count - 1]]->format('Y-m-d')) {
                 // Date is not consecutive.
-                $currentConsecutiveDayCount = 0;
+                $currentConsecutiveDates = [];
             }
-            ++$currentConsecutiveDayCount;
-            ++$delta;
-            if ($currentConsecutiveDayCount > $mostConsecutiveDayCount) {
-                $mostConsecutiveDayCount = $currentConsecutiveDayCount;
+            $currentConsecutiveDates[] = $date;
+            ++$count;
+
+            if (count($currentConsecutiveDates) > count($mostConsecutiveDates)) {
+                $mostConsecutiveDates = $currentConsecutiveDates;
             }
         }
 
-        return $mostConsecutiveDayCount;
+        return DateCollection::fromDates($mostConsecutiveDates);
+    }
+
+    public function count(): int
+    {
+        return count($this->datesIndexedByDate);
     }
 }
