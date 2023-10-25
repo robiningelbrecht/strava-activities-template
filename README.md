@@ -106,6 +106,10 @@ For any feedback, help or feature requests, please [open a new issue](https://gi
 ## Change Log
 All notable changes to this project will be documented in this file.
 
+#### [2023-10-24]
+
+* Added activity stream chart in activity drawer
+
 #### [2023-10-21]
 
 * Migrated weather data to separate field
