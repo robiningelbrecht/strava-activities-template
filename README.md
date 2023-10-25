@@ -19,12 +19,12 @@ This repository contains the template code to generate your own Strava statistic
 Just follow the steps below. If you experience any issues with any of the steps,
 feel free to [open an issue](https://github.com/robiningelbrecht/strava-activities-template/issues/new). I'll be glad to help you out 💅.
 
-## Examples
+## 🦄 Examples
 
 * Markdown version: https://github.com/robiningelbrecht/strava-activities
 * HTML version: https://strava-statistics.robiningelbrecht.be/
 
-## What you'll need
+## 🪄 What you'll need
 
 * A Strava API key
 * A GitHub account
