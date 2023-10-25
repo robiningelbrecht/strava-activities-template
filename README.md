@@ -19,17 +19,17 @@ This repository contains the template code to generate your own Strava statistic
 Just follow the steps below. If you experience any issues with any of the steps,
 feel free to [open an issue](https://github.com/robiningelbrecht/strava-activities-template/issues/new). I'll be glad to help you out 💅.
 
-## Examples
+## 🦄 Examples
 
 * Markdown version: https://github.com/robiningelbrecht/strava-activities
 * HTML version: https://strava-statistics.robiningelbrecht.be/
 
-## What you'll need
+## 🪄 What you'll need
 
 * A Strava API key
 * A GitHub account
 
-## Installation
+## 🛠️ Installation
 
 * Make sure your logged in with your GitHub account
 * Start off by showing some ❤️ and give this repo a star
@@ -72,7 +72,7 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
         * Replace `YOUR_GITHUB_USERNAME` with your own username
         * Click `commit changes` at the top right-hand corner
 
-## Hosting the HTML version
+## ☁️ Hosting the HTML version
 
 There's also a HTML versions available with a lot more features. You can easily host this for free
 on https://vercel.com:
@@ -85,7 +85,7 @@ on https://vercel.com:
 * You can uncheck the option `Include source files outside of the Root Directory in the Build Step.`
 * You should be good to go
 
-## Some things to consider
+## 🧐 Some things to consider
 
 * Any new feature or update added to the template, will automatically end up in your repository 🪄
 * Only (virtual) bike rides are imported, other sports are not relevant for these stats
@@ -99,12 +99,16 @@ on https://vercel.com:
   Strava's API has a rate limit of 100 request per 15 minutes and a 1000 requests per day. We have to make sure
   this limit is not exceeded. See https://developers.strava.com/docs/rate-limits/. If you have more than 500 activities,
   you might run into the daily rate limit. If you do so, the app will import the remaining activities the next day(s).
-## 💡Feature request?
+## 💡 Feature request?
 
 For any feedback, help or feature requests, please [open a new issue](https://github.com/robiningelbrecht/strava-activities-template/issues/new)
 
-## Change Log
+## 📓 Change Log
 All notable changes to this project will be documented in this file.
+
+#### [2023-10-24]
+
+* Added activity stream chart in activity drawer
 
 #### [2023-10-21]
 
