@@ -12,6 +12,8 @@ final class ActivityHeatmapChartBuilder
     private readonly SerializableDateTime $toDate;
     private bool $animation;
     private ?string $backgroundColor;
+    /** @var array<mixed>|null */
+    private ?array $tooltip;
 
     private function __construct(
         private readonly ActivityCollection $activities,
@@ -19,6 +21,9 @@ final class ActivityHeatmapChartBuilder
     ) {
         $this->animation = false;
         $this->backgroundColor = '#ffffff';
+        $this->tooltip = [
+            'trigger' => 'item',
+        ];
 
         /** @var SerializableDateTime $fromDate */
         $fromDate = SerializableDateTime::createFromFormat('Y-m-d', $this->now->modify('-11 months')->format('Y-m-01'));
@@ -45,9 +50,9 @@ final class ActivityHeatmapChartBuilder
         return $this;
     }
 
-    public function withoutBackgroundColor(): self
+    public function withoutTooltip(): self
     {
-        $this->backgroundColor = null;
+        $this->tooltip = null;
 
         return $this;
     }
@@ -57,14 +62,12 @@ final class ActivityHeatmapChartBuilder
      */
     public function build(): array
     {
-        return [
+        $build = [
             'backgroundColor' => $this->backgroundColor,
             'animation' => $this->animation,
             'title' => [
                 'left' => 'center',
                 'text' => sprintf('%s - %s', $this->fromDate->format('M Y'), $this->toDate->format('M Y')),
-            ],
-            'tooltip' => [
             ],
             'visualMap' => [
                 'type' => 'piecewise',
@@ -141,6 +144,12 @@ final class ActivityHeatmapChartBuilder
                 'data' => $this->getData(),
             ],
         ];
+
+        if ($this->tooltip) {
+            $build['tooltip'] = $this->tooltip;
+        }
+
+        return $build;
     }
 
     /**
