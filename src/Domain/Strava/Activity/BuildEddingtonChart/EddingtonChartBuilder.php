@@ -6,12 +6,17 @@ final class EddingtonChartBuilder
 {
     private bool $animation;
     private ?string $backgroundColor;
+    /** @var array<mixed>|null */
+    private ?array $tooltip;
 
     private function __construct(
         private readonly Eddington $eddington
     ) {
         $this->animation = false;
         $this->backgroundColor = '#ffffff';
+        $this->tooltip = [
+            'trigger' => 'axis',
+       ];
     }
 
     public static function fromEddington(Eddington $eddington): self
@@ -29,6 +34,13 @@ final class EddingtonChartBuilder
     public function withoutBackgroundColor(): self
     {
         $this->backgroundColor = null;
+
+        return $this;
+    }
+
+    public function withoutTooltip(): self
+    {
+        $this->tooltip = null;
 
         return $this;
     }
@@ -53,7 +65,7 @@ final class EddingtonChartBuilder
             ],
         ];
 
-        return [
+        $build = [
             'backgroundColor' => $this->backgroundColor,
             'animation' => $this->animation,
             'grid' => [
@@ -141,5 +153,11 @@ final class EddingtonChartBuilder
                 ],
             ],
         ];
+
+        if ($this->tooltip) {
+            $build['tooltip'] = $this->tooltip;
+        }
+
+        return $build;
     }
 }

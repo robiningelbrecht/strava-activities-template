@@ -30,7 +30,9 @@ final readonly class BuildEddingtonChartCommandHandler implements CommandHandler
                 [
                     'width' => 1000,
                     'height' => 300,
-                    'options' => EddingtonChartBuilder::fromEddington($eddington)->build(),
+                    'options' => EddingtonChartBuilder::fromEddington($eddington)
+                        ->withoutTooltip()
+                        ->build(),
                 ],
                 JSON_PRETTY_PRINT
             ),
