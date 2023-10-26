@@ -34,7 +34,9 @@ final readonly class BuildActivityHeatmapChartCommandHandler implements CommandH
                     'options' => ActivityHeatmapChartBuilder::fromActivities(
                         activities: $this->stravaActivityRepository->findAll(),
                         now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
-                    )->build(),
+                    )
+                        ->withoutTooltip()
+                        ->build(),
                 ],
                 JSON_PRETTY_PRINT),
         );
