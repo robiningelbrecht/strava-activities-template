@@ -47,7 +47,7 @@ final class StreamChartBuilder
         $cadenceStream = $this->streams->getByStreamType(StreamType::CADENCE)?->getData() ?? [];
 
         $numberOfDataPointsOnXAxis = min([count($wattStream), count($hearRateStream), count($cadenceStream)]);
-        $xAxisValues = array_map(fn (int $timeInSeconds) => $this->formatDurationForHumans($timeInSeconds), range(0, $numberOfDataPointsOnXAxis));
+        $xAxisValues = array_map(fn (int $timeInSeconds) => $this->formatDurationForHumans($timeInSeconds, false), range(0, $numberOfDataPointsOnXAxis));
 
         return [
             'backgroundColor' => $this->backgroundColor,
