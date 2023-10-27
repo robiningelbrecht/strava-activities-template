@@ -8,17 +8,24 @@ use Carbon\CarbonInterval;
 
 trait TimeFormatter
 {
-    public function formatDurationForHumans(int $timeInSeconds): string
+    public function formatDurationForHumans(int $timeInSeconds, bool $trimLeadingZeros = true): string
     {
         $interval = CarbonInterval::seconds($timeInSeconds)->cascade();
 
-        $movingTime = implode(':', array_filter(array_map(fn (int $value) => sprintf('%02d', $value), [
+        $values = [
+            $interval->hours,
             $interval->minutes,
             $interval->seconds,
-        ])));
+        ];
 
-        if ($hours = $interval->hours) {
-            $movingTime = $hours.':'.$movingTime;
+        if ($trimLeadingZeros) {
+            $values = array_filter($values);
+        }
+
+        $movingTime = implode(':', array_map(fn (int $value) => sprintf('%02d', $value), $values));
+
+        if (!$trimLeadingZeros) {
+            return $movingTime;
         }
 
         return ltrim($movingTime, '0');
