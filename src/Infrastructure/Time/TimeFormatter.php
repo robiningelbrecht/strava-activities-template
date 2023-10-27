@@ -12,20 +12,21 @@ trait TimeFormatter
     {
         $interval = CarbonInterval::seconds($timeInSeconds)->cascade();
 
-        $values = [
-            $interval->hours,
-            $interval->minutes,
-            $interval->seconds,
-        ];
-
-        if ($trimLeadingZeros) {
-            $values = array_filter($values);
+        if (!$trimLeadingZeros) {
+            return implode(':', array_map(fn (int $value) => sprintf('%02d', $value), [
+                $interval->hours,
+                $interval->minutes,
+                $interval->seconds,
+            ]));
         }
 
-        $movingTime = implode(':', array_map(fn (int $value) => sprintf('%02d', $value), $values));
+        $movingTime = implode(':', array_map(fn (int $value) => sprintf('%02d', $value), [
+            $interval->minutes,
+            $interval->seconds,
+        ]));
 
-        if (!$trimLeadingZeros) {
-            return $movingTime;
+        if ($hours = $interval->hours) {
+            $movingTime = $hours.':'.$movingTime;
         }
 
         return ltrim($movingTime, '0');
