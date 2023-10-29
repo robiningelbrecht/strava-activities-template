@@ -1,0 +1,52 @@
+name: Update key value store
+on:
+  workflow_dispatch:
+    inputs:
+      key:
+        type: choice
+        description: Key you want to set
+        required: true
+        default: 'athlete_birthday'
+        options:
+          - athlete_birthday
+      value:
+        type: string
+        description: The value
+        required: true
+jobs:
+  update-key-value-store:
+    name: Update KeyValue store
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/marketplace/actions/setup-php-action
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: sqlite, pdo_sqlite
+
+      # https://github.com/marketplace/actions/checkout
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize GIT
+        run: |
+          git config --global user.name 'robiningelbrecht'
+          git config --global user.email 'robiningelbrecht@users.noreply.github.com'
+
+      - name: Install .env file
+        run: |
+          # Install env file.
+            echo ENVIRONMENT=dev >> .env
+            echo DISPLAY_ERROR_DETAILS=1 >> .env
+            echo LOG_ERRORS=0 >> .env
+            echo LOG_ERROR_DETAILS=0 >> .env
+            echo DATABASE_NAME="database/db.strava" >> .env
+            echo STRAVA_CLIENT_ID=${{ secrets.STRAVA_CLIENT_ID }} >> .env
+            echo STRAVA_CLIENT_SECRET=${{ secrets.STRAVA_CLIENT_SECRET }} >> .env
+            echo STRAVA_REFRESH_TOKEN=${{ secrets.STRAVA_REFRESH_TOKEN }} >> .env
+            echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
+
+      - name: Update KeyValue
+        run: bin/console app:strava:key-value ${{ github.event.inputs.key }} ${{ github.event.inputs.value }}
+
