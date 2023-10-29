@@ -127,6 +127,7 @@ All notable changes to this project will be documented in this file.
 
 #### [2023-10-29]
 
+* Show FTP history
 * More accurate calculation of activity intensity
 
 #### [2023-10-26]
