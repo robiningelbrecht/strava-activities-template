@@ -106,6 +106,9 @@ For any feedback, help or feature requests, please [open a new issue](https://gi
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
 
+Explain App\Infrastructure\Exception\EntityNotFound: KeyValue "athlete_birthday" not found
+
+
 #### [2023-10-26]
 
 * Better moving time formatting

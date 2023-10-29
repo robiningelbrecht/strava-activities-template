@@ -30,6 +30,8 @@ use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Exception\EntityNotFound;
+use App\Infrastructure\KeyValue\Key;
+use App\Infrastructure\KeyValue\KeyValueStore;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Lcobucci\Clock\Clock;
@@ -47,6 +49,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         private StravaActivityPowerRepository $stravaActivityPowerRepository,
         private StravaActivityStreamRepository $stravaActivityStreamRepository,
         private FtpRepository $ftpRepository,
+        private KeyValueStore $keyValueStore,
         private Environment $twig,
         private FilesystemOperator $filesystem,
         private Clock $clock,
@@ -58,6 +61,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         assert($command instanceof BuildHtmlVersion);
 
         $now = SerializableDateTime::fromDateTimeImmutable($this->clock->now());
+        $athleteBirthday = SerializableDateTime::fromString($this->keyValueStore->find(Key::ATHLETE_BIRTHDAY)->getValue());
 
         $allActivities = $this->stravaActivityRepository->findAll();
         $allChallenges = $this->stravaChallengeRepository->findAll();
@@ -79,6 +83,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 $activity->enrichWithFtp($ftp->getFtp());
             } catch (EntityNotFound) {
             }
+            $activity->enrichWithAthleteBirthday($athleteBirthday);
 
             if (!$activity->getGearId()) {
                 continue;

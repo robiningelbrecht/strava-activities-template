@@ -27,6 +27,19 @@ final readonly class StravaActivityStreamRepository
         return !empty($queryBuilder->executeQuery()->fetchOne());
     }
 
+    public function hasOneForActivityAndStreamType(int $activityId, StreamType $streamType): bool
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select('*')
+            ->from('ActivityStream')
+            ->andWhere('activityId = :activityId')
+            ->setParameter('activityId', $activityId)
+            ->andWhere('streamType = :streamType')
+            ->setParameter('streamType', $streamType->value);
+
+        return !empty($queryBuilder->executeQuery()->fetchOne());
+    }
+
     public function findByStreamType(StreamType $streamType): ActivityStreamCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();

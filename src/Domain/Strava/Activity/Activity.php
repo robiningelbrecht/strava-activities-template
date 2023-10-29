@@ -18,10 +18,12 @@ final class Activity
     use TimeFormatter;
 
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
-    private ?string $gearName;
+    private ?string $gearName = null;
     /** @var array<mixed> */
-    private array $bestPowerOutputs;
-    private ?FtpValue $ftp;
+    private array $bestPowerOutputs = [];
+    private ?FtpValue $ftp = null;
+    private ?SerializableDateTime $athleteBirthday = null;
+    private bool $hasDetailedPowerData = false;
 
     /**
      * @param array<mixed> $data
@@ -39,9 +41,6 @@ final class Activity
         #[ORM\Column(type: 'string', nullable: true)]
         private ?string $gearId = null,
     ) {
-        $this->gearName = null;
-        $this->bestPowerOutputs = [];
-        $this->ftp = null;
     }
 
     /**
@@ -147,6 +146,7 @@ final class Activity
     public function enrichWithBestPowerOutputs(array $bestPowerOutputs): void
     {
         $this->bestPowerOutputs = $bestPowerOutputs;
+        $this->hasDetailedPowerData = !empty($bestPowerOutputs);
     }
 
     /**
@@ -325,20 +325,22 @@ final class Activity
         // 1) Max and average heart rate
         // OR
         // 2) FTP and average power
-        if (($ftp = $this->getFtp()) && ($averagePower = $this->getAveragePower())) {
+        if (($ftp = $this->getFtp()) && ($averagePower = $this->getAveragePower()) && $this->hasDetailedPowerData()) {
             // Use more complicated and more accurate calculation.
             // intensityFactor = averagePower / FTP
             // (durationInSeconds * averagePower * intensityFactor) / (FTP x 3600) * 100
             return (int) round(($this->getMovingTime() * $averagePower * ($averagePower / $ftp->getValue())) / ($ftp->getValue() * 3600) * 100);
         }
 
-        /*if (($averageHeartRate = $this->getAverageHeartRate())) {
+        if (($averageHeartRate = $this->getAverageHeartRate()) && ($age = $this->getAthleteAgeInYears())) {
             // Use simplified, less accurate calculation.
             // maxHeartRate = = (220 - age) x 0.92
             // intensityFactor = averageHeartRate / maxHeartRate
             // (durationInSeconds x averageHeartRate x intensityFactor) / (maxHeartRate x 3600) x 100
-            return (int) round(($this->getMovingTime() * $averageHeartRate) / ($ftp->getValue() * 3600) * 100);
-        }*/
+            $maxHeartRate = (220 - $age) * 0.92;
+
+            return (int) round(($this->getMovingTime() * $averageHeartRate * ($averageHeartRate / $maxHeartRate)) / ($maxHeartRate * 3600) * 100);
+        }
 
         return null;
     }
@@ -356,6 +358,26 @@ final class Activity
     public function getAthleteWeight(): Weight
     {
         return Weight::fromKilograms($this->data['athlete_weight']);
+    }
+
+    public function getAthleteAgeInYears(): ?int
+    {
+        return $this->athleteBirthday?->diff($this->getStartDate())->y;
+    }
+
+    public function enrichWithAthleteBirthday(SerializableDateTime $birthday): void
+    {
+        $this->athleteBirthday = $birthday;
+    }
+
+    public function hasDetailedPowerData(): bool
+    {
+        return $this->hasDetailedPowerData;
+    }
+
+    public function updateHasDetailedPowerData(bool $flag): void
+    {
+        $this->hasDetailedPowerData = $flag;
     }
 
     /**
