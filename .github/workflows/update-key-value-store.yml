@@ -1,11 +1,21 @@
-name: Update strava activities
+name: Update key value store
 on:
   workflow_dispatch:
-  #schedule:
-  #  - cron:  '30 18 * * *'
+    inputs:
+      key:
+        type: choice
+        description: Key you want to set
+        required: true
+        default: 'athlete_birthday'
+        options:
+          - athlete_birthday
+      value:
+        type: string
+        description: The value
+        required: true
 jobs:
-  update-strava-history:
-    name: Update strava activities
+  update-key-value-store:
+    name: Update KeyValue store
     runs-on: ubuntu-latest
     steps:
       # https://github.com/marketplace/actions/setup-php-action
@@ -14,12 +24,6 @@ jobs:
         with:
           php-version: '8.2'
           extensions: sqlite, pdo_sqlite
-
-      # https://github.com/marketplace/actions/setup-node-js-environment
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
 
       # https://github.com/marketplace/actions/checkout
       - name: Checkout
@@ -43,10 +47,6 @@ jobs:
             echo STRAVA_REFRESH_TOKEN=${{ secrets.STRAVA_REFRESH_TOKEN }} >> .env
             echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
 
-      - name: Install new build file
-        run: |
-          curl -s https://raw.githubusercontent.com/robiningelbrecht/strava-activities-template/master/bin/update-strava-activities.sh -o bin/update-strava-activities.sh
-
-      - name: Update Strava activities
-        run: bin/update-strava-activities.sh
+      - name: Update KeyValue
+        run: bin/console app:strava:key-value ${{ github.event.inputs.key }} ${{ github.event.inputs.value }}
 

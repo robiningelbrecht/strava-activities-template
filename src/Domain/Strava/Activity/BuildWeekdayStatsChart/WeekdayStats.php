@@ -28,7 +28,7 @@ final readonly class WeekdayStats
     {
         $statistics = [];
         $daysOfTheWeekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        $totalMovingTime = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $this->activities->toArray()));
+        $totalMovingTime = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTimeInSeconds(), $this->activities->toArray()));
 
         foreach ([1, 2, 3, 4, 5, 6, 0] as $weekDay) {
             $statistics[$daysOfTheWeekMap[$weekDay]] = [
@@ -40,13 +40,14 @@ final readonly class WeekdayStats
             ];
         }
 
+        /** @var Activity $activity */
         foreach ($this->activities as $activity) {
             $weekDay = $daysOfTheWeekMap[$activity->getStartDate()->format('w')];
 
             ++$statistics[$weekDay]['numberOfRides'];
             $statistics[$weekDay]['totalDistance'] += $activity->getDistance();
             $statistics[$weekDay]['totalElevation'] += $activity->getElevation();
-            $statistics[$weekDay]['movingTime'] += $activity->getMovingTime();
+            $statistics[$weekDay]['movingTime'] += $activity->getMovingTimeInSeconds();
             $statistics[$weekDay]['movingTimeForHumans'] = CarbonInterval::seconds($statistics[$weekDay]['movingTime'])->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']);
             $statistics[$weekDay]['percentage'] = round($statistics[$weekDay]['movingTime'] / $totalMovingTime * 100, 2);
         }

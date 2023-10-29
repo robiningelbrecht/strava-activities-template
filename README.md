@@ -72,6 +72,14 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
         * Replace `YOUR_GITHUB_USERNAME` with your own username
         * Click `commit changes` at the top right-hand corner
 
+## Configuration
+
+Before running the first activity import, you need to 
+
+* Set your birthday. This is needed to accurately calculate the intensity of your activities 
+  in case no power data is available
+* Configure your FTP (= Functional Treshold Power) history.
+
 ## ☁️ Hosting the HTML version
 
 There's also a HTML versions available with a lot more features. You can easily host this for free
@@ -99,12 +107,18 @@ on https://vercel.com:
   Strava's API has a rate limit of 100 request per 15 minutes and a 1000 requests per day. We have to make sure
   this limit is not exceeded. See https://developers.strava.com/docs/rate-limits/. If you have more than 500 activities,
   you might run into the daily rate limit. If you do so, the app will import the remaining activities the next day(s).
+* If you get following error `App\Infrastructure\Exception\EntityNotFound: KeyValue "athlete_birthday" not found`,
+  it means that you have not set your birthday. Run the "Update athlete birthday" workflow
 ## 💡 Feature request?
 
 For any feedback, help or feature requests, please [open a new issue](https://github.com/robiningelbrecht/strava-activities-template/issues/new)
 
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
+
+#### [2023-10-29]
+
+* More accurate calculation of activity intensity
 
 #### [2023-10-26]
 

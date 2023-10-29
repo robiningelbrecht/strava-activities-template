@@ -20,6 +20,7 @@
     <include>
       <directory>src/Domain</directory>
       <directory>src/Console</directory>
+      <directory>src/Infrastructure/KeyValue</directory>
     </include>
   </source>
 </phpunit>

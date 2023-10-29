@@ -21,6 +21,25 @@ class StravaActivityStreamRepositoryTest extends DatabaseTestCase
         $this->assertFalse($this->stravaActivityStreamRepository->hasOneForActivity('1'));
     }
 
+    public function testHasOneForActivityAndStreamType(): void
+    {
+        $stream = DefaultStreamBuilder::fromDefaults()->build();
+        $this->stravaActivityStreamRepository->add($stream);
+
+        $this->assertTrue($this->stravaActivityStreamRepository->hasOneForActivityAndStreamType(
+            activityId: $stream->getActivityId(),
+            streamType: $stream->getStreamType()
+        ));
+        $this->assertFalse($this->stravaActivityStreamRepository->hasOneForActivityAndStreamType(
+            activityId: 1,
+            streamType: $stream->getStreamType()
+        ));
+        $this->assertFalse($this->stravaActivityStreamRepository->hasOneForActivityAndStreamType(
+            activityId: $stream->getActivityId(),
+            streamType: StreamType::CADENCE
+        ));
+    }
+
     public function testFindByStreamType(): void
     {
         $stream = DefaultStreamBuilder::fromDefaults()->build();

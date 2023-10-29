@@ -8,6 +8,8 @@ use App\Domain\Weather\OpenMeteo\OpenMeteo;
 use App\Infrastructure\Console\ConsoleCommandContainer;
 use App\Infrastructure\Environment\Environment;
 use App\Infrastructure\Environment\Settings;
+use App\Infrastructure\KeyValue\KeyValueStore;
+use App\Infrastructure\KeyValue\SystemKeyValueStore;
 use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\Time\SystemSleep;
 use App\Infrastructure\Twig\TwigBuilder;
@@ -37,6 +39,7 @@ return [
     Clock::class => DI\factory([SystemClock::class, 'fromSystemTimezone']),
     Sleep::class => DI\create(SystemSleep::class),
     UuidFactory::class => DI\create(RandomUuidFactory::class),
+    KeyValueStore::class => DI\get(SystemKeyValueStore::class),
     OpenMeteo::class => DI\get(LiveOpenMeteo::class),
     // Twig Environment.
     FilesystemLoader::class => DI\create(FilesystemLoader::class)->constructor($appRoot.'/templates'),

@@ -104,7 +104,7 @@
                             <td data-sort="{{ activity.getElevation() }}" class="px-6 py-2 {{ activityHighlights.getHighestElevation() == activity.getElevation() ? 'text-strava-orange font-bold': '' }}">
                                 {{ activity.getElevation() }}<span class="text-xs">m</span>
                             </td>
-                            <td data-sort="{{ activity.getMovingTime() }}" class="px-6 py-2 {{ activityHighlights.getLongestMovingTimeFormatted() == activity.getMovingTimeFormatted() ? 'text-strava-orange font-bold': '' }}">
+                            <td data-sort="{{ activity.getMovingTimeInSeconds() }}" class="px-6 py-2 {{ activityHighlights.getLongestMovingTimeFormatted() == activity.getMovingTimeFormatted() ? 'text-strava-orange font-bold': '' }}">
                                 {{ activity.getMovingTimeFormatted() }}
                             </td>
                             <td data-sort="{{ activity.getAveragePower() }}" class="px-6 py-2 {{ activityHighlights.getHighestAveragePower() == activity.getAveragePower() ? 'text-strava-orange font-bold': '' }}">

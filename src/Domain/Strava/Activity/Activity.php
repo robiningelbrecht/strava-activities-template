@@ -2,6 +2,7 @@
 
 namespace App\Domain\Strava\Activity;
 
+use App\Domain\Strava\Ftp\FtpValue;
 use App\Domain\Strava\PowerOutput;
 use App\Domain\Weather\OpenMeteo\Weather;
 use App\Infrastructure\Time\TimeFormatter;
@@ -17,9 +18,12 @@ final class Activity
     use TimeFormatter;
 
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
-    private ?string $gearName;
+    private ?string $gearName = null;
     /** @var array<mixed> */
-    private array $bestPowerOutputs;
+    private array $bestPowerOutputs = [];
+    private ?FtpValue $ftp = null;
+    private ?SerializableDateTime $athleteBirthday = null;
+    private bool $hasDetailedPowerData = false;
 
     /**
      * @param array<mixed> $data
@@ -37,8 +41,6 @@ final class Activity
         #[ORM\Column(type: 'string', nullable: true)]
         private ?string $gearId = null,
     ) {
-        $this->gearName = null;
-        $this->bestPowerOutputs = [];
     }
 
     /**
@@ -144,6 +146,7 @@ final class Activity
     public function enrichWithBestPowerOutputs(array $bestPowerOutputs): void
     {
         $this->bestPowerOutputs = $bestPowerOutputs;
+        $this->hasDetailedPowerData = !empty($bestPowerOutputs);
     }
 
     /**
@@ -301,14 +304,14 @@ final class Activity
         $this->data['max_cadence'] = $maxCadence;
     }
 
-    public function getMovingTime(): int
+    public function getMovingTimeInSeconds(): int
     {
         return $this->data['moving_time'];
     }
 
     public function getMovingTimeFormatted(): string
     {
-        return $this->formatDurationForHumans($this->getMovingTime());
+        return $this->formatDurationForHumans($this->getMovingTimeInSeconds());
     }
 
     public function getUrl(): string
@@ -318,17 +321,63 @@ final class Activity
 
     public function getIntensity(): ?int
     {
-        // ((durationInSeconds * avgHeartRate) / (FTP * 3600)) * 100
-        if (!$this->getAverageHeartRate()) {
-            return null;
+        // To calculate intensity, we need
+        // 1) Max and average heart rate
+        // OR
+        // 2) FTP and average power
+        if (($ftp = $this->getFtp()) && ($averagePower = $this->getAveragePower()) && $this->hasDetailedPowerData()) {
+            // Use more complicated and more accurate calculation.
+            // intensityFactor = averagePower / FTP
+            // (durationInSeconds * averagePower * intensityFactor) / (FTP x 3600) * 100
+            return (int) round(($this->getMovingTimeInSeconds() * $averagePower * ($averagePower / $ftp->getValue())) / ($ftp->getValue() * 3600) * 100);
         }
 
-        return (int) round(($this->getMovingTime() * $this->getAverageHeartRate()) / (240 * 3600) * 100);
+        if (($averageHeartRate = $this->getAverageHeartRate()) && ($age = $this->getAthleteAgeInYears())) {
+            // Use simplified, less accurate calculation.
+            // maxHeartRate = = (220 - age) x 0.92
+            // intensityFactor = averageHeartRate / maxHeartRate
+            // (durationInSeconds x averageHeartRate x intensityFactor) / (maxHeartRate x 3600) x 100
+            $maxHeartRate = round((220 - $age) * 0.92);
+
+            return (int) round(($this->getMovingTimeInSeconds() * $averageHeartRate * ($averageHeartRate / $maxHeartRate)) / ($maxHeartRate * 3600) * 100);
+        }
+
+        return null;
+    }
+
+    public function getFtp(): ?FtpValue
+    {
+        return $this->ftp;
+    }
+
+    public function enrichWithFtp(FtpValue $ftp): void
+    {
+        $this->ftp = $ftp;
     }
 
     public function getAthleteWeight(): Weight
     {
         return Weight::fromKilograms($this->data['athlete_weight']);
+    }
+
+    public function getAthleteAgeInYears(): ?int
+    {
+        return $this->athleteBirthday?->diff($this->getStartDate())->y;
+    }
+
+    public function enrichWithAthleteBirthday(SerializableDateTime $birthday): void
+    {
+        $this->athleteBirthday = $birthday;
+    }
+
+    public function hasDetailedPowerData(): bool
+    {
+        return $this->hasDetailedPowerData;
+    }
+
+    public function updateHasDetailedPowerData(bool $flag): void
+    {
+        $this->hasDetailedPowerData = $flag;
     }
 
     /**

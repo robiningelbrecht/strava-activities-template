@@ -83,24 +83,24 @@ final class ActivityHeatmapChartBuilder
                     ],
                     [
                         'min' => 1,
-                        'max' => 75,
+                        'max' => 33,
                         'color' => '#68B34B',
                         'label' => 'Low',
                     ],
                     [
-                        'min' => 76,
-                        'max' => 125,
+                        'min' => 34,
+                        'max' => 66,
                         'color' => '#FAB735',
                         'label' => 'Medium',
                     ],
                     [
-                        'min' => 126,
-                        'max' => 200,
+                        'min' => 67,
+                        'max' => 100,
                         'color' => '#FF8E14',
                         'label' => 'High',
                     ],
                     [
-                        'min' => 200,
+                        'min' => 101,
                         'color' => '#FF0C0C',
                         'label' => 'Very high',
                     ],
@@ -163,6 +163,7 @@ final class ActivityHeatmapChartBuilder
         );
 
         $data = $rawData = [];
+        /** @var Activity $activity */
         foreach ($activities as $activity) {
             if (!$intensity = $activity->getIntensity()) {
                 continue;
