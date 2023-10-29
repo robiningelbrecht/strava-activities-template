@@ -23,8 +23,9 @@ final readonly class DistanceBreakdown
     /**
      * @return array<mixed>
      */
-    public function getRows(int $breakdownOnKm = 25): array
+    public function getRows(): array
     {
+        $breakdownOnKm = 10;
         $statistics = [];
         $longestDistanceForActivity = max(array_map(
             fn (Activity $activity) => $activity->getDistance(),
