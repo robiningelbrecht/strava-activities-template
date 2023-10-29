@@ -34,7 +34,7 @@ final class UpdateFtpConsoleCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $setOn = SerializableDateTime::fromString($input->getArgument('setOn'));
-        $ftp = FtpValue::fromInt($input->getArgument('ftp'));
+        $ftp = FtpValue::fromInt((int) $input->getArgument('ftp'));
 
         $this->ftpRepository->save(Ftp::fromState(
             setOn: $setOn,

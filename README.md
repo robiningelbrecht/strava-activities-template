@@ -56,9 +56,9 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
     * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/settings/actions
     * Scroll down to `Workflow permissions` and make sure `Read and write permissions` is checked
       ![Workflow permissions](files/install/workflow-permissions.png)
-* The last thing you need to do is edit the `update-strava-activities.yml` file:
-    * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/edit/master/.github/workflows/update-strava-activities.yml
-    * Edit the `update-strava-activities.yml`
+* The last thing you need to do is edit the workflow files `update-strava-activities.yml`, `update-ftp.yml` and `update-key-value-store.yml`:
+    * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/edit/master/.github/workflows
+    * Edit the file
       ![Edit workflow](files/install/edit-workflow.png)
     * Uncomment line 4 and 5 by removing the `#` character
     * Scroll own to:
@@ -71,14 +71,23 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
 
         * Replace `YOUR_GITHUB_USERNAME` with your own username
         * Click `commit changes` at the top right-hand corner
+    * Do this again for the other 2 files
 
 ## Configuration
 
 Before running the first activity import, you need to 
 
-* Set your birthday. This is needed to accurately calculate the intensity of your activities 
-  in case no power data is available
-* Configure your FTP (= Functional Treshold Power) history.
+* Set your birthday. This is required to accurately calculate the intensity of your activities 
+  in case no power data is available.
+  * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/actions/workflows/update-key-value-store.yml
+  * Fill out your birthday and run the workflow
+  * ![Update birthday](files/install/update-birthday.png)
+* Configure your FTP (= Functional Threshold Power) history.
+  * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/actions/workflows/update-ftp.yml
+  * Fill out the FTP and the date you've set the FTP on and run the workflow
+  * ![Update FTP](files/install/update-ftp.png)
+  * Do this for every FTP you've set
+* It's important you wait until a workflow is done, before running another one
 
 ## ☁️ Hosting the HTML version
 
