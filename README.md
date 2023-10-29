@@ -107,7 +107,7 @@ on https://vercel.com:
   Strava's API has a rate limit of 100 request per 15 minutes and a 1000 requests per day. We have to make sure
   this limit is not exceeded. See https://developers.strava.com/docs/rate-limits/. If you have more than 500 activities,
   you might run into the daily rate limit. If you do so, the app will import the remaining activities the next day(s).
-* If you get following error `Explain App\Infrastructure\Exception\EntityNotFound: KeyValue "athlete_birthday" not found`,
+* If you get following error `App\Infrastructure\Exception\EntityNotFound: KeyValue "athlete_birthday" not found`,
   it means that you have not set your birthday. Run the "Update athlete birthday" workflow
 ## 💡 Feature request?
 
