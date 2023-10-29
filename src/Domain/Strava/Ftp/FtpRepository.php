@@ -51,7 +51,7 @@ final readonly class FtpRepository
         return Ftp::fromState(
             ftpId: Uuid::fromString($result['ftpId']),
             setOn: SerializableDateTime::fromString($result['setOn']),
-            ftp: $result['ftp']
+            ftp: FtpValue::fromInt((int) $result['ftp'])
         );
     }
 }

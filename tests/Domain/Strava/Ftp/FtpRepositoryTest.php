@@ -3,6 +3,7 @@
 namespace App\Tests\Domain\Strava\Ftp;
 
 use App\Domain\Strava\Ftp\FtpRepository;
+use App\Domain\Strava\Ftp\FtpValue;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\DatabaseTestCase;
@@ -17,25 +18,25 @@ class FtpRepositoryTest extends DatabaseTestCase
         $ftpOne = FtpBuilder::fromDefaults()
             ->withFtpId(Uuid::uuid4())
             ->withSetOn(SerializableDateTime::fromString('2023-04-01'))
-            ->withFtp(198)
+            ->withFtp(FtpValue::fromInt(198))
             ->build();
         $this->ftpRepository->add($ftpOne);
         $ftpTwo = FtpBuilder::fromDefaults()
             ->withFtpId(Uuid::uuid4())
             ->withSetOn(SerializableDateTime::fromString('2023-05-25'))
-            ->withFtp(220)
+            ->withFtp(FtpValue::fromInt(220))
             ->build();
         $this->ftpRepository->add($ftpTwo);
         $ftpThree = FtpBuilder::fromDefaults()
             ->withFtpId(Uuid::uuid4())
             ->withSetOn(SerializableDateTime::fromString('2023-08-01'))
-            ->withFtp(238)
+            ->withFtp(FtpValue::fromInt(238))
             ->build();
         $this->ftpRepository->add($ftpThree);
         $ftpFour = FtpBuilder::fromDefaults()
             ->withFtpId(Uuid::uuid4())
             ->withSetOn(SerializableDateTime::fromString('2023-09-24'))
-            ->withFtp(250)
+            ->withFtp(FtpValue::fromInt(250))
             ->build();
         $this->ftpRepository->add($ftpFour);
 
@@ -70,25 +71,25 @@ class FtpRepositoryTest extends DatabaseTestCase
         $ftpOne = FtpBuilder::fromDefaults()
             ->withFtpId(Uuid::uuid4())
             ->withSetOn(SerializableDateTime::fromString('2023-04-01'))
-            ->withFtp(198)
+            ->withFtp(FtpValue::fromInt(198))
             ->build();
         $this->ftpRepository->add($ftpOne);
         $ftpTwo = FtpBuilder::fromDefaults()
             ->withFtpId(Uuid::uuid4())
             ->withSetOn(SerializableDateTime::fromString('2023-05-25'))
-            ->withFtp(220)
+            ->withFtp(FtpValue::fromInt(220))
             ->build();
         $this->ftpRepository->add($ftpTwo);
         $ftpThree = FtpBuilder::fromDefaults()
             ->withFtpId(Uuid::uuid4())
             ->withSetOn(SerializableDateTime::fromString('2023-08-01'))
-            ->withFtp(238)
+            ->withFtp(FtpValue::fromInt(238))
             ->build();
         $this->ftpRepository->add($ftpThree);
         $ftpFour = FtpBuilder::fromDefaults()
             ->withFtpId(Uuid::uuid4())
             ->withSetOn(SerializableDateTime::fromString('2023-09-24'))
-            ->withFtp(250)
+            ->withFtp(FtpValue::fromInt(250))
             ->build();
         $this->ftpRepository->add($ftpFour);
 

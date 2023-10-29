@@ -8,12 +8,15 @@ use App\Domain\Strava\Activity\StravaActivityRepository;
 use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Challenge\StravaChallengeRepository;
+use App\Domain\Strava\Ftp\FtpRepository;
+use App\Domain\Strava\Ftp\FtpValue;
 use App\Domain\Strava\Gear\StravaGearRepository;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\Domain\Strava\Activity\ActivityBuilder;
 use App\Tests\Domain\Strava\Activity\Stream\DefaultStreamBuilder;
 use App\Tests\Domain\Strava\Challenge\ChallengeBuilder;
+use App\Tests\Domain\Strava\Ftp\FtpBuilder;
 use App\Tests\Domain\Strava\Gear\GearBuilder;
 use Psr\Container\ContainerInterface;
 
@@ -131,6 +134,15 @@ trait ProvideTestData
                 ->withChallengeId('3809')
                 ->withCreatedOn(SerializableDateTime::fromString('2023-06-03 17:32:21'))
                 ->withData(Json::decode('{"name":"June Sweat With Pride Challenge","date":"Jun 2023","teaser":"Let\u2019s walk a mile in solidarity with the LGBTQ+ community this Pride Month.","logo_url":"https:\/\/dgalywyr863hv.cloudfront.net\/challenges\/3809\/3809-logo-100.png","url":"June-Sweat-With-Pride-Challenge-2023","challenge_id":3809,"athlete_id":62214940,"effort":null,"createdOn":1685813541,"localLogo":"files\/challenges\/98b92ae4-0234-11ee-ad06-000d3a360b3f.png","_id":20}'))
+                ->build()
+        );
+
+        /** @var FtpRepository $ftpRepository */
+        $ftpRepository = $this->getContainer()->get(FtpRepository::class);
+        $ftpRepository->add(
+            FtpBuilder::fromDefaults()
+                ->withSetOn(SerializableDateTime::fromString('1970-01-01'))
+                ->withFtp(FtpValue::fromInt(240))
                 ->build()
         );
     }

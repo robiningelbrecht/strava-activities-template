@@ -17,14 +17,14 @@ final readonly class Ftp
         #[ORM\Column(type: 'datetime_immutable')]
         private SerializableDateTime $setOn,
         #[ORM\Column(type: 'integer')]
-        private int $ftp,
+        private FtpValue $ftp,
     ) {
     }
 
     public static function fromState(
         UuidInterface $ftpId,
         SerializableDateTime $setOn,
-        int $ftp,
+        FtpValue $ftp,
     ): self {
         return new self(
             ftpId: $ftpId,
@@ -43,7 +43,7 @@ final readonly class Ftp
         return $this->setOn;
     }
 
-    public function getFtp(): int
+    public function getFtp(): FtpValue
     {
         return $this->ftp;
     }

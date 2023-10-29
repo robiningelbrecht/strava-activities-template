@@ -22,12 +22,14 @@ use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Domain\Strava\BikeStatistics;
 use App\Domain\Strava\Challenge\StravaChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
+use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Gear\StravaGearRepository;
 use App\Domain\Strava\MonthlyStatistics;
 use App\Domain\Strava\Trivia;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
+use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Lcobucci\Clock\Clock;
@@ -44,6 +46,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         private ActivityBasedImageRepository $activityBasedImageRepository,
         private StravaActivityPowerRepository $stravaActivityPowerRepository,
         private StravaActivityStreamRepository $stravaActivityStreamRepository,
+        private FtpRepository $ftpRepository,
         private Environment $twig,
         private FilesystemOperator $filesystem,
         private Clock $clock,
@@ -65,10 +68,17 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $weekdayStats = WeekdayStats::fromActivities($allActivities);
         $dayTimeStats = DaytimeStats::fromActivities($allActivities);
 
+        /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($allActivities as $activity) {
             $activity->enrichWithBestPowerOutputs(
                 $this->stravaActivityPowerRepository->findBestForActivity($activity->getId())
             );
+
+            try {
+                $ftp = $this->ftpRepository->findForDate($activity->getStartDate());
+                $activity->enrichWithFtp($ftp->getFtp());
+            } catch (EntityNotFound) {
+            }
 
             if (!$activity->getGearId()) {
                 continue;

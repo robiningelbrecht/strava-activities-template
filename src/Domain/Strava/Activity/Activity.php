@@ -2,6 +2,7 @@
 
 namespace App\Domain\Strava\Activity;
 
+use App\Domain\Strava\Ftp\FtpValue;
 use App\Domain\Strava\PowerOutput;
 use App\Domain\Weather\OpenMeteo\Weather;
 use App\Infrastructure\Time\TimeFormatter;
@@ -20,6 +21,7 @@ final class Activity
     private ?string $gearName;
     /** @var array<mixed> */
     private array $bestPowerOutputs;
+    private ?FtpValue $ftp;
 
     /**
      * @param array<mixed> $data
@@ -39,6 +41,7 @@ final class Activity
     ) {
         $this->gearName = null;
         $this->bestPowerOutputs = [];
+        $this->ftp = null;
     }
 
     /**
@@ -319,11 +322,24 @@ final class Activity
     public function getIntensity(): ?int
     {
         // ((durationInSeconds * avgHeartRate) / (FTP * 3600)) * 100
-        if (!$this->getAverageHeartRate()) {
+        if (!$averageHeartRate = $this->getAverageHeartRate()) {
+            return null;
+        }
+        if (!$ftp = $this->getFtp()) {
             return null;
         }
 
-        return (int) round(($this->getMovingTime() * $this->getAverageHeartRate()) / (240 * 3600) * 100);
+        return (int) round(($this->getMovingTime() * $averageHeartRate) / ($ftp->getValue() * 3600) * 100);
+    }
+
+    public function getFtp(): ?FtpValue
+    {
+        return $this->ftp;
+    }
+
+    public function enrichWithFtp(FtpValue $ftp): void
+    {
+        $this->ftp = $ftp;
     }
 
     public function getAthleteWeight(): Weight

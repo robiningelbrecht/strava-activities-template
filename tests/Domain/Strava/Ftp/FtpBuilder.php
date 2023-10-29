@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Domain\Strava\Ftp;
 
 use App\Domain\Strava\Ftp\Ftp;
+use App\Domain\Strava\Ftp\FtpValue;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -13,13 +14,13 @@ final class FtpBuilder
 {
     private UuidInterface $ftpId;
     private SerializableDateTime $setOn;
-    private int $ftp;
+    private FtpValue $ftp;
 
     private function __construct()
     {
         $this->ftpId = Uuid::fromString('9f17cfe9-0c80-465a-921b-55f5b391de10');
         $this->setOn = SerializableDateTime::fromString('2023-01-04');
-        $this->ftp = 200;
+        $this->ftp = FtpValue::fromInt(200);
     }
 
     public static function fromDefaults(): self
@@ -50,7 +51,7 @@ final class FtpBuilder
         return $this;
     }
 
-    public function withFtp(int $ftp): self
+    public function withFtp(FtpValue $ftp): self
     {
         $this->ftp = $ftp;
 
