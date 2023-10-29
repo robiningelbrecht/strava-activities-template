@@ -13,7 +13,7 @@ use App\Domain\Strava\Ftp\FtpValue;
 use App\Domain\Strava\Gear\StravaGearRepository;
 use App\Infrastructure\KeyValue\Key;
 use App\Infrastructure\KeyValue\KeyValue;
-use App\Infrastructure\KeyValue\KeyValueStore;
+use App\Infrastructure\KeyValue\SystemKeyValueStore;
 use App\Infrastructure\KeyValue\Value;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -150,8 +150,8 @@ trait ProvideTestData
                 ->build()
         );
 
-        /** @var KeyValueStore $keyValueStore */
-        $keyValueStore = $this->getContainer()->get(KeyValueStore::class);
+        /** @var SystemKeyValueStore $keyValueStore */
+        $keyValueStore = $this->getContainer()->get(SystemKeyValueStore::class);
         $keyValue = KeyValue::fromState(
             key: Key::ATHLETE_BIRTHDAY,
             value: Value::fromString('1989-08-14'),

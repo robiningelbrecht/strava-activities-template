@@ -5,13 +5,13 @@ namespace App\Tests\Infrastructure\KeyValue;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\KeyValue\Key;
 use App\Infrastructure\KeyValue\KeyValue;
-use App\Infrastructure\KeyValue\KeyValueStore;
+use App\Infrastructure\KeyValue\SystemKeyValueStore;
 use App\Infrastructure\KeyValue\Value;
 use App\Tests\DatabaseTestCase;
 
 class KeyValueStoreTest extends DatabaseTestCase
 {
-    private KeyValueStore $keyValueStore;
+    private SystemKeyValueStore $keyValueStore;
 
     public function testFind(): void
     {
@@ -38,7 +38,7 @@ class KeyValueStoreTest extends DatabaseTestCase
     {
         parent::setUp();
 
-        $this->keyValueStore = new KeyValueStore(
+        $this->keyValueStore = new SystemKeyValueStore(
             $this->getConnection()
         );
     }
