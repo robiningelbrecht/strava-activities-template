@@ -304,14 +304,14 @@ final class Activity
         $this->data['max_cadence'] = $maxCadence;
     }
 
-    public function getMovingTime(): int
+    public function getMovingTimeInSeconds(): int
     {
         return $this->data['moving_time'];
     }
 
     public function getMovingTimeFormatted(): string
     {
-        return $this->formatDurationForHumans($this->getMovingTime());
+        return $this->formatDurationForHumans($this->getMovingTimeInSeconds());
     }
 
     public function getUrl(): string
@@ -329,7 +329,7 @@ final class Activity
             // Use more complicated and more accurate calculation.
             // intensityFactor = averagePower / FTP
             // (durationInSeconds * averagePower * intensityFactor) / (FTP x 3600) * 100
-            return (int) round(($this->getMovingTime() * $averagePower * ($averagePower / $ftp->getValue())) / ($ftp->getValue() * 3600) * 100);
+            return (int) round(($this->getMovingTimeInSeconds() * $averagePower * ($averagePower / $ftp->getValue())) / ($ftp->getValue() * 3600) * 100);
         }
 
         if (($averageHeartRate = $this->getAverageHeartRate()) && ($age = $this->getAthleteAgeInYears())) {
@@ -337,9 +337,9 @@ final class Activity
             // maxHeartRate = = (220 - age) x 0.92
             // intensityFactor = averageHeartRate / maxHeartRate
             // (durationInSeconds x averageHeartRate x intensityFactor) / (maxHeartRate x 3600) x 100
-            $maxHeartRate = (220 - $age) * 0.92;
+            $maxHeartRate = round((220 - $age) * 0.92);
 
-            return (int) round(($this->getMovingTime() * $averageHeartRate * ($averageHeartRate / $maxHeartRate)) / ($maxHeartRate * 3600) * 100);
+            return (int) round(($this->getMovingTimeInSeconds() * $averageHeartRate * ($averageHeartRate / $maxHeartRate)) / ($maxHeartRate * 3600) * 100);
         }
 
         return null;

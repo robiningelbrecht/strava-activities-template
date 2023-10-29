@@ -68,6 +68,7 @@ final class MonthlyStatistics
 
         $statistics = array_reverse($statistics, true);
 
+        /** @var Activity $activity */
         foreach ($this->activities as $activity) {
             $month = $activity->getStartDate()->format('Ym');
 
@@ -81,7 +82,7 @@ final class MonthlyStatistics
             ++$statistics[$month]['numberOfRides'];
             $statistics[$month]['totalDistance'] += $activity->getDistance();
             $statistics[$month]['totalElevation'] += $activity->getElevation();
-            $statistics[$month]['movingTime'] += $activity->getMovingTime();
+            $statistics[$month]['movingTime'] += $activity->getMovingTimeInSeconds();
             $statistics[$month]['gears'][$activity->getGearId()]['distance'] += $activity->getDistance();
 
             // Sort gears by gears.
@@ -150,7 +151,7 @@ final class MonthlyStatistics
             'numberOfRides' => count($activities),
             'totalDistance' => array_sum(array_map(fn (Activity $activity) => $activity->getDistance(), $activities)),
             'totalElevation' => array_sum(array_map(fn (Activity $activity) => $activity->getElevation(), $activities)),
-            'movingTime' => CarbonInterval::seconds(array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $activities)))->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),
+            'movingTime' => CarbonInterval::seconds(array_sum(array_map(fn (Activity $activity) => $activity->getMovingTimeInSeconds(), $activities)))->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),
         ];
     }
 }

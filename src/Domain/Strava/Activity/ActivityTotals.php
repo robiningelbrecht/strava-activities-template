@@ -39,7 +39,7 @@ final class ActivityTotals
 
     public function getMovingTimeFormatted(): string
     {
-        $seconds = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTime(), $this->activities->toArray()));
+        $seconds = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTimeInSeconds(), $this->activities->toArray()));
 
         return CarbonInterval::seconds($seconds)->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']);
     }
