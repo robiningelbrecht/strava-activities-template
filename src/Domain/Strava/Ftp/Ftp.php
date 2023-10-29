@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 final readonly class Ftp
 {
     private function __construct(
-        #[ORM\Id, ORM\Column(type: 'datetime_immutable')]
+        #[ORM\Id, ORM\Column(type: 'date_immutable')]
         private SerializableDateTime $setOn,
         #[ORM\Column(type: 'integer')]
         private FtpValue $ftp,
