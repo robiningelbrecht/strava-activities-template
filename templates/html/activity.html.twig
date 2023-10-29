@@ -162,8 +162,8 @@
             </div>
         </div>
         {% if activity.getType().supportsBestPowerOutputs() %}
-            <div class="mt-4">
-                <h3 class="font-bold">Power outputs</h3>
+            <div class="mt-4 mb-1">
+                <h3 class="font-bold mb-1">Power outputs</h3>
                 <div class="relative overflow-x-auto">
                     <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -180,7 +180,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             {% for timeInterval in timeIntervals %}
                                 {% set powerOutput = activity.getBestAveragePowerForTimeInterval(timeInterval) %}
                                 {% if powerOutput %}

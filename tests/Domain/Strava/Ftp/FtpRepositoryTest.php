@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Ftp;
 
+use App\Domain\Strava\Ftp\FtpCollection;
 use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Ftp\FtpValue;
 use App\Infrastructure\Exception\EntityNotFound;
@@ -87,6 +88,35 @@ class FtpRepositoryTest extends DatabaseTestCase
         $this->expectException(EntityNotFound::class);
 
         $this->ftpRepository->find(SerializableDateTime::fromString('2023-01-01'));
+    }
+
+    public function testFindAll(): void
+    {
+        $ftpOne = FtpBuilder::fromDefaults()
+            ->withSetOn(SerializableDateTime::fromString('2023-04-01'))
+            ->withFtp(FtpValue::fromInt(198))
+            ->build();
+        $this->ftpRepository->save($ftpOne);
+        $ftpTwo = FtpBuilder::fromDefaults()
+            ->withSetOn(SerializableDateTime::fromString('2023-05-25'))
+            ->withFtp(FtpValue::fromInt(220))
+            ->build();
+        $this->ftpRepository->save($ftpTwo);
+        $ftpThree = FtpBuilder::fromDefaults()
+            ->withSetOn(SerializableDateTime::fromString('2023-08-01'))
+            ->withFtp(FtpValue::fromInt(238))
+            ->build();
+        $this->ftpRepository->save($ftpThree);
+        $ftpFour = FtpBuilder::fromDefaults()
+            ->withSetOn(SerializableDateTime::fromString('2023-09-24'))
+            ->withFtp(FtpValue::fromInt(250))
+            ->build();
+        $this->ftpRepository->save($ftpFour);
+
+        $this->assertEquals(
+            FtpCollection::fromArray([$ftpFour, $ftpThree, $ftpTwo, $ftpOne]),
+            $this->ftpRepository->findAll()
+        );
     }
 
     protected function setUp(): void

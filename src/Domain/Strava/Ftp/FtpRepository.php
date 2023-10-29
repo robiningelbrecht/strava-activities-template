@@ -13,6 +13,19 @@ class FtpRepository
     ) {
     }
 
+    public function findAll(): FtpCollection
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select('*')
+            ->from('Ftp')
+            ->orderBy('setOn', 'DESC');
+
+        return FtpCollection::fromArray(array_map(
+            fn (array $result) => $this->buildFromResult($result),
+            $queryBuilder->executeQuery()->fetchAllAssociative()
+        ));
+    }
+
     public function find(SerializableDateTime $dateTime): Ftp
     {
         $queryBuilder = $this->connection->createQueryBuilder();

@@ -150,6 +150,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 'daytimeStats' => $dayTimeStats,
                 'distanceBreakdown' => DistanceBreakdown::fromActivities($allActivities),
                 'trivia' => Trivia::fromActivities($allActivities),
+                'ftpHistory' => $this->ftpRepository->findAll(),
             ]),
         );
 
