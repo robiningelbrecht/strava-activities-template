@@ -2,6 +2,7 @@
 
 namespace App\Tests\Infrastructure\KeyValue;
 
+use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\KeyValue\Key;
 use App\Infrastructure\KeyValue\KeyValue;
 use App\Infrastructure\KeyValue\KeyValueStore;
@@ -25,6 +26,12 @@ class KeyValueStoreTest extends DatabaseTestCase
             $keyValue,
             $this->keyValueStore->find(Key::ATHLETE_BIRTHDAY)
         );
+    }
+
+    public function testItShouldThrowWhenNotFound(): void
+    {
+        $this->expectException(EntityNotFound::class);
+        $this->keyValueStore->find(Key::ATHLETE_BIRTHDAY);
     }
 
     protected function setUp(): void
