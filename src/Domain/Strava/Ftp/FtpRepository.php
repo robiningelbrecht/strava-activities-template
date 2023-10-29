@@ -6,10 +6,10 @@ use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Doctrine\DBAL\Connection;
 
-final readonly class FtpRepository
+class FtpRepository
 {
     public function __construct(
-        private Connection $connection
+        private readonly Connection $connection
     ) {
     }
 

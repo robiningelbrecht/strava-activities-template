@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'app:strava:key-value', description: 'Update KeyValue store')]
-class UpdateKeyValueConsoleCommand extends Command
+final class UpdateKeyValueConsoleCommand extends Command
 {
     public function __construct(
         private readonly KeyValueStore $keyValueStore

@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'app:strava:import-data', description: 'Import Strava data')]
-class ImportStravaDataConsoleCommand extends Command
+final class ImportStravaDataConsoleCommand extends Command
 {
     public function __construct(
         private readonly CommandBus $commandBus,
