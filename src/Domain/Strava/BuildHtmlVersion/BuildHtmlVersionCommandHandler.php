@@ -75,7 +75,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             );
 
             try {
-                $ftp = $this->ftpRepository->findForDate($activity->getStartDate());
+                $ftp = $this->ftpRepository->find($activity->getStartDate());
                 $activity->enrichWithFtp($ftp->getFtp());
             } catch (EntityNotFound) {
             }

@@ -32,7 +32,7 @@ final readonly class BuildActivityHeatmapChartCommandHandler implements CommandH
         /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($allActivities as $activity) {
             try {
-                $ftp = $this->ftpRepository->findForDate($activity->getStartDate());
+                $ftp = $this->ftpRepository->find($activity->getStartDate());
                 $activity->enrichWithFtp($ftp->getFtp());
             } catch (EntityNotFound) {
             }

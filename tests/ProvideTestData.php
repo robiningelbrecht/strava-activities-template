@@ -139,7 +139,7 @@ trait ProvideTestData
 
         /** @var FtpRepository $ftpRepository */
         $ftpRepository = $this->getContainer()->get(FtpRepository::class);
-        $ftpRepository->add(
+        $ftpRepository->save(
             FtpBuilder::fromDefaults()
                 ->withSetOn(SerializableDateTime::fromString('2023-04-01'))
                 ->withFtp(FtpValue::fromInt(240))

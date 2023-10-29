@@ -163,6 +163,7 @@ final class ActivityHeatmapChartBuilder
         );
 
         $data = $rawData = [];
+        /** @var Activity $activity */
         foreach ($activities as $activity) {
             if (!$intensity = $activity->getIntensity()) {
                 continue;

@@ -5,7 +5,6 @@ namespace App\Domain\Strava\Ftp;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Doctrine\DBAL\Connection;
-use Ramsey\Uuid\Uuid;
 
 final readonly class FtpRepository
 {
@@ -14,7 +13,7 @@ final readonly class FtpRepository
     ) {
     }
 
-    public function findForDate(SerializableDateTime $dateTime): Ftp
+    public function find(SerializableDateTime $dateTime): Ftp
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
@@ -31,13 +30,12 @@ final readonly class FtpRepository
         return $this->buildFromResult($result);
     }
 
-    public function add(Ftp $ftp): void
+    public function save(Ftp $ftp): void
     {
-        $sql = 'INSERT INTO Ftp (ftpId, setOn, ftp)
-        VALUES (:ftpId, :setOn, :ftp)';
+        $sql = 'REPLACE INTO Ftp (setOn, ftp)
+        VALUES (:setOn, :ftp)';
 
         $this->connection->executeStatement($sql, [
-            'ftpId' => $ftp->getFtpId(),
             'setOn' => $ftp->getSetOn(),
             'ftp' => $ftp->getFtp(),
         ]);
@@ -49,7 +47,6 @@ final readonly class FtpRepository
     private function buildFromResult(array $result): Ftp
     {
         return Ftp::fromState(
-            ftpId: Uuid::fromString($result['ftpId']),
             setOn: SerializableDateTime::fromString($result['setOn']),
             ftp: FtpValue::fromInt((int) $result['ftp'])
         );

@@ -321,15 +321,26 @@ final class Activity
 
     public function getIntensity(): ?int
     {
-        // ((durationInSeconds * avgHeartRate) / (FTP * 3600)) * 100
-        if (!$averageHeartRate = $this->getAverageHeartRate()) {
-            return null;
-        }
-        if (!$ftp = $this->getFtp()) {
-            return null;
+        // To calculate intensity, we need
+        // 1) Max and average heart rate
+        // OR
+        // 2) FTP and average power
+        if (($ftp = $this->getFtp()) && ($averagePower = $this->getAveragePower())) {
+            // Use more complicated and more accurate calculation.
+            // intensityFactor = averagePower / FTP
+            // (durationInSeconds * averagePower * intensityFactor) / (FTP x 3600) * 100
+            return (int) round(($this->getMovingTime() * $averagePower * ($averagePower / $ftp->getValue())) / ($ftp->getValue() * 3600) * 100);
         }
 
-        return (int) round(($this->getMovingTime() * $averageHeartRate) / ($ftp->getValue() * 3600) * 100);
+        /*if (($averageHeartRate = $this->getAverageHeartRate())) {
+            // Use simplified, less accurate calculation.
+            // maxHeartRate = = (220 - age) x 0.92
+            // intensityFactor = averageHeartRate / maxHeartRate
+            // (durationInSeconds x averageHeartRate x intensityFactor) / (maxHeartRate x 3600) x 100
+            return (int) round(($this->getMovingTime() * $averageHeartRate) / ($ftp->getValue() * 3600) * 100);
+        }*/
+
+        return null;
     }
 
     public function getFtp(): ?FtpValue

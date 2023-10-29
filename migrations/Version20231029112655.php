@@ -22,11 +22,13 @@ final class Version20231029112655 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE Ftp (ftpId VARCHAR(255) NOT NULL, setOn DATETIME NOT NULL --(DC2Type:datetime_immutable)
         , ftp INTEGER NOT NULL, PRIMARY KEY(ftpId))');
+        $this->addSql('CREATE TABLE KeyValue ("key" VARCHAR(255) NOT NULL, value VARCHAR(255) NOT NULL, PRIMARY KEY("key"))');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('DROP TABLE Ftp');
+        $this->addSql('DROP TABLE KeyValue');
     }
 }
