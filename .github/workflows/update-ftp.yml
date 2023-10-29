@@ -34,16 +34,25 @@ jobs:
       - name: Install .env file
         run: |
           # Install env file.
-            echo ENVIRONMENT=dev >> .env
-            echo DISPLAY_ERROR_DETAILS=1 >> .env
-            echo LOG_ERRORS=0 >> .env
-            echo LOG_ERROR_DETAILS=0 >> .env
-            echo DATABASE_NAME="database/db.strava" >> .env
-            echo STRAVA_CLIENT_ID=${{ secrets.STRAVA_CLIENT_ID }} >> .env
-            echo STRAVA_CLIENT_SECRET=${{ secrets.STRAVA_CLIENT_SECRET }} >> .env
-            echo STRAVA_REFRESH_TOKEN=${{ secrets.STRAVA_REFRESH_TOKEN }} >> .env
-            echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
+          composer install --prefer-dist
+          echo ENVIRONMENT=dev >> .env
+          echo DISPLAY_ERROR_DETAILS=1 >> .env
+          echo LOG_ERRORS=0 >> .env
+          echo LOG_ERROR_DETAILS=0 >> .env
+          echo DATABASE_NAME="database/db.strava" >> .env
+          echo STRAVA_CLIENT_ID=${{ secrets.STRAVA_CLIENT_ID }} >> .env
+          echo STRAVA_CLIENT_SECRET=${{ secrets.STRAVA_CLIENT_SECRET }} >> .env
+          echo STRAVA_REFRESH_TOKEN=${{ secrets.STRAVA_REFRESH_TOKEN }} >> .env
+          echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
 
       - name: Update FTP
-        run: bin/console app:strava:key-value ${{ github.event.inputs.set-on-date }} ${{ github.event.inputs.ftp }}
+        run: bin/console app:strava:update-ftp ${{ github.event.inputs.set-on-date }} ${{ github.event.inputs.ftp }}
+
+      - name: Commit and push changes
+        run: |
+          # Push changes
+          git add .
+          git status
+          git diff --staged --quiet || git commit -m"Updated FTP"
+          git push
 

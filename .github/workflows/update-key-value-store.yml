@@ -3,12 +3,10 @@ on:
   workflow_dispatch:
     inputs:
       key:
-        type: choice
+        type: string
         description: Key you want to set
         required: true
         default: 'athlete_birthday'
-        options:
-          - athlete_birthday
       value:
         type: string
         description: The value
@@ -37,16 +35,25 @@ jobs:
       - name: Install .env file
         run: |
           # Install env file.
-            echo ENVIRONMENT=dev >> .env
-            echo DISPLAY_ERROR_DETAILS=1 >> .env
-            echo LOG_ERRORS=0 >> .env
-            echo LOG_ERROR_DETAILS=0 >> .env
-            echo DATABASE_NAME="database/db.strava" >> .env
-            echo STRAVA_CLIENT_ID=${{ secrets.STRAVA_CLIENT_ID }} >> .env
-            echo STRAVA_CLIENT_SECRET=${{ secrets.STRAVA_CLIENT_SECRET }} >> .env
-            echo STRAVA_REFRESH_TOKEN=${{ secrets.STRAVA_REFRESH_TOKEN }} >> .env
-            echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
+          composer install --prefer-dist
+          echo ENVIRONMENT=dev >> .env
+          echo DISPLAY_ERROR_DETAILS=1 >> .env
+          echo LOG_ERRORS=0 >> .env
+          echo LOG_ERROR_DETAILS=0 >> .env
+          echo DATABASE_NAME="database/db.strava" >> .env
+          echo STRAVA_CLIENT_ID=${{ secrets.STRAVA_CLIENT_ID }} >> .env
+          echo STRAVA_CLIENT_SECRET=${{ secrets.STRAVA_CLIENT_SECRET }} >> .env
+          echo STRAVA_REFRESH_TOKEN=${{ secrets.STRAVA_REFRESH_TOKEN }} >> .env
+          echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
 
       - name: Update KeyValue
         run: bin/console app:strava:key-value ${{ github.event.inputs.key }} ${{ github.event.inputs.value }}
+
+      - name: Commit and push changes
+        run: |
+          # Push changes
+          git add .
+          git status
+          git diff --staged --quiet || git commit -m"Updated KeyValue store"
+          git push
 
