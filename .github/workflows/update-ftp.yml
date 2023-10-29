@@ -1,0 +1,49 @@
+name: Update FTP
+on:
+  workflow_dispatch:
+    inputs:
+      set-on-date:
+        type: string
+        description: The date you have set the FTP on
+        required: true
+      ftp:
+        type: string
+        description: The FTP you've set
+        required: true
+jobs:
+  update-ftp:
+    name: Update FTP
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/marketplace/actions/setup-php-action
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: sqlite, pdo_sqlite
+
+      # https://github.com/marketplace/actions/checkout
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize GIT
+        run: |
+          git config --global user.name 'YOUR_GITHUB_USERNAME'
+          git config --global user.email 'YOUR_GITHUB_USERNAME@users.noreply.github.com'
+
+      - name: Install .env file
+        run: |
+          # Install env file.
+            echo ENVIRONMENT=dev >> .env
+            echo DISPLAY_ERROR_DETAILS=1 >> .env
+            echo LOG_ERRORS=0 >> .env
+            echo LOG_ERROR_DETAILS=0 >> .env
+            echo DATABASE_NAME="database/db.strava" >> .env
+            echo STRAVA_CLIENT_ID=${{ secrets.STRAVA_CLIENT_ID }} >> .env
+            echo STRAVA_CLIENT_SECRET=${{ secrets.STRAVA_CLIENT_SECRET }} >> .env
+            echo STRAVA_REFRESH_TOKEN=${{ secrets.STRAVA_REFRESH_TOKEN }} >> .env
+            echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
+
+      - name: Update FTP
+        run: bin/console app:strava:key-value ${{ github.event.inputs.set-on-date }} ${{ github.event.inputs.ftp }}
+
