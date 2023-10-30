@@ -50,7 +50,7 @@ final class Ftp
         return round($this->getFtp()->getValue() / $this->athleteWeight->getFloat(), 1);
     }
 
-    public function enrichWithAthleteWeight(Weight $athleteWeight): void
+    public function enrichWithAthleteWeight(?Weight $athleteWeight): void
     {
         $this->athleteWeight = $athleteWeight;
     }
