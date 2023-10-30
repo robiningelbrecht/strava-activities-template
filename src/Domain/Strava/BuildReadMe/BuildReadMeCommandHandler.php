@@ -11,7 +11,7 @@ use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Strava\BikeStatistics;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
-use App\Domain\Strava\Gear\StravaGearRepository;
+use App\Domain\Strava\Gear\GearRepository;
 use App\Domain\Strava\MonthlyStatistics;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
@@ -27,7 +27,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
     public function __construct(
         private ActivityRepository $activityRepository,
         private ChallengeRepository $challengeRepository,
-        private StravaGearRepository $stravaGearRepository,
+        private GearRepository $gearRepository,
         private ActivityPowerRepository $activityPowerRepository,
         private Environment $twig,
         private FilesystemOperator $filesystem,
@@ -46,11 +46,11 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
                 continue;
             }
             $activity->enrichWithGearName(
-                $this->stravaGearRepository->find($activity->getGearId())->getName()
+                $this->gearRepository->find($activity->getGearId())->getName()
             );
         }
         $allChallenges = $this->challengeRepository->findAll();
-        $allBikes = $this->stravaGearRepository->findAll();
+        $allBikes = $this->gearRepository->findAll();
 
         $this->filesystem->write('README.md', $this->twig->load('readme.html.twig')->render([
             'totals' => ActivityTotals::fromActivities(

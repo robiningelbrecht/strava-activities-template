@@ -3,8 +3,8 @@
 namespace App\Tests\Domain\Strava\Gear\ImportGear;
 
 use App\Domain\Strava\Activity\ActivityRepository;
+use App\Domain\Strava\Gear\GearRepository;
 use App\Domain\Strava\Gear\ImportGear\ImportGear;
-use App\Domain\Strava\Gear\StravaGearRepository;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
@@ -27,7 +27,7 @@ class ImportGearCommandHandlerTest extends DatabaseTestCase
         $output = new SpyOutput();
         $this->strava->setMaxNumberOfCallsBeforeTriggering429(3);
 
-        $this->getContainer()->get(StravaGearRepository::class)->add(
+        $this->getContainer()->get(GearRepository::class)->add(
             GearBuilder::fromDefaults()
                 ->withGearId('b12659861')
                 ->build()

@@ -10,7 +10,7 @@ use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Ftp\FtpValue;
-use App\Domain\Strava\Gear\StravaGearRepository;
+use App\Domain\Strava\Gear\GearRepository;
 use App\Infrastructure\KeyValue\DbalKeyValueStore;
 use App\Infrastructure\KeyValue\Key;
 use App\Infrastructure\KeyValue\KeyValue;
@@ -78,8 +78,8 @@ trait ProvideTestData
                 ->build()
         );
 
-        /** @var StravaGearRepository $gearRepository */
-        $gearRepository = $this->getContainer()->get(StravaGearRepository::class);
+        /** @var GearRepository $gearRepository */
+        $gearRepository = $this->getContainer()->get(GearRepository::class);
         $gearRepository->add(
             GearBuilder::fromDefaults()
                 ->withGearId('b12659861')

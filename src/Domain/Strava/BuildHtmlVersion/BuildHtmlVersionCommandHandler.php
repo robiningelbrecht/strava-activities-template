@@ -23,7 +23,7 @@ use App\Domain\Strava\BikeStatistics;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
 use App\Domain\Strava\Ftp\FtpRepository;
-use App\Domain\Strava\Gear\StravaGearRepository;
+use App\Domain\Strava\Gear\GearRepository;
 use App\Domain\Strava\MonthlyStatistics;
 use App\Domain\Strava\Trivia;
 use App\Infrastructure\Attribute\AsCommandHandler;
@@ -44,7 +44,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
     public function __construct(
         private ActivityRepository $activityRepository,
         private ChallengeRepository $challengeRepository,
-        private StravaGearRepository $stravaGearRepository,
+        private GearRepository $gearRepository,
         private ImageRepository $imageRepository,
         private ActivityPowerRepository $activityPowerRepository,
         private ActivityStreamRepository $activityStreamRepository,
@@ -65,7 +65,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 
         $allActivities = $this->activityRepository->findAll();
         $allChallenges = $this->challengeRepository->findAll();
-        $allBikes = $this->stravaGearRepository->findAll();
+        $allBikes = $this->gearRepository->findAll();
         $allImages = $this->imageRepository->findAll();
         $eddington = Eddington::fromActivities($allActivities);
         $activityHighlights = ActivityHighlights::fromActivities($allActivities);
@@ -89,7 +89,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 continue;
             }
             $activity->enrichWithGearName(
-                $this->stravaGearRepository->find($activity->getGearId())->getName()
+                $this->gearRepository->find($activity->getGearId())->getName()
             );
         }
 
