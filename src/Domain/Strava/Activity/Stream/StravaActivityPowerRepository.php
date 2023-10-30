@@ -15,7 +15,7 @@ final class StravaActivityPowerRepository
 
     public function __construct(
         private readonly ActivityRepository $activityRepository,
-        private readonly StravaActivityStreamRepository $stravaActivityStreamRepository
+        private readonly ActivityStreamRepository $activityStreamRepository
     ) {
     }
 
@@ -29,7 +29,7 @@ final class StravaActivityPowerRepository
         }
 
         $activities = $this->activityRepository->findAll();
-        $powerStreams = $this->stravaActivityStreamRepository->findByStreamType(StreamType::WATTS)->toArray();
+        $powerStreams = $this->activityStreamRepository->findByStreamType(StreamType::WATTS)->toArray();
 
         foreach ($activities as $activity) {
             StravaActivityPowerRepository::$cachedPowerOutputs[$activity->getId()] = [];
@@ -67,7 +67,7 @@ final class StravaActivityPowerRepository
         /** @var \App\Domain\Strava\Activity\Stream\PowerStream[] $powerStreams */
         $powerStreams = array_map(
             fn (ActivityStream $stream) => PowerStream::fromStream($stream),
-            $this->stravaActivityStreamRepository->findByStreamType(StreamType::WATTS)->toArray()
+            $this->activityStreamRepository->findByStreamType(StreamType::WATTS)->toArray()
         );
 
         /** @var PowerOutput[] $best */

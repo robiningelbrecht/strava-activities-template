@@ -7,7 +7,7 @@ use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Doctrine\DBAL\Connection;
 
-final readonly class StravaActivityStreamRepository
+final readonly class DbalActivityStreamRepository implements ActivityStreamRepository
 {
     use ProvideSqlConvert;
 

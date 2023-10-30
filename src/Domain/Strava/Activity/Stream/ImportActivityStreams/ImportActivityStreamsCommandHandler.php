@@ -3,8 +3,8 @@
 namespace App\Domain\Strava\Activity\Stream\ImportActivityStreams;
 
 use App\Domain\Strava\Activity\ActivityRepository;
+use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\DefaultStream;
-use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\ReachedStravaApiRateLimits;
 use App\Domain\Strava\Strava;
@@ -22,7 +22,7 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
     public function __construct(
         private Strava $strava,
         private ActivityRepository $activityRepository,
-        private StravaActivityStreamRepository $stravaActivityStreamRepository,
+        private ActivityStreamRepository $activityStreamRepository,
         private Clock $clock,
         private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
         private Sleep $sleep,
@@ -35,7 +35,7 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
         $command->getOutput()->writeln('Importing activity streams...');
 
         foreach ($this->activityRepository->findActivityIds() as $activityId) {
-            if ($this->stravaActivityStreamRepository->hasOneForActivity($activityId)) {
+            if ($this->activityStreamRepository->hasOneForActivity($activityId)) {
                 // Streams for this activity have been imported already, skip.
                 continue;
             }
@@ -72,7 +72,7 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
                     streamData: $stravaStream['data'],
                     createdOn: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
                 );
-                $this->stravaActivityStreamRepository->add($stream);
+                $this->activityStreamRepository->add($stream);
                 $command->getOutput()->writeln(sprintf('  => Imported activity stream "%s"', $stream->getName()));
             }
 

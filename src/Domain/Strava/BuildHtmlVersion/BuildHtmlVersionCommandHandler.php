@@ -14,8 +14,8 @@ use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStatsChartsBuilder;
 use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\WeeklyDistanceChartBuilder;
 use App\Domain\Strava\Activity\Image\ImageRepository;
+use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StravaActivityPowerRepository;
-use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamChartBuilder;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
@@ -47,7 +47,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         private StravaGearRepository $stravaGearRepository,
         private ImageRepository $imageRepository,
         private StravaActivityPowerRepository $stravaActivityPowerRepository,
-        private StravaActivityStreamRepository $stravaActivityStreamRepository,
+        private ActivityStreamRepository $activityStreamRepository,
         private FtpRepository $ftpRepository,
         private KeyValueStore $keyValueStore,
         private Environment $twig,
@@ -208,7 +208,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         );
 
         foreach ($allActivities as $activity) {
-            $streams = $this->stravaActivityStreamRepository->findByActivityAndStreamTypes(
+            $streams = $this->activityStreamRepository->findByActivityAndStreamTypes(
                 activityId: $activity->getId(),
                 streamTypes: StreamTypeCollection::fromArray([
                     StreamType::VELOCITY,

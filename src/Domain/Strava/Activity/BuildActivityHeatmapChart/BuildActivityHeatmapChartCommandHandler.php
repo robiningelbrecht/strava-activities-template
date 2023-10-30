@@ -3,7 +3,7 @@
 namespace App\Domain\Strava\Activity\BuildActivityHeatmapChart;
 
 use App\Domain\Strava\Activity\ActivityRepository;
-use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
+use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Ftp\FtpRepository;
 use App\Infrastructure\Attribute\AsCommandHandler;
@@ -22,7 +22,7 @@ final readonly class BuildActivityHeatmapChartCommandHandler implements CommandH
 {
     public function __construct(
         private ActivityRepository $activityRepository,
-        private StravaActivityStreamRepository $stravaActivityStreamRepository,
+        private ActivityStreamRepository $activityStreamRepository,
         private FtpRepository $ftpRepository,
         private KeyValueStore $keyValueStore,
         private FilesystemOperator $filesystem,
@@ -46,7 +46,7 @@ final readonly class BuildActivityHeatmapChartCommandHandler implements CommandH
             }
             $activity->enrichWithAthleteBirthday($athleteBirthday);
             $activity->updateHasDetailedPowerData(
-                $this->stravaActivityStreamRepository->hasOneForActivityAndStreamType(
+                $this->activityStreamRepository->hasOneForActivityAndStreamType(
                     activityId: $activity->getId(),
                     streamType: StreamType::WATTS,
                 )

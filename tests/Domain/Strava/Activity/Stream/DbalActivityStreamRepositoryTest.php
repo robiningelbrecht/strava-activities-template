@@ -3,38 +3,39 @@
 namespace App\Tests\Domain\Strava\Activity\Stream;
 
 use App\Domain\Strava\Activity\Stream\ActivityStreamCollection;
-use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
+use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
+use App\Domain\Strava\Activity\Stream\DbalActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Tests\DatabaseTestCase;
 
-class StravaActivityStreamRepositoryTest extends DatabaseTestCase
+class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 {
-    private StravaActivityStreamRepository $stravaActivityStreamRepository;
+    private ActivityStreamRepository $activityStreamRepository;
 
     public function testHasOneForActivity(): void
     {
         $stream = DefaultStreamBuilder::fromDefaults()->build();
-        $this->stravaActivityStreamRepository->add($stream);
+        $this->activityStreamRepository->add($stream);
 
-        $this->assertTrue($this->stravaActivityStreamRepository->hasOneForActivity($stream->getActivityId()));
-        $this->assertFalse($this->stravaActivityStreamRepository->hasOneForActivity('1'));
+        $this->assertTrue($this->activityStreamRepository->hasOneForActivity($stream->getActivityId()));
+        $this->assertFalse($this->activityStreamRepository->hasOneForActivity('1'));
     }
 
     public function testHasOneForActivityAndStreamType(): void
     {
         $stream = DefaultStreamBuilder::fromDefaults()->build();
-        $this->stravaActivityStreamRepository->add($stream);
+        $this->activityStreamRepository->add($stream);
 
-        $this->assertTrue($this->stravaActivityStreamRepository->hasOneForActivityAndStreamType(
+        $this->assertTrue($this->activityStreamRepository->hasOneForActivityAndStreamType(
             activityId: $stream->getActivityId(),
             streamType: $stream->getStreamType()
         ));
-        $this->assertFalse($this->stravaActivityStreamRepository->hasOneForActivityAndStreamType(
+        $this->assertFalse($this->activityStreamRepository->hasOneForActivityAndStreamType(
             activityId: 1,
             streamType: $stream->getStreamType()
         ));
-        $this->assertFalse($this->stravaActivityStreamRepository->hasOneForActivityAndStreamType(
+        $this->assertFalse($this->activityStreamRepository->hasOneForActivityAndStreamType(
             activityId: $stream->getActivityId(),
             streamType: StreamType::CADENCE
         ));
@@ -43,11 +44,11 @@ class StravaActivityStreamRepositoryTest extends DatabaseTestCase
     public function testFindByStreamType(): void
     {
         $stream = DefaultStreamBuilder::fromDefaults()->build();
-        $this->stravaActivityStreamRepository->add($stream);
+        $this->activityStreamRepository->add($stream);
 
         $this->assertEquals(
             ActivityStreamCollection::fromArray([$stream]),
-            $this->stravaActivityStreamRepository->findByStreamType($stream->getStreamType())
+            $this->activityStreamRepository->findByStreamType($stream->getStreamType())
         );
     }
 
@@ -57,19 +58,19 @@ class StravaActivityStreamRepositoryTest extends DatabaseTestCase
             ->withActivityId(1)
             ->withStreamType(StreamType::WATTS)
             ->build();
-        $this->stravaActivityStreamRepository->add($streamOne);
+        $this->activityStreamRepository->add($streamOne);
         $streamTwo = DefaultStreamBuilder::fromDefaults()
             ->withActivityId(1)
             ->withStreamType(StreamType::CADENCE)
             ->build();
-        $this->stravaActivityStreamRepository->add($streamTwo);
-        $this->stravaActivityStreamRepository->add(
+        $this->activityStreamRepository->add($streamTwo);
+        $this->activityStreamRepository->add(
             DefaultStreamBuilder::fromDefaults()
                 ->withActivityId(1)
                 ->withStreamType(StreamType::HEART_RATE)
                 ->build()
         );
-        $this->stravaActivityStreamRepository->add(
+        $this->activityStreamRepository->add(
             DefaultStreamBuilder::fromDefaults()
                 ->withActivityId(2)
                 ->withStreamType(StreamType::CADENCE)
@@ -78,7 +79,7 @@ class StravaActivityStreamRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             ActivityStreamCollection::fromArray([$streamTwo, $streamOne]),
-            $this->stravaActivityStreamRepository->findByActivityAndStreamTypes(
+            $this->activityStreamRepository->findByActivityAndStreamTypes(
                 activityId: 1,
                 streamTypes: StreamTypeCollection::fromArray([StreamType::WATTS, StreamType::CADENCE])
             )
@@ -89,7 +90,7 @@ class StravaActivityStreamRepositoryTest extends DatabaseTestCase
     {
         parent::setUp();
 
-        $this->stravaActivityStreamRepository = new StravaActivityStreamRepository(
+        $this->activityStreamRepository = new DbalActivityStreamRepository(
             $this->getConnection()
         );
     }

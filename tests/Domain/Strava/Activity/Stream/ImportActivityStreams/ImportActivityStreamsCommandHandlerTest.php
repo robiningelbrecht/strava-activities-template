@@ -3,8 +3,8 @@
 namespace App\Tests\Domain\Strava\Activity\Stream\ImportActivityStreams;
 
 use App\Domain\Strava\Activity\ActivityRepository;
+use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\ImportActivityStreams\ImportActivityStreams;
-use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
@@ -47,7 +47,7 @@ class ImportActivityStreamsCommandHandlerTest extends DatabaseTestCase
                 ->withActivityId(7)
                 ->build()
         );
-        $this->getContainer()->get(StravaActivityStreamRepository::class)->add(
+        $this->getContainer()->get(ActivityStreamRepository::class)->add(
             DefaultStreamBuilder::fromDefaults()
                 ->withActivityId(4)
                 ->build()
