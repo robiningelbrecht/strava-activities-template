@@ -115,7 +115,7 @@ class DbalFtpRepositoryTest extends DatabaseTestCase
         $this->ftpRepository->save($ftpFour);
 
         $this->assertEquals(
-            FtpCollection::fromArray([$ftpFour, $ftpThree, $ftpTwo, $ftpOne]),
+            FtpCollection::fromArray([$ftpOne, $ftpTwo, $ftpThree, $ftpFour]),
             $this->ftpRepository->findAll()
         );
     }

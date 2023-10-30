@@ -8,6 +8,8 @@ use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\DbalActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamBasedActivityPowerRepository;
+use App\Domain\Strava\Athlete\ActivityBasedAthleteWeightRepository;
+use App\Domain\Strava\Athlete\AthleteWeightRepository;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\Challenge\DbalChallengeRepository;
 use App\Domain\Strava\Ftp\DbalFtpRepository;
@@ -56,6 +58,7 @@ return [
     KeyValueStore::class => DI\get(DbalKeyValueStore::class),
     OpenMeteo::class => DI\get(LiveOpenMeteo::class),
     // Repositories
+    AthleteWeightRepository::class => DI\autowire(ActivityBasedAthleteWeightRepository::class),
     ActivityRepository::class => DI\autowire(DbalActivityRepository::class),
     ActivityStreamRepository::class => DI\autowire(DbalActivityStreamRepository::class),
     ActivityPowerRepository::class => DI\autowire(StreamBasedActivityPowerRepository::class),

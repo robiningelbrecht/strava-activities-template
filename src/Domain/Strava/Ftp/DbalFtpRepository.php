@@ -18,7 +18,7 @@ final readonly class DbalFtpRepository implements FtpRepository
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('Ftp')
-            ->orderBy('setOn', 'DESC');
+            ->orderBy('setOn', 'ASC');
 
         return FtpCollection::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),

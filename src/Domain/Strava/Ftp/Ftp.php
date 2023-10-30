@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace App\Domain\Strava\Ftp;
 
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use App\Infrastructure\ValueObject\Weight;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-final readonly class Ftp
+final class Ftp
 {
+    private ?Weight $athleteWeight = null;
+
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'date_immutable')]
-        private SerializableDateTime $setOn,
+        private readonly SerializableDateTime $setOn,
         #[ORM\Column(type: 'integer')]
-        private FtpValue $ftp,
+        private readonly FtpValue $ftp,
     ) {
     }
 
@@ -36,5 +39,19 @@ final readonly class Ftp
     public function getFtp(): FtpValue
     {
         return $this->ftp;
+    }
+
+    public function getRelativeFtp(): ?float
+    {
+        if (!$this->athleteWeight) {
+            return null;
+        }
+
+        return round($this->getFtp()->getValue() / $this->athleteWeight->getFloat(), 1);
+    }
+
+    public function enrichWithAthleteWeight(?Weight $athleteWeight): void
+    {
+        $this->athleteWeight = $athleteWeight;
     }
 }

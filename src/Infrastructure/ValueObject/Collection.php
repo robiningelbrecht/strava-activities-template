@@ -89,6 +89,16 @@ abstract class Collection implements \Countable, \IteratorAggregate, \JsonSerial
     }
 
     /**
+     * @return T|false
+     */
+    public function getLast(): mixed
+    {
+        $items = $this->toArray();
+
+        return end($items);
+    }
+
+    /**
      * @return array<T>
      */
     public function jsonSerialize(): array
