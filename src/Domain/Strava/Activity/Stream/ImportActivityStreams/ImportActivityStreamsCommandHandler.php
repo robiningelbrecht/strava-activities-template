@@ -2,7 +2,7 @@
 
 namespace App\Domain\Strava\Activity\Stream\ImportActivityStreams;
 
-use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\Stream\DefaultStream;
 use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
@@ -21,7 +21,7 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
 {
     public function __construct(
         private Strava $strava,
-        private StravaActivityRepository $stravaActivityRepository,
+        private ActivityRepository $activityRepository,
         private StravaActivityStreamRepository $stravaActivityStreamRepository,
         private Clock $clock,
         private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
@@ -34,7 +34,7 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
         assert($command instanceof ImportActivityStreams);
         $command->getOutput()->writeln('Importing activity streams...');
 
-        foreach ($this->stravaActivityRepository->findActivityIds() as $activityId) {
+        foreach ($this->activityRepository->findActivityIds() as $activityId) {
             if ($this->stravaActivityStreamRepository->hasOneForActivity($activityId)) {
                 // Streams for this activity have been imported already, skip.
                 continue;

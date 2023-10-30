@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Challenge\StravaChallengeRepository;
@@ -30,8 +30,8 @@ trait ProvideTestData
 
     public function provideFullTestSet(): void
     {
-        /** @var StravaActivityRepository $activityRepository */
-        $activityRepository = $this->getContainer()->get(StravaActivityRepository::class);
+        /** @var ActivityRepository $activityRepository */
+        $activityRepository = $this->getContainer()->get(ActivityRepository::class);
 
         $activityRepository->add(
             ActivityBuilder::fromDefaults()

@@ -2,7 +2,7 @@
 
 namespace App\Domain\Strava\Activity\BuildEddingtonChart;
 
-use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
@@ -13,7 +13,7 @@ use League\Flysystem\FilesystemOperator;
 final readonly class BuildEddingtonChartCommandHandler implements CommandHandler
 {
     public function __construct(
-        private StravaActivityRepository $stravaActivityRepository,
+        private ActivityRepository $activityRepository,
         private FilesystemOperator $filesystem,
     ) {
     }
@@ -22,7 +22,7 @@ final readonly class BuildEddingtonChartCommandHandler implements CommandHandler
     {
         assert($command instanceof BuildEddingtonChart);
 
-        $eddington = Eddington::fromActivities($this->stravaActivityRepository->findAll());
+        $eddington = Eddington::fromActivities($this->activityRepository->findAll());
 
         $this->filesystem->write(
             'build/charts/chart-activities-eddington_1000_300.json',

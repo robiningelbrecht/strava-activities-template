@@ -2,7 +2,7 @@
 
 namespace App\Domain\Strava\Activity\BuildLatestStravaActivities;
 
-use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
@@ -13,7 +13,7 @@ use Twig\Environment;
 final readonly class BuildLatestStravaActivitiesCommandHandler implements CommandHandler
 {
     public function __construct(
-        private StravaActivityRepository $stravaActivityRepository,
+        private ActivityRepository $activityRepository,
         private FilesystemOperator $filesystem,
         private Environment $twig,
     ) {
@@ -26,7 +26,7 @@ final readonly class BuildLatestStravaActivitiesCommandHandler implements Comman
         $this->filesystem->write(
             'build/strava-activities-latest.md',
             $this->twig->load('strava-activities.html.twig')->render([
-                'activities' => $this->stravaActivityRepository->findAll(5),
+                'activities' => $this->activityRepository->findAll(5),
                 'addLinkToAllActivities' => true,
             ])
         );

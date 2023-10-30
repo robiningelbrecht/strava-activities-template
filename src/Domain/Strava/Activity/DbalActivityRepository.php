@@ -7,7 +7,7 @@ use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Doctrine\DBAL\Connection;
 
-final class StravaActivityRepository
+final class DbalActivityRepository implements ActivityRepository
 {
     /** @var array<int|string, \App\Domain\Strava\Activity\ActivityCollection> */
     public static array $cachedActivities = [];
@@ -35,8 +35,8 @@ final class StravaActivityRepository
     public function findAll(int $limit = null): ActivityCollection
     {
         $cacheKey = $limit ?? 'all';
-        if (array_key_exists($cacheKey, StravaActivityRepository::$cachedActivities)) {
-            return StravaActivityRepository::$cachedActivities[$cacheKey];
+        if (array_key_exists($cacheKey, DbalActivityRepository::$cachedActivities)) {
+            return DbalActivityRepository::$cachedActivities[$cacheKey];
         }
 
         $queryBuilder = $this->connection->createQueryBuilder();
@@ -49,9 +49,9 @@ final class StravaActivityRepository
             fn (array $result) => $this->buildFromResult($result),
             $queryBuilder->executeQuery()->fetchAllAssociative()
         );
-        StravaActivityRepository::$cachedActivities[$cacheKey] = ActivityCollection::fromArray($activities);
+        DbalActivityRepository::$cachedActivities[$cacheKey] = ActivityCollection::fromArray($activities);
 
-        return StravaActivityRepository::$cachedActivities[$cacheKey];
+        return DbalActivityRepository::$cachedActivities[$cacheKey];
     }
 
     /**

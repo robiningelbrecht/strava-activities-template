@@ -3,6 +3,7 @@
 namespace App\Domain\Strava\BuildHtmlVersion;
 
 use App\Domain\Strava\Activity\ActivityHighlights;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\ActivityTotals;
 use App\Domain\Strava\Activity\BuildActivityHeatmapChart\ActivityHeatmapChartBuilder;
 use App\Domain\Strava\Activity\BuildDaytimeStatsChart\DaytimeStats;
@@ -13,7 +14,6 @@ use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStatsChartsBuilder;
 use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\WeeklyDistanceChartBuilder;
 use App\Domain\Strava\Activity\Image\ActivityBasedImageRepository;
-use App\Domain\Strava\Activity\StravaActivityRepository;
 use App\Domain\Strava\Activity\Stream\StravaActivityPowerRepository;
 use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamChartBuilder;
@@ -42,7 +42,7 @@ use Twig\Environment;
 final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 {
     public function __construct(
-        private StravaActivityRepository $stravaActivityRepository,
+        private ActivityRepository $activityRepository,
         private StravaChallengeRepository $stravaChallengeRepository,
         private StravaGearRepository $stravaGearRepository,
         private ActivityBasedImageRepository $activityBasedImageRepository,
@@ -63,7 +63,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $now = SerializableDateTime::fromDateTimeImmutable($this->clock->now());
         $athleteBirthday = SerializableDateTime::fromString($this->keyValueStore->find(Key::ATHLETE_BIRTHDAY)->getValue());
 
-        $allActivities = $this->stravaActivityRepository->findAll();
+        $allActivities = $this->activityRepository->findAll();
         $allChallenges = $this->stravaChallengeRepository->findAll();
         $allBikes = $this->stravaGearRepository->findAll();
         $allImages = $this->activityBasedImageRepository->findAll();

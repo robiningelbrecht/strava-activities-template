@@ -2,7 +2,7 @@
 
 namespace App\Domain\Strava\Activity\Stream;
 
-use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\PowerOutput;
 use Carbon\CarbonInterval;
 
@@ -14,7 +14,7 @@ final class StravaActivityPowerRepository
     private static array $cachedPowerOutputs = [];
 
     public function __construct(
-        private readonly StravaActivityRepository $stravaActivityRepository,
+        private readonly ActivityRepository $activityRepository,
         private readonly StravaActivityStreamRepository $stravaActivityStreamRepository
     ) {
     }
@@ -28,7 +28,7 @@ final class StravaActivityPowerRepository
             return StravaActivityPowerRepository::$cachedPowerOutputs[$activityId];
         }
 
-        $activities = $this->stravaActivityRepository->findAll();
+        $activities = $this->activityRepository->findAll();
         $powerStreams = $this->stravaActivityStreamRepository->findByStreamType(StreamType::WATTS)->toArray();
 
         foreach ($activities as $activity) {
@@ -79,7 +79,7 @@ final class StravaActivityPowerRepository
                     continue;
                 }
                 if (!isset($best[$timeIntervalInSeconds]) || $best[$timeIntervalInSeconds]->getPower() < $power) {
-                    $activity = $this->stravaActivityRepository->find($stream->getActivityId());
+                    $activity = $this->activityRepository->find($stream->getActivityId());
                     $interval = CarbonInterval::seconds($timeIntervalInSeconds);
 
                     if (!$bestRelativeAverageForTimeInterval = $stream->getBestRelativeAverageForTimeInterval($timeIntervalInSeconds, $activity->getAthleteWeight())) {

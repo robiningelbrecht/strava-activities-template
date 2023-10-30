@@ -2,7 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Activity\Stream\ImportActivityStreams;
 
-use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\Stream\ImportActivityStreams\ImportActivityStreams;
 use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
 use App\Domain\Strava\Strava;
@@ -27,22 +27,22 @@ class ImportActivityStreamsCommandHandlerTest extends DatabaseTestCase
         $output = new SpyOutput();
         $this->strava->setMaxNumberOfCallsBeforeTriggering429(3);
 
-        $this->getContainer()->get(StravaActivityRepository::class)->add(
+        $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(4)
                 ->build()
         );
-        $this->getContainer()->get(StravaActivityRepository::class)->add(
+        $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(5)
                 ->build()
         );
-        $this->getContainer()->get(StravaActivityRepository::class)->add(
+        $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(6)
                 ->build()
         );
-        $this->getContainer()->get(StravaActivityRepository::class)->add(
+        $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(7)
                 ->build()

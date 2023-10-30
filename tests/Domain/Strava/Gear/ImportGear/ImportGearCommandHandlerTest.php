@@ -2,7 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Gear\ImportGear;
 
-use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Gear\ImportGear\ImportGear;
 use App\Domain\Strava\Gear\StravaGearRepository;
 use App\Domain\Strava\Strava;
@@ -32,19 +32,19 @@ class ImportGearCommandHandlerTest extends DatabaseTestCase
                 ->withGearId('b12659861')
                 ->build()
         );
-        $this->getContainer()->get(StravaActivityRepository::class)->add(
+        $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(1)
                 ->withGearId('b12659861')
                 ->build()
         );
-        $this->getContainer()->get(StravaActivityRepository::class)->add(
+        $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(2)
                 ->withGearId('b12659743')
                 ->build()
         );
-        $this->getContainer()->get(StravaActivityRepository::class)->add(
+        $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(3)
                 ->withGearId('b12659792')

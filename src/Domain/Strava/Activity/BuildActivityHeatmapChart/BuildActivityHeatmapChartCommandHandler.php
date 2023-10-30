@@ -2,7 +2,7 @@
 
 namespace App\Domain\Strava\Activity\BuildActivityHeatmapChart;
 
-use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Ftp\FtpRepository;
@@ -21,7 +21,7 @@ use League\Flysystem\FilesystemOperator;
 final readonly class BuildActivityHeatmapChartCommandHandler implements CommandHandler
 {
     public function __construct(
-        private StravaActivityRepository $stravaActivityRepository,
+        private ActivityRepository $activityRepository,
         private StravaActivityStreamRepository $stravaActivityStreamRepository,
         private FtpRepository $ftpRepository,
         private KeyValueStore $keyValueStore,
@@ -34,7 +34,7 @@ final readonly class BuildActivityHeatmapChartCommandHandler implements CommandH
     {
         assert($command instanceof BuildActivityHeatmapChart);
 
-        $allActivities = $this->stravaActivityRepository->findAll();
+        $allActivities = $this->activityRepository->findAll();
         $athleteBirthday = SerializableDateTime::fromString($this->keyValueStore->find(Key::ATHLETE_BIRTHDAY)->getValue());
 
         /** @var \App\Domain\Strava\Activity\Activity $activity */
@@ -60,7 +60,7 @@ final readonly class BuildActivityHeatmapChartCommandHandler implements CommandH
                     'width' => 1000,
                     'height' => 180,
                     'options' => ActivityHeatmapChartBuilder::fromActivities(
-                        activities: $this->stravaActivityRepository->findAll(),
+                        activities: $this->activityRepository->findAll(),
                         now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
                     )
                         ->withoutTooltip()
