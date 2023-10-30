@@ -19,6 +19,7 @@ final readonly class ActivityBasedAthleteWeightRepository implements AthleteWeig
 
     public function find(SerializableDateTime $dateTime): ?Weight
     {
+        $dateTime = SerializableDateTime::fromString($dateTime->format('Y-m-d'));
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('data')
             ->from('Activity')

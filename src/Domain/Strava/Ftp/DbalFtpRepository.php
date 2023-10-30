@@ -28,6 +28,7 @@ final readonly class DbalFtpRepository implements FtpRepository
 
     public function find(SerializableDateTime $dateTime): Ftp
     {
+        $dateTime = SerializableDateTime::fromString($dateTime->format('Y-m-d'));
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('Ftp')
