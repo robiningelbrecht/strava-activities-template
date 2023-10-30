@@ -145,6 +145,24 @@ trait ProvideTestData
         $ftpRepository = $this->getContainer()->get(FtpRepository::class);
         $ftpRepository->save(
             FtpBuilder::fromDefaults()
+                ->withSetOn(SerializableDateTime::fromString('2023-01-01'))
+                ->withFtp(FtpValue::fromInt(198))
+                ->build()
+        );
+        $ftpRepository->save(
+            FtpBuilder::fromDefaults()
+                ->withSetOn(SerializableDateTime::fromString('2023-03-22'))
+                ->withFtp(FtpValue::fromInt(220))
+                ->build()
+        );
+        $ftpRepository->save(
+            FtpBuilder::fromDefaults()
+                ->withSetOn(SerializableDateTime::fromString('2023-03-29'))
+                ->withFtp(FtpValue::fromInt(238))
+                ->build()
+        );
+        $ftpRepository->save(
+            FtpBuilder::fromDefaults()
                 ->withSetOn(SerializableDateTime::fromString('2023-04-01'))
                 ->withFtp(FtpValue::fromInt(240))
                 ->build()

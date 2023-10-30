@@ -535,38 +535,13 @@
         </div>
     </div>
     <!-- FTP HISTORY -->
-    {% if ftpHistory is not empty %}
+    {% if ftpHistoryChart is not empty %}
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
             <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <h3 class="mb-4 text-lg font-semibold">
                     FTP history
                 </h3>
-                <div class="relative overflow-x-auto">
-                    <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                Date
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                FTP
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for ftp in ftpHistory %}
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <td class="px-6 py-2">
-                                    {{ ftp.getSetOn().format('d-m-Y') }}
-                                </td>
-                                <td class="px-6 py-2 truncate">
-                                    {{ ftp.getFtp() }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                <div class="h-64" data-echarts-options='{{ ftpHistoryChart }}'></div>
             </div>
         </div>
     {% endif %}

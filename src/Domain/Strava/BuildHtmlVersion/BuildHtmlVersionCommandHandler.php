@@ -19,9 +19,11 @@ use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamChartBuilder;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
+use App\Domain\Strava\Athlete\AthleteWeightRepository;
 use App\Domain\Strava\BikeStatistics;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
+use App\Domain\Strava\Ftp\FtpHistoryChartBuilder;
 use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Gear\GearRepository;
 use App\Domain\Strava\MonthlyStatistics;
@@ -48,6 +50,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         private ImageRepository $imageRepository,
         private ActivityPowerRepository $activityPowerRepository,
         private ActivityStreamRepository $activityStreamRepository,
+        private AthleteWeightRepository $athleteWeightRepository,
         private FtpRepository $ftpRepository,
         private KeyValueStore $keyValueStore,
         private Environment $twig,
@@ -67,6 +70,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $allChallenges = $this->challengeRepository->findAll();
         $allBikes = $this->gearRepository->findAll();
         $allImages = $this->imageRepository->findAll();
+        $allFtps = $this->ftpRepository->findAll();
         $eddington = Eddington::fromActivities($allActivities);
         $activityHighlights = ActivityHighlights::fromActivities($allActivities);
         $weekdayStats = WeekdayStats::fromActivities($allActivities);
@@ -91,6 +95,16 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             $activity->enrichWithGearName(
                 $this->gearRepository->find($activity->getGearId())->getName()
             );
+        }
+
+        /** @var \App\Domain\Strava\Ftp\Ftp $ftp */
+        foreach ($allFtps as $ftp) {
+            try {
+                $ftp->enrichWithAthleteWeight(
+                    $this->athleteWeightRepository->find($ftp->getSetOn())
+                );
+            } catch (EntityNotFound) {
+            }
         }
 
         $this->filesystem->write(
@@ -150,7 +164,15 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 'daytimeStats' => $dayTimeStats,
                 'distanceBreakdown' => DistanceBreakdown::fromActivities($allActivities),
                 'trivia' => Trivia::fromActivities($allActivities),
-                'ftpHistory' => $this->ftpRepository->findAll(),
+                'ftpHistoryChart' => !$allFtps->isEmpty() ? Json::encode(
+                    FtpHistoryChartBuilder::fromFtps(
+                        ftps: $allFtps,
+                        now: SerializableDateTime::fromDateTimeImmutable($this->clock->now())
+                    )
+                    ->withoutBackgroundColor()
+                    ->withAnimation(true)
+                    ->build(),
+                ) : null,
             ]),
         );
 
