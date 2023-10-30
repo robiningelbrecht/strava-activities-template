@@ -125,6 +125,10 @@ For any feedback, help or feature requests, please [open a new issue](https://gi
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
 
+#### [2023-10-30]
+
+* Render FTP history chart
+
 #### [2023-10-29]
 
 * Show FTP history
