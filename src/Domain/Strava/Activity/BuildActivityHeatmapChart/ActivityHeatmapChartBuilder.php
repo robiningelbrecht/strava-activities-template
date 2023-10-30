@@ -25,11 +25,9 @@ final class ActivityHeatmapChartBuilder
             'trigger' => 'item',
         ];
 
-        /** @var SerializableDateTime $fromDate */
-        $fromDate = SerializableDateTime::createFromFormat('Y-m-d', $this->now->modify('-11 months')->format('Y-m-01'));
+        $fromDate = SerializableDateTime::fromString($this->now->modify('-11 months')->format('Y-m-01'));
         $this->fromDate = $fromDate;
-        /** @var SerializableDateTime $toDate */
-        $toDate = SerializableDateTime::createFromFormat('Y-m-d', $this->now->format('Y-m-t'));
+        $toDate = SerializableDateTime::fromString($this->now->format('Y-m-t 23:59:59'));
         $this->toDate = $toDate;
     }
 
