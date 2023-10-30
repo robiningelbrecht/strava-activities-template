@@ -11,9 +11,9 @@ use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Ftp\FtpValue;
 use App\Domain\Strava\Gear\StravaGearRepository;
+use App\Infrastructure\KeyValue\DbalKeyValueStore;
 use App\Infrastructure\KeyValue\Key;
 use App\Infrastructure\KeyValue\KeyValue;
-use App\Infrastructure\KeyValue\SystemKeyValueStore;
 use App\Infrastructure\KeyValue\Value;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -150,8 +150,8 @@ trait ProvideTestData
                 ->build()
         );
 
-        /** @var SystemKeyValueStore $keyValueStore */
-        $keyValueStore = $this->getContainer()->get(SystemKeyValueStore::class);
+        /** @var DbalKeyValueStore $keyValueStore */
+        $keyValueStore = $this->getContainer()->get(DbalKeyValueStore::class);
         $keyValue = KeyValue::fromState(
             key: Key::ATHLETE_BIRTHDAY,
             value: Value::fromString('1989-08-14'),

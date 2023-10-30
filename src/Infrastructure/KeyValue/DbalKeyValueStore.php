@@ -7,7 +7,7 @@ namespace App\Infrastructure\KeyValue;
 use App\Infrastructure\Exception\EntityNotFound;
 use Doctrine\DBAL\Connection;
 
-final readonly class SystemKeyValueStore implements KeyValueStore
+final readonly class DbalKeyValueStore implements KeyValueStore
 {
     public function __construct(
         private Connection $connection
