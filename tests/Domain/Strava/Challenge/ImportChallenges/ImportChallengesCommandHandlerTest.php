@@ -2,8 +2,8 @@
 
 namespace App\Tests\Domain\Strava\Challenge\ImportChallenges;
 
+use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\Challenge\ImportChallenges\ImportChallenges;
-use App\Domain\Strava\Challenge\StravaChallengeRepository;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
@@ -25,7 +25,7 @@ class ImportChallengesCommandHandlerTest extends DatabaseTestCase
         $output = new SpyOutput();
         $this->strava->setMaxNumberOfCallsBeforeTriggering429(3);
 
-        $this->getContainer()->get(StravaChallengeRepository::class)->add(
+        $this->getContainer()->get(ChallengeRepository::class)->add(
             ChallengeBuilder::fromDefaults()
                 ->withChallengeId('654321')
                 ->build()

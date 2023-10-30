@@ -1,5 +1,19 @@
 <?php
 
+use App\Domain\Strava\Activity\ActivityRepository;
+use App\Domain\Strava\Activity\DbalActivityRepository;
+use App\Domain\Strava\Activity\Image\ActivityBasedImageRepository;
+use App\Domain\Strava\Activity\Image\ImageRepository;
+use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
+use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
+use App\Domain\Strava\Activity\Stream\DbalActivityStreamRepository;
+use App\Domain\Strava\Activity\Stream\StreamBasedActivityPowerRepository;
+use App\Domain\Strava\Challenge\ChallengeRepository;
+use App\Domain\Strava\Challenge\DbalChallengeRepository;
+use App\Domain\Strava\Ftp\DbalFtpRepository;
+use App\Domain\Strava\Ftp\FtpRepository;
+use App\Domain\Strava\Gear\DbalGearRepository;
+use App\Domain\Strava\Gear\GearRepository;
 use App\Domain\Strava\StravaClientId;
 use App\Domain\Strava\StravaClientSecret;
 use App\Domain\Strava\StravaRefreshToken;
@@ -8,8 +22,8 @@ use App\Domain\Weather\OpenMeteo\OpenMeteo;
 use App\Infrastructure\Console\ConsoleCommandContainer;
 use App\Infrastructure\Environment\Environment;
 use App\Infrastructure\Environment\Settings;
+use App\Infrastructure\KeyValue\DbalKeyValueStore;
 use App\Infrastructure\KeyValue\KeyValueStore;
-use App\Infrastructure\KeyValue\SystemKeyValueStore;
 use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\Time\SystemSleep;
 use App\Infrastructure\Twig\TwigBuilder;
@@ -39,8 +53,16 @@ return [
     Clock::class => DI\factory([SystemClock::class, 'fromSystemTimezone']),
     Sleep::class => DI\create(SystemSleep::class),
     UuidFactory::class => DI\create(RandomUuidFactory::class),
-    KeyValueStore::class => DI\get(SystemKeyValueStore::class),
+    KeyValueStore::class => DI\get(DbalKeyValueStore::class),
     OpenMeteo::class => DI\get(LiveOpenMeteo::class),
+    // Repositories
+    ActivityRepository::class => DI\autowire(DbalActivityRepository::class),
+    ActivityStreamRepository::class => DI\autowire(DbalActivityStreamRepository::class),
+    ActivityPowerRepository::class => DI\autowire(StreamBasedActivityPowerRepository::class),
+    ImageRepository::class => DI\autowire(ActivityBasedImageRepository::class),
+    ChallengeRepository::class => DI\autowire(DbalChallengeRepository::class),
+    FtpRepository::class => DI\autowire(DbalFtpRepository::class),
+    GearRepository::class => DI\autowire(DbalGearRepository::class),
     // Twig Environment.
     FilesystemLoader::class => DI\create(FilesystemLoader::class)->constructor($appRoot.'/templates'),
     TwigEnvironment::class => DI\factory([TwigBuilder::class, 'build']),

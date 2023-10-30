@@ -3,8 +3,8 @@
 namespace App\Domain\Strava\Activity\ImportActivities;
 
 use App\Domain\Strava\Activity\Activity;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\ActivityType;
-use App\Domain\Strava\Activity\StravaActivityRepository;
 use App\Domain\Strava\ReachedStravaApiRateLimits;
 use App\Domain\Strava\Strava;
 use App\Domain\Weather\OpenMeteo\OpenMeteo;
@@ -24,7 +24,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
     public function __construct(
         private Strava $strava,
         private OpenMeteo $openMeteo,
-        private StravaActivityRepository $stravaActivityRepository,
+        private ActivityRepository $activityRepository,
         private FilesystemOperator $filesystem,
         private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
         private UuidFactory $uuidFactory,
@@ -45,10 +45,10 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
             }
 
             try {
-                $activity = $this->stravaActivityRepository->find($stravaActivity['id']);
+                $activity = $this->activityRepository->find($stravaActivity['id']);
                 $activity->updateKudoCount($stravaActivity['kudos_count'] ?? 0);
                 $activity->updateGearId($stravaActivity['gear_id'] ?? null);
-                $this->stravaActivityRepository->update($activity);
+                $this->activityRepository->update($activity);
                 $command->getOutput()->writeln(sprintf('  => Updated activity "%s"', $activity->getName()));
             } catch (EntityNotFound) {
                 try {
@@ -98,7 +98,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                         $activity->updateWeather($weather);
                     }
 
-                    $this->stravaActivityRepository->add($activity);
+                    $this->activityRepository->add($activity);
                     $command->getOutput()->writeln(sprintf('  => Imported activity "%s"', $activity->getName()));
                     // Try to avoid Strava rate limits.
                     $this->sleep->sweetDreams(10);

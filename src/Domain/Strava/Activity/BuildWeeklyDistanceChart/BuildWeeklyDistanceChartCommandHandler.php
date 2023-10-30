@@ -2,7 +2,7 @@
 
 namespace App\Domain\Strava\Activity\BuildWeeklyDistanceChart;
 
-use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
@@ -15,7 +15,7 @@ use League\Flysystem\FilesystemOperator;
 final readonly class BuildWeeklyDistanceChartCommandHandler implements CommandHandler
 {
     public function __construct(
-        private StravaActivityRepository $stravaActivityRepository,
+        private ActivityRepository $activityRepository,
         private FilesystemOperator $filesystem,
         private Clock $clock,
     ) {
@@ -32,7 +32,7 @@ final readonly class BuildWeeklyDistanceChartCommandHandler implements CommandHa
                     'width' => 1000,
                     'height' => 300,
                     'options' => WeeklyDistanceChartBuilder::fromActivities(
-                        activities: $this->stravaActivityRepository->findAll(),
+                        activities: $this->activityRepository->findAll(),
                         now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
                     )->build(),
                 ],

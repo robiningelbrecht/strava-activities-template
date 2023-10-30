@@ -2,9 +2,9 @@
 
 namespace App\Domain\Strava\Gear\ImportGear;
 
-use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Gear\Gear;
-use App\Domain\Strava\Gear\StravaGearRepository;
+use App\Domain\Strava\Gear\GearRepository;
 use App\Domain\Strava\ReachedStravaApiRateLimits;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\Attribute\AsCommandHandler;
@@ -21,8 +21,8 @@ final readonly class ImportGearCommandHandler implements CommandHandler
 {
     public function __construct(
         private Strava $strava,
-        private StravaActivityRepository $stravaActivityRepository,
-        private StravaGearRepository $stravaGearRepository,
+        private ActivityRepository $activityRepository,
+        private GearRepository $gearRepository,
         private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
         private Clock $clock,
         private Sleep $sleep
@@ -34,7 +34,7 @@ final readonly class ImportGearCommandHandler implements CommandHandler
         assert($command instanceof ImportGear);
         $command->getOutput()->writeln('Importing gear...');
 
-        $gearIds = array_filter($this->stravaActivityRepository->findUniqueGearIds());
+        $gearIds = array_filter($this->activityRepository->findUniqueGearIds());
 
         foreach ($gearIds as $gearId) {
             try {
@@ -53,9 +53,9 @@ final readonly class ImportGearCommandHandler implements CommandHandler
             }
 
             try {
-                $gear = $this->stravaGearRepository->find($gearId);
+                $gear = $this->gearRepository->find($gearId);
                 $gear->updateDistance($stravaGear['distance'], $stravaGear['converted_distance']);
-                $this->stravaGearRepository->update($gear);
+                $this->gearRepository->update($gear);
             } catch (EntityNotFound) {
                 $gear = Gear::create(
                     gearId: $gearId,
@@ -63,7 +63,7 @@ final readonly class ImportGearCommandHandler implements CommandHandler
                     distanceInMeter: $stravaGear['distance'],
                     createdOn: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
                 );
-                $this->stravaGearRepository->add($gear);
+                $this->gearRepository->add($gear);
             }
             $command->getOutput()->writeln(sprintf('  => Imported/updated gear "%s"', $gear->getName()));
             // Try to avoid Strava rate limits.

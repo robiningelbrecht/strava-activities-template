@@ -2,7 +2,7 @@
 
 namespace App\Tests;
 
-use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Infrastructure\DependencyInjection\ContainerFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -16,7 +16,7 @@ abstract class ContainerTestCase extends TestCase
         parent::setUp();
         self::$container = $this->bootContainer();
         // Empty the static cache of the activity repository between tests.
-        self::$container->get(StravaActivityRepository::class)::$cachedActivities = [];
+        self::$container->get(ActivityRepository::class)::$cachedActivities = [];
     }
 
     public function bootContainer(): ContainerInterface

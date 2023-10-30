@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Domain\Strava\Activity\StravaActivityRepository;
-use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
+use App\Domain\Strava\Activity\ActivityRepository;
+use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
-use App\Domain\Strava\Challenge\StravaChallengeRepository;
+use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Ftp\FtpValue;
-use App\Domain\Strava\Gear\StravaGearRepository;
+use App\Domain\Strava\Gear\GearRepository;
+use App\Infrastructure\KeyValue\DbalKeyValueStore;
 use App\Infrastructure\KeyValue\Key;
 use App\Infrastructure\KeyValue\KeyValue;
-use App\Infrastructure\KeyValue\SystemKeyValueStore;
 use App\Infrastructure\KeyValue\Value;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -30,8 +30,8 @@ trait ProvideTestData
 
     public function provideFullTestSet(): void
     {
-        /** @var StravaActivityRepository $activityRepository */
-        $activityRepository = $this->getContainer()->get(StravaActivityRepository::class);
+        /** @var ActivityRepository $activityRepository */
+        $activityRepository = $this->getContainer()->get(ActivityRepository::class);
 
         $activityRepository->add(
             ActivityBuilder::fromDefaults()
@@ -78,8 +78,8 @@ trait ProvideTestData
                 ->build()
         );
 
-        /** @var StravaGearRepository $gearRepository */
-        $gearRepository = $this->getContainer()->get(StravaGearRepository::class);
+        /** @var GearRepository $gearRepository */
+        $gearRepository = $this->getContainer()->get(GearRepository::class);
         $gearRepository->add(
             GearBuilder::fromDefaults()
                 ->withGearId('b12659861')
@@ -97,8 +97,8 @@ trait ProvideTestData
                 ->build()
         );
 
-        /** @var StravaActivityStreamRepository $activityStreamRepository */
-        $activityStreamRepository = $this->getContainer()->get(StravaActivityStreamRepository::class);
+        /** @var ActivityStreamRepository $activityStreamRepository */
+        $activityStreamRepository = $this->getContainer()->get(ActivityStreamRepository::class);
         $activityStreamRepository->add(
             DefaultStreamBuilder::fromDefaults()
                 ->withActivityId(9756441741)
@@ -124,8 +124,8 @@ trait ProvideTestData
                 ->build()
         );
 
-        /** @var StravaChallengeRepository $challengeRepository */
-        $challengeRepository = $this->getContainer()->get(StravaChallengeRepository::class);
+        /** @var ChallengeRepository $challengeRepository */
+        $challengeRepository = $this->getContainer()->get(ChallengeRepository::class);
         $challengeRepository->add(
             ChallengeBuilder::fromDefaults()
                 ->withChallengeId('4022')
@@ -150,8 +150,8 @@ trait ProvideTestData
                 ->build()
         );
 
-        /** @var SystemKeyValueStore $keyValueStore */
-        $keyValueStore = $this->getContainer()->get(SystemKeyValueStore::class);
+        /** @var DbalKeyValueStore $keyValueStore */
+        $keyValueStore = $this->getContainer()->get(DbalKeyValueStore::class);
         $keyValue = KeyValue::fromState(
             key: Key::ATHLETE_BIRTHDAY,
             value: Value::fromString('1989-08-14'),

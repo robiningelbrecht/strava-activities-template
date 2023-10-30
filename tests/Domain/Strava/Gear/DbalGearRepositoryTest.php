@@ -2,14 +2,15 @@
 
 namespace App\Tests\Domain\Strava\Gear;
 
+use App\Domain\Strava\Gear\DbalGearRepository;
 use App\Domain\Strava\Gear\GearCollection;
-use App\Domain\Strava\Gear\StravaGearRepository;
+use App\Domain\Strava\Gear\GearRepository;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Tests\DatabaseTestCase;
 
-class StravaGearRepositoryTest extends DatabaseTestCase
+class DbalGearRepositoryTest extends DatabaseTestCase
 {
-    private StravaGearRepository $stravaGearRepository;
+    private GearRepository $gearRepository;
 
     public function testFindAndSave(): void
     {
@@ -17,18 +18,18 @@ class StravaGearRepositoryTest extends DatabaseTestCase
             ->withGearId(1)
             ->withDistanceInMeter(1230)
             ->build();
-        $this->stravaGearRepository->add($gear);
+        $this->gearRepository->add($gear);
 
         $this->assertEquals(
             $gear,
-            $this->stravaGearRepository->find($gear->getId())
+            $this->gearRepository->find($gear->getId())
         );
     }
 
     public function testItShouldThrowWhenNotFound(): void
     {
         $this->expectException(EntityNotFound::class);
-        $this->stravaGearRepository->find('1');
+        $this->gearRepository->find('1');
     }
 
     public function testFindAll(): void
@@ -37,21 +38,21 @@ class StravaGearRepositoryTest extends DatabaseTestCase
             ->withGearId(1)
             ->withDistanceInMeter(1230)
             ->build();
-        $this->stravaGearRepository->add($gearOne);
+        $this->gearRepository->add($gearOne);
         $gearTwo = GearBuilder::fromDefaults()
             ->withGearId(2)
             ->withDistanceInMeter(10230)
             ->build();
-        $this->stravaGearRepository->add($gearTwo);
+        $this->gearRepository->add($gearTwo);
         $gearThree = GearBuilder::fromDefaults()
             ->withGearId(3)
             ->withDistanceInMeter(230)
             ->build();
-        $this->stravaGearRepository->add($gearThree);
+        $this->gearRepository->add($gearThree);
 
         $this->assertEquals(
             GearCollection::fromArray([$gearTwo, $gearOne, $gearThree]),
-            $this->stravaGearRepository->findAll()
+            $this->gearRepository->findAll()
         );
     }
 
@@ -61,7 +62,7 @@ class StravaGearRepositoryTest extends DatabaseTestCase
             ->withGearId(1)
             ->withDistanceInMeter(1000)
             ->build();
-        $this->stravaGearRepository->add($gear);
+        $this->gearRepository->add($gear);
 
         $this->assertEquals(
             1000,
@@ -69,11 +70,11 @@ class StravaGearRepositoryTest extends DatabaseTestCase
         );
 
         $gear->updateDistance(30000, 30.00);
-        $this->stravaGearRepository->update($gear);
+        $this->gearRepository->update($gear);
 
         $this->assertEquals(
             30000,
-            $this->stravaGearRepository->find(1)->getDistanceInMeter()
+            $this->gearRepository->find(1)->getDistanceInMeter()
         );
     }
 
@@ -81,7 +82,7 @@ class StravaGearRepositoryTest extends DatabaseTestCase
     {
         parent::setUp();
 
-        $this->stravaGearRepository = new StravaGearRepository(
+        $this->gearRepository = new DbalGearRepository(
             $this->getConnection()
         );
     }

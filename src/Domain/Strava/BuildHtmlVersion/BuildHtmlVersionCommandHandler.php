@@ -3,6 +3,7 @@
 namespace App\Domain\Strava\BuildHtmlVersion;
 
 use App\Domain\Strava\Activity\ActivityHighlights;
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\ActivityTotals;
 use App\Domain\Strava\Activity\BuildActivityHeatmapChart\ActivityHeatmapChartBuilder;
 use App\Domain\Strava\Activity\BuildDaytimeStatsChart\DaytimeStats;
@@ -12,18 +13,17 @@ use App\Domain\Strava\Activity\BuildEddingtonChart\EddingtonChartBuilder;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStatsChartsBuilder;
 use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\WeeklyDistanceChartBuilder;
-use App\Domain\Strava\Activity\Image\ActivityBasedImageRepository;
-use App\Domain\Strava\Activity\StravaActivityRepository;
-use App\Domain\Strava\Activity\Stream\StravaActivityPowerRepository;
-use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
+use App\Domain\Strava\Activity\Image\ImageRepository;
+use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
+use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamChartBuilder;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Domain\Strava\BikeStatistics;
-use App\Domain\Strava\Challenge\StravaChallengeRepository;
+use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
 use App\Domain\Strava\Ftp\FtpRepository;
-use App\Domain\Strava\Gear\StravaGearRepository;
+use App\Domain\Strava\Gear\GearRepository;
 use App\Domain\Strava\MonthlyStatistics;
 use App\Domain\Strava\Trivia;
 use App\Infrastructure\Attribute\AsCommandHandler;
@@ -42,12 +42,12 @@ use Twig\Environment;
 final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 {
     public function __construct(
-        private StravaActivityRepository $stravaActivityRepository,
-        private StravaChallengeRepository $stravaChallengeRepository,
-        private StravaGearRepository $stravaGearRepository,
-        private ActivityBasedImageRepository $activityBasedImageRepository,
-        private StravaActivityPowerRepository $stravaActivityPowerRepository,
-        private StravaActivityStreamRepository $stravaActivityStreamRepository,
+        private ActivityRepository $activityRepository,
+        private ChallengeRepository $challengeRepository,
+        private GearRepository $gearRepository,
+        private ImageRepository $imageRepository,
+        private ActivityPowerRepository $activityPowerRepository,
+        private ActivityStreamRepository $activityStreamRepository,
         private FtpRepository $ftpRepository,
         private KeyValueStore $keyValueStore,
         private Environment $twig,
@@ -63,10 +63,10 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $now = SerializableDateTime::fromDateTimeImmutable($this->clock->now());
         $athleteBirthday = SerializableDateTime::fromString($this->keyValueStore->find(Key::ATHLETE_BIRTHDAY)->getValue());
 
-        $allActivities = $this->stravaActivityRepository->findAll();
-        $allChallenges = $this->stravaChallengeRepository->findAll();
-        $allBikes = $this->stravaGearRepository->findAll();
-        $allImages = $this->activityBasedImageRepository->findAll();
+        $allActivities = $this->activityRepository->findAll();
+        $allChallenges = $this->challengeRepository->findAll();
+        $allBikes = $this->gearRepository->findAll();
+        $allImages = $this->imageRepository->findAll();
         $eddington = Eddington::fromActivities($allActivities);
         $activityHighlights = ActivityHighlights::fromActivities($allActivities);
         $weekdayStats = WeekdayStats::fromActivities($allActivities);
@@ -75,7 +75,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($allActivities as $activity) {
             $activity->enrichWithBestPowerOutputs(
-                $this->stravaActivityPowerRepository->findBestForActivity($activity->getId())
+                $this->activityPowerRepository->findBestForActivity($activity->getId())
             );
 
             try {
@@ -89,7 +89,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 continue;
             }
             $activity->enrichWithGearName(
-                $this->stravaGearRepository->find($activity->getGearId())->getName()
+                $this->gearRepository->find($activity->getGearId())->getName()
             );
         }
 
@@ -125,7 +125,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     activities: $allActivities,
                     bikes: $allBikes
                 ),
-                'powerOutputs' => $this->stravaActivityPowerRepository->findBest(),
+                'powerOutputs' => $this->activityPowerRepository->findBest(),
                 'activityHeatmapChart' => Json::encode(
                     ActivityHeatmapChartBuilder::fromActivities(
                         activities: $allActivities,
@@ -157,7 +157,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $this->filesystem->write(
             'build/html/activities.html',
             $this->twig->load('html/activities.html.twig')->render([
-                'timeIntervals' => StravaActivityPowerRepository::TIME_INTERVAL_IN_SECONDS,
+                'timeIntervals' => ActivityPowerRepository::TIME_INTERVAL_IN_SECONDS,
                 'activities' => $allActivities,
                 'activityHighlights' => $activityHighlights,
             ]),
@@ -208,7 +208,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         );
 
         foreach ($allActivities as $activity) {
-            $streams = $this->stravaActivityStreamRepository->findByActivityAndStreamTypes(
+            $streams = $this->activityStreamRepository->findByActivityAndStreamTypes(
                 activityId: $activity->getId(),
                 streamTypes: StreamTypeCollection::fromArray([
                     StreamType::VELOCITY,
@@ -225,7 +225,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             $this->filesystem->write(
                 'build/html/activity/activity-'.$activity->getId().'.html',
                 $this->twig->load('html/activity.html.twig')->render([
-                    'timeIntervals' => StravaActivityPowerRepository::TIME_INTERVAL_IN_SECONDS,
+                    'timeIntervals' => ActivityPowerRepository::TIME_INTERVAL_IN_SECONDS,
                     'activity' => $activity,
                     'streamChart' => $streams->canBuildChartData() ? Json::encode(
                         StreamChartBuilder::fromStreams($streams)

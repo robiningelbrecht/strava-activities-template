@@ -2,16 +2,16 @@
 
 namespace App\Domain\Strava\BuildReadMe;
 
+use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\ActivityTotals;
 use App\Domain\Strava\Activity\BuildDaytimeStatsChart\DaytimeStats;
 use App\Domain\Strava\Activity\BuildEddingtonChart\Eddington;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
-use App\Domain\Strava\Activity\StravaActivityRepository;
-use App\Domain\Strava\Activity\Stream\StravaActivityPowerRepository;
+use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Strava\BikeStatistics;
-use App\Domain\Strava\Challenge\StravaChallengeRepository;
+use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
-use App\Domain\Strava\Gear\StravaGearRepository;
+use App\Domain\Strava\Gear\GearRepository;
 use App\Domain\Strava\MonthlyStatistics;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
@@ -25,10 +25,10 @@ use Twig\Environment;
 final readonly class BuildReadMeCommandHandler implements CommandHandler
 {
     public function __construct(
-        private StravaActivityRepository $stravaActivityRepository,
-        private StravaChallengeRepository $stravaChallengeRepository,
-        private StravaGearRepository $stravaGearRepository,
-        private StravaActivityPowerRepository $stravaActivityPowerRepository,
+        private ActivityRepository $activityRepository,
+        private ChallengeRepository $challengeRepository,
+        private GearRepository $gearRepository,
+        private ActivityPowerRepository $activityPowerRepository,
         private Environment $twig,
         private FilesystemOperator $filesystem,
         private Clock $clock,
@@ -39,18 +39,18 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
     {
         assert($command instanceof BuildReadMe);
 
-        $allActivities = $this->stravaActivityRepository->findAll();
+        $allActivities = $this->activityRepository->findAll();
 
         foreach ($allActivities as &$activity) {
             if (!$activity->getGearId()) {
                 continue;
             }
             $activity->enrichWithGearName(
-                $this->stravaGearRepository->find($activity->getGearId())->getName()
+                $this->gearRepository->find($activity->getGearId())->getName()
             );
         }
-        $allChallenges = $this->stravaChallengeRepository->findAll();
-        $allBikes = $this->stravaGearRepository->findAll();
+        $allChallenges = $this->challengeRepository->findAll();
+        $allBikes = $this->gearRepository->findAll();
 
         $this->filesystem->write('README.md', $this->twig->load('readme.html.twig')->render([
             'totals' => ActivityTotals::fromActivities(
@@ -69,7 +69,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
                 activities: $allActivities,
                 bikes: $allBikes
             ),
-            'powerOutputs' => $this->stravaActivityPowerRepository->findBest(),
+            'powerOutputs' => $this->activityPowerRepository->findBest(),
             'challenges' => $allChallenges,
             'eddington' => Eddington::fromActivities($allActivities),
             'weekdayStats' => WeekdayStats::fromActivities($allActivities),

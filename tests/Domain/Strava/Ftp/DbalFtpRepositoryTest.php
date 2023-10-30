@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Ftp;
 
+use App\Domain\Strava\Ftp\DbalFtpRepository;
 use App\Domain\Strava\Ftp\FtpCollection;
 use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Ftp\FtpValue;
@@ -9,7 +10,7 @@ use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\DatabaseTestCase;
 
-class FtpRepositoryTest extends DatabaseTestCase
+class DbalFtpRepositoryTest extends DatabaseTestCase
 {
     private FtpRepository $ftpRepository;
 
@@ -123,7 +124,7 @@ class FtpRepositoryTest extends DatabaseTestCase
     {
         parent::setUp();
 
-        $this->ftpRepository = new FtpRepository(
+        $this->ftpRepository = new DbalFtpRepository(
             $this->getConnection()
         );
     }

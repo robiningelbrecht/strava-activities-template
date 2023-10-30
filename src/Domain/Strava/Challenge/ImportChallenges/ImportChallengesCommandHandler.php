@@ -3,7 +3,7 @@
 namespace App\Domain\Strava\Challenge\ImportChallenges;
 
 use App\Domain\Strava\Challenge\Challenge;
-use App\Domain\Strava\Challenge\StravaChallengeRepository;
+use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
@@ -20,7 +20,7 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
 {
     public function __construct(
         private Strava $strava,
-        private StravaChallengeRepository $stravaChallengeRepository,
+        private ChallengeRepository $challengeRepository,
         private FilesystemOperator $filesystem,
         private Clock $clock,
         private UuidFactory $uuidFactory,
@@ -43,7 +43,7 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
 
         foreach ($challenges as $challengeData) {
             try {
-                $this->stravaChallengeRepository->find($challengeData['challenge_id']);
+                $this->challengeRepository->find($challengeData['challenge_id']);
             } catch (EntityNotFound) {
                 $challenge = Challenge::create(
                     challengeId: $challengeData['challenge_id'],
@@ -59,7 +59,7 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
 
                     $challenge->updateLocalLogo($imagePath);
                 }
-                $this->stravaChallengeRepository->add($challenge);
+                $this->challengeRepository->add($challenge);
                 $command->getOutput()->writeln(sprintf('  => Imported challenge "%s"', $challenge->getName()));
                 $this->sleep->sweetDreams(1); // Make sure timestamp is increased by at least one.
             }

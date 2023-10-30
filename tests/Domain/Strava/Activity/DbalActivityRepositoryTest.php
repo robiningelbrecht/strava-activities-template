@@ -3,32 +3,33 @@
 namespace App\Tests\Domain\Strava\Activity;
 
 use App\Domain\Strava\Activity\ActivityCollection;
-use App\Domain\Strava\Activity\StravaActivityRepository;
+use App\Domain\Strava\Activity\ActivityRepository;
+use App\Domain\Strava\Activity\DbalActivityRepository;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\DatabaseTestCase;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
-class StravaActivityRepositoryTest extends DatabaseTestCase
+class DbalActivityRepositoryTest extends DatabaseTestCase
 {
-    private StravaActivityRepository $stravaActivityRepository;
+    private ActivityRepository $activityRepository;
 
     public function testItShouldSaveAndFind(): void
     {
         $activity = ActivityBuilder::fromDefaults()->build();
 
-        $this->stravaActivityRepository->add($activity);
+        $this->activityRepository->add($activity);
 
         $this->assertEquals(
             $activity,
-            $this->stravaActivityRepository->find($activity->getId())
+            $this->activityRepository->find($activity->getId())
         );
     }
 
     public function testItShouldThrowWhenNotFound(): void
     {
         $this->expectException(EntityNotFound::class);
-        $this->stravaActivityRepository->find(1);
+        $this->activityRepository->find(1);
     }
 
     public function testItShouldThrowOnDuplicateActivity(): void
@@ -37,8 +38,8 @@ class StravaActivityRepositoryTest extends DatabaseTestCase
 
         $this->expectException(UniqueConstraintViolationException::class);
 
-        $this->stravaActivityRepository->add($activity);
-        $this->stravaActivityRepository->add($activity);
+        $this->activityRepository->add($activity);
+        $this->activityRepository->add($activity);
     }
 
     public function testFindAll(): void
@@ -47,21 +48,21 @@ class StravaActivityRepositoryTest extends DatabaseTestCase
             ->withActivityId(1)
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 14:00:34'))
             ->build();
-        $this->stravaActivityRepository->add($activityOne);
+        $this->activityRepository->add($activityOne);
         $activityTwo = ActivityBuilder::fromDefaults()
             ->withActivityId(2)
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 13:00:34'))
             ->build();
-        $this->stravaActivityRepository->add($activityTwo);
+        $this->activityRepository->add($activityTwo);
         $activityThree = ActivityBuilder::fromDefaults()
             ->withActivityId(3)
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-09 14:00:34'))
             ->build();
-        $this->stravaActivityRepository->add($activityThree);
+        $this->activityRepository->add($activityThree);
 
         $this->assertEquals(
             ActivityCollection::fromArray([$activityOne, $activityTwo, $activityThree]),
-            $this->stravaActivityRepository->findAll()
+            $this->activityRepository->findAll()
         );
     }
 
@@ -71,21 +72,21 @@ class StravaActivityRepositoryTest extends DatabaseTestCase
             ->withActivityId(1)
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 14:00:34'))
             ->build();
-        $this->stravaActivityRepository->add($activityOne);
+        $this->activityRepository->add($activityOne);
         $activityTwo = ActivityBuilder::fromDefaults()
             ->withActivityId(2)
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 13:00:34'))
             ->build();
-        $this->stravaActivityRepository->add($activityTwo);
+        $this->activityRepository->add($activityTwo);
         $activityThree = ActivityBuilder::fromDefaults()
             ->withActivityId(3)
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-09 14:00:34'))
             ->build();
-        $this->stravaActivityRepository->add($activityThree);
+        $this->activityRepository->add($activityThree);
 
         $this->assertEquals(
             [1, 2, 3],
-            $this->stravaActivityRepository->findActivityIds()
+            $this->activityRepository->findActivityIds()
         );
     }
 
@@ -96,23 +97,23 @@ class StravaActivityRepositoryTest extends DatabaseTestCase
             ->withGearId(1)
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 14:00:34'))
             ->build();
-        $this->stravaActivityRepository->add($activityOne);
+        $this->activityRepository->add($activityOne);
         $activityTwo = ActivityBuilder::fromDefaults()
             ->withActivityId(2)
             ->withGearId(2)
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 13:00:34'))
             ->build();
-        $this->stravaActivityRepository->add($activityTwo);
+        $this->activityRepository->add($activityTwo);
         $activityThree = ActivityBuilder::fromDefaults()
             ->withActivityId(3)
             ->withGearId(1)
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-09 14:00:34'))
             ->build();
-        $this->stravaActivityRepository->add($activityThree);
+        $this->activityRepository->add($activityThree);
 
         $this->assertEquals(
             [1, 2],
-            $this->stravaActivityRepository->findUniqueGearIds()
+            $this->activityRepository->findUniqueGearIds()
         );
     }
 
@@ -123,7 +124,7 @@ class StravaActivityRepositoryTest extends DatabaseTestCase
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 14:00:34'))
             ->withGearId('1')
             ->build();
-        $this->stravaActivityRepository->add($activity);
+        $this->activityRepository->add($activity);
 
         $this->assertEquals(
             1,
@@ -132,16 +133,16 @@ class StravaActivityRepositoryTest extends DatabaseTestCase
 
         $activity->updateKudoCount(3);
         $activity->updateGearId('10');
-        $this->stravaActivityRepository->update($activity);
+        $this->activityRepository->update($activity);
 
         $this->assertEquals(
             3,
-            $this->stravaActivityRepository->find(1)->getKudoCount()
+            $this->activityRepository->find(1)->getKudoCount()
         );
 
         $this->assertEquals(
             '10',
-            $this->stravaActivityRepository->find(1)->getGearId()
+            $this->activityRepository->find(1)->getGearId()
         );
     }
 
@@ -149,7 +150,7 @@ class StravaActivityRepositoryTest extends DatabaseTestCase
     {
         parent::setUp();
 
-        $this->stravaActivityRepository = new StravaActivityRepository(
+        $this->activityRepository = new DbalActivityRepository(
             $this->getConnection()
         );
     }

@@ -7,7 +7,7 @@ use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Doctrine\DBAL\Connection;
 
-final readonly class StravaGearRepository
+final readonly class DbalGearRepository implements GearRepository
 {
     public function __construct(
         private Connection $connection
