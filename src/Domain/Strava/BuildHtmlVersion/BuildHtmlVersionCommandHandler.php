@@ -13,7 +13,7 @@ use App\Domain\Strava\Activity\BuildEddingtonChart\EddingtonChartBuilder;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStatsChartsBuilder;
 use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\WeeklyDistanceChartBuilder;
-use App\Domain\Strava\Activity\Image\ActivityBasedImageRepository;
+use App\Domain\Strava\Activity\Image\ImageRepository;
 use App\Domain\Strava\Activity\Stream\StravaActivityPowerRepository;
 use App\Domain\Strava\Activity\Stream\StravaActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamChartBuilder;
@@ -45,7 +45,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         private ActivityRepository $activityRepository,
         private StravaChallengeRepository $stravaChallengeRepository,
         private StravaGearRepository $stravaGearRepository,
-        private ActivityBasedImageRepository $activityBasedImageRepository,
+        private ImageRepository $imageRepository,
         private StravaActivityPowerRepository $stravaActivityPowerRepository,
         private StravaActivityStreamRepository $stravaActivityStreamRepository,
         private FtpRepository $ftpRepository,
@@ -66,7 +66,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $allActivities = $this->activityRepository->findAll();
         $allChallenges = $this->stravaChallengeRepository->findAll();
         $allBikes = $this->stravaGearRepository->findAll();
-        $allImages = $this->activityBasedImageRepository->findAll();
+        $allImages = $this->imageRepository->findAll();
         $eddington = Eddington::fromActivities($allActivities);
         $activityHighlights = ActivityHighlights::fromActivities($allActivities);
         $weekdayStats = WeekdayStats::fromActivities($allActivities);

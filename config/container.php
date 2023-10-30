@@ -2,6 +2,8 @@
 
 use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\DbalActivityRepository;
+use App\Domain\Strava\Activity\Image\ActivityBasedImageRepository;
+use App\Domain\Strava\Activity\Image\ImageRepository;
 use App\Domain\Strava\StravaClientId;
 use App\Domain\Strava\StravaClientSecret;
 use App\Domain\Strava\StravaRefreshToken;
@@ -45,6 +47,7 @@ return [
     OpenMeteo::class => DI\get(LiveOpenMeteo::class),
     // Repositories
     ActivityRepository::class => DI\autowire(DbalActivityRepository::class),
+    ImageRepository::class => DI\autowire(ActivityBasedImageRepository::class),
     // Twig Environment.
     FilesystemLoader::class => DI\create(FilesystemLoader::class)->constructor($appRoot.'/templates'),
     TwigEnvironment::class => DI\factory([TwigBuilder::class, 'build']),

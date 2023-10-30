@@ -4,7 +4,7 @@ namespace App\Domain\Strava\Activity\Image;
 
 use App\Domain\Strava\Activity\ActivityRepository;
 
-final readonly class ActivityBasedImageRepository
+final readonly class ActivityBasedImageRepository implements ImageRepository
 {
     public function __construct(
         private ActivityRepository $activityRepository
