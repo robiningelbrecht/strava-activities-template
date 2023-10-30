@@ -3,14 +3,15 @@
 namespace App\Tests\Domain\Strava\Challenge;
 
 use App\Domain\Strava\Challenge\ChallengeCollection;
-use App\Domain\Strava\Challenge\StravaChallengeRepository;
+use App\Domain\Strava\Challenge\ChallengeRepository;
+use App\Domain\Strava\Challenge\DbalChallengeRepository;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\DatabaseTestCase;
 
-class StravaChallengeRepositoryTest extends DatabaseTestCase
+class DbalChallengeRepositoryTest extends DatabaseTestCase
 {
-    private StravaChallengeRepository $stravaChallengeRepository;
+    private ChallengeRepository $stravaChallengeRepository;
 
     public function testFindAndSave(): void
     {
@@ -52,7 +53,7 @@ class StravaChallengeRepositoryTest extends DatabaseTestCase
     {
         parent::setUp();
 
-        $this->stravaChallengeRepository = new StravaChallengeRepository(
+        $this->stravaChallengeRepository = new DbalChallengeRepository(
             $this->getConnection()
         );
     }

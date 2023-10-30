@@ -7,7 +7,7 @@ use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Doctrine\DBAL\Connection;
 
-final readonly class StravaChallengeRepository
+final readonly class DbalChallengeRepository implements ChallengeRepository
 {
     public function __construct(
         private Connection $connection

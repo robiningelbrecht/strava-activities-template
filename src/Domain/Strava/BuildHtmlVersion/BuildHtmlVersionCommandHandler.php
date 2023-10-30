@@ -20,7 +20,7 @@ use App\Domain\Strava\Activity\Stream\StreamChartBuilder;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Domain\Strava\BikeStatistics;
-use App\Domain\Strava\Challenge\StravaChallengeRepository;
+use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
 use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Gear\StravaGearRepository;
@@ -43,7 +43,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 {
     public function __construct(
         private ActivityRepository $activityRepository,
-        private StravaChallengeRepository $stravaChallengeRepository,
+        private ChallengeRepository $challengeRepository,
         private StravaGearRepository $stravaGearRepository,
         private ImageRepository $imageRepository,
         private ActivityPowerRepository $activityPowerRepository,
@@ -64,7 +64,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $athleteBirthday = SerializableDateTime::fromString($this->keyValueStore->find(Key::ATHLETE_BIRTHDAY)->getValue());
 
         $allActivities = $this->activityRepository->findAll();
-        $allChallenges = $this->stravaChallengeRepository->findAll();
+        $allChallenges = $this->challengeRepository->findAll();
         $allBikes = $this->stravaGearRepository->findAll();
         $allImages = $this->imageRepository->findAll();
         $eddington = Eddington::fromActivities($allActivities);

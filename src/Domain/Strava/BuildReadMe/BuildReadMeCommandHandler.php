@@ -9,7 +9,7 @@ use App\Domain\Strava\Activity\BuildEddingtonChart\Eddington;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Strava\BikeStatistics;
-use App\Domain\Strava\Challenge\StravaChallengeRepository;
+use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
 use App\Domain\Strava\Gear\StravaGearRepository;
 use App\Domain\Strava\MonthlyStatistics;
@@ -26,7 +26,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
 {
     public function __construct(
         private ActivityRepository $activityRepository,
-        private StravaChallengeRepository $stravaChallengeRepository,
+        private ChallengeRepository $challengeRepository,
         private StravaGearRepository $stravaGearRepository,
         private ActivityPowerRepository $activityPowerRepository,
         private Environment $twig,
@@ -49,7 +49,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
                 $this->stravaGearRepository->find($activity->getGearId())->getName()
             );
         }
-        $allChallenges = $this->stravaChallengeRepository->findAll();
+        $allChallenges = $this->challengeRepository->findAll();
         $allBikes = $this->stravaGearRepository->findAll();
 
         $this->filesystem->write('README.md', $this->twig->load('readme.html.twig')->render([

@@ -7,7 +7,7 @@ namespace App\Tests;
 use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
-use App\Domain\Strava\Challenge\StravaChallengeRepository;
+use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Ftp\FtpValue;
 use App\Domain\Strava\Gear\StravaGearRepository;
@@ -124,8 +124,8 @@ trait ProvideTestData
                 ->build()
         );
 
-        /** @var StravaChallengeRepository $challengeRepository */
-        $challengeRepository = $this->getContainer()->get(StravaChallengeRepository::class);
+        /** @var ChallengeRepository $challengeRepository */
+        $challengeRepository = $this->getContainer()->get(ChallengeRepository::class);
         $challengeRepository->add(
             ChallengeBuilder::fromDefaults()
                 ->withChallengeId('4022')
