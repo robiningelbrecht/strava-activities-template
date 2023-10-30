@@ -7,7 +7,7 @@ use App\Domain\Strava\Activity\ActivityTotals;
 use App\Domain\Strava\Activity\BuildDaytimeStatsChart\DaytimeStats;
 use App\Domain\Strava\Activity\BuildEddingtonChart\Eddington;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
-use App\Domain\Strava\Activity\Stream\StravaActivityPowerRepository;
+use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Strava\BikeStatistics;
 use App\Domain\Strava\Challenge\StravaChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
@@ -28,7 +28,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
         private ActivityRepository $activityRepository,
         private StravaChallengeRepository $stravaChallengeRepository,
         private StravaGearRepository $stravaGearRepository,
-        private StravaActivityPowerRepository $stravaActivityPowerRepository,
+        private ActivityPowerRepository $activityPowerRepository,
         private Environment $twig,
         private FilesystemOperator $filesystem,
         private Clock $clock,
@@ -69,7 +69,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
                 activities: $allActivities,
                 bikes: $allBikes
             ),
-            'powerOutputs' => $this->stravaActivityPowerRepository->findBest(),
+            'powerOutputs' => $this->activityPowerRepository->findBest(),
             'challenges' => $allChallenges,
             'eddington' => Eddington::fromActivities($allActivities),
             'weekdayStats' => WeekdayStats::fromActivities($allActivities),

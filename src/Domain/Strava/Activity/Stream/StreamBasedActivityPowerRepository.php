@@ -6,10 +6,8 @@ use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\PowerOutput;
 use Carbon\CarbonInterval;
 
-final class StravaActivityPowerRepository
+final class StreamBasedActivityPowerRepository implements ActivityPowerRepository
 {
-    public const TIME_INTERVAL_IN_SECONDS = [5, 10, 30, 60, 300, 480, 1200, 3600];
-
     /** @var array<mixed> */
     private static array $cachedPowerOutputs = [];
 
@@ -24,15 +22,15 @@ final class StravaActivityPowerRepository
      */
     public function findBestForActivity(int $activityId): array
     {
-        if (array_key_exists($activityId, StravaActivityPowerRepository::$cachedPowerOutputs)) {
-            return StravaActivityPowerRepository::$cachedPowerOutputs[$activityId];
+        if (array_key_exists($activityId, StreamBasedActivityPowerRepository::$cachedPowerOutputs)) {
+            return StreamBasedActivityPowerRepository::$cachedPowerOutputs[$activityId];
         }
 
         $activities = $this->activityRepository->findAll();
         $powerStreams = $this->activityStreamRepository->findByStreamType(StreamType::WATTS)->toArray();
 
         foreach ($activities as $activity) {
-            StravaActivityPowerRepository::$cachedPowerOutputs[$activity->getId()] = [];
+            StreamBasedActivityPowerRepository::$cachedPowerOutputs[$activity->getId()] = [];
             $powerStreamsForActivity = array_filter($powerStreams, fn (ActivityStream $stream) => $stream->getActivityId() == $activity->getId());
 
             if (!$powerStreamsForActivity) {
@@ -48,7 +46,7 @@ final class StravaActivityPowerRepository
                 if (!$bestRelativeAverageForTimeInterval = $stream->getBestRelativeAverageForTimeInterval($timeIntervalInSeconds, $activity->getAthleteWeight())) {
                     continue;
                 }
-                StravaActivityPowerRepository::$cachedPowerOutputs[$activity->getId()][$timeIntervalInSeconds] = PowerOutput::fromState(
+                StreamBasedActivityPowerRepository::$cachedPowerOutputs[$activity->getId()][$timeIntervalInSeconds] = PowerOutput::fromState(
                     time: (int) $interval->totalHours ? $interval->totalHours.' h' : ((int) $interval->totalMinutes ? $interval->totalMinutes.' m' : $interval->totalSeconds.' s'),
                     power: $bestAverageForTimeInterval,
                     relativePower: $bestRelativeAverageForTimeInterval,
@@ -56,7 +54,7 @@ final class StravaActivityPowerRepository
             }
         }
 
-        return StravaActivityPowerRepository::$cachedPowerOutputs[$activityId];
+        return StreamBasedActivityPowerRepository::$cachedPowerOutputs[$activityId];
     }
 
     /**

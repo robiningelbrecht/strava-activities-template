@@ -4,8 +4,10 @@ use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\DbalActivityRepository;
 use App\Domain\Strava\Activity\Image\ActivityBasedImageRepository;
 use App\Domain\Strava\Activity\Image\ImageRepository;
+use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\DbalActivityStreamRepository;
+use App\Domain\Strava\Activity\Stream\StreamBasedActivityPowerRepository;
 use App\Domain\Strava\StravaClientId;
 use App\Domain\Strava\StravaClientSecret;
 use App\Domain\Strava\StravaRefreshToken;
@@ -50,6 +52,7 @@ return [
     // Repositories
     ActivityRepository::class => DI\autowire(DbalActivityRepository::class),
     ActivityStreamRepository::class => DI\autowire(DbalActivityStreamRepository::class),
+    ActivityPowerRepository::class => DI\autowire(StreamBasedActivityPowerRepository::class),
     ImageRepository::class => DI\autowire(ActivityBasedImageRepository::class),
     // Twig Environment.
     FilesystemLoader::class => DI\create(FilesystemLoader::class)->constructor($appRoot.'/templates'),
