@@ -43,7 +43,7 @@ class StravaTest extends TestCase
                 $this->assertEquals('api/v3/athlete', $path);
                 $this->assertMatchesJsonSnapshot($options);
 
-                return new Response(200, [], Json::encode(['weight' => 68]));
+                return new Response(200, [], Json::encode(['weight' => 68, 'id' => 10]));
             });
 
         $this->strava->getAthlete();
@@ -199,6 +199,21 @@ class StravaTest extends TestCase
             });
 
         $this->strava->getGear(3);
+    }
+
+    public function testGetChallenges(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('athletes/10', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/public-profile.html'));
+            });
+
+        $this->strava->getChallenges();
     }
 
     public function testDownloadImage(): void
