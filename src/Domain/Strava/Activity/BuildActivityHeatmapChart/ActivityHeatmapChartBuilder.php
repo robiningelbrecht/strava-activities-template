@@ -63,12 +63,16 @@ final class ActivityHeatmapChartBuilder
         $build = [
             'backgroundColor' => $this->backgroundColor,
             'animation' => $this->animation,
+            'legend' => [
+                'show' => true,
+            ],
             'title' => [
                 'left' => 'center',
                 'text' => sprintf('%s - %s', $this->fromDate->format('M Y'), $this->toDate->format('M Y')),
             ],
             'visualMap' => [
                 'type' => 'piecewise',
+                'selectedMode' => false,
                 'left' => 'center',
                 'bottom' => 0,
                 'orient' => 'horizontal',
@@ -83,24 +87,24 @@ final class ActivityHeatmapChartBuilder
                         'min' => 0.01,
                         'max' => 33,
                         'color' => '#68B34B',
-                        'label' => 'Low',
+                        'label' => 'Low (0 - 32)',
                     ],
                     [
                         'min' => 33.01,
                         'max' => 66,
                         'color' => '#FAB735',
-                        'label' => 'Medium',
+                        'label' => 'Medium (33 - 65)',
                     ],
                     [
                         'min' => 66.01,
                         'max' => 100,
                         'color' => '#FF8E14',
-                        'label' => 'High',
+                        'label' => 'High (66 - 100)',
                     ],
                     [
                         'min' => 100.01,
                         'color' => '#FF0C0C',
-                        'label' => 'Very high',
+                        'label' => 'Very high (> 100)',
                     ],
                 ],
             ],

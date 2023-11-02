@@ -14,12 +14,15 @@ use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStatsChartsBuilder;
 use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\WeeklyDistanceChartBuilder;
 use App\Domain\Strava\Activity\Image\ImageRepository;
+use App\Domain\Strava\Activity\Stream\ActivityHeartRateRepository;
 use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamChartBuilder;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Domain\Strava\Athlete\AthleteWeightRepository;
+use App\Domain\Strava\Athlete\HeartRateZone;
+use App\Domain\Strava\Athlete\TimeInHeartRateZoneChartBuilder;
 use App\Domain\Strava\BikeStatistics;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
@@ -50,6 +53,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         private ImageRepository $imageRepository,
         private ActivityPowerRepository $activityPowerRepository,
         private ActivityStreamRepository $activityStreamRepository,
+        private ActivityHeartRateRepository $activityHeartRateRepository,
         private AthleteWeightRepository $athleteWeightRepository,
         private FtpRepository $ftpRepository,
         private KeyValueStore $keyValueStore,
@@ -171,8 +175,18 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     )
                     ->withoutBackgroundColor()
                     ->withAnimation(true)
-                    ->build(),
+                    ->build()
                 ) : null,
+                'timeInHeartRateZoneChart' => Json::encode(
+                    TimeInHeartRateZoneChartBuilder::fromTimeInZones(
+                        timeInSecondsInHeartRateZoneOne: $this->activityHeartRateRepository->findTotalTimeInSecondsInHeartRateZone(HeartRateZone::ONE),
+                        timeInSecondsInHeartRateZoneTwo: $this->activityHeartRateRepository->findTotalTimeInSecondsInHeartRateZone(HeartRateZone::TWO),
+                        timeInSecondsInHeartRateZoneThree: $this->activityHeartRateRepository->findTotalTimeInSecondsInHeartRateZone(HeartRateZone::THREE),
+                        timeInSecondsInHeartRateZoneFour: $this->activityHeartRateRepository->findTotalTimeInSecondsInHeartRateZone(HeartRateZone::FOUR),
+                        timeInSecondsInHeartRateZoneFive: $this->activityHeartRateRepository->findTotalTimeInSecondsInHeartRateZone(HeartRateZone::FIVE),
+                    )
+                    ->build(),
+                ),
             ]),
         );
 
@@ -254,6 +268,16 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                             ->withoutBackgroundColor()
                             ->build()
                     ) : null,
+                    'timeInHeartRateZoneChart' => Json::encode(
+                        TimeInHeartRateZoneChartBuilder::fromTimeInZones(
+                            timeInSecondsInHeartRateZoneOne: $this->activityHeartRateRepository->findTimeInSecondsInHeartRateZoneForActivity($activity->getId(), HeartRateZone::ONE),
+                            timeInSecondsInHeartRateZoneTwo: $this->activityHeartRateRepository->findTimeInSecondsInHeartRateZoneForActivity($activity->getId(), HeartRateZone::TWO),
+                            timeInSecondsInHeartRateZoneThree: $this->activityHeartRateRepository->findTimeInSecondsInHeartRateZoneForActivity($activity->getId(), HeartRateZone::THREE),
+                            timeInSecondsInHeartRateZoneFour: $this->activityHeartRateRepository->findTimeInSecondsInHeartRateZoneForActivity($activity->getId(), HeartRateZone::FOUR),
+                            timeInSecondsInHeartRateZoneFive: $this->activityHeartRateRepository->findTimeInSecondsInHeartRateZoneForActivity($activity->getId(), HeartRateZone::FIVE),
+                        )
+                        ->build(),
+                    ),
                 ]),
             );
         }
