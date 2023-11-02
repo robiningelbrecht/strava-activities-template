@@ -77,8 +77,8 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
 
 Before running the first activity import, you need to 
 
-* Set your birthday. This is required to accurately calculate the intensity of your activities 
-  in case no power data is available.
+* Set your birthday. This is required to 1) accurately calculate the intensity of your activities 
+  in case no power data is available, 2) determine your heart rate zones
   * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/actions/workflows/update-key-value-store.yml
   * Fill out your birthday and run the workflow
   * ![Update birthday](files/install/update-birthday.png)
@@ -87,7 +87,7 @@ Before running the first activity import, you need to
   * Fill out the FTP and the date you've set the FTP on and run the workflow
   * ![Update FTP](files/install/update-ftp.png)
   * Do this for every FTP you've set
-* It's important you wait until a workflow is done, before running another one
+* !!! It's important you wait until a workflow is done, before running another one !!!
 
 ## ☁️ Hosting the HTML version
 
@@ -124,6 +124,11 @@ For any feedback, help or feature requests, please [open a new issue](https://gi
 
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
+
+#### [2023-11-02]
+
+* Added "Time in heart rate zone" charts
+* Optimized existing charts
 
 #### [2023-10-30]
 

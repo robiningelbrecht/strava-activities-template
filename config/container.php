@@ -4,9 +4,11 @@ use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\DbalActivityRepository;
 use App\Domain\Strava\Activity\Image\ActivityBasedImageRepository;
 use App\Domain\Strava\Activity\Image\ImageRepository;
+use App\Domain\Strava\Activity\Stream\ActivityHeartRateRepository;
 use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\DbalActivityStreamRepository;
+use App\Domain\Strava\Activity\Stream\StreamBasedActivityHeartRateRepository;
 use App\Domain\Strava\Activity\Stream\StreamBasedActivityPowerRepository;
 use App\Domain\Strava\Athlete\ActivityBasedAthleteWeightRepository;
 use App\Domain\Strava\Athlete\AthleteWeightRepository;
@@ -62,6 +64,7 @@ return [
     ActivityRepository::class => DI\autowire(DbalActivityRepository::class),
     ActivityStreamRepository::class => DI\autowire(DbalActivityStreamRepository::class),
     ActivityPowerRepository::class => DI\autowire(StreamBasedActivityPowerRepository::class),
+    ActivityHeartRateRepository::class => DI\autowire(StreamBasedActivityHeartRateRepository::class),
     ImageRepository::class => DI\autowire(ActivityBasedImageRepository::class),
     ChallengeRepository::class => DI\autowire(DbalChallengeRepository::class),
     FtpRepository::class => DI\autowire(DbalFtpRepository::class),

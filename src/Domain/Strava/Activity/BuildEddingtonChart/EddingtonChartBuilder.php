@@ -76,6 +76,7 @@ final class EddingtonChartBuilder
             ],
             'legend' => [
                 'show' => true,
+                'selectedMode' => false,
             ],
             'xAxis' => [
                 'data' => array_map(fn (int $distance) => $distance.'km', range(1, $longestDistanceInADay)),

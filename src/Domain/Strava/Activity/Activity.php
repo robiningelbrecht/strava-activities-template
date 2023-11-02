@@ -332,12 +332,12 @@ final class Activity
             return (int) round(($this->getMovingTimeInSeconds() * $averagePower * ($averagePower / $ftp->getValue())) / ($ftp->getValue() * 3600) * 100);
         }
 
-        if (($averageHeartRate = $this->getAverageHeartRate()) && ($age = $this->getAthleteAgeInYears())) {
+        if (($averageHeartRate = $this->getAverageHeartRate()) && ($athleteMaxHeartRate = $this->getAthleteMaxHeartRate())) {
             // Use simplified, less accurate calculation.
             // maxHeartRate = = (220 - age) x 0.92
             // intensityFactor = averageHeartRate / maxHeartRate
             // (durationInSeconds x averageHeartRate x intensityFactor) / (maxHeartRate x 3600) x 100
-            $maxHeartRate = round((220 - $age) * 0.92);
+            $maxHeartRate = round($athleteMaxHeartRate * 0.92);
 
             return (int) round(($this->getMovingTimeInSeconds() * $averageHeartRate * ($averageHeartRate / $maxHeartRate)) / ($maxHeartRate * 3600) * 100);
         }
@@ -363,6 +363,15 @@ final class Activity
     public function getAthleteAgeInYears(): ?int
     {
         return $this->athleteBirthday?->diff($this->getStartDate())->y;
+    }
+
+    public function getAthleteMaxHeartRate(): ?int
+    {
+        if (!$age = $this->getAthleteAgeInYears()) {
+            return null;
+        }
+
+        return 220 - $age;
     }
 
     public function enrichWithAthleteBirthday(SerializableDateTime $birthday): void
