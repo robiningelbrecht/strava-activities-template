@@ -12,11 +12,6 @@ enum ActivityType: string
         return self::RIDE === $this;
     }
 
-    public function supportsBestPowerOutputs(): bool
-    {
-        return self::VIRTUAL_RIDE === $this;
-    }
-
     public function getIcon(): string
     {
         return match ($this) {
