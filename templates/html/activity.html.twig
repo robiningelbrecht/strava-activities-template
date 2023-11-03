@@ -161,7 +161,7 @@
                 </div>
             </div>
         </div>
-        {% if activity.getType().supportsBestPowerOutputs() %}
+        {% if activity.hasDetailedPowerData() %}
             <div class="mt-4 mb-1">
                 <h3 class="font-bold mb-1">Power outputs</h3>
                 <div class="relative overflow-x-auto">
