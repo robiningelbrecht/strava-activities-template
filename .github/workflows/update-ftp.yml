@@ -46,7 +46,14 @@ jobs:
           echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
 
       - name: Update FTP
-        run: bin/console app:strava:update-ftp ${{ github.event.inputs.set-on-date }} ${{ github.event.inputs.ftp }}
+        run: |
+          # Make sure database and migration directories exist
+          mkdir -p database
+          mkdir -p migrations
+          # Run migrations.
+          ./vendor/bin/doctrine-migrations migrate --no-interaction 
+          
+          bin/console app:strava:update-ftp ${{ github.event.inputs.set-on-date }} ${{ github.event.inputs.ftp }}
 
       - name: Commit and push changes
         run: |
