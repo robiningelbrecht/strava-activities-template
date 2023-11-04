@@ -3,7 +3,7 @@ module.exports = {
     darkMode: 'class',
     content: [
         "./build/html/*.html",
-        "./build/html/activity/activity-8848645176.html",
+        "./build/html/**/activity-8837881433.html",
         "./node_modules/flowbite/**/*.js"
     ],
     theme: {
@@ -13,4 +13,3 @@ module.exports = {
         require('flowbite/plugin')
     ]
 }
-
