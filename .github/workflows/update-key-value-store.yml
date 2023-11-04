@@ -47,7 +47,14 @@ jobs:
           echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
 
       - name: Update KeyValue
-        run: bin/console app:strava:key-value ${{ github.event.inputs.key }} ${{ github.event.inputs.value }}
+        run: |
+          # Make sure database and migration directories exist
+          mkdir -p database
+          mkdir -p migrations
+          # Run migrations.
+          ./vendor/bin/doctrine-migrations migrate --no-interaction    
+          
+          bin/console app:strava:key-value ${{ github.event.inputs.key }} ${{ github.event.inputs.value }}
 
       - name: Commit and push changes
         run: |
