@@ -33,7 +33,7 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
 
 * Make sure your logged in with your GitHub account
 * Start off by showing some ❤️ and give this repo a star
-* [Create a new repository](https://github.com/new?template_name=strava-activities-template&template_owner=robiningelbrecht) using this template
+* Create a new repository using this template by clicking [HERE](https://github.com/new?template_name=strava-activities-template&template_owner=robiningelbrecht) and filling out the required fields
 * Navigate to your newly created repository `Actions secrets and variables` page (https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/settings/secrets/actions)
   Keep this page open, you will need to add several secrets here
 * Next, navigate to your [Strava API settings page](https://www.strava.com/settings/api).
@@ -61,7 +61,7 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
     * Edit the file
       ![Edit workflow](files/install/edit-workflow.png)
     * Uncomment line 4 and 5 by removing the `#` character
-    * Scroll own to:
+    * Scroll down to:
         ```yml
         name: Initialize GIT
         run: |
@@ -77,17 +77,18 @@ feel free to [open an issue](https://github.com/robiningelbrecht/strava-activiti
 
 Before running the first activity import, you need to 
 
+__!!! It's important you wait until a workflow is done, before running another one !!!__
+
 * Set your birthday. This is required to 1) accurately calculate the intensity of your activities 
   in case no power data is available, 2) determine your heart rate zones
   * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/actions/workflows/update-key-value-store.yml
-  * Fill out your birthday and run the workflow
+  * Fill out your birthday using date format `YYYY-MM-DD` and run the workflow
   * ![Update birthday](files/install/update-birthday.png)
 * Configure your FTP (= Functional Threshold Power) history.
   * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/actions/workflows/update-ftp.yml
-  * Fill out the FTP and the date you've set the FTP on and run the workflow
+  * Fill out the FTP and the date (`YYYY-MM-DD`) you've set the FTP on and run the workflow
   * ![Update FTP](files/install/update-ftp.png)
   * Do this for every FTP you've set
-* !!! It's important you wait until a workflow is done, before running another one !!!
 
 ## ☁️ Hosting the HTML version
 
@@ -124,6 +125,10 @@ For any feedback, help or feature requests, please [open a new issue](https://gi
 
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
+
+#### [2023-11-04]
+
+* Fixed workflow database errors (thanks to [mdleye](https://github.com/mdleye))
 
 #### [2023-11-02]
 
@@ -163,7 +168,7 @@ All notable changes to this project will be documented in this file.
 
 * Added distance breakdown table
 * Added daytime stats
-* Monthly stats: filter out months that have no activities (thanks to m.deleye)
+* Monthly stats: filter out months that have no activities (thanks to  [mdleye](https://github.com/mdleye))
 * Add sorting to the activity list
 * Reworked weekday stats
 
