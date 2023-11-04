@@ -100,7 +100,7 @@ final class EddingtonChartBuilder
                         'show' => false,
                     ],
                     'max' => $yAxisMaxValue,
-                    'interval' => 30,
+                    'interval' => $yAxisInterval,
                 ],
             ],
             'series' => [
