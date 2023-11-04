@@ -5,6 +5,7 @@ namespace App\Domain\Strava\BuildHtmlVersion;
 use App\Domain\Strava\Activity\ActivityHighlights;
 use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\ActivityTotals;
+use App\Domain\Strava\Activity\ActivityType;
 use App\Domain\Strava\Activity\BuildActivityHeatmapChart\ActivityHeatmapChartBuilder;
 use App\Domain\Strava\Activity\BuildDaytimeStatsChart\DaytimeStats;
 use App\Domain\Strava\Activity\BuildDaytimeStatsChart\DaytimeStatsChartsBuilder;
@@ -13,6 +14,7 @@ use App\Domain\Strava\Activity\BuildEddingtonChart\EddingtonChartBuilder;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStatsChartsBuilder;
 use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\WeeklyDistanceChartBuilder;
+use App\Domain\Strava\Activity\Image\Image;
 use App\Domain\Strava\Activity\Image\ImageRepository;
 use App\Domain\Strava\Activity\Stream\ActivityHeartRateRepository;
 use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
@@ -202,6 +204,8 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $this->filesystem->write(
             'build/html/photos.html',
             $this->twig->load('html/photos.html.twig')->render([
+                'rideImagesCount' => count(array_filter($allImages, fn (Image $image) => ActivityType::RIDE === $image->getActivity()->getType())),
+                'virtualRideImagesCount' => count(array_filter($allImages, fn (Image $image) => ActivityType::VIRTUAL_RIDE === $image->getActivity()->getType())),
                 'images' => $allImages,
             ]),
         );
