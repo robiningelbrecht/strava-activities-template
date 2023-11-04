@@ -128,6 +128,7 @@ All notable changes to this project will be documented in this file.
 
 #### [2023-11-04]
 
+* Better masonry layout
 * Show number of photos on tabs
 * Fixed workflow database errors (thanks to [mdleye](https://github.com/mdleye))
 
