@@ -148,6 +148,11 @@ class SpyStrava extends Strava
         ];
     }
 
+    public function getChallengesOnTrophyCase(): array
+    {
+        throw new \RuntimeException('an error');
+    }
+
     public function downloadImage(string $uri): string
     {
         ++$this->numberOfCallsExecuted;
