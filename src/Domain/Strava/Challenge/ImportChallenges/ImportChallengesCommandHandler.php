@@ -18,6 +18,8 @@ use League\Flysystem\FilesystemOperator;
 #[AsCommandHandler]
 final readonly class ImportChallengesCommandHandler implements CommandHandler
 {
+    private const DEFAULT_STRAVA_CHALLENGE_HISTORY = '<!-- OVERRIDE ME WITH HTML COPY/PASTED FROM https://www.strava.com/athletes/[YOUR_ATHLETE_ID]/trophy-case -->';
+
     public function __construct(
         private Strava $strava,
         private ChallengeRepository $challengeRepository,
@@ -36,26 +38,36 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
         if (!$this->filesystem->fileExists('files/strava-challenge-history.html')) {
             $this->filesystem->write(
                 location: 'files/strava-challenge-history.html',
-                contents: '<!-- OVERRIDE ME WITH HTML COPY/PASTED FROM https://www.strava.com/athletes/[YOUR_ATHLETE_ID]/trophy-case -->'
+                contents: self::DEFAULT_STRAVA_CHALLENGE_HISTORY
             );
         }
 
+        $challenges = [];
         try {
-            $challenges = $this->strava->getChallenges();
+            $challenges = $this->strava->getChallengesOnPublicProfile();
         } catch (\Throwable) {
-            $command->getOutput()->writeln('Could not import challenges...');
+            $command->getOutput()->writeln('Could not import challenges from public profile...');
+        }
+        try {
+            $challenges = [...$challenges, ...$this->strava->getChallengesOnTrophyCase()];
+        } catch (\Throwable) {
+            $command->getOutput()->writeln('Could not import challenges from trophy case page...');
+        }
+
+        if (empty($challenges)) {
+            $command->getOutput()->writeln('No Challenges to import...');
 
             return;
         }
 
-        foreach ($challenges as $challengeData) {
+        foreach ($challenges as $stravaChallenge) {
             try {
-                $this->challengeRepository->find($challengeData['challenge_id']);
+                $this->challengeRepository->find($stravaChallenge['challenge_id']);
             } catch (EntityNotFound) {
                 $challenge = Challenge::create(
-                    challengeId: $challengeData['challenge_id'],
-                    createdOn: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
-                    data: $challengeData,
+                    challengeId: $stravaChallenge['challenge_id'],
+                    createdOn: $stravaChallenge['completedOn'] ?? SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
+                    data: $stravaChallenge,
                 );
                 if ($url = $challenge->getLogoUrl()) {
                     $imagePath = sprintf('files/challenges/%s.png', $this->uuidFactory->random());

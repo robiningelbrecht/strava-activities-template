@@ -213,7 +213,7 @@ class StravaTest extends TestCase
                 return new Response(200, [], file_get_contents(__DIR__.'/public-profile.html'));
             });
 
-        $this->strava->getChallenges();
+        $this->strava->getChallengesOnPublicProfile();
     }
 
     public function testDownloadImage(): void

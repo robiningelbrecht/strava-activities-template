@@ -125,7 +125,7 @@ class SpyStrava extends Strava
         return $gears[$id];
     }
 
-    public function getChallenges(): array
+    public function getChallengesOnPublicProfile(): array
     {
         ++$this->numberOfCallsExecuted;
         $this->throw429IfMaxNumberOfCallsIsExceeded();
