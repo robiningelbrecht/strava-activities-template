@@ -335,6 +335,159 @@ class StravaTest extends TestCase
         $this->assertMatchesJsonSnapshot($challenges);
     }
 
+    public function testGetChallengesOnTrophyCaseWhenInvalidHtml(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/files/strava-challenge-history.html', $path);
+
+                return new Response(200, [], '');
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenges from trophy case'));
+
+        $this->strava->getChallengesOnTrophyCase();
+    }
+
+    public function testGetChallengesOnTrophyCaseWhenInvalidHtmlCaseTwo(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/files/strava-challenge-history.html', $path);
+
+                return new Response(200, [], "<ul class='list-block-grid list-trophies'>YEAHBABY</ul>");
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenges from trophy case'));
+
+        $this->strava->getChallengesOnTrophyCase();
+    }
+
+    public function testGetChallengesOnTrophyCaseWhenNameNotFound(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/files/strava-challenge-history.html', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/trophy-case-without-name.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge name'));
+
+        $this->strava->getChallengesOnTrophyCase();
+    }
+
+    public function testGetChallengesOnTrophyCaseWhenTeaserNotFound(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/files/strava-challenge-history.html', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/trophy-case-without-teaser.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge teaser'));
+
+        $this->strava->getChallengesOnTrophyCase();
+    }
+
+    public function testGetChallengesOnTrophyCaseWhenLogoNotFound(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/files/strava-challenge-history.html', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/trophy-case-without-logo.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge logoUrl'));
+
+        $this->strava->getChallengesOnTrophyCase();
+    }
+
+    public function testGetChallengesOnTrophyCaseWhenUrlNotFound(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/files/strava-challenge-history.html', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/trophy-case-without-url.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge url'));
+
+        $this->strava->getChallengesOnTrophyCase();
+    }
+
+    public function testGetChallengesOnTrophyCaseWhenIdNotFound(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/files/strava-challenge-history.html', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/trophy-case-without-id.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge challengeId'));
+
+        $this->strava->getChallengesOnTrophyCase();
+    }
+
+    public function testGetChallengesOnTrophyCaseWhenTimestampNotFound(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/files/strava-challenge-history.html', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/trophy-case-without-timestamp.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge timestamp'));
+
+        $this->strava->getChallengesOnTrophyCase();
+    }
+
+    public function testGetChallengesOnTrophyCaseWithEmptyTimestamp(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/files/strava-challenge-history.html', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/trophy-case-with-empty-timestamp.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge timestamp'));
+
+        $this->strava->getChallengesOnTrophyCase();
+    }
+
     public function testDownloadImage(): void
     {
         $this->client

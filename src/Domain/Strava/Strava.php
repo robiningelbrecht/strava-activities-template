@@ -235,6 +235,9 @@ class Strava
             if (!preg_match('/<time class=\'timestamp\'>(?<match>.*?)<\/time>/', $match, $completedOn)) {
                 throw new \RuntimeException('Could not fetch Strava challenge timestamp');
             }
+            if (empty(trim($completedOn['match']))) {
+                throw new \RuntimeException('Could not fetch Strava challenge timestamp');
+            }
 
             $challenges[] = [
                 'completedOn' => SerializableDateTime::createFromFormat('d M Y H:i:s', '01 '.trim($completedOn['match']).' 00:00:00'),
