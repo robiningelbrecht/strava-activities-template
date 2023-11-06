@@ -201,7 +201,7 @@ class StravaTest extends TestCase
         $this->strava->getGear(3);
     }
 
-    public function testGetChallenges(): void
+    public function testGetChallengesOnPublicProfile(): void
     {
         $this->client
             ->expects($this->once())
@@ -212,6 +212,108 @@ class StravaTest extends TestCase
 
                 return new Response(200, [], file_get_contents(__DIR__.'/public-profile.html'));
             });
+
+        $this->strava->getChallengesOnPublicProfile();
+    }
+
+    public function testGetChallengesOnPublicProfileWhenInvalidProfile(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('athletes/10', $path);
+
+                return new Response(200, [], '');
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenges on public profile'));
+
+        $this->strava->getChallengesOnPublicProfile();
+    }
+
+    public function testGetChallengesOnPublicProfileWhenNameNotFound(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('athletes/10', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/public-profile-without-name.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge name'));
+
+        $this->strava->getChallengesOnPublicProfile();
+    }
+
+    public function testGetChallengesOnPublicProfileWhenTeaserNotFound(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('athletes/10', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/public-profile-without-teaser.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge teaser'));
+
+        $this->strava->getChallengesOnPublicProfile();
+    }
+
+    public function testGetChallengesOnPublicProfileWhenLogoNotFound(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('athletes/10', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/public-profile-without-logo.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge logoUrl'));
+
+        $this->strava->getChallengesOnPublicProfile();
+    }
+
+    public function testGetChallengesOnPublicProfileWhenUrlNotFound(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('athletes/10', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/public-profile-without-url.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge url'));
+
+        $this->strava->getChallengesOnPublicProfile();
+    }
+
+    public function testGetChallengesOnPublicProfileWhenIdNotFound(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('athletes/10', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/public-profile-without-id.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge challengeId'));
 
         $this->strava->getChallengesOnPublicProfile();
     }
