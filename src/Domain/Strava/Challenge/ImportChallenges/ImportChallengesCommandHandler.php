@@ -33,6 +33,13 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
         assert($command instanceof ImportChallenges);
         $command->getOutput()->writeln('Importing challenges...');
 
+        if (!$this->filesystem->fileExists('files/strava-challenge-history.html')) {
+            $this->filesystem->write(
+                location: 'files/strava-challenge-history.html',
+                contents: '<!-- OVERRIDE ME WITH HTML COPY/PASTED FROM https://www.strava.com/athletes/[YOUR_ATHLETE_ID]/trophy-case -->'
+            );
+        }
+
         try {
             $challenges = $this->strava->getChallenges();
         } catch (\Throwable) {
