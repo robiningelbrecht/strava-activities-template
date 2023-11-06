@@ -210,34 +210,34 @@ class Strava
         if (!preg_match_all('/<ul class=\'list-block-grid list-trophies\'>(?<matches>[\s\S]*)<\/ul>/U', $contents, $matches)) {
             throw new \RuntimeException('Could not fetch Strava challenges from trophy case');
         }
-        if (!preg_match_all('/<li[\s\S]*>(?<matches>[\s\S]*)<\/li>/U', $matches['matches'][0], $matches)) {
+        if (!preg_match_all('/<li(?<matches>[\s\S]*)<\/li>/U', $matches['matches'][0], $matches)) {
             throw new \RuntimeException('Could not fetch Strava challenges from trophy case');
         }
 
         $challenges = [];
         foreach ($matches['matches'] as $match) {
             $match = str_replace(["\r", "\n"], '', $match);
-            if (!preg_match('/<a[\s\S]*>(?<match>.*?)<\/a>/U', $match, $challengeName)) {
+            if (!preg_match('/<a[\s\S]*>(?<match>.*?)<\/a><\/h6>/', $match, $challengeName)) {
                 throw new \RuntimeException('Could not fetch Strava challenge name');
             }
-            if (!preg_match('/<li[\s\S]*title=\'(?<match>.*?)\'>/U', $match, $teaser)) {
+            if (!preg_match('/class=\'centered\'[\s\S]*title=\'(?<match>.*?)\'>/', $match, $teaser)) {
                 throw new \RuntimeException('Could not fetch Strava challenge teaser');
             }
-            if (!preg_match('/<img[\s\S]* src="(?<match>.*?)"/U', $match, $logoUrl)) {
+            if (!preg_match('/<img[\s\S]* src="(?<match>.*?)"/', $match, $logoUrl)) {
                 throw new \RuntimeException('Could not fetch Strava challenge logoUrl');
             }
-            if (!preg_match('/<a str-on="click" [\s\S]*href="\/challenges\/(?<match>.*?)"[\s\S]*<\/a>/U', $match, $url)) {
+            if (!preg_match('/<a str-on="click" [\s\S]*href="\/challenges\/(?<match>.*?)"[\s\S]*<\/a>/', $match, $url)) {
                 throw new \RuntimeException('Could not fetch Strava challenge url');
             }
-            if (!preg_match('/<img[\s\S]*data-trophy-challenge-id="(?<match>.*?)" src="[\s\S]*"[\s\S]*\/>/U', $match, $challengeId)) {
+            if (!preg_match('/<img[\s\S]*data-trophy-challenge-id="(?<match>.*?)" src="[\s\S]*"[\s\S]*\/>/', $match, $challengeId)) {
                 throw new \RuntimeException('Could not fetch Strava challenge challengeId');
             }
-            if (!preg_match('/<time class=\'timestamp\'>(?<match>.*?)<\/time>/U', $match, $completedOn)) {
+            if (!preg_match('/<time class=\'timestamp\'>(?<match>.*?)<\/time>/', $match, $completedOn)) {
                 throw new \RuntimeException('Could not fetch Strava challenge timestamp');
             }
 
             $challenges[] = [
-                'completedOn' => SerializableDateTime::createFromFormat('d M Y', '01 '.$completedOn['match']),
+                'completedOn' => SerializableDateTime::createFromFormat('d M Y H:i:s', '01 '.trim($completedOn['match']).' 00:00:00'),
                 'name' => $challengeName['match'],
                 'teaser' => $teaser['match'],
                 'logo_url' => $logoUrl['match'],

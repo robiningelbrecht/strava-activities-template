@@ -213,7 +213,8 @@ class StravaTest extends TestCase
                 return new Response(200, [], file_get_contents(__DIR__.'/public-profile.html'));
             });
 
-        $this->strava->getChallengesOnPublicProfile();
+        $challenges = $this->strava->getChallengesOnPublicProfile();
+        $this->assertMatchesJsonSnapshot($challenges);
     }
 
     public function testGetChallengesOnPublicProfileWhenInvalidProfile(): void
@@ -316,6 +317,22 @@ class StravaTest extends TestCase
         $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge challengeId'));
 
         $this->strava->getChallengesOnPublicProfile();
+    }
+
+    public function testGetChallengesOnTrophyCase(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/files/strava-challenge-history.html', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/trophy-case.html'));
+            });
+
+        $challenges = $this->strava->getChallengesOnTrophyCase();
+        $this->assertMatchesJsonSnapshot($challenges);
     }
 
     public function testDownloadImage(): void
