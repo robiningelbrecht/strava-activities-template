@@ -13,7 +13,7 @@ final class SpyFileSystem implements FilesystemOperator
 
     public function fileExists(string $location): bool
     {
-        return true;
+        return false;
     }
 
     public function directoryExists(string $location): bool
