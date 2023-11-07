@@ -13,7 +13,7 @@ final class Challenge
      */
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string', unique: true)]
-        private readonly string $challengeId,
+        private readonly ChallengeId $challengeId,
         #[ORM\Column(type: 'datetime_immutable')]
         private readonly SerializableDateTime $createdOn,
         #[ORM\Column(type: 'json')]
@@ -25,7 +25,7 @@ final class Challenge
      * @param array<mixed> $data
      */
     public static function fromState(
-        string $challengeId,
+        ChallengeId $challengeId,
         SerializableDateTime $createdOn,
         array $data
     ): self {
@@ -40,7 +40,7 @@ final class Challenge
      * @param array<mixed> $data
      */
     public static function create(
-        string $challengeId,
+        ChallengeId $challengeId,
         SerializableDateTime $createdOn,
         array $data
     ): self {
@@ -51,7 +51,7 @@ final class Challenge
         );
     }
 
-    public function getId(): string
+    public function getId(): ChallengeId
     {
         return $this->challengeId;
     }

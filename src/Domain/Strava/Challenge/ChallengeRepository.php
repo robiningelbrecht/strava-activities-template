@@ -6,7 +6,7 @@ interface ChallengeRepository
 {
     public function findAll(): ChallengeCollection;
 
-    public function find(string $id): Challenge;
+    public function find(ChallengeId $challengeId): Challenge;
 
     public function add(Challenge $challenge): void;
 }

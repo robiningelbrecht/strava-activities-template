@@ -5,17 +5,18 @@ declare(strict_types=1);
 namespace App\Tests\Domain\Strava\Challenge;
 
 use App\Domain\Strava\Challenge\Challenge;
+use App\Domain\Strava\Challenge\ChallengeId;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final class ChallengeBuilder
 {
-    private string $challengeId;
+    private ChallengeId $challengeId;
     private SerializableDateTime $createdOn;
     private array $data;
 
     private function __construct()
     {
-        $this->challengeId = 'test';
+        $this->challengeId = ChallengeId::fromString('test');
         $this->createdOn = SerializableDateTime::fromString('2023-10-10');
         $this->data = [];
     }
@@ -34,7 +35,7 @@ final class ChallengeBuilder
         );
     }
 
-    public function withChallengeId(string $challengeId): self
+    public function withChallengeId(ChallengeId $challengeId): self
     {
         $this->challengeId = $challengeId;
 
