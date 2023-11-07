@@ -125,7 +125,7 @@ class SpyStrava extends Strava
         return $gears[$id];
     }
 
-    public function getChallenges(): array
+    public function getChallengesOnPublicProfile(): array
     {
         ++$this->numberOfCallsExecuted;
         $this->throw429IfMaxNumberOfCallsIsExceeded();
@@ -146,6 +146,11 @@ class SpyStrava extends Strava
                 'challenge_id' => '654321',
             ],
         ];
+    }
+
+    public function getChallengesOnTrophyCase(): array
+    {
+        throw new \RuntimeException('an error');
     }
 
     public function downloadImage(string $uri): string
