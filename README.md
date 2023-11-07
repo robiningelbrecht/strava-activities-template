@@ -83,12 +83,20 @@ __!!! It's important you wait until a workflow is done, before running another o
   in case no power data is available, 2) determine your heart rate zones
   * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/actions/workflows/update-key-value-store.yml
   * Fill out your birthday using date format `YYYY-MM-DD` and run the workflow
-  * ![Update birthday](files/install/update-birthday.png)
-* Configure your FTP (= Functional Threshold Power) history.
+  ![Update birthday](files/install/update-birthday.png)
+* (Optional, but recommended) Configure your FTP (= Functional Threshold Power) history.
   * Navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/actions/workflows/update-ftp.yml
   * Fill out the FTP and the date (`YYYY-MM-DD`) you've set the FTP on and run the workflow
-  * ![Update FTP](files/install/update-ftp.png)
+  ![Update FTP](files/install/update-ftp.png)
   * Do this for every FTP you've set
+* (Optional) Strava does not allow to fetch all your completed challenges and trophies (see <a href="#some-things-to-consider">Some things to consider</a>), 
+   but there's a little workaround if you'd like to import those:
+  * Navigate to https://www.strava.com/athletes/[YOUR_ATHLETE_ID]/trophy-case
+  * Open the page's source code and copy everything
+    ![UTrophy case source code](files/install/trophy-case-source-code.png)
+  * Next navigate to https://github.com/[YOUR-GITHUB-USERNAME]/[REPOSITORY-NAME]/edit/master/files/strava-challenge-history.html
+  * Paste the source code you just copied and `commit changes` at the top right-hand corner
+  * On the next run of the `import activities` workflow, all your challenges will be imported
 
 ## ☁️ Hosting the HTML version
 
@@ -119,6 +127,7 @@ on https://vercel.com:
   you might run into the daily rate limit. If you do so, the app will import the remaining activities the next day(s).
 * If you get following error `App\Infrastructure\Exception\EntityNotFound: KeyValue "athlete_birthday" not found`,
   it means that you have not set your birthday. Run the "Update athlete birthday" workflow
+
 ## 💡 Feature request?
 
 For any feedback, help or feature requests, please [open a new issue](https://github.com/robiningelbrecht/strava-activities-template/issues/new)
