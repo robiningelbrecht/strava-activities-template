@@ -126,6 +126,11 @@ For any feedback, help or feature requests, please [open a new issue](https://gi
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
 
+#### [2023-11-07]
+
+* Allow to import challenge/trophy case history
+* Fix import of double challenges
+
 #### [2023-11-04]
 
 * Better masonry layout

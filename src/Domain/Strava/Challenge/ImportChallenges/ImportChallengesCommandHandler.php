@@ -3,6 +3,7 @@
 namespace App\Domain\Strava\Challenge\ImportChallenges;
 
 use App\Domain\Strava\Challenge\Challenge;
+use App\Domain\Strava\Challenge\ChallengeId;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\Attribute\AsCommandHandler;
@@ -61,12 +62,17 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
         }
 
         foreach ($challenges as $stravaChallenge) {
+            $createdOn = $stravaChallenge['completedOn'] ?? SerializableDateTime::fromDateTimeImmutable($this->clock->now());
+            $challengeId = ChallengeId::fromDateAndName(
+                $createdOn,
+                $stravaChallenge['name'],
+            );
             try {
-                $this->challengeRepository->find($stravaChallenge['challenge_id']);
+                $this->challengeRepository->find($challengeId);
             } catch (EntityNotFound) {
                 $challenge = Challenge::create(
-                    challengeId: $stravaChallenge['challenge_id'],
-                    createdOn: $stravaChallenge['completedOn'] ?? SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
+                    challengeId: $challengeId,
+                    createdOn: $createdOn,
                     data: $stravaChallenge,
                 );
                 if ($url = $challenge->getLogoUrl()) {
@@ -80,7 +86,7 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
                 }
                 $this->challengeRepository->add($challenge);
                 $command->getOutput()->writeln(sprintf('  => Imported challenge "%s"', $challenge->getName()));
-                $this->sleep->sweetDreams(1); // Make sure timestamp is increased by at least one.
+                $this->sleep->sweetDreams(1); // Make sure timestamp is increased by at least one second.
             }
         }
     }

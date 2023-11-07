@@ -27,16 +27,16 @@ final readonly class DbalChallengeRepository implements ChallengeRepository
         ));
     }
 
-    public function find(string $id): Challenge
+    public function find(ChallengeId $challengeId): Challenge
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('Challenge')
             ->andWhere('challengeId = :challengeId')
-            ->setParameter('challengeId', $id);
+            ->setParameter('challengeId', (string) $challengeId);
 
         if (!$result = $queryBuilder->executeQuery()->fetchAssociative()) {
-            throw new EntityNotFound(sprintf('Challenge "%s" not found', $id));
+            throw new EntityNotFound(sprintf('Challenge "%s" not found', $challengeId));
         }
 
         return $this->buildFromResult($result);
@@ -48,7 +48,7 @@ final readonly class DbalChallengeRepository implements ChallengeRepository
         VALUES (:challengeId, :createdOn, :data)';
 
         $this->connection->executeStatement($sql, [
-            'challengeId' => $challenge->getId(),
+            'challengeId' => (string) $challenge->getId(),
             'createdOn' => $challenge->getCreatedOn(),
             'data' => Json::encode($challenge->getData()),
         ]);
@@ -60,7 +60,7 @@ final readonly class DbalChallengeRepository implements ChallengeRepository
     private function buildFromResult(array $result): Challenge
     {
         return Challenge::fromState(
-            challengeId: $result['challengeId'],
+            challengeId: ChallengeId::fromString($result['challengeId']),
             createdOn: SerializableDateTime::fromString($result['createdOn']),
             data: Json::decode($result['data']),
         );

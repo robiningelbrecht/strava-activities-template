@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Challenge\ImportChallenges;
 
+use App\Domain\Strava\Challenge\ChallengeId;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\Challenge\ImportChallenges\ImportChallenges;
 use App\Domain\Strava\Strava;
@@ -27,7 +28,7 @@ class ImportChallengesCommandHandlerTest extends DatabaseTestCase
 
         $this->getContainer()->get(ChallengeRepository::class)->add(
             ChallengeBuilder::fromDefaults()
-                ->withChallengeId('654321')
+                ->withChallengeId(ChallengeId::fromString('2023-10_challenge_2'))
                 ->build()
         );
 
