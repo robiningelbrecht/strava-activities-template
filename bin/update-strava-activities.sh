@@ -2,7 +2,7 @@
 set -e
 
 # Clone template
-git clone https://github.com/robiningelbrecht/strava-activities-template.git
+git clone https://github.com/robiningelbrecht/strava-activities-template.git --depth 1
 
 # Copy all files from template to this repo.
 rm -Rf bin/* && mv -f strava-activities-template/bin/* bin/
