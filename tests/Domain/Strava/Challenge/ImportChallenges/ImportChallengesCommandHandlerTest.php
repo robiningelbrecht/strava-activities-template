@@ -41,6 +41,27 @@ class ImportChallengesCommandHandlerTest extends DatabaseTestCase
         $this->assertMatchesJsonSnapshot($fileSystem->getWrites());
     }
 
+    public function testHandleWhenErrorInDownload(): void
+    {
+        $output = new SpyOutput();
+        $this->strava->setMaxNumberOfCallsBeforeTriggering429(100);
+        $this->strava->triggerExceptionOnNextCall();
+
+        $this->getContainer()->get(ChallengeRepository::class)->add(
+            ChallengeBuilder::fromDefaults()
+                ->withChallengeId(ChallengeId::fromString('2023-10_challenge_2'))
+                ->build()
+        );
+
+        $this->commandBus->dispatch(new ImportChallenges($output));
+
+        $this->assertMatchesTextSnapshot($output);
+
+        /** @var \App\Tests\SpyFileSystem $fileSystem */
+        $fileSystem = $this->getContainer()->get(FilesystemOperator::class);
+        $this->assertMatchesJsonSnapshot($fileSystem->getWrites());
+    }
+
     protected function setUp(): void
     {
         parent::setUp();

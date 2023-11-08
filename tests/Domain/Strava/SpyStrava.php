@@ -21,6 +21,7 @@ class SpyStrava extends Strava
     private int $numberOfCallsExecuted = 0;
     private int $maxNumberOfCallsBeforeTriggering429 = 0;
     private readonly array $activities;
+    private bool $triggerExceptionOnNextCall = false;
 
     public function __construct()
     {
@@ -44,6 +45,11 @@ class SpyStrava extends Strava
     {
         $this->numberOfCallsExecuted = 0;
         $this->maxNumberOfCallsBeforeTriggering429 = $max;
+    }
+
+    public function triggerExceptionOnNextCall(): void
+    {
+        $this->triggerExceptionOnNextCall = true;
     }
 
     private function throw429IfMaxNumberOfCallsIsExceeded(): void
@@ -155,6 +161,10 @@ class SpyStrava extends Strava
 
     public function downloadImage(string $uri): string
     {
+        if ($this->triggerExceptionOnNextCall) {
+            $this->triggerExceptionOnNextCall = false;
+            throw new \RuntimeException('WAW ERROR');
+        }
         ++$this->numberOfCallsExecuted;
         $this->throw429IfMaxNumberOfCallsIsExceeded();
 

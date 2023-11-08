@@ -77,10 +77,19 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
                 );
                 if ($url = $challenge->getLogoUrl()) {
                     $imagePath = sprintf('files/challenges/%s.png', $this->uuidFactory->random());
-                    $this->filesystem->write(
-                        $imagePath,
-                        $this->strava->downloadImage($url)
-                    );
+                    try {
+                        $this->filesystem->write(
+                            $imagePath,
+                            $this->strava->downloadImage($url)
+                        );
+                    } catch (\Throwable $e) {
+                        $command->getOutput()->writeln(sprintf(
+                            '  => Could not challenge "%s", error: %s',
+                            $challenge->getName(),
+                            $e->getMessage()
+                        ));
+                        continue;
+                    }
 
                     $challenge->updateLocalLogo($imagePath);
                 }
