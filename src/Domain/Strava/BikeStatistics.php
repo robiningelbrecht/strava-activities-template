@@ -45,16 +45,21 @@ final readonly class BikeStatistics
         }, $this->bikes->toArray());
 
         $activitiesWithOtherBike = array_filter($this->activities->toArray(), fn (Activity $activity) => empty($activity->getGearId()));
-        if (0 === count($activitiesWithOtherBike)) {
+        $countActivitiesWithOtherBike = count($activitiesWithOtherBike);
+        if (0 === $countActivitiesWithOtherBike) {
             return $statistics;
         }
+        $distanceWithOtherBike = array_sum(array_map(fn (Activity $activity) => $activity->getDistance(), $activitiesWithOtherBike));
+        $movingTimeInSeconds = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTimeInSeconds(), $activitiesWithOtherBike));
 
         $statistics[] = [
             'name' => 'Other',
             'distance' => array_sum(array_map(fn (Activity $activity) => $activity->getDistance(), $activitiesWithOtherBike)),
-            'numberOfRides' => count($activitiesWithOtherBike),
-            'movingTime' => CarbonInterval::seconds(array_sum(array_map(fn (Activity $activity) => $activity->getMovingTimeInSeconds(), $activitiesWithOtherBike)))->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),
-            'elevation' => array_sum(array_map(fn (Activity $activity) => $activity->getElevation(), $activitiesWithOtherBike)),
+            'numberOfRides' => $countActivitiesWithOtherBike,
+            'movingTime' => CarbonInterval::seconds($movingTimeInSeconds)->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),
+            'elevation' => $distanceWithOtherBike,
+            'averageDistance' => $distanceWithOtherBike / $countActivitiesWithOtherBike,
+            'averageSpeed' => ($distanceWithOtherBike / $movingTimeInSeconds) * 3600,
         ];
 
         return $statistics;
