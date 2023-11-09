@@ -45,17 +45,15 @@ final readonly class DistanceBreakdown
             ];
         }
 
-        /** @var Activity $activity */
         foreach ($this->activities as $activity) {
+            /** @var Activity $activity */
             $distanceBreakdown = ceil($activity->getDistance() / $breakdownOnKm) * $breakdownOnKm;
 
             ++$statistics[$distanceBreakdown]['numberOfRides'];
             $statistics[$distanceBreakdown]['totalDistance'] += $activity->getDistance();
             $statistics[$distanceBreakdown]['totalElevation'] += $activity->getElevation();
             $statistics[$distanceBreakdown]['movingTime'] += $activity->getMovingTimeInSeconds();
-            if ($statistics[$distanceBreakdown]['numberOfRides'] > 0) {
-                $statistics[$distanceBreakdown]['averageDistance'] = $statistics[$distanceBreakdown]['totalDistance'] / $statistics[$distanceBreakdown]['numberOfRides'];
-            }
+            $statistics[$distanceBreakdown]['averageDistance'] = $statistics[$distanceBreakdown]['totalDistance'] / $statistics[$distanceBreakdown]['numberOfRides'];
             if ($statistics[$distanceBreakdown]['movingTime'] > 0) {
                 $statistics[$distanceBreakdown]['averageSpeed'] = ($statistics[$distanceBreakdown]['totalDistance'] / $statistics[$distanceBreakdown]['movingTime']) * 3600;
             }
