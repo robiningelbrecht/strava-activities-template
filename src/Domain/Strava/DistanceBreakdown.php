@@ -40,6 +40,8 @@ final readonly class DistanceBreakdown
                 'totalDistance' => 0,
                 'totalElevation' => 0,
                 'movingTime' => 0,
+                'averageDistance' => 0,
+                'averageSpeed' => 0,
             ];
         }
 
@@ -51,6 +53,12 @@ final readonly class DistanceBreakdown
             $statistics[$distanceBreakdown]['totalDistance'] += $activity->getDistance();
             $statistics[$distanceBreakdown]['totalElevation'] += $activity->getElevation();
             $statistics[$distanceBreakdown]['movingTime'] += $activity->getMovingTimeInSeconds();
+            if ($statistics[$distanceBreakdown]['numberOfRides'] > 0) {
+                $statistics[$distanceBreakdown]['averageDistance'] = $statistics[$distanceBreakdown]['totalDistance'] / $statistics[$distanceBreakdown]['numberOfRides'];
+            }
+            if ($statistics[$distanceBreakdown]['movingTime'] > 0) {
+                $statistics[$distanceBreakdown]['averageSpeed'] = ($statistics[$distanceBreakdown]['totalDistance'] / $statistics[$distanceBreakdown]['movingTime']) * 3600;
+            }
             $statistics[$distanceBreakdown]['movingTimeForHumans'] = CarbonInterval::seconds($statistics[$distanceBreakdown]['movingTime'])->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']);
         }
 
