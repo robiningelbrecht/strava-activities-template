@@ -37,6 +37,8 @@ final readonly class WeekdayStats
                 'totalElevation' => 0,
                 'movingTime' => 0,
                 'percentage' => 0,
+                'averageDistance' => 0,
+                'averageSpeed' => 0,
             ];
         }
 
@@ -48,6 +50,10 @@ final readonly class WeekdayStats
             $statistics[$weekDay]['totalDistance'] += $activity->getDistance();
             $statistics[$weekDay]['totalElevation'] += $activity->getElevation();
             $statistics[$weekDay]['movingTime'] += $activity->getMovingTimeInSeconds();
+            $statistics[$weekDay]['averageDistance'] = $statistics[$weekDay]['totalDistance'] / $statistics[$weekDay]['numberOfRides'];
+            if ($statistics[$weekDay]['movingTime'] > 0) {
+                $statistics[$weekDay]['averageSpeed'] = ($statistics[$weekDay]['totalDistance'] / $statistics[$weekDay]['movingTime']) * 3600;
+            }
             $statistics[$weekDay]['movingTimeForHumans'] = CarbonInterval::seconds($statistics[$weekDay]['movingTime'])->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']);
             $statistics[$weekDay]['percentage'] = round($statistics[$weekDay]['movingTime'] / $totalMovingTime * 100, 2);
         }
