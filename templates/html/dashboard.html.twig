@@ -154,6 +154,11 @@
                                 {{ svgTime }}
                             </div>
                         </th>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center justify-center">
+                                {{ svgSpeed }}
+                            </div>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -169,10 +174,21 @@
                                 {{ statistic.distance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
                             </td>
                             <td class="px-6 py-2 truncate">
+                                {% if statistic.distance > 0 %}
+                                    {{ statistic.averageDistance|number_format(0, '.', ' ') }}<span class="text-xs">km avg</span> /
+                                    {{ statistic.distance|number_format(0, '.', ' ') }}<span class="text-xs">km total</span>
+                                {% else %}
+                                    0<span class="text-xs">km</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-2 truncate">
                                 {{ statistic.elevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
                             </td>
                             <td class="px-6 py-2 truncate">
                                 {{ statistic.movingTime }}
+                            </td>
+                            <td class="px-6 py-2 truncate">
+                                {{ statistic.averageSpeed|number_format(1, '.', ' ') }}<span class="text-xs">km/h</span>
                             </td>
                         </tr>
                     {% endfor %}
@@ -297,6 +313,11 @@
                                 {{ svgTime }}
                             </div>
                         </th>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center justify-center">
+                                {{ svgSpeed }}
+                            </div>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -309,13 +330,21 @@
                                 {{ statistic.numberOfRides }}
                             </td>
                             <td class="px-6 py-2 truncate">
-                                {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                                {% if statistic.totalDistance > 0 %}
+                                    {{ statistic.averageDistance|number_format(0, '.', ' ') }}<span class="text-xs">km avg</span> /
+                                    {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km total</span>
+                                {% else %}
+                                    0<span class="text-xs">km</span>
+                                {% endif %}
                             </td>
                             <td class="px-6 py-2 truncate">
                                 {{ statistic.totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
                             </td>
                             <td class="px-6 py-2 truncate">
                                 {{ statistic.movingTimeForHumans }}
+                            </td>
+                            <td class="px-6 py-2 truncate">
+                                {{ statistic.averageSpeed|number_format(1, '.', ' ') }}<span class="text-xs">km/h</span>
                             </td>
                         </tr>
                     {% endfor %}
@@ -354,6 +383,11 @@
                                 {{ svgTime }}
                             </div>
                         </th>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center justify-center">
+                                {{ svgSpeed }}
+                            </div>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -367,13 +401,21 @@
                                 {{ statistic.numberOfRides }}
                             </td>
                             <td class="px-6 py-2 truncate">
-                                {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                                {% if statistic.totalDistance > 0 %}
+                                    {{ statistic.averageDistance|number_format(0, '.', ' ') }}<span class="text-xs">km avg</span> /
+                                    {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km total</span>
+                                {% else %}
+                                    0<span class="text-xs">km</span>
+                                {% endif %}
                             </td>
                             <td class="px-6 py-2 truncate">
                                 {{ statistic.totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
                             </td>
                             <td class="px-6 py-2 truncate">
                                 {{ statistic.movingTimeForHumans }}
+                            </td>
+                            <td class="px-6 py-2 truncate">
+                                {{ statistic.averageSpeed|number_format(1, '.', ' ') }}<span class="text-xs">km/h</span>
                             </td>
                         </tr>
                     {% endfor %}
@@ -411,6 +453,11 @@
                                 {{ svgTime }}
                             </div>
                         </th>
+                        <th scope="col" class="px-6 py-3">
+                            <div class="flex items-center justify-center">
+                                {{ svgSpeed }}
+                            </div>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -423,13 +470,21 @@
                                 {{ statistic.numberOfRides }}
                             </td>
                             <td class="px-6 py-2 truncate">
-                                {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                                {% if statistic.totalDistance > 0 %}
+                                    {{ statistic.averageDistance|number_format(0, '.', ' ') }}<span class="text-xs">km avg</span> /
+                                    {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km total</span>
+                                {% else %}
+                                    0<span class="text-xs">km</span>
+                                {% endif %}
                             </td>
                             <td class="px-6 py-2 truncate">
                                 {{ statistic.totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
                             </td>
                             <td class="px-6 py-2 truncate">
                                 {{ statistic.movingTimeForHumans }}
+                            </td>
+                            <td class="px-6 py-2 truncate">
+                                {{ statistic.averageSpeed|number_format(1, '.', ' ') }}<span class="text-xs">km/h</span>
                             </td>
                         </tr>
                     {% endfor %}

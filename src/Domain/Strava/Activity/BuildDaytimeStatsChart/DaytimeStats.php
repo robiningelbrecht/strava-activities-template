@@ -37,6 +37,8 @@ final readonly class DaytimeStats
                 'totalElevation' => 0,
                 'movingTime' => 0,
                 'percentage' => 0,
+                'averageDistance' => 0,
+                'averageSpeed' => 0,
             ];
         }
 
@@ -48,6 +50,10 @@ final readonly class DaytimeStats
             $statistics[$daytime->value]['totalDistance'] += $activity->getDistance();
             $statistics[$daytime->value]['totalElevation'] += $activity->getElevation();
             $statistics[$daytime->value]['movingTime'] += $activity->getMovingTimeInSeconds();
+            $statistics[$daytime->value]['averageDistance'] = $statistics[$daytime->value]['totalDistance'] / $statistics[$daytime->value]['numberOfRides'];
+            if ($statistics[$daytime->value]['movingTime'] > 0) {
+                $statistics[$daytime->value]['averageSpeed'] = ($statistics[$daytime->value]['totalDistance'] / $statistics[$daytime->value]['movingTime']) * 3600;
+            }
             $statistics[$daytime->value]['movingTimeForHumans'] = CarbonInterval::seconds($statistics[$daytime->value]['movingTime'])->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']);
             $statistics[$daytime->value]['percentage'] = round($statistics[$daytime->value]['movingTime'] / $totalMovingTime * 100, 2);
         }
