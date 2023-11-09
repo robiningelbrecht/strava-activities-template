@@ -30,13 +30,17 @@ final readonly class BikeStatistics
     {
         $statistics = array_map(function (Gear $bike) {
             $activitiesWithBike = array_filter($this->activities->toArray(), fn (Activity $activity) => $activity->getGearId() == $bike->getId());
+            $countActivitiesWithBike = count($activitiesWithBike);
+            $movingTimeInSeconds = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTimeInSeconds(), $activitiesWithBike));
 
             return [
                 'name' => sprintf('%s%s', $bike->getName(), $bike->isRetired() ? ' ☠️' : ''),
                 'distance' => $bike->getDistanceInKm(),
-                'numberOfRides' => count($activitiesWithBike),
-                'movingTime' => CarbonInterval::seconds(array_sum(array_map(fn (Activity $activity) => $activity->getMovingTimeInSeconds(), $activitiesWithBike)))->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),
+                'numberOfRides' => $countActivitiesWithBike,
+                'movingTime' => CarbonInterval::seconds($movingTimeInSeconds)->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),
                 'elevation' => array_sum(array_map(fn (Activity $activity) => $activity->getElevation(), $activitiesWithBike)),
+                'averageDistance' => $countActivitiesWithBike > 0 ? $bike->getDistanceInKm() / $countActivitiesWithBike : 0,
+                'averageSpeed' => $movingTimeInSeconds > 0 ? ($bike->getDistanceInKm() / $movingTimeInSeconds) * 3600 : 0,
             ];
         }, $this->bikes->toArray());
 
