@@ -3,6 +3,7 @@
 namespace App\Domain\Strava;
 
 use App\Domain\Strava\Activity\Stream\StreamType;
+use App\Domain\Strava\Challenge\ImportChallenges\ImportChallengesCommandHandler;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use GuzzleHttp\Client;
@@ -207,6 +208,9 @@ class Strava
     public function getChallengesOnTrophyCase(): array
     {
         $contents = $this->request('https://raw.githubusercontent.com/'.$_ENV['REPOSITORY_NAME'].'/master/files/strava-challenge-history.html');
+        if (ImportChallengesCommandHandler::DEFAULT_STRAVA_CHALLENGE_HISTORY == trim($contents)) {
+            return [];
+        }
         if (!preg_match_all('/<ul class=\'list-block-grid list-trophies\'>(?<matches>[\s\S]*)<\/ul>/U', $contents, $matches)) {
             throw new \RuntimeException('Could not fetch Strava challenges from trophy case');
         }
