@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava;
 
+use App\Domain\Strava\Challenge\ImportChallenges\ImportChallengesCommandHandler;
 use App\Domain\Strava\Strava;
 use App\Domain\Strava\StravaClientId;
 use App\Domain\Strava\StravaClientSecret;
@@ -333,6 +334,22 @@ class StravaTest extends TestCase
 
         $challenges = $this->strava->getChallengesOnTrophyCase();
         $this->assertMatchesJsonSnapshot($challenges);
+    }
+
+    public function testGetChallengesOnTrophyCaseWithDefaultHtml(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/files/strava-challenge-history.html', $path);
+
+                return new Response(200, [], ImportChallengesCommandHandler::DEFAULT_STRAVA_CHALLENGE_HISTORY);
+            });
+
+        $challenges = $this->strava->getChallengesOnTrophyCase();
+        $this->assertEmpty($challenges);
     }
 
     public function testGetChallengesOnTrophyCaseWhenInvalidHtml(): void

@@ -19,7 +19,7 @@ use League\Flysystem\FilesystemOperator;
 #[AsCommandHandler]
 final readonly class ImportChallengesCommandHandler implements CommandHandler
 {
-    private const DEFAULT_STRAVA_CHALLENGE_HISTORY = '<!-- OVERRIDE ME WITH HTML COPY/PASTED FROM https://www.strava.com/athletes/[YOUR_ATHLETE_ID]/trophy-case -->';
+    public const DEFAULT_STRAVA_CHALLENGE_HISTORY = '<!-- OVERRIDE ME WITH HTML COPY/PASTED FROM https://www.strava.com/athletes/[YOUR_ATHLETE_ID]/trophy-case -->';
 
     public function __construct(
         private Strava $strava,
