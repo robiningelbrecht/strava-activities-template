@@ -171,9 +171,6 @@
                                 {{ statistic.numberOfRides }}
                             </td>
                             <td class="px-6 py-2 truncate">
-                                {{ statistic.distance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
-                            </td>
-                            <td class="px-6 py-2 truncate">
                                 {% if statistic.distance > 0 %}
                                     {{ statistic.averageDistance|number_format(0, '.', ' ') }}<span class="text-xs">km avg</span> /
                                     {{ statistic.distance|number_format(0, '.', ' ') }}<span class="text-xs">km total</span>
