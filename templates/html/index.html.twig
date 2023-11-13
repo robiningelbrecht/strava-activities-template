@@ -193,15 +193,12 @@
         </div>
         <!-- JS LOADED CONTENT -->
         <div id="js-loaded-content"></div>
-        <div id="drawer-activity" aria-labelledby="drawer-activity" aria-hidden="true" class="max-h-[90vh] min-h-[310px] fixed bottom-0 left-0 right-0 z-70 w-full p-4 transition-transform bg-white dark:bg-gray-800 translate-y-full" tabindex="-1">
-            <button type="button" aria-controls="drawer-activity" class="close text-gray-400 bg-transparent rounded-lg text-sm w-8 h-8 absolute top-2.5 right-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
-                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                </svg>
-                <span class="sr-only">Close menu</span>
-            </button>
-            <div id="drawer-content">
+        <div id="activity-detail" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[61] justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-7xl max-h-full">
+                <!-- Modal content -->
+                <div id="activity-content" class="relative bg-white rounded-lg shadow dark:bg-gray-700">
 
+                </div>
             </div>
         </div>
     </main>
@@ -217,46 +214,51 @@
         thresholds: "50px",
     });
 
-    const drawerNode = document.getElementById('drawer-activity');
+    const activityDetailNode = document.getElementById('activity-detail');
+    const modals = [];
     document.addEventListener('pageWasLoaded', () => {
         lazyLoad.update();
 
         initTabs();
         initPopovers();
         initTooltips();
+        initCharts(document.querySelectorAll('[data-echarts-options]'));
 
-        const activityDrawerLinks = document.querySelectorAll('[data-drawer-activity]');
-        activityDrawerLinks.forEach(function(node) {
-            const drawer = new Drawer(drawerNode, {
+        const activityDetailLinks = document.querySelectorAll('[data-activity-detail]');
+        activityDetailLinks.forEach(function(node) {
+            const activityId = node.getAttribute('data-activity-detail')
+            modals[activityId] = new Modal(activityDetailNode, {
                 placement: 'bottom',
-                backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-60',
+                closable: true,
+                backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-[60]',
                 onShow: async () => {
-                    const activityId = node.getAttribute('data-drawer-activity');
                     const response = await fetch('activity/activity-'+activityId+'.html');
-                    drawerNode.querySelector('#drawer-content').innerHTML = await response.text();
-                    document.dispatchEvent(new CustomEvent('activityDrawerWasLoaded', {
+                    activityDetailNode.querySelector('#activity-content').innerHTML = await response.text();
+                    document.dispatchEvent(new CustomEvent('activityDetailWasLoaded', {
                         bubbles: true,
                         cancelable: true,
+                        detail: {
+                            node: activityDetailNode,
+                            activityId: activityId
+                        }
                     }));
                 },
                 onHide: ()=> {
-                    drawerNode.querySelector('#drawer-content').innerHTML = '';
+                    activityDetailNode.querySelector('#activity-content').innerHTML = '';
                 }
             });
             node.addEventListener('click', function (e) {
                 e.preventDefault();
-                drawer.toggle();
-            });
-            drawerNode.querySelector('button.close').addEventListener('click', function (e) {
-                e.preventDefault();
-                drawer.hide();
+                modals[activityId].toggle();
             });
         });
-
-        initCharts(document.querySelectorAll('[data-echarts-options]'));
     });
-    document.addEventListener('activityDrawerWasLoaded', () => {
-        initCharts(drawerNode.querySelectorAll('[data-echarts-options]'));
+    document.addEventListener('activityDetailWasLoaded', (event) => {
+        event.detail.node.querySelector('button.close').addEventListener('click', function (e) {
+            e.preventDefault();
+            modals[event.detail.activityId].hide();
+        });
+        initCharts(event.detail.node.querySelectorAll('[data-echarts-options]'));
         lazyLoad.update();
     });
 
