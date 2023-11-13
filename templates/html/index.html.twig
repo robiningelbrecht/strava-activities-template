@@ -215,6 +215,7 @@
     });
 
     const activityDetailNode = document.getElementById('activity-detail');
+    const modals = [];
     document.addEventListener('pageWasLoaded', () => {
         lazyLoad.update();
 
@@ -225,19 +226,20 @@
 
         const activityDetailLinks = document.querySelectorAll('[data-activity-detail]');
         activityDetailLinks.forEach(function(node) {
-            const modal = new Modal(activityDetailNode, {
+            const activityId = node.getAttribute('data-activity-detail')
+            modals[activityId] = new Modal(activityDetailNode, {
                 placement: 'bottom',
                 closable: true,
                 backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-[60]',
                 onShow: async () => {
-                    const activityId = node.getAttribute('data-activity-detail');
                     const response = await fetch('activity/activity-'+activityId+'.html');
                     activityDetailNode.querySelector('#activity-content').innerHTML = await response.text();
                     document.dispatchEvent(new CustomEvent('activityDetailWasLoaded', {
                         bubbles: true,
                         cancelable: true,
                         detail: {
-                            node: activityDetailNode
+                            node: activityDetailNode,
+                            activityId: activityId
                         }
                     }));
                 },
@@ -247,16 +249,16 @@
             });
             node.addEventListener('click', function (e) {
                 e.preventDefault();
-                modal.toggle();
-            });
-            activityDetailNode.querySelector('button.close').addEventListener('click', function (e) {
-                e.preventDefault();
-                modal.hide();
+                modals[activityId].toggle();
             });
         });
     });
-    document.addEventListener('activityDetailWasLoaded', () => {
-        initCharts(e.detail.node.querySelectorAll('[data-echarts-options]'));
+    document.addEventListener('activityDetailWasLoaded', (event) => {
+        event.detail.node.querySelector('button.close').addEventListener('click', function (e) {
+            e.preventDefault();
+            modals[event.detail.activityId].hide();
+        });
+        initCharts(event.detail.node.querySelectorAll('[data-echarts-options]'));
         lazyLoad.update();
     });
 
