@@ -135,6 +135,10 @@ For any feedback, help or feature requests, please [open a new issue](https://gi
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
 
+#### [2023-11-13]
+
+* Changed activity drawer with to modal
+
 #### [2023-11-09]
 
 * Added average speed and distance to multiple stats
