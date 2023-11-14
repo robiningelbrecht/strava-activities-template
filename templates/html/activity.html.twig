@@ -94,7 +94,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        <tr class="border-b dark:border-gray-600">
                             <th class="px-6 py-3">
                                 Avg
                             </th>
@@ -218,5 +218,15 @@
                 </div>
             </div>
         {% endif %}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div>
+                <h3 class="font-bold mb-1 text-center">Power distribution</h3>
+                <div class="h-[400px]" data-echarts-options='{{ heartRateDistributionChart }}'></div>
+            </div>
+            <div>
+                <h3 class="font-bold mb-1 text-center">Heart rate distribution</h3>
+                <div class="h-[400px]" data-echarts-options='{{ heartRateDistributionChart }}'></div>
+            </div>
+        </div>
     </div>
 {% endautoescape %}
