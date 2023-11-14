@@ -22,6 +22,7 @@ use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Domain\Strava\Athlete\AthleteWeightRepository;
+use App\Domain\Strava\Athlete\HeartRateDistributionChartBuilder;
 use App\Domain\Strava\Athlete\HeartRateZone;
 use App\Domain\Strava\Athlete\TimeInHeartRateZoneChartBuilder;
 use App\Domain\Strava\BikeStatistics;
@@ -266,15 +267,8 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 $this->twig->load('html/activity.html.twig')->render([
                     'timeIntervals' => ActivityPowerRepository::TIME_INTERVAL_IN_SECONDS,
                     'activity' => $activity,
-                    'timeInHeartRateZoneChart' => Json::encode(
-                        TimeInHeartRateZoneChartBuilder::fromTimeInZones(
-                            timeInSecondsInHeartRateZoneOne: $this->activityHeartRateRepository->findTimeInSecondsInHeartRateZoneForActivity($activity->getId(), HeartRateZone::ONE),
-                            timeInSecondsInHeartRateZoneTwo: $this->activityHeartRateRepository->findTimeInSecondsInHeartRateZoneForActivity($activity->getId(), HeartRateZone::TWO),
-                            timeInSecondsInHeartRateZoneThree: $this->activityHeartRateRepository->findTimeInSecondsInHeartRateZoneForActivity($activity->getId(), HeartRateZone::THREE),
-                            timeInSecondsInHeartRateZoneFour: $this->activityHeartRateRepository->findTimeInSecondsInHeartRateZoneForActivity($activity->getId(), HeartRateZone::FOUR),
-                            timeInSecondsInHeartRateZoneFive: $this->activityHeartRateRepository->findTimeInSecondsInHeartRateZoneForActivity($activity->getId(), HeartRateZone::FIVE),
-                        )
-                        ->build(),
+                    'heartRateDistributionChart' => Json::encode(
+                        HeartRateDistributionChartBuilder::fromHeartRateData()->build(),
                     ),
                 ]),
             );
