@@ -19,7 +19,6 @@ use App\Domain\Strava\Activity\Image\ImageRepository;
 use App\Domain\Strava\Activity\Stream\ActivityHeartRateRepository;
 use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
-use App\Domain\Strava\Activity\Stream\StreamChartBuilder;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Domain\Strava\Athlete\AthleteWeightRepository;
@@ -267,11 +266,6 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 $this->twig->load('html/activity.html.twig')->render([
                     'timeIntervals' => ActivityPowerRepository::TIME_INTERVAL_IN_SECONDS,
                     'activity' => $activity,
-                    'streamChart' => $streams->canBuildChartData() ? Json::encode(
-                        StreamChartBuilder::fromStreams($streams)
-                            ->withoutBackgroundColor()
-                            ->build()
-                    ) : null,
                     'timeInHeartRateZoneChart' => Json::encode(
                         TimeInHeartRateZoneChartBuilder::fromTimeInZones(
                             timeInSecondsInHeartRateZoneOne: $this->activityHeartRateRepository->findTimeInSecondsInHeartRateZoneForActivity($activity->getId(), HeartRateZone::ONE),

@@ -137,7 +137,7 @@ All notable changes to this project will be documented in this file.
 
 #### [2023-11-13]
 
-* Changed activity drawer with to modal
+* Changed activity drawer with modal
 
 #### [2023-11-09]
 
