@@ -265,7 +265,6 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             $this->filesystem->write(
                 'build/html/activity/activity-'.$activity->getId().'.html',
                 $this->twig->load('html/activity.html.twig')->render([
-                    'timeIntervals' => ActivityPowerRepository::TIME_INTERVAL_IN_SECONDS,
                     'activity' => $activity,
                     'heartRateDistributionChart' => Json::encode(
                         HeartRateDistributionChartBuilder::fromHeartRateData()->build(),

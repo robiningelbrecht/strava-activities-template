@@ -25,6 +25,7 @@ final readonly class HeartRateDistributionChartBuilder
                 'left' => '1%',
                 'right' => '1%',
                 'bottom' => '7%',
+                'height' => '375px',
                 'containLabel' => false,
             ],
             'xAxis' => [
@@ -41,9 +42,6 @@ final readonly class HeartRateDistributionChartBuilder
                     'showMinLabel' => true,
                     'showMaxLabel' => true,
                 ],
-                'name' => 'BPM',
-                'nameLocation' => 'middle',
-                'nameGap' => 30,
             ],
             'yAxis' => [
                 'show' => false,
