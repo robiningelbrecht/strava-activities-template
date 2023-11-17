@@ -4,7 +4,13 @@ const path = require('path');
 
 const run = async () => {
     const directoryPath = path.join(__dirname, 'build/charts');
-    const files = fs.readdirSync(directoryPath);
+    let files = [];
+    try {
+        files = fs.readdirSync(directoryPath);
+    } catch (err) {
+        process.exit(0);
+    }
+
     files.forEach(function (file) {
         if(file.endsWith('.json')){
             const absolutePath = directoryPath+'/'+file;
