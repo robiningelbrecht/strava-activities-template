@@ -17,6 +17,7 @@ use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\WeeklyDistanceChartBuild
 use App\Domain\Strava\Activity\HeartRateDistributionChartBuilder;
 use App\Domain\Strava\Activity\Image\Image;
 use App\Domain\Strava\Activity\Image\ImageRepository;
+use App\Domain\Strava\Activity\PowerDistributionChartBuilder;
 use App\Domain\Strava\Activity\Stream\ActivityHeartRateRepository;
 use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
@@ -263,6 +264,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             }
 
             $heartRateData = $this->activityHeartRateRepository->findTimeInSecondsPerHeartRateForActivity($activity->getId());
+            $powerData = $this->activityPowerRepository->findTimeInSecondsPerWattageForActivity($activity->getId());
 
             $this->filesystem->write(
                 'build/html/activity/activity-'.$activity->getId().'.html',
@@ -273,6 +275,12 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                             heartRateData: $heartRateData,
                             averageHeartRate: $activity->getAverageHeartRate(),
                             athleteMaxHeartRate: $activity->getAthleteMaxHeartRate()
+                        )->build(),
+                    ) : null,
+                    'powerDistributionChart' => $powerData ? Json::encode(
+                        PowerDistributionChartBuilder::fromPowerData(
+                            powerData: $powerData,
+                            averagePower: $activity->getAveragePower(),
                         )->build(),
                     ) : null,
                 ]),

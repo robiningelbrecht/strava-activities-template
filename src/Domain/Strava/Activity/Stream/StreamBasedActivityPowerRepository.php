@@ -58,6 +58,30 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
     }
 
     /**
+     * @return array<int, int>
+     */
+    public function findTimeInSecondsPerWattageForActivity(int $activityId): array
+    {
+        if (!$this->activityStreamRepository->hasOneForActivityAndStreamType(
+            activityId: $activityId,
+            streamType: StreamType::WATTS
+        )) {
+            return [];
+        }
+
+        $streams = $this->activityStreamRepository->findByActivityAndStreamTypes(
+            activityId: $activityId,
+            streamTypes: StreamTypeCollection::fromArray([StreamType::WATTS])
+        );
+        /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $stream */
+        $stream = $streams->getByStreamType(StreamType::WATTS);
+        $powerStreamForActivity = array_count_values($stream->getData());
+        ksort($powerStreamForActivity);
+
+        return $powerStreamForActivity;
+    }
+
+    /**
      * @return array<mixed>
      */
     public function findBest(): array

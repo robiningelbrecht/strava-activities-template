@@ -15,4 +15,9 @@ interface ActivityPowerRepository
      * @return array<mixed>
      */
     public function findBest(): array;
+
+    /**
+     * @return array<int, int>
+     */
+    public function findTimeInSecondsPerWattageForActivity(int $activityId): array;
 }
