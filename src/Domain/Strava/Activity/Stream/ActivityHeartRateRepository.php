@@ -8,7 +8,10 @@ use App\Domain\Strava\Athlete\HeartRateZone;
 
 interface ActivityHeartRateRepository
 {
-    public function findTimeInSecondsInHeartRateZoneForActivity(int $activityId, HeartRateZone $heartRateZone): int;
-
     public function findTotalTimeInSecondsInHeartRateZone(HeartRateZone $heartRateZone): int;
+
+    /**
+     * @return array<int, int>
+     */
+    public function findTimeInSecondsPerHeartRateForActivity(int $activityId): array;
 }

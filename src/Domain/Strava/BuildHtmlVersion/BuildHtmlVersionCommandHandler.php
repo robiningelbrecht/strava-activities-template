@@ -175,9 +175,9 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                         ftps: $allFtps,
                         now: SerializableDateTime::fromDateTimeImmutable($this->clock->now())
                     )
-                    ->withoutBackgroundColor()
-                    ->withAnimation(true)
-                    ->build()
+                        ->withoutBackgroundColor()
+                        ->withAnimation(true)
+                        ->build()
                 ) : null,
                 'timeInHeartRateZoneChart' => Json::encode(
                     TimeInHeartRateZoneChartBuilder::fromTimeInZones(
@@ -187,7 +187,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                         timeInSecondsInHeartRateZoneFour: $this->activityHeartRateRepository->findTotalTimeInSecondsInHeartRateZone(HeartRateZone::FOUR),
                         timeInSecondsInHeartRateZoneFive: $this->activityHeartRateRepository->findTotalTimeInSecondsInHeartRateZone(HeartRateZone::FIVE),
                     )
-                    ->build(),
+                        ->build(),
                 ),
             ]),
         );
@@ -262,13 +262,19 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 $activity->enrichWithMaxCadence(max($cadenceStream->getData()));
             }
 
+            $heartRateData = $this->activityHeartRateRepository->findTimeInSecondsPerHeartRateForActivity($activity->getId());
+
             $this->filesystem->write(
                 'build/html/activity/activity-'.$activity->getId().'.html',
                 $this->twig->load('html/activity.html.twig')->render([
                     'activity' => $activity,
-                    'heartRateDistributionChart' => Json::encode(
-                        HeartRateDistributionChartBuilder::fromHeartRateData()->build(),
-                    ),
+                    'heartRateDistributionChart' => $heartRateData ? Json::encode(
+                        HeartRateDistributionChartBuilder::fromHeartRateData(
+                            heartRateData: $heartRateData,
+                            averageHeartRate: $activity->getAverageHeartRate(),
+                            athleteMaxHeartRate: $activity->getAthleteMaxHeartRate()
+                        )->build(),
+                    ) : null,
                 ]),
             );
         }
