@@ -29,11 +29,28 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
         return array_sum(array_map(fn (array $heartRateZones) => $heartRateZones[$heartRateZone->value], $cachedHeartRateZones));
     }
 
-    public function findTimeInSecondsInHeartRateZoneForActivity(int $activityId, HeartRateZone $heartRateZone): int
+    /**
+     * @return array<int, int>
+     */
+    public function findTimeInSecondsPerHeartRateForActivity(int $activityId): array
     {
-        $cachedHeartRateZones = $this->getCachedHeartRateZones();
+        if (!$this->activityStreamRepository->hasOneForActivityAndStreamType(
+            activityId: $activityId,
+            streamType: StreamType::HEART_RATE
+        )) {
+            return [];
+        }
 
-        return $cachedHeartRateZones[$activityId][$heartRateZone->value];
+        $streams = $this->activityStreamRepository->findByActivityAndStreamTypes(
+            activityId: $activityId,
+            streamTypes: StreamTypeCollection::fromArray([StreamType::HEART_RATE])
+        );
+        /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $stream */
+        $stream = $streams->getByStreamType(StreamType::HEART_RATE);
+        $heartRateStreamForActivity = array_count_values($stream->getData());
+        ksort($heartRateStreamForActivity);
+
+        return $heartRateStreamForActivity;
     }
 
     /**

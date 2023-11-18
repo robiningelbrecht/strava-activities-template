@@ -6,13 +6,27 @@ namespace App\Domain\Strava\Activity;
 
 final readonly class HeartRateDistributionChartBuilder
 {
-    private function __construct()
-    {
+    private function __construct(
+        /** @var array<int, int> */
+        private array $heartRateData,
+        private int $averageHeartRate,
+        private int $athleteMaxHeartRate,
+    ) {
     }
 
-    public static function fromHeartRateData(): self
-    {
-        return new self();
+    /**
+     * @param array<int, int> $heartRateData
+     */
+    public static function fromHeartRateData(
+        array $heartRateData,
+        int $averageHeartRate,
+        int $athleteMaxHeartRate,
+    ): self {
+        return new self(
+            heartRateData: $heartRateData,
+            averageHeartRate: $averageHeartRate,
+            athleteMaxHeartRate: $athleteMaxHeartRate,
+        );
     }
 
     /**
@@ -20,17 +34,50 @@ final readonly class HeartRateDistributionChartBuilder
      */
     public function build(): array
     {
+        // Calculate all data related things.
+        $heartRateData = $this->heartRateData;
+        $heartRates = array_keys($heartRateData);
+        $minHeartRate = (int) min(60, floor(min($heartRates) / 10) * 10);
+        $maxHeartRate = (int) max(200, ceil(max($heartRates) / 10) * 10);
+
+        foreach (range($minHeartRate, $maxHeartRate) as $heartRate) {
+            if (array_key_exists($heartRate, $this->heartRateData)) {
+                continue;
+            }
+            $heartRateData[$heartRate] = 0;
+        }
+        ksort($heartRateData);
+
+        $step = (int) floor(($maxHeartRate - $minHeartRate) / 24) ?: 1;
+        $xAxisValues = range($minHeartRate, $maxHeartRate, $step);
+        if (end($xAxisValues) < $maxHeartRate) {
+            $xAxisValues[] = $maxHeartRate;
+        }
+
+        $totalTimeInSeconds = array_sum($heartRateData);
+        $data = [];
+        foreach ($xAxisValues as $axisValue) {
+            $data[] = array_sum(array_splice($heartRateData, 0, $step)) / $totalTimeInSeconds * 100;
+        }
+        $yAxisMax = max($data) * 1.40;
+        $xAxisValueAverageHeartRate = array_search(floor($this->averageHeartRate / $step) * $step, $xAxisValues);
+
+        // Calculate the mark areas to display the zones.
+        $oneHeartBeatPercentage = 100 / ($maxHeartRate - $minHeartRate);
+        $beforeZoneOne = (($this->athleteMaxHeartRate / 2) - $minHeartRate) * $oneHeartBeatPercentage;
+        $percentagePerZone = (100 - $beforeZoneOne - (($maxHeartRate - $this->athleteMaxHeartRate) * $oneHeartBeatPercentage)) / 5;
+
         return [
             'grid' => [
                 'left' => '1%',
                 'right' => '1%',
                 'bottom' => '7%',
-                'height' => '375px',
+                'height' => '325px',
                 'containLabel' => false,
             ],
             'xAxis' => [
                 'type' => 'category',
-                'data' => [60, 64, 68, 72, 76, 80, 84, 88, 92, 96, 100, 104, 108, 112, 116, 120, 124, 128, 132, 136, 140, 144, 148, 152, 156, 160, 164, 168, 172, 176, 180, 184, 188, 192, 196, 200],
+                'data' => $xAxisValues,
                 'axisTick' => [
                     'show' => false,
                 ],
@@ -40,17 +87,17 @@ final readonly class HeartRateDistributionChartBuilder
                 'axisLabel' => [
                     'interval' => 2,
                     'showMinLabel' => true,
-                    'showMaxLabel' => true,
+                    // 'showMaxLabel' => true,
                 ],
             ],
             'yAxis' => [
                 'show' => false,
                 'min' => 0,
-                'max' => 120,
+                'max' => $yAxisMax,
             ],
             'series' => [
                 [
-                    'data' => [84, 22, 38, 40, 5, 63, 12, 7, 53, 12, 65, 38, 22, 52, 63, 1, 47, 85, 84, 68, 79, 92, 40, 49, 48, 97, 100, 10, 62, 28, 8, 36, 6, 18, 95, 31, 47, 91, 31, 94, 27, 88, 50, 35, 47, 46, 28, 40, 46, 29, 17, 45, 79, 52, 66, 86, 8, 51, 87, 84, 49, 13, 61, 65, 4, 55, 32, 9, 36, 35, 54, 8, 92, 57, 57, 52, 3, 82, 31, 54, 11, 6, 4, 40, 86, 85, 46, 89, 82, 62, 42, 83, 4, 99, 38, 61, 77, 77, 68, 1, 2, 3, 59, 93, 67, 82, 36, 46, 42, 94, 70, 19, 70, 39, 48, 19, 7, 74, 45, 26, 80, 94, 8, 91, 99, 4, 18, 57, 24, 57, 50, 87, 65, 16, 18, 23, 48, 47, 90, 71, 35],
+                    'data' => $data,
                     'type' => 'bar',
                     'barCategoryGap' => 1,
                     'itemStyle' => [
@@ -79,8 +126,8 @@ final readonly class HeartRateDistributionChartBuilder
                         ],
                         'data' => [
                             [
-                                'value' => 120,
-                                'coord' => [20, 100],
+                                'value' => $this->averageHeartRate,
+                                'coord' => [$xAxisValueAverageHeartRate, $yAxisMax * 0.8],
                             ],
                         ],
                     ],
@@ -97,8 +144,8 @@ final readonly class HeartRateDistributionChartBuilder
                         ],
                         'data' => [
                             [
-                                ['xAxis' => 20, 'yAxis' => 0],
-                                ['xAxis' => 20, 'yAxis' => 100],
+                                ['xAxis' => $xAxisValueAverageHeartRate, 'yAxis' => 0],
+                                ['xAxis' => $xAxisValueAverageHeartRate, 'yAxis' => $yAxisMax * 0.8],
                             ],
                         ],
                         'silent' => true,
@@ -112,7 +159,7 @@ final readonly class HeartRateDistributionChartBuilder
                                     ],
                                 ],
                                 [
-                                    'x' => '23.1%',
+                                    'x' => $beforeZoneOne.'%',
                                 ],
                             ],
                             [
@@ -129,10 +176,10 @@ final readonly class HeartRateDistributionChartBuilder
                                     'itemStyle' => [
                                         'color' => '#DF584A',
                                     ],
-                                    'x' => '23.1%',
+                                    'x' => $beforeZoneOne.'%',
                                 ],
                                 [
-                                    'x' => '36.24%',
+                                    'x' => ($beforeZoneOne + $percentagePerZone).'%',
                                 ],
                             ],
                             [
@@ -149,10 +196,10 @@ final readonly class HeartRateDistributionChartBuilder
                                     'itemStyle' => [
                                         'color' => '#D63522',
                                     ],
-                                    'x' => '36.24%',
+                                    'x' => ($beforeZoneOne + $percentagePerZone).'%',
                                 ],
                                 [
-                                    'x' => '49.38%',
+                                    'x' => ($beforeZoneOne + ($percentagePerZone * 2)).'%',
                                 ],
                             ],
                             [
@@ -169,10 +216,10 @@ final readonly class HeartRateDistributionChartBuilder
                                     'itemStyle' => [
                                         'color' => '#BD2D22',
                                     ],
-                                    'x' => '49.38%',
+                                    'x' => ($beforeZoneOne + ($percentagePerZone * 2)).'%',
                                 ],
                                 [
-                                    'x' => '62.52%',
+                                    'x' => ($beforeZoneOne + ($percentagePerZone * 3)).'%',
                                 ],
                             ],
                             [
@@ -189,10 +236,10 @@ final readonly class HeartRateDistributionChartBuilder
                                     'itemStyle' => [
                                         'color' => '#942319',
                                     ],
-                                    'x' => '62.52%',
+                                    'x' => ($beforeZoneOne + ($percentagePerZone * 3)).'%',
                                 ],
                                 [
-                                    'x' => '75.66%',
+                                    'x' => ($beforeZoneOne + ($percentagePerZone * 4)).'%',
                                 ],
                             ],
                             [
@@ -209,7 +256,7 @@ final readonly class HeartRateDistributionChartBuilder
                                     'itemStyle' => [
                                         'color' => '#6A1009',
                                     ],
-                                    'x' => '75.66%',
+                                    'x' => ($beforeZoneOne + ($percentagePerZone * 4)).'%',
                                 ],
                                 [
                                 ],
