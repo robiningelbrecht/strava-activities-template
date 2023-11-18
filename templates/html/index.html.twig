@@ -259,6 +259,7 @@
             modals[event.detail.activityId].hide();
         });
         initCharts(event.detail.node.querySelectorAll('[data-echarts-options]'));
+        initPopovers();
         lazyLoad.update();
     });
 
