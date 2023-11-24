@@ -1,0 +1,85 @@
+{% extends "html/base.html.twig" %}
+
+{% block breadcrumbs %}
+    <li>
+        <div class="flex items-center">
+            <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+            <a href="#" data-router-navigate="gear-stats.html" class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white">Gear stats</a>
+        </div>
+    </li>
+{% endblock %}
+{% block content %}
+    {% autoescape false %}
+        <!-- GEAR STATS -->
+        <div class="grid grid-cols-1 mb-4">
+            <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <h3 class="mb-4 text-lg font-semibold">
+                    Stats per bike
+                </h3>
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-2 py-3">
+
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                # rides
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                <div class="flex items-center justify-center">
+                                    {{ svgDistance }}
+                                </div>
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                <div class="flex items-center justify-center">
+                                    {{ svgElevation }}
+                                </div>
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                <div class="flex items-center justify-center">
+                                    {{ svgTime }}
+                                </div>
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                <div class="flex items-center justify-center">
+                                    {{ svgSpeed }}
+                                </div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for statistic in bikeStatistics.getRows() %}
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ statistic.name }}
+                                </th>
+                                <td class="px-6 py-2">
+                                    {{ statistic.numberOfRides }}
+                                </td>
+                                <td class="px-6 py-2 truncate">
+                                    {% if statistic.distance > 0 %}
+                                        {{ statistic.averageDistance|number_format(0, '.', ' ') }}<span class="text-xs">km avg</span> /
+                                        {{ statistic.distance|number_format(0, '.', ' ') }}<span class="text-xs">km total</span>
+                                    {% else %}
+                                        0<span class="text-xs">km</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-2 truncate">
+                                    {{ statistic.elevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                                </td>
+                                <td class="px-6 py-2 truncate">
+                                    {{ statistic.movingTime }}
+                                </td>
+                                <td class="px-6 py-2 truncate">
+                                    {{ statistic.averageSpeed|number_format(1, '.', ' ') }}<span class="text-xs">km/h</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endautoescape %}
+{% endblock %}

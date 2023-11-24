@@ -142,10 +142,6 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                         ->withoutBackgroundColor()
                         ->build(),
                 ),
-                'bikeStatistics' => BikeStatistics::fromActivitiesAndGear(
-                    activities: $allActivities,
-                    bikes: $allBikes
-                ),
                 'powerOutputs' => $this->activityPowerRepository->findBest(),
                 'activityHeatmapChart' => Json::encode(
                     ActivityHeatmapChartBuilder::fromActivities(
@@ -244,6 +240,16 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     activities: $allActivities,
                     challenges: $allChallenges,
                     now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
+                ),
+            ]),
+        );
+
+        $this->filesystem->write(
+            'build/html/gear-stats.html',
+            $this->twig->load('html/gear-stats.html.twig')->render([
+                'bikeStatistics' => BikeStatistics::fromActivitiesAndGear(
+                    activities: $allActivities,
+                    bikes: $allBikes
                 ),
             ]),
         );
