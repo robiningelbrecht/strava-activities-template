@@ -9,135 +9,128 @@
     </li>
 {% endblock %}
 {% block content %}
-{% autoescape false %}
-    <!-- MONTHLY STATS -->
-    <div class="grid grid-cols-1 mb-4">
-        <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <div class="relative overflow-x-auto">
-                <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-2 py-3">
+    {% autoescape false %}
+        <!-- MONTHLY STATS -->
+        <div class="grid grid-cols-1 mb-4">
+            <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-2 py-3">
 
-                        </th>
-                        <th scope="col" class="px-2 py-3">
-                            # rides
-                        </th>
-                        <th scope="col" class="px-2 py-3">
-                            <div class="flex items-center justify-center">
-                                {{ svgDistance }}
-                            </div>
-                        </th>
-                        <th scope="col" class="px-2 py-3">
-                            <div class="flex items-center justify-center">
-                                {{ svgBikeLogo }}
-                            </div>
-                        </th>
-                        <th scope="col" class="px-2 py-3">
-                            <div class="flex items-center justify-center">
-                                {{ svgElevation }}
-                            </div>
-                        </th>
-                        <th scope="col" class="px-2 py-3">
-                            <div class="flex items-center justify-center">
-                                {{ svgTime }}
-                            </div>
-                        </th>
-                        <th scope="col" class="px-2 py-3">
-                            <div class="flex items-center justify-center">
-                                {{ svgChallenges }}
-                            </div>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for statistic in monthlyStatistics.getRows() %}
-                    <tr class="{{ cycle(['bg-white border-b dark:bg-gray-900 dark:border-gray-700', 'border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700'], loop.index0) }}">
-                        <th scope="row" class="w-36 px-2 py-2 text-right font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ statistic.month }}
-                        </th>
-                        <td class="px-2 py-2">
-                            {{ statistic.numberOfRides }}
-                        </td>
-                        <td class="px-2 py-2">
-                            {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
-                        </td>
-                        <td class="px-2 py-2 w-64">
-                            <ul class="space-y-1 text-gray-500 list-inside dark:text-gray-400">
-                                {% for gear in statistic.gears %}
-                                    <li class="flex items-center justify-center">
-                                        <svg class="w-3.5 h-3.5 mr-2 text-gray-500 dark:text-gray-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                                        </svg>
-                                        <div>
-                                            <span class="font-semibold">{{ gear.name ?: 'Other' }}</span>: {{ gear.distance }}<span class="text-xs">km</span>
-                                        </div>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </td>
-                        <td class="px-2 py-2">
-                            {{ statistic.totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
-                        </td>
-                        <td class="px-2 py-2">
-                            {{ statistic.movingTime }}
-                        </td>
-                        <td class="px-2 py-2">
-                            {{ statistic.challengesCompleted }}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                    <tfoot>
-                    <tr class="font-semibold text-gray-900 dark:text-white border-t-4 dark:border-gray-700">
-                        <th scope="row" class="px-2 py-2 text-base" rowspan="3">
-                            Totals
-                        </th>
-                        <td class="px-2 py-2">
-                            Virtual/Indoor
-                        </td>
-                        <td class="px-2 py-2" colspan="2">
-                            {{ monthlyStatistics.getTotalsForZwift().totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
-                        </td>
-                        <td class="px-2 py-2">
-                            {{ monthlyStatistics.getTotalsForZwift().totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
-                        </td>
-                        <td class="px-2 py-2" colspan="2">
-                            {{ monthlyStatistics.getTotalsForZwift().movingTime }}
-                        </td>
-                    </tr>
-                    <tr class="font-semibold text-gray-900 dark:text-white">
-                        <td class="px-2 py-2">
-                            Outside
-                        </td>
-                        <td class="px-2 py-2" colspan="2">
-                            {{ monthlyStatistics.getTotalsForOutsideBikeRides().totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
-                        </td>
-                        <td class="px-2 py-2">
-                            {{ monthlyStatistics.getTotalsForOutsideBikeRides().totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
-                        </td>
-                        <td class="px-2 py-2" colspan="2">
-                            {{ monthlyStatistics.getTotalsForOutsideBikeRides().movingTime }}
-                        </td>
-                    </tr>
-                    <tr class="font-semibold text-gray-900 dark:text-white">
-                        <td class="px-2 py-2">
-                            Total
-                        </td>
-                        <td class="px-2 py-2" colspan="2">
-                            {{ monthlyStatistics.getTotals().totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
-                        </td>
-                        <td class="px-2 py-2">
-                            {{ monthlyStatistics.getTotals().totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
-                        </td>
-                        <td class="px-2 py-2" colspan="2">
-                            {{ monthlyStatistics.getTotals().movingTime }}
-                        </td>
-                    </tr>
-                    </tfoot>
-                </table>
+                            </th>
+                            <th scope="col" class="px-2 py-3">
+                                # rides
+                            </th>
+                            <th scope="col" class="px-2 py-3">
+                                <div class="flex items-center justify-center">
+                                    {{ svgDistance }}
+                                </div>
+                            </th>
+                            <th scope="col" class="px-2 py-3">
+                                <div class="flex items-center justify-center">
+                                    {{ svgElevation }}
+                                </div>
+                            </th>
+                            <th scope="col" class="px-2 py-3">
+                                <div class="flex items-center justify-center">
+                                    {{ svgTime }}
+                                </div>
+                            </th>
+                            <th scope="col" class="px-2 py-3">
+                                <div class="flex items-center justify-center">
+                                    {{ svgChallenges }}
+                                </div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for statistic in monthlyStatistics.getRows() %}
+                            <tr class="{{ cycle(['bg-white border-b dark:bg-gray-900 dark:border-gray-700', 'border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700'], loop.index0) }}">
+                                <th scope="row" class="w-36 px-2 py-2 text-right font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ statistic.month }}
+                                </th>
+                                <td class="px-2 py-2">
+                                    {{ statistic.numberOfRides }}
+                                </td>
+                                <td class="px-2 py-2">
+                                    {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                                </td>
+                                <td class="px-2 py-2">
+                                    {{ statistic.totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                                </td>
+                                <td class="px-2 py-2">
+                                    {{ statistic.movingTime }}
+                                </td>
+                                <td class="px-2 py-2">
+                                    {{ statistic.challengesCompleted }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <tr class="font-semibold text-gray-900 dark:text-white border-t-4 dark:border-gray-700">
+                            <td class="px-2 py-2 text-right">
+                                Virtual/Indoor
+                            </td>
+                            <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotalsForZwift().numberOfRides }}
+                            </td>
+                            <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotalsForZwift().totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                            </td>
+                            <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotalsForZwift().totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                            </td>
+                            <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotalsForZwift().movingTime }}
+                            </td>
+                            <td class="px-2 py-2">
+                            </td>
+                        </tr>
+                        <tr class="font-semibold text-gray-900 dark:text-white">
+                            <td class="px-2 py-2 text-right">
+                                Outside
+                            </td>
+                            <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotalsForOutsideBikeRides().numberOfRides }}
+                            </td>
+                            <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotalsForOutsideBikeRides().totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                            </td>
+                            <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotalsForOutsideBikeRides().totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                            </td>
+                            <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotalsForOutsideBikeRides().movingTime }}
+                            </td>
+                            <td class="px-2 py-2">
+                            </td>
+                        </tr>
+                        <tr class="font-semibold text-gray-900 dark:text-white">
+                            <td class="px-2 py-2 text-right">
+                                Total
+                            </td>
+                            <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotals().numberOfRides }}
+                            </td>
+                            <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotals().totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                            </td>
+                            <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotals().totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                            </td>
+                            <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotals().movingTime }}
+                            </td>
+                            <td class="px-2 py-2">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-{% endautoescape %}
+    {% endautoescape %}
 {% endblock %}
