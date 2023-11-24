@@ -26,12 +26,13 @@ use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Domain\Strava\Athlete\AthleteWeightRepository;
 use App\Domain\Strava\Athlete\HeartRateZone;
 use App\Domain\Strava\Athlete\TimeInHeartRateZoneChartBuilder;
-use App\Domain\Strava\BikeStatistics;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
 use App\Domain\Strava\Ftp\FtpHistoryChartBuilder;
 use App\Domain\Strava\Ftp\FtpRepository;
+use App\Domain\Strava\Gear\DistanceOverTimePerGearChartBuilder;
 use App\Domain\Strava\Gear\GearRepository;
+use App\Domain\Strava\Gear\GearStatistics;
 use App\Domain\Strava\MonthlyStatistics;
 use App\Domain\Strava\Trivia;
 use App\Infrastructure\Attribute\AsCommandHandler;
@@ -247,9 +248,14 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $this->filesystem->write(
             'build/html/gear-stats.html',
             $this->twig->load('html/gear-stats.html.twig')->render([
-                'bikeStatistics' => BikeStatistics::fromActivitiesAndGear(
+                'bikeStatistics' => GearStatistics::fromActivitiesAndGear(
                     activities: $allActivities,
                     bikes: $allBikes
+                ),
+                'distanceOverTimePerGearChart' => Json::encode(
+                    DistanceOverTimePerGearChartBuilder::fromGear(
+                    )
+                        ->build()
                 ),
             ]),
         );

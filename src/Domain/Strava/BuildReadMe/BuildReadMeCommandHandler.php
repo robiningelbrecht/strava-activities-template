@@ -8,10 +8,10 @@ use App\Domain\Strava\Activity\BuildDaytimeStatsChart\DaytimeStats;
 use App\Domain\Strava\Activity\BuildEddingtonChart\Eddington;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
-use App\Domain\Strava\BikeStatistics;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
 use App\Domain\Strava\Gear\GearRepository;
+use App\Domain\Strava\Gear\GearStatistics;
 use App\Domain\Strava\MonthlyStatistics;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
@@ -65,7 +65,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
                 challenges: $allChallenges,
                 now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
             ),
-            'bikeStatistics' => BikeStatistics::fromActivitiesAndGear(
+            'bikeStatistics' => GearStatistics::fromActivitiesAndGear(
                 activities: $allActivities,
                 bikes: $allBikes
             ),

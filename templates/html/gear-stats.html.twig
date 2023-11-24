@@ -12,7 +12,8 @@
     {% autoescape false %}
         <!-- GEAR STATS -->
         <div class="grid grid-cols-1 mb-4">
-            <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+            <!-- STATS PER GEAR -->
+            <div class="mb-4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <h3 class="mb-4 text-lg font-semibold">
                     Stats per bike
                 </h3>
@@ -78,6 +79,15 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <!-- DISTANCE OVER TIME PER BIKE -->
+            <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <h3 class="mb-4 text-lg font-semibold">
+                    Distance over time per bike
+                </h3>
+                <div class="relative overflow-x-auto">
+                    <div class="h-[32rem]" data-echarts-options='{{ distanceOverTimePerGearChart }}'></div>
                 </div>
             </div>
         </div>
