@@ -99,7 +99,7 @@ final readonly class DistanceOverTimePerGearChartBuilder
             'grid' => [
                 'left' => '3%',
                 'right' => '4%',
-                'bottom' => '3%',
+                'bottom' => '50px',
                 'containLabel' => true,
             ],
             'tooltip' => [
