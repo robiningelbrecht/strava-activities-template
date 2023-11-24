@@ -64,7 +64,7 @@ class Gear
 
     public function getName(): string
     {
-        return $this->data['name'];
+        return sprintf('%s%s', $this->data['name'], $this->isRetired() ? ' ☠️' : '');
     }
 
     public function getDistanceInMeter(): int

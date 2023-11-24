@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Domain\Strava;
+namespace App\Domain\Strava\Gear;
 
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
-use App\Domain\Strava\Gear\Gear;
-use App\Domain\Strava\Gear\GearCollection;
 use Carbon\CarbonInterval;
 
-final readonly class BikeStatistics
+final readonly class GearStatistics
 {
     private function __construct(
         private ActivityCollection $activities,
@@ -34,7 +32,7 @@ final readonly class BikeStatistics
             $movingTimeInSeconds = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTimeInSeconds(), $activitiesWithBike));
 
             return [
-                'name' => sprintf('%s%s', $bike->getName(), $bike->isRetired() ? ' ☠️' : ''),
+                'name' => $bike->getName(),
                 'distance' => $bike->getDistanceInKm(),
                 'numberOfRides' => $countActivitiesWithBike,
                 'movingTime' => CarbonInterval::seconds($movingTimeInSeconds)->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),

@@ -5,21 +5,12 @@ namespace App\Domain\Strava\Activity;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Carbon\CarbonInterval;
 
-final class ActivityTotals
+final readonly class ActivityTotals
 {
-    private SerializableDateTime $startDate;
-
     private function __construct(
-        private readonly ActivityCollection $activities,
-        private readonly SerializableDateTime $now,
+        private ActivityCollection $activities,
+        private SerializableDateTime $now,
     ) {
-        $this->startDate = new SerializableDateTime();
-        foreach ($this->activities as $activity) {
-            if ($activity->getStartDate()->isAfterOrOn($this->startDate)) {
-                continue;
-            }
-            $this->startDate = $activity->getStartDate();
-        }
     }
 
     public function getDistance(): float
@@ -46,7 +37,7 @@ final class ActivityTotals
 
     public function getStartDate(): SerializableDateTime
     {
-        return $this->startDate;
+        return $this->activities->getFirstActivityStartDate();
     }
 
     public function getDailyAverage(): float
@@ -81,7 +72,7 @@ final class ActivityTotals
 
     public function getTotalDays(): int
     {
-        return (int) $this->now->diff($this->startDate)->days;
+        return (int) $this->now->diff($this->getStartDate())->days;
     }
 
     public function getTotalDaysOfCycling(): int

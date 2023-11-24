@@ -15,4 +15,15 @@ final class GearCollection extends Collection
     {
         return Gear::class;
     }
+
+    public function sortByIsRetired(): self
+    {
+        $items = $this->toArray();
+
+        usort($items, function (Gear $a, Gear $b) {
+            return $a->isRetired() <=> $b->isRetired();
+        });
+
+        return self::fromArray($items);
+    }
 }
