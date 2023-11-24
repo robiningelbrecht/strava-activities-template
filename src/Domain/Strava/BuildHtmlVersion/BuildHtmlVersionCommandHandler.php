@@ -131,8 +131,8 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 'mostRecentActivities' => array_slice($allActivities->toArray(), 0, 5),
                 'activityHighlights' => $activityHighlights,
                 'intro' => ActivityTotals::fromActivities(
-                    $allActivities,
-                    $now,
+                    activities: $allActivities,
+                    now: $now,
                 ),
                 'weeklyDistanceChart' => Json::encode(
                     WeeklyDistanceChartBuilder::fromActivities(
@@ -171,7 +171,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 'ftpHistoryChart' => !$allFtps->isEmpty() ? Json::encode(
                     FtpHistoryChartBuilder::fromFtps(
                         ftps: $allFtps,
-                        now: SerializableDateTime::fromDateTimeImmutable($this->clock->now())
+                        now: $now
                     )
                         ->withoutBackgroundColor()
                         ->withAnimation(true)
@@ -240,7 +240,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 'monthlyStatistics' => MonthlyStatistics::fromActivitiesAndChallenges(
                     activities: $allActivities,
                     challenges: $allChallenges,
-                    now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
+                    now: $now,
                 ),
             ]),
         );
@@ -253,7 +253,10 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     bikes: $allBikes
                 ),
                 'distanceOverTimePerGearChart' => Json::encode(
-                    DistanceOverTimePerGearChartBuilder::fromGear(
+                    DistanceOverTimePerGearChartBuilder::fromGearAndActivities(
+                        gearCollection: $allBikes,
+                        activityCollection: $allActivities,
+                        now: $now,
                     )
                         ->build()
                 ),

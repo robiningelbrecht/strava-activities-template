@@ -4,15 +4,28 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava\Gear;
 
+use App\Domain\Strava\Activity\ActivityCollection;
+use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+
 final readonly class DistanceOverTimePerGearChartBuilder
 {
-    private function __construct()
-    {
+    private function __construct(
+        private GearCollection $gears,
+        private ActivityCollection $activities,
+        private SerializableDateTime $now,
+    ) {
     }
 
-    public static function fromGear(): self
-    {
-        return new self();
+    public static function fromGearAndActivities(
+        GearCollection $gearCollection,
+        ActivityCollection $activityCollection,
+        SerializableDateTime $now
+    ): self {
+        return new self(
+            gears: $gearCollection,
+            activities: $activityCollection,
+            now: $now
+        );
     }
 
     /**
@@ -20,8 +33,69 @@ final readonly class DistanceOverTimePerGearChartBuilder
      */
     public function build(): array
     {
+        $startDate = $this->activities->getFirstActivityStartDate();
+        $gears = $this->gears->sortByIsRetired();
+
+        $interval = new \DateInterval('P1M');
+        $period = new \DatePeriod(
+            $startDate->modify('first day of this month'),
+            $interval,
+            $this->now->modify('last day of this month')
+        );
+
+        $xAxisValues = [];
+        $distancePerGearAndMonth = [];
+        foreach ($period as $date) {
+            $xAxisValues[] = $date->format('F Y');
+            /** @var \App\Domain\Strava\Gear\Gear $gear */
+            foreach ($gears as $gear) {
+                $distancePerGearAndMonth[$gear->getId()][$date->format('Ym')] = 0;
+            }
+        }
+        /** @var \App\Domain\Strava\Activity\Activity $activity */
+        foreach ($this->activities as $activity) {
+            if (!$activity->getGearId()) {
+                continue;
+            }
+            $month = $activity->getStartDate()->format('Ym');
+            $distancePerGearAndMonth[$activity->getGearId()][$month] += $activity->getDistance();
+        }
+
+        $series = [];
+        $selectedSeries = [];
+
+        foreach ($gears as $gear) {
+            $selectedSeries[$gear->getName()] = !$gear->isRetired();
+            $series[] = [
+                'name' => $gear->getName(),
+                'type' => 'bar',
+                'barGap' => 0,
+                'emphasis' => [
+                    'focus' => 'series',
+                ],
+                'label' => [
+                    'show' => true,
+                    'position' => 'insideBottom',
+                    'verticalAlign' => 'middle',
+                    'align' => 'left',
+                    'color' => '#000',
+                    'rotate' => 90,
+                    'distance' => 15,
+                    'formatter' => '{distance|{c} km} - {a}',
+                    'rich' => [
+                        'distance' => [
+                            'fontSize' => 14,
+                            'fontWeight' => 'bold',
+                        ],
+                    ],
+                ],
+                'data' => array_values($distancePerGearAndMonth[$gear->getId()]),
+            ];
+        }
+
         return [
             'animation' => true,
+            'color' => ['#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'],
             'grid' => [
                 'left' => '3%',
                 'right' => '4%',
@@ -31,13 +105,11 @@ final readonly class DistanceOverTimePerGearChartBuilder
             'tooltip' => [
                 'trigger' => 'axis',
                 'axisPointer' => [
-                    'type' => 'shadow',
+                    'type' => 'none',
                 ],
             ],
             'legend' => [
-                'selected' => [
-                    'MTB' => false,
-                ],
+                'selected' => $selectedSeries,
             ],
             'toolbox' => [
                 'feature' => [
@@ -54,53 +126,7 @@ final readonly class DistanceOverTimePerGearChartBuilder
                     'axisTick' => [
                         'show' => false,
                     ],
-                    'data' => [
-                        '2012',
-                        '2013',
-                        '2014',
-                        '2015',
-                        '2016',
-                        '2012',
-                        '2013',
-                        '2014',
-                        '2015',
-                        '2016',
-                        '2012',
-                        '2013',
-                        '2014',
-                        '2015',
-                        '2016',
-                        '2012',
-                        '2013',
-                        '2014',
-                        '2015',
-                        '2016',
-                        '2012',
-                        '2013',
-                        '2014',
-                        '2015',
-                        '2016',
-                        '2012',
-                        '2013',
-                        '2014',
-                        '2015',
-                        '2016',
-                        '2012',
-                        '2013',
-                        '2014',
-                        '2015',
-                        '2016',
-                        '2012',
-                        '2013',
-                        '2014',
-                        '2015',
-                        '2016',
-                        '2012',
-                        '2013',
-                        '2014',
-                        '2015',
-                        '2016',
-                    ],
+                    'data' => $xAxisValues,
                 ],
             ],
             'yAxis' => [
@@ -111,225 +137,17 @@ final readonly class DistanceOverTimePerGearChartBuilder
             'dataZoom' => [
                 [
                     'type' => 'inside',
-                    'start' => 90,
-                    'end' => 100,
-                    'minSpan' => 10,
-                    'maxSpan' => 10,
+                    'startValue' => 5,
+                    'endValue' => 9,
+                    'minValueSpan' => 4,
+                    'maxValueSpan' => 4,
                     'brushSelect' => false,
                     'zoomLock' => true,
                 ],
                 [
                 ],
             ],
-            'series' => [
-                [
-                    'name' => 'Zwift Hub',
-                    'type' => 'bar',
-                    'barGap' => 0,
-                    'emphasis' => [
-                        'focus' => 'series',
-                    ],
-                    'label' => [
-                        'show' => true,
-                        'position' => 'insideBottom',
-                        'verticalAlign' => 'middle',
-                        'align' => 'left',
-                        'rotate' => 90,
-                        'distance' => 15,
-                        'formatter' => '{distance|{c} km} - {a}',
-                        'rich' => [
-                            'distance' => [
-                                'fontSize' => 14,
-                            ],
-                        ],
-                    ],
-                    'data' => [
-                        320,
-                        332,
-                        301,
-                        334,
-                        390,
-                        320,
-                        332,
-                        301,
-                        334,
-                        390,
-                        320,
-                        332,
-                        301,
-                        334,
-                        390,
-                        320,
-                        332,
-                        301,
-                        334,
-                        390,
-                        320,
-                        332,
-                        301,
-                        334,
-                        390,
-                        320,
-                        332,
-                        301,
-                        334,
-                        390,
-                        320,
-                        332,
-                        301,
-                        334,
-                        390,
-                        320,
-                        332,
-                        301,
-                        334,
-                        390,
-                        320,
-                        332,
-                        301,
-                        334,
-                        390,
-                    ],
-                ],
-                [
-                    'name' => 'Stadsfiets',
-                    'type' => 'bar',
-                    'barGap' => 0,
-                    'emphasis' => [
-                        'focus' => 'series',
-                    ],
-                    'label' => [
-                        'show' => true,
-                        'position' => 'insideBottom',
-                        'verticalAlign' => 'middle',
-                        'align' => 'left',
-                        'rotate' => 90,
-                        'distance' => 15,
-                        'formatter' => '{distance|{c} km} - {a}',
-                        'rich' => [
-                            'distance' => [
-                                'fontSize' => 14,
-                            ],
-                        ],
-                    ],
-                    'data' => [
-                        220,
-                        182,
-                        191,
-                        234,
-                        290,
-                        220,
-                        182,
-                        191,
-                        234,
-                        290,
-                        220,
-                        182,
-                        191,
-                        234,
-                        290,
-                        220,
-                        182,
-                        191,
-                        234,
-                        290,
-                        220,
-                        182,
-                        191,
-                        234,
-                        290,
-                        220,
-                        182,
-                        191,
-                        234,
-                        290,
-                        220,
-                        182,
-                        191,
-                        234,
-                        290,
-                        220,
-                        182,
-                        191,
-                        234,
-                        290,
-                        220,
-                        182,
-                        191,
-                        234,
-                        290,
-                    ],
-                ],
-                [
-                    'name' => 'MTB',
-                    'type' => 'bar',
-                    'barGap' => 0,
-                    'emphasis' => [
-                        'focus' => 'series',
-                    ],
-                    'label' => [
-                        'show' => true,
-                        'position' => 'insideBottom',
-                        'verticalAlign' => 'middle',
-                        'align' => 'left',
-                        'rotate' => 90,
-                        'distance' => 15,
-                        'formatter' => '{distance|{c} km} - {a}',
-                        'rich' => [
-                            'distance' => [
-                                'fontSize' => 14,
-                            ],
-                        ],
-                    ],
-                    'data' => [
-                        150,
-                        232,
-                        201,
-                        154,
-                        190,
-                        150,
-                        232,
-                        201,
-                        154,
-                        190,
-                        150,
-                        232,
-                        201,
-                        154,
-                        190,
-                        150,
-                        232,
-                        201,
-                        154,
-                        190,
-                        150,
-                        232,
-                        201,
-                        154,
-                        190,
-                        150,
-                        232,
-                        201,
-                        154,
-                        190,
-                        150,
-                        232,
-                        201,
-                        154,
-                        190,
-                        150,
-                        232,
-                        201,
-                        154,
-                        190,
-                        150,
-                        232,
-                        201,
-                        154,
-                        190,
-                    ],
-                ],
-            ],
+            'series' => $series,
         ];
     }
 }
