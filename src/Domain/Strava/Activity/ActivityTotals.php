@@ -70,9 +70,11 @@ final readonly class ActivityTotals
         return $this->getDistance() / (($diff->y * 12) + $diff->m + 1);
     }
 
-    public function getTotalDays(): int
+    public function getTotalDaysSinceFirstActivity(): string
     {
-        return (int) $this->now->diff($this->getStartDate())->days;
+        $days = (int) $this->now->diff($this->getStartDate())->days;
+
+        return CarbonInterval::days($days)->cascade()->forHumans(['minimumUnit' => 'day', 'join' => [' ', ' and '], 'parts' => 2]);
     }
 
     public function getTotalDaysOfCycling(): int
