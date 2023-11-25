@@ -4,7 +4,7 @@
          alt="Strava">
 </p>
 
-Since I began cycling `{{ totals.getTotalDays() }} days` ago on `{{ totals.getStartDate().format('d-m-Y') }}`,
+Since I began cycling `{{ totals.getTotalDaysSinceFirstActivity() }}` ago on `{{ totals.getStartDate().format('d-m-Y') }}`,
 I had `{{ totals.getTotalDaysOfCycling() }} cycling days`.<br />
 I recorded a total distance of `{{ totals.getDistance()|number_format(0, '.', ' ') }} km`
 (`{{ (totals.getDistance() / 40075)|number_format(2, '.', ' ') }}` trips around the world 🌍 and
