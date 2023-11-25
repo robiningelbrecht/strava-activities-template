@@ -66,7 +66,7 @@
                 <div class="grid grid-cols-4 gap-2">
                     {% for imagePath in activity.getRemoteImagePaths() %}
                         <div>
-                            <a href="#" data-popover-target="popover-image-{{ loop.index }}" data-popover-placement="bottom">
+                            <a href="#" data-popover-target="popover-image-{{ loop.index }}" data-popover-placement="bottom" data-popover-trigger="click">
                                 <img class="h-auto max-w-full rounded-lg lazy" src="{{ placeholderImage }}" data-src="{{ imagePath }}" alt="Activity image" />
                             </a>
                         </div>
