@@ -87,19 +87,19 @@ final class ActivityHeatmapChartBuilder
                         'min' => 0.01,
                         'max' => 33,
                         'color' => '#68B34B',
-                        'label' => 'Low (0 - 32)',
+                        'label' => 'Low (0 - 33)',
                     ],
                     [
                         'min' => 33.01,
                         'max' => 66,
                         'color' => '#FAB735',
-                        'label' => 'Medium (33 - 65)',
+                        'label' => 'Medium (34 - 66)',
                     ],
                     [
                         'min' => 66.01,
                         'max' => 100,
                         'color' => '#FF8E14',
-                        'label' => 'High (66 - 100)',
+                        'label' => 'High (67 - 100)',
                     ],
                     [
                         'min' => 100.01,
