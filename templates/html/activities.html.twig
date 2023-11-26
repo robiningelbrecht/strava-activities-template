@@ -10,132 +10,132 @@
 {% endblock %}
 
 {% block content %}
-{% autoescape false %}
-    <!-- ALL ACTIVITIES -->
-    <div class="grid grid-cols-1 mb-4">
-        <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <div class="relative overflow-x-auto">
-                <table class="sortable w-full text-sm text-center text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-2 py-3 cursor-pointer">
-                            <div class="flex items-center justify-center">
-                                {{ svgCalendar }}
-                                {{ svgSortingIcon }}
-                            </div>
-                        </th>
-                        <th scope="col" class="no-sort px-2 py-3">
+    {% autoescape false %}
+        <!-- ALL ACTIVITIES -->
+        <div class="grid grid-cols-1 mb-4">
+            <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <div class="relative overflow-x-auto">
+                    <table class="sortable w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-2 py-3 cursor-pointer">
+                                <div class="flex items-center justify-center">
+                                    {{ svgCalendar }}
+                                    {{ svgSortingIcon }}
+                                </div>
+                            </th>
+                            <th scope="col" class="no-sort px-2 py-3 bg-gray-50 dark:bg-gray-700 sticky left-0 h-fit">
 
-                        </th>
-                        <th scope="col" class="px-6 py-3 cursor-pointer">
-                            <div class="flex items-center justify-center">
-                                {{ svgDistance }}
-                                {{ svgSortingIcon }}
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3 cursor-pointer">
-                            <div class="flex items-center justify-center">
-                                {{ svgElevation }}
-                                {{ svgSortingIcon }}
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3 cursor-pointer">
-                            <div class="flex items-center justify-center">
-                                {{ svgTime }}
-                                {{ svgSortingIcon }}
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3 cursor-pointer">
-                            <div class="flex items-center justify-center">
-                                {{ svgPower }}
-                                {{ svgSortingIcon }}
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3 cursor-pointer">
-                            <div class="flex items-center justify-center">
-                                {{ svgSpeed }}
-                                {{ svgSortingIcon }}
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3 cursor-pointer">
-                            <div class="flex items-center justify-center">
-                                {{ svgHeartRate }}
-                                {{ svgSortingIcon }}
-                            </div>
-                        </th>
-                        <th scope="col" colspan="2" class="no-sort px-6 py-3">
-                            Best 5s
-                        </th>
-                        <th scope="col" colspan="2" class="no-sort px-6 py-3">
-                            Best 10s
-                        </th>
-                        <th scope="col" colspan="2" class="no-sort px-6 py-3">
-                            Best 30s
-                        </th>
-                        <th scope="col" colspan="2" class="no-sort px-6 py-3">
-                            Best 1m
-                        </th>
-                        <th scope="col" colspan="2" class="no-sort px-6 py-3">
-                            Best 5m
-                        </th>
-                        <th scope="col" colspan="2" class="no-sort px-6 py-3">
-                            Best 8m
-                        </th>
-                        <th scope="col" colspan="2" class="no-sort px-6 py-3">
-                            Best 20m
-                        </th>
-                        <th scope="col" colspan="2" class="no-sort px-6 py-3">
-                            Best 1h
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for activity in activities %}
-                        <tr class="{{ cycle(['bg-white border-b dark:bg-gray-900 dark:border-gray-700', 'border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700'], loop.index0) }}">
-                            <td data-sort="{{ activity.getStartDate().getTimestamp() }}" class="px-2 py-2">
-                                <div class="w-18">{{ activity.getStartDate().format('d-m-y') }}</div>
-                            </td>
-                            <td class="px-2 py-2 truncate">
-                                {{ render('html/component/activity-title.html.twig', {'activity': activity, 'ellipses': 50}) }}
-                            </td>
-                            <td data-sort="{{ activity.getDistance() }}" class="px-6 py-2 {{ activityHighlights.getLongestDistance() == activity.getDistance() ? 'text-strava-orange font-bold': '' }}">
-                                {{ activity.getDistance() }}<span class="text-xs">km</span>
-                            </td>
-                            <td data-sort="{{ activity.getElevation() }}" class="px-6 py-2 {{ activityHighlights.getHighestElevation() == activity.getElevation() ? 'text-strava-orange font-bold': '' }}">
-                                {{ activity.getElevation() }}<span class="text-xs">m</span>
-                            </td>
-                            <td data-sort="{{ activity.getMovingTimeInSeconds() }}" class="px-6 py-2 {{ activityHighlights.getLongestMovingTimeFormatted() == activity.getMovingTimeFormatted() ? 'text-strava-orange font-bold': '' }}">
-                                {{ activity.getMovingTimeFormatted() }}
-                            </td>
-                            <td data-sort="{{ activity.getAveragePower() }}" class="px-6 py-2 {{ activityHighlights.getHighestAveragePower() == activity.getAveragePower() ? 'text-strava-orange font-bold': '' }}">
-                                {{ activity.getAveragePower() ? activity.getAveragePower() ~ '<span class="text-xs">w</span>': 'n/a' }}
-                            </td>
-                            <td data-sort="{{ activity.getAverageSpeedInKmPerH() }}" class="px-6 py-2 {{ activityHighlights.getFastestAverageSpeed() == activity.getAverageSpeedInKmPerH() ? 'text-strava-orange font-bold': '' }}">
-                                {{ activity.getAverageSpeedInKmPerH() }}<span class="text-xs">km/h</span>
-                            </td>
-                            <td data-sort="{{ activity.getAverageHeartRate() }}" class="px-6 py-2 {{ activityHighlights.getHighestAverageHeartRate() == activity.getAverageHeartRate() ? 'text-strava-orange font-bold': '' }}">
-                                {{ activity.getAverageHeartRate() ?? 'n/a' }}
-                            </td>
-                            {% for timeInterval in timeIntervals %}
-                                {% set powerOutput = activity.getBestAveragePowerForTimeInterval(timeInterval) %}
-                                {% if powerOutput %}
-                                    <td class="px-2 py-2 border-l-2">
-                                        {{ powerOutput.getPower() }}<span class="text-xs">w</span>
-                                    </td>
-                                    <td class="px-2 py-2 border-r-2">
-                                        {{ powerOutput.getRelativePower() }}<span class="text-xs">w/kg</span>
-                                    </td>
-                                {% else %}
-                                    <td class="px-2 py-2"></td>
-                                    <td class="px-2 py-2"></td>
-                                {% endif %}
-                            {% endfor %}
+                            </th>
+                            <th scope="col" class="px-6 py-3 cursor-pointer">
+                                <div class="flex items-center justify-center">
+                                    {{ svgDistance }}
+                                    {{ svgSortingIcon }}
+                                </div>
+                            </th>
+                            <th scope="col" class="px-6 py-3 cursor-pointer">
+                                <div class="flex items-center justify-center">
+                                    {{ svgElevation }}
+                                    {{ svgSortingIcon }}
+                                </div>
+                            </th>
+                            <th scope="col" class="px-6 py-3 cursor-pointer">
+                                <div class="flex items-center justify-center">
+                                    {{ svgTime }}
+                                    {{ svgSortingIcon }}
+                                </div>
+                            </th>
+                            <th scope="col" class="px-6 py-3 cursor-pointer">
+                                <div class="flex items-center justify-center">
+                                    {{ svgPower }}
+                                    {{ svgSortingIcon }}
+                                </div>
+                            </th>
+                            <th scope="col" class="px-6 py-3 cursor-pointer">
+                                <div class="flex items-center justify-center">
+                                    {{ svgSpeed }}
+                                    {{ svgSortingIcon }}
+                                </div>
+                            </th>
+                            <th scope="col" class="px-6 py-3 cursor-pointer">
+                                <div class="flex items-center justify-center">
+                                    {{ svgHeartRate }}
+                                    {{ svgSortingIcon }}
+                                </div>
+                            </th>
+                            <th scope="col" colspan="2" class="no-sort px-6 py-3">
+                                Best 5s
+                            </th>
+                            <th scope="col" colspan="2" class="no-sort px-6 py-3">
+                                Best 10s
+                            </th>
+                            <th scope="col" colspan="2" class="no-sort px-6 py-3">
+                                Best 30s
+                            </th>
+                            <th scope="col" colspan="2" class="no-sort px-6 py-3">
+                                Best 1m
+                            </th>
+                            <th scope="col" colspan="2" class="no-sort px-6 py-3">
+                                Best 5m
+                            </th>
+                            <th scope="col" colspan="2" class="no-sort px-6 py-3">
+                                Best 8m
+                            </th>
+                            <th scope="col" colspan="2" class="no-sort px-6 py-3">
+                                Best 20m
+                            </th>
+                            <th scope="col" colspan="2" class="no-sort px-6 py-3">
+                                Best 1h
+                            </th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {% for activity in activities %}
+                            <tr class="{{ cycle(['bg-white border-b dark:bg-gray-900 dark:border-gray-700', 'border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700'], loop.index0) }}">
+                                <td data-sort="{{ activity.getStartDate().getTimestamp() }}" class="px-2 py-2">
+                                    <div class="w-18">{{ activity.getStartDate().format('d-m-y') }}</div>
+                                </td>
+                                <td class="px-2 py-2 truncate sticky left-0 h-fit {{ cycle(['bg-white dark:bg-gray-900', 'bg-gray-50 dark:bg-gray-800'], loop.index0) }}">
+                                    {{ render('html/component/activity-title.html.twig', {'activity': activity, 'ellipses': 50}) }}
+                                </td>
+                                <td data-sort="{{ activity.getDistance() }}" class="px-6 py-2 {{ activityHighlights.getLongestDistance() == activity.getDistance() ? 'text-strava-orange font-bold': '' }}">
+                                    {{ activity.getDistance() }}<span class="text-xs">km</span>
+                                </td>
+                                <td data-sort="{{ activity.getElevation() }}" class="px-6 py-2 {{ activityHighlights.getHighestElevation() == activity.getElevation() ? 'text-strava-orange font-bold': '' }}">
+                                    {{ activity.getElevation() }}<span class="text-xs">m</span>
+                                </td>
+                                <td data-sort="{{ activity.getMovingTimeInSeconds() }}" class="px-6 py-2 {{ activityHighlights.getLongestMovingTimeFormatted() == activity.getMovingTimeFormatted() ? 'text-strava-orange font-bold': '' }}">
+                                    {{ activity.getMovingTimeFormatted() }}
+                                </td>
+                                <td data-sort="{{ activity.getAveragePower() }}" class="px-6 py-2 {{ activityHighlights.getHighestAveragePower() == activity.getAveragePower() ? 'text-strava-orange font-bold': '' }}">
+                                    {{ activity.getAveragePower() ? activity.getAveragePower() ~ '<span class="text-xs">w</span>': 'n/a' }}
+                                </td>
+                                <td data-sort="{{ activity.getAverageSpeedInKmPerH() }}" class="px-6 py-2 {{ activityHighlights.getFastestAverageSpeed() == activity.getAverageSpeedInKmPerH() ? 'text-strava-orange font-bold': '' }}">
+                                    {{ activity.getAverageSpeedInKmPerH() }}<span class="text-xs">km/h</span>
+                                </td>
+                                <td data-sort="{{ activity.getAverageHeartRate() }}" class="px-6 py-2 {{ activityHighlights.getHighestAverageHeartRate() == activity.getAverageHeartRate() ? 'text-strava-orange font-bold': '' }}">
+                                    {{ activity.getAverageHeartRate() ?? 'n/a' }}
+                                </td>
+                                {% for timeInterval in timeIntervals %}
+                                    {% set powerOutput = activity.getBestAveragePowerForTimeInterval(timeInterval) %}
+                                    {% if powerOutput %}
+                                        <td class="px-2 py-2 border-l-2">
+                                            {{ powerOutput.getPower() }}<span class="text-xs">w</span>
+                                        </td>
+                                        <td class="px-2 py-2 border-r-2">
+                                            {{ powerOutput.getRelativePower() }}<span class="text-xs">w/kg</span>
+                                        </td>
+                                    {% else %}
+                                        <td class="px-2 py-2"></td>
+                                        <td class="px-2 py-2"></td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-{% endautoescape %}
+    {% endautoescape %}
 {% endblock %}

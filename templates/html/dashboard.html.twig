@@ -13,14 +13,14 @@
                         View all
                     </a>
                 </div>
-                <div class="relative overflow-x-auto">
+                <div class="relative overflow-x-scroll">
                     <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-2 py-3">
 
                             </th>
-                            <th scope="col" class="px-2 py-3">
+                            <th scope="col" class="px-2 py-3 bg-gray-50 dark:bg-gray-700 sticky left-0 h-fit">
 
                             </th>
                             <th scope="col" class="px-6 py-3">
@@ -61,7 +61,7 @@
                                 <td class="px-2 py-2">
                                     <div class="w-18">{{ activity.getStartDate().format('d-m-y') }}</div>
                                 </td>
-                                <td class="px-2 py-2 truncate">
+                                <td class="px-2 py-2 truncate sticky left-0 h-fit {{ cycle(['bg-white dark:bg-gray-900', 'bg-gray-50 dark:bg-gray-800'], loop.index0) }}">
                                     {{ render('html/component/activity-title.html.twig', {'activity': activity, 'ellipses': 30}) }}
                                 </td>
                                 <td class="px-6 py-2 {{ activityHighlights.getLongestDistance() == activity.getDistance() ? 'text-strava-orange font-bold': '' }}">
