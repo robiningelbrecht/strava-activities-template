@@ -137,8 +137,8 @@ final readonly class DistanceOverTimePerGearChartBuilder
             'dataZoom' => [
                 [
                     'type' => 'inside',
-                    'startValue' => 5,
-                    'endValue' => 9,
+                    'startValue' => count($xAxisValues) - 4,
+                    'endValue' => count($xAxisValues),
                     'minValueSpan' => 4,
                     'maxValueSpan' => 4,
                     'brushSelect' => false,
