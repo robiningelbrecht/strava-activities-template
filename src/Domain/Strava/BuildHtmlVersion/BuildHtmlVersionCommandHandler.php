@@ -245,6 +245,18 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             ]),
         );
 
+        $period = new \DatePeriod(
+            $allActivities->getFirstActivityStartDate()->modify('first day of this month'),
+            new \DateInterval('P1M'),
+            $now->modify('last day of this month')
+        );
+        foreach ($period as $date) {
+            $this->filesystem->write(
+                'build/html/month/month-'.$date->format('Y-m').'.html',
+                $this->twig->load('html/month.html.twig')->render([]),
+            );
+        }
+
         $this->filesystem->write(
             'build/html/gear-stats.html',
             $this->twig->load('html/gear-stats.html.twig')->render([

@@ -45,6 +45,7 @@ final readonly class MonthlyStatistics
         foreach ($period as $date) {
             $month = $date->format('Ym');
             $statistics[$month] = [
+                'id' => $date->format('Y-m'),
                 'month' => $date->format('F Y'),
                 'numberOfRides' => 0,
                 'totalDistance' => 0,

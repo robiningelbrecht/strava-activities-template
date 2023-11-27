@@ -201,10 +201,10 @@
         </div>
         <!-- JS LOADED CONTENT -->
         <div id="js-loaded-content"></div>
-        <div id="activity-detail" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[61] justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div id="modal-skeleton" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[61] justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-7xl max-h-full">
                 <!-- Modal content -->
-                <div id="activity-content" class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div id="modal-content" class="relative bg-white rounded-lg shadow dark:bg-gray-700">
 
                 </div>
             </div>
@@ -222,7 +222,7 @@
         thresholds: "50px",
     });
 
-    const activityDetailNode = document.getElementById('activity-detail');
+    const modalSkeletonNode = document.getElementById('modal-skeleton');
     const modals = [];
     document.addEventListener('pageWasLoaded', () => {
         lazyLoad.update();
@@ -232,39 +232,39 @@
         initTooltips();
         initCharts(document.querySelectorAll('[data-echarts-options]'));
 
-        const activityDetailLinks = document.querySelectorAll('[data-activity-detail]');
-        activityDetailLinks.forEach(function(node) {
-            const activityId = node.getAttribute('data-activity-detail')
-            modals[activityId] = new Modal(activityDetailNode, {
+        const modalLinks = document.querySelectorAll('a[data-modal-id]');
+        modalLinks.forEach(function(node) {
+            const modalId = node.getAttribute('data-modal-id')
+            modals[modalId] = new Modal(modalSkeletonNode, {
                 placement: 'bottom',
                 closable: true,
                 backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-[60]',
                 onShow: async () => {
-                    const response = await fetch('activity/activity-'+activityId+'.html');
-                    activityDetailNode.querySelector('#activity-content').innerHTML = await response.text();
-                    document.dispatchEvent(new CustomEvent('activityDetailWasLoaded', {
+                    const response = await fetch(node.getAttribute('data-model-content-url'));
+                    modalSkeletonNode.querySelector('#modal-content').innerHTML = await response.text();
+                    document.dispatchEvent(new CustomEvent('modalWasLoaded', {
                         bubbles: true,
                         cancelable: true,
                         detail: {
-                            node: activityDetailNode,
-                            activityId: activityId
+                            node: modalSkeletonNode,
+                            modalId: modalId
                         }
                     }));
                 },
                 onHide: ()=> {
-                    activityDetailNode.querySelector('#activity-content').innerHTML = '';
+                    modalSkeletonNode.querySelector('#modal-content').innerHTML = '';
                 }
             });
             node.addEventListener('click', function (e) {
                 e.preventDefault();
-                modals[activityId].toggle();
+                modals[modalId].toggle();
             });
         });
     });
-    document.addEventListener('activityDetailWasLoaded', (event) => {
+    document.addEventListener('modalWasLoaded', (event) => {
         event.detail.node.querySelector('button.close').addEventListener('click', function (e) {
             e.preventDefault();
-            modals[event.detail.activityId].hide();
+            modals[event.detail.modalId].hide();
         });
         initCharts(event.detail.node.querySelectorAll('[data-echarts-options]'));
         initPopovers();
