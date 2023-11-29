@@ -13,3 +13,9 @@ a.active{
     --tw-text-opacity: 1;
     color: rgb(255 255 255/var(--tw-text-opacity));
 }
+
+
+table.sortable th[aria-sort="ascending"] svg.sort,
+table.sortable th[aria-sort="descending"] svg.sort{
+    fill: #FC4A02;
+}
