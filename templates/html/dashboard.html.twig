@@ -59,7 +59,7 @@
                         {% for activity in mostRecentActivities %}
                             <tr class="{{ cycle(['bg-white border-b dark:bg-gray-900 dark:border-gray-700', 'border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700'], loop.index0) }}">
                                 <td class="px-2 py-2">
-                                    <div class="w-18">{{ activity.getStartDate().format('d-m-y') }}</div>
+                                    <div class="w-[4.5rem]">{{ activity.getStartDate().format('d-m-y') }}</div>
                                 </td>
                                 <td class="px-2 py-2 truncate sticky left-0 h-fit {{ cycle(['bg-white dark:bg-gray-900', 'bg-gray-50 dark:bg-gray-800'], loop.index0) }}">
                                     {{ render('html/component/activity-title.html.twig', {'activity': activity, 'ellipses': 30}) }}

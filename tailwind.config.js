@@ -7,6 +7,9 @@ module.exports = {
         "./node_modules/flowbite/**/*.js"
     ],
     theme: {
+        colors: {
+            'strava-orange': '#F26722',
+        },
         extend: {},
     },
     plugins: [
