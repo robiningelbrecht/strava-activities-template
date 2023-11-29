@@ -14,6 +14,7 @@ rm -Rf templates/* && mv -f strava-activities-template/templates/* templates/
 ## Build asset files
 mv -f strava-activities-template/build/html/echarts/echarts.min.js build/html/echarts/echarts.min.js
 mv -f strava-activities-template/build/html/flowbite/flowbite.js build/html/flowbite/flowbite.js
+mv -f strava-activities-template/build/html/flowbite/tailwind.css build/html/flowbite/tailwind.css
 mv -f strava-activities-template/build/html/flowbite/tailwind.min.css build/html/flowbite/tailwind.min.css
 mv -f strava-activities-template/build/html/dark-mode-toggle.js build/html/dark-mode-toggle.js
 mv -f strava-activities-template/build/html/favicon.ico build/html/favicon.ico

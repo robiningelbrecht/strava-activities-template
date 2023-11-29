@@ -5,13 +5,9 @@
 {% autoescape false %}
     <!-- Modal header -->
     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-        <h3 class="max-w-[30%] sm:max-w-[50%] md:max-w-[100%] truncate text-xl font-semibold text-gray-900 dark:text-white">
+        <h3 class="truncate text-xl font-semibold text-gray-900 dark:text-white">
             November 2023
         </h3>
-        <span class="mx-1 text-xs font-normal text-gray-500 dark:text-gray-400">-</span>
-        <span class="text-xs font-normal text-gray-500 dark:text-gray-400">
-            22 rides
-        </span>
         <button type="button" class="close text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -22,7 +18,81 @@
     <!-- Modal body -->
     <div class="p-4 md:p-5 space-y-4">
         <div class="grid grid-cols-1 gap-4">
-
+            <div class="flex flex-col bg-gray-200 dark:bg-gray-600">
+                <div class="grid grid-cols-7 gap-px leading-6 font-semibold text-xs text-center border border-b-0 dark:border-gray-600">
+                    <div class="py-2 bg-white dark:bg-gray-700">
+                        Mon
+                    </div>
+                    <div class="py-2 bg-white dark:bg-gray-700">
+                        Thu
+                    </div>
+                    <div class="py-2 bg-white dark:bg-gray-700">
+                        Wed
+                    </div>
+                    <div class="py-2 bg-white dark:bg-gray-700">
+                        Thu
+                    </div>
+                    <div class="py-2 bg-white dark:bg-gray-700">
+                        Fri
+                    </div>
+                    <div class="py-2 bg-white dark:bg-gray-700">
+                        Sat
+                    </div>
+                    <div class="py-2 bg-white dark:bg-gray-700">
+                        Sun
+                    </div>
+                </div>
+                <div class="grid grid-cols-7 grid-rows-6 gap-px leading-6 text-xs w-full border dark:border-gray-600">
+                    <div class="relative py-2 px-3 bg-gray-50 dark:bg-gray-800">
+                        <div class="text-right">
+                            <time datetime="2021-12-27" class="text-gray-400">27</time>
+                        </div>
+                        <div>
+                            <ul>
+                                <li class="truncate">Some content YOO000000000000</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="relative py-2 px-3 bg-white dark:bg-gray-700">
+                        <div class="text-right">
+                            <time datetime="2021-12-27">27</time>
+                        </div>
+                        <div>
+                            <ul>
+                                <li class="truncate">Some content YOO0</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="relative py-2 px-3 bg-white dark:bg-gray-700">
+                        <div class="text-right">
+                            <time datetime="2021-12-27">27</time>
+                        </div>
+                        <div>
+                            <ul>
+                                <li class="truncate">Some content YOO0</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="relative py-2 px-3 bg-white dark:bg-gray-700">
+                        <div class="text-right">
+                            <time datetime="2021-12-27">27</time>
+                        </div>
+                        <div>
+                            <ul>
+                                <li class="mb-1 truncate pl-1 bg-orange-500/[.1] border-l-2 border-l-orange-500">
+                                    <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Some content YOO0</a>
+                                </li>
+                                <li class="mb-1 truncate pl-1 bg-amber-300/[.1] border-l-2 border-l-amber-300">
+                                    <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Some content YOO0</a>
+                                </li>
+                                <li class="mb-1 last:mb-0 truncate pl-1 bg-emerald-600/[.1] border-l-2 border-l-emerald-600">
+                                    <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Some content YOO0</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endautoescape %}

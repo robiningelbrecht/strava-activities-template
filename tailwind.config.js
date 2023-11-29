@@ -4,6 +4,7 @@ module.exports = {
     content: [
         "./build/html/*.html",
         "./build/html/**/activity-8837881433.html",
+        "./build/html/month/*.html",
         "./node_modules/flowbite/**/*.js"
     ],
     theme: {
@@ -16,3 +17,4 @@ module.exports = {
         require('flowbite/plugin')
     ]
 }
+
