@@ -2,27 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.text-strava-orange{
-    color: #F26722;
-}
-
-.w-18{
-    width: 4.5rem;
-}
-
-.z-60{
-    z-index: 60;
-}
-
-.z-70{
-    z-index: 70;
-}
-
-[data-tabs-toggle] li a[aria-selected="true"]{
-    color: #FC4A02;
-    border-color: #FC4A02;
-}
-
 a.active{
     --tw-bg-opacity: 1;
     background-color: rgb(243 244 246/var(--tw-bg-opacity));
@@ -34,6 +13,7 @@ a.active{
     --tw-text-opacity: 1;
     color: rgb(255 255 255/var(--tw-text-opacity));
 }
+
 
 table.sortable th[aria-sort="ascending"] svg.sort,
 table.sortable th[aria-sort="descending"] svg.sort{

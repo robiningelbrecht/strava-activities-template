@@ -135,6 +135,10 @@ For any feedback, help or feature requests, please [open a new issue](https://gi
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
 
+#### [2023-11-25]
+
+* Moved gear stats to separate page
+
 #### [2023-11-18]
 
 * Added Power and heart rate distribution charts
