@@ -34,6 +34,11 @@ final readonly class ActivityHighlights
         return (int) max(array_map(fn (Activity $activity) => $activity->getAverageHeartRate(), $this->activities->toArray()));
     }
 
+    public function getCalories(): int
+    {
+        return (int) max(array_map(fn (Activity $activity) => $activity->getCalories(), $this->activities->toArray()));
+    }
+
     public function getLongestMovingTimeFormatted(): ?string
     {
         $activityWithMaxMovingTime = null;

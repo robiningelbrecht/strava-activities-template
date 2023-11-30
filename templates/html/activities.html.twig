@@ -63,6 +63,12 @@
                                     {{ svgSortingIcon }}
                                 </div>
                             </th>
+                            <th scope="col" class="px-6 py-3 cursor-pointer">
+                                <div class="flex items-center justify-center">
+                                    {{ svgCalories }}
+                                    {{ svgSortingIcon }}
+                                </div>
+                            </th>
                             <th scope="col" colspan="2" class="no-sort px-6 py-3">
                                 Best 5s
                             </th>
@@ -115,6 +121,9 @@
                                 </td>
                                 <td data-sort="{{ activity.getAverageHeartRate() }}" class="px-6 py-2 {{ activityHighlights.getHighestAverageHeartRate() == activity.getAverageHeartRate() ? 'text-strava-orange font-bold': '' }}">
                                     {{ activity.getAverageHeartRate() ?? 'n/a' }}
+                                </td>
+                                <td data-sort="{{ activity.getCalories() }}" class="px-6 py-2 {{ activityHighlights.getCalories() == activity.getCalories() ? 'text-strava-orange font-bold': '' }}">
+                                    {{ activity.getCalories()|number_format(0, '.', ' ') }}<span class="text-xs">kcal</span>
                                 </td>
                                 {% for timeInterval in timeIntervals %}
                                     {% set powerOutput = activity.getBestAveragePowerForTimeInterval(timeInterval) %}

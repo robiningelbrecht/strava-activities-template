@@ -40,6 +40,11 @@
                             </th>
                             <th scope="col" class="px-2 py-3">
                                 <div class="flex items-center justify-center">
+                                    {{ svgCalories }}
+                                </div>
+                            </th>
+                            <th scope="col" class="px-2 py-3">
+                                <div class="flex items-center justify-center">
                                     {{ svgChallenges }}
                                 </div>
                             </th>
@@ -66,6 +71,9 @@
                                     {{ statistic.movingTime }}
                                 </td>
                                 <td class="px-2 py-2 truncate">
+                                    {{ statistic.totalCalories|number_format(0, '.', ' ') }}<span class="text-xs">kcal</span>
+                                </td>
+                                <td class="px-2 py-2 truncate">
                                     {{ statistic.challengesCompleted }}
                                 </td>
                             </tr>
@@ -89,6 +97,9 @@
                                 {{ monthlyStatistics.getTotalsForZwift().movingTime }}
                             </td>
                             <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotalsForZwift().totalCalories|number_format(0, '.', ' ') }}<span class="text-xs">kcal</span>
+                            </td>
+                            <td class="px-2 py-2">
                             </td>
                         </tr>
                         <tr class="font-semibold text-gray-900 dark:text-white">
@@ -108,6 +119,9 @@
                                 {{ monthlyStatistics.getTotalsForOutsideBikeRides().movingTime }}
                             </td>
                             <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotalsForOutsideBikeRides().totalCalories|number_format(0, '.', ' ') }}<span class="text-xs">kcal</span>
+                            </td>
+                            <td class="px-2 py-2">
                             </td>
                         </tr>
                         <tr class="font-semibold text-gray-900 dark:text-white">
@@ -125,6 +139,9 @@
                             </td>
                             <td class="px-2 py-2">
                                 {{ monthlyStatistics.getTotals().movingTime }}
+                            </td>
+                            <td class="px-2 py-2">
+                                {{ monthlyStatistics.getTotals().totalCalories|number_format(0, '.', ' ') }}<span class="text-xs">kcal</span>
                             </td>
                             <td class="px-2 py-2">
                             </td>
