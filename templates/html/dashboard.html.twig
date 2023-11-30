@@ -20,7 +20,7 @@
                             <th scope="col" class="px-2 py-3">
 
                             </th>
-                            <th scope="col" class="px-2 py-3 bg-gray-50 dark:bg-gray-700 sticky left-0 h-fit">
+                            <th scope="col" class="px-2 py-3 bg-gray-50 dark:bg-gray-700 sticky left-0">
 
                             </th>
                             <th scope="col" class="px-6 py-3">
@@ -61,7 +61,7 @@
                                 <td class="px-2 py-2">
                                     <div class="w-[4.5rem]">{{ activity.getStartDate().format('d-m-y') }}</div>
                                 </td>
-                                <td class="px-2 py-2 truncate sticky left-0 h-fit {{ cycle(['bg-white dark:bg-gray-900', 'bg-gray-50 dark:bg-gray-800'], loop.index0) }}">
+                                <td class="px-2 py-2 truncate sticky left-0 {{ cycle(['bg-white dark:bg-gray-900', 'bg-gray-50 dark:bg-gray-800'], loop.index0) }}">
                                     {{ render('html/component/activity-title.html.twig', {'activity': activity, 'ellipses': 30}) }}
                                 </td>
                                 <td class="px-6 py-2 {{ activityHighlights.getLongestDistance() == activity.getDistance() ? 'text-strava-orange font-bold': '' }}">
@@ -132,7 +132,7 @@
                     <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-6 py-3 sticky left-0 bg-gray-50 dark:bg-gray-700">
                                 <div class="flex items-center justify-center">
                                     {{ svgTime }}
                                 </div>
@@ -150,7 +150,7 @@
                         <tbody>
                         {% for powerOutput in powerOutputs %}
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <td class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <td class="px-6 py-2 sticky left-0 bg-white dark:bg-gray-800 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ powerOutput.getTime() }}
                                 </td>
                                 <td class="px-2 py-2">
@@ -226,7 +226,7 @@
                     <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-2 py-3">
+                            <th scope="col" class="px-2 py-3 sticky left-0 bg-gray-50 dark:bg-gray-700">
 
                             </th>
                             <th scope="col" class="px-6 py-3">
@@ -257,7 +257,7 @@
                         <tbody>
                         {% for weekday, statistic in weekdayStats.getData() %}
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <th scope="row" class="px-2 py-2 sticky bg-white dark:bg-gray-800 left-0 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ weekday }}
                                 </th>
                                 <td class="px-6 py-2">
@@ -296,7 +296,7 @@
                     <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-2 py-3">
+                            <th scope="col" class="px-2 py-3 sticky left-0 bg-gray-50 dark:bg-gray-700">
 
                             </th>
                             <th scope="col" class="px-6 py-3">
@@ -327,7 +327,7 @@
                         <tbody>
                         {% for statistic in daytimeStats.getData() %}
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <th scope="row" class="px-2 py-2 sticky left-0 bg-white dark:bg-gray-800 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <div>{{ statistic.daytime.value }}</div>
                                     <div class="font-normal text-xs">{{ statistic.daytime.getHours()[0] }}h - {{ statistic.daytime.getHours()[1] }}h</div>
                                 </th>
@@ -366,7 +366,7 @@
                     <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-2 py-3">
+                            <th scope="col" class="px-2 py-3 sticky left-0 bg-gray-50 dark:bg-gray-700">
 
                             </th>
                             <th scope="col" class="px-6 py-3">
@@ -397,7 +397,7 @@
                         <tbody>
                         {% for statistic in distanceBreakdown.getRows() %}
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <th scope="row" class="px-2 py-2 sticky left-0 bg-white dark:bg-gray-800 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <div>{{ statistic.label }}</div>
                                 </th>
                                 <td class="px-6 py-2">
