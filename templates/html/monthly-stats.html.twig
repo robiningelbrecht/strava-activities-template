@@ -17,7 +17,7 @@
                     <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-2 py-3">
+                            <th scope="col" class="px-2 py-3 sticky left-0 bg-gray-50 dark:bg-gray-700">
 
                             </th>
                             <th scope="col" class="px-2 py-3">
@@ -48,24 +48,24 @@
                         <tbody>
                         {% for statistic in monthlyStatistics.getRows() %}
                             <tr class="{{ cycle(['bg-white border-b dark:bg-gray-900 dark:border-gray-700', 'border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700'], loop.index0) }}">
-                                <th scope="row" class="w-36 px-2 py-2 text-right font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <th scope="row" class="sticky left-0 w-36 px-2 py-2 text-right font-medium text-gray-900 whitespace-nowrap dark:text-white {{ cycle(['bg-white dark:bg-gray-900', 'bg-gray-50 dark:bg-gray-800'], loop.index0) }}">
                                     <a href="#" data-modal-id="month-{{ statistic.id }}" data-model-content-url="month/month-{{ statistic.id }}.html" class="text-blue-600 dark:text-blue-500 hover:underline">
                                         {{ statistic.month }}
                                     </a>
                                 </th>
-                                <td class="px-2 py-2">
+                                <td class="px-2 py-2 truncate">
                                     {{ statistic.numberOfRides }}
                                 </td>
-                                <td class="px-2 py-2">
+                                <td class="px-2 py-2 truncate">
                                     {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
                                 </td>
-                                <td class="px-2 py-2">
+                                <td class="px-2 py-2 truncate">
                                     {{ statistic.totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
                                 </td>
-                                <td class="px-2 py-2">
+                                <td class="px-2 py-2 truncate">
                                     {{ statistic.movingTime }}
                                 </td>
-                                <td class="px-2 py-2">
+                                <td class="px-2 py-2 truncate">
                                     {{ statistic.challengesCompleted }}
                                 </td>
                             </tr>
@@ -73,7 +73,7 @@
                         </tbody>
                         <tfoot>
                         <tr class="font-semibold text-gray-900 dark:text-white border-t-4 dark:border-gray-700">
-                            <td class="px-2 py-2 text-right">
+                            <td class="px-2 py-2 text-right sticky left-0 bg-white dark:bg-gray-800">
                                 Virtual/Indoor
                             </td>
                             <td class="px-2 py-2">
@@ -92,7 +92,7 @@
                             </td>
                         </tr>
                         <tr class="font-semibold text-gray-900 dark:text-white">
-                            <td class="px-2 py-2 text-right">
+                            <td class="px-2 py-2 text-right sticky left-0 bg-white dark:bg-gray-800">
                                 Outside
                             </td>
                             <td class="px-2 py-2">
@@ -111,7 +111,7 @@
                             </td>
                         </tr>
                         <tr class="font-semibold text-gray-900 dark:text-white">
-                            <td class="px-2 py-2 text-right">
+                            <td class="px-2 py-2 text-right sticky left-0 bg-white dark:bg-gray-800">
                                 Total
                             </td>
                             <td class="px-2 py-2">

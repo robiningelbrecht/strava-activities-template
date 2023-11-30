@@ -21,7 +21,7 @@
                     <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-2 py-3">
+                            <th scope="col" class="px-2 py-3 sticky left-0 bg-gray-50 dark:bg-gray-700">
 
                             </th>
                             <th scope="col" class="px-6 py-3">
@@ -51,11 +51,11 @@
                         </thead>
                         <tbody>
                         {% for statistic in bikeStatistics.getRows() %}
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <tr class="{{ cycle(['bg-white border-b dark:bg-gray-900 dark:border-gray-700', 'border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700'], loop.index0) }}">
+                                <th scope="row" class="px-2 py-2 sticky left-0 font-medium text-gray-900 whitespace-nowrap dark:text-white {{ cycle(['bg-white dark:bg-gray-900', 'bg-gray-50 dark:bg-gray-800'], loop.index0) }}">
                                     {{ statistic.name }}
                                 </th>
-                                <td class="px-6 py-2">
+                                <td class="px-6 py-2 truncate">
                                     {{ statistic.numberOfRides }}
                                 </td>
                                 <td class="px-6 py-2 truncate">
