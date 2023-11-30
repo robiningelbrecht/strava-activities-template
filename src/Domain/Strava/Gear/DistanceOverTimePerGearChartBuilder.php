@@ -5,26 +5,27 @@ declare(strict_types=1);
 namespace App\Domain\Strava\Gear;
 
 use App\Domain\Strava\Activity\ActivityCollection;
-use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use App\Domain\Strava\Calendar\Month;
+use App\Domain\Strava\Calendar\MonthCollection;
 
 final readonly class DistanceOverTimePerGearChartBuilder
 {
     private function __construct(
         private GearCollection $gears,
         private ActivityCollection $activities,
-        private SerializableDateTime $now,
+        private MonthCollection $months,
     ) {
     }
 
     public static function fromGearAndActivities(
         GearCollection $gearCollection,
         ActivityCollection $activityCollection,
-        SerializableDateTime $now
+        MonthCollection $months
     ): self {
         return new self(
             gears: $gearCollection,
             activities: $activityCollection,
-            now: $now
+            months: $months
         );
     }
 
@@ -33,23 +34,16 @@ final readonly class DistanceOverTimePerGearChartBuilder
      */
     public function build(): array
     {
-        $startDate = $this->activities->getFirstActivityStartDate();
         $gears = $this->gears->sortByIsRetired();
-
-        $interval = new \DateInterval('P1M');
-        $period = new \DatePeriod(
-            $startDate->modify('first day of this month'),
-            $interval,
-            $this->now->modify('last day of this month')
-        );
 
         $xAxisValues = [];
         $distancePerGearAndMonth = [];
-        foreach ($period as $date) {
-            $xAxisValues[] = $date->format('F Y');
+        /** @var \App\Domain\Strava\Calendar\Month $month */
+        foreach ($this->months as $month) {
+            $xAxisValues[] = $month->getLabel();
             /** @var \App\Domain\Strava\Gear\Gear $gear */
             foreach ($gears as $gear) {
-                $distancePerGearAndMonth[$gear->getId()][$date->format('Ym')] = 0;
+                $distancePerGearAndMonth[$gear->getId()][$month->getId()] = 0;
             }
         }
         /** @var \App\Domain\Strava\Activity\Activity $activity */
@@ -57,7 +51,7 @@ final readonly class DistanceOverTimePerGearChartBuilder
             if (!$activity->getGearId()) {
                 continue;
             }
-            $month = $activity->getStartDate()->format('Ym');
+            $month = $activity->getStartDate()->format(Month::MONTH_ID_FORMAT);
             $distancePerGearAndMonth[$activity->getGearId()][$month] += $activity->getDistance();
         }
 

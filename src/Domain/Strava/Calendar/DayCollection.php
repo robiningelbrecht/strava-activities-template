@@ -6,7 +6,10 @@ namespace App\Domain\Strava\Calendar;
 
 use App\Infrastructure\ValueObject\Collection;
 
-class DayCollection extends Collection
+/**
+ * @extends Collection<Day>
+ */
+final class DayCollection extends Collection
 {
     public function getItemClassName(): string
     {
