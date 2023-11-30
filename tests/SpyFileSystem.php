@@ -67,10 +67,12 @@ final class SpyFileSystem implements FilesystemOperator
 
     public function getWrites(): array
     {
-        $writes = $this->writes;
-        $this->writes = [];
+        return $this->writes;
+    }
 
-        return $writes;
+    public function resetWrites(): void
+    {
+        $this->writes = [];
     }
 
     public function writeStream(string $location, $contents, array $config = []): void
