@@ -1,6 +1,6 @@
 Importing activities...
   => Imported activity "Night Ride1"
   => Imported activity "Watopia Flat Forward in London"
-  => Updated activity "Test activity"
+  => Updated activity "Night Ride3"
   => Imported activity "Night Ride4"
 <error>You reached Strava API rate limits. You will need to import the rest of your activities tomorrow</error>

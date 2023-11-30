@@ -228,6 +228,11 @@ final class Activity
         return trim(str_replace('Zwift - ', '', $this->data['name']));
     }
 
+    public function updateName(string $name): void
+    {
+        $this->data['name'] = $name;
+    }
+
     public function getDistance(): float
     {
         return round($this->data['distance'] / 1000);
