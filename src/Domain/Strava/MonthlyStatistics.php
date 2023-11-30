@@ -13,11 +13,15 @@ use Carbon\CarbonInterval;
 
 final readonly class MonthlyStatistics
 {
+    /** @var array<mixed> */
+    private array $statistics;
+
     private function __construct(
         private ActivityCollection $activities,
         private ChallengeCollection $challenges,
         private MonthCollection $months,
     ) {
+        $this->statistics = $this->buildStatistics();
     }
 
     public static function fromActivitiesAndChallenges(
@@ -35,7 +39,7 @@ final readonly class MonthlyStatistics
     /**
      * @return array<mixed>
      */
-    public function getRows(): array
+    private function buildStatistics(): array
     {
         $statistics = [];
         /** @var \App\Domain\Strava\Calendar\Month $month */
@@ -47,7 +51,7 @@ final readonly class MonthlyStatistics
                 'totalDistance' => 0,
                 'totalElevation' => 0,
                 'totalCalories' => 0,
-                'movingTime' => 0,
+                'movingTimeInSeconds' => 0,
                 'challengesCompleted' => count(array_filter(
                     $this->challenges->toArray(),
                     fn (Challenge $challenge) => $challenge->getCreatedOn()->format(Month::MONTH_ID_FORMAT) == $month->getId()
@@ -64,17 +68,33 @@ final readonly class MonthlyStatistics
             ++$statistics[$month]['numberOfRides'];
             $statistics[$month]['totalDistance'] += $activity->getDistance();
             $statistics[$month]['totalElevation'] += $activity->getElevation();
-            $statistics[$month]['movingTime'] += $activity->getMovingTimeInSeconds();
+            $statistics[$month]['movingTimeInSeconds'] += $activity->getMovingTimeInSeconds();
             $statistics[$month]['totalCalories'] += $activity->getCalories();
         }
 
         $statistics = array_filter($statistics, fn (array $statistic) => $statistic['numberOfRides'] > 0);
 
         foreach ($statistics as &$statistic) {
-            $statistic['movingTime'] = CarbonInterval::seconds($statistic['movingTime'])->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']);
+            $statistic['movingTime'] = CarbonInterval::seconds($statistic['movingTimeInSeconds'])->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']);
         }
 
         return $statistics;
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getStatistics(): array
+    {
+        return $this->statistics;
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getStatisticsForMonth(Month $month): array
+    {
+        return $this->statistics[$month->getId()] ?? [];
     }
 
     /**

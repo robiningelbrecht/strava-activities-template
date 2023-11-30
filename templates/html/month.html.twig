@@ -31,31 +31,31 @@
             <ul class="hidden md:flex text-center mr-2 divide-x divide-gray-200 dark:divide-gray-700">
                 <li class="flex items-center gap-x-0.5 pr-2">
                     {{ svgDistance }}
-                    <div>1000</div>
+                    <div>{{ statistics.totalDistance|number_format(0, '.', ' ') }}</div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">km</div>
                 </li>
                 <li class="flex items-center gap-x-0.5 px-2">
                     {{ svgElevation }}
-                    <div>3000</div>
+                    <div>{{ statistics.totalElevation|number_format(0, '.', ' ') }}</div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">m</div>
                 </li>
                 <li class="flex items-center gap-x-0.5 px-2">
                     {{ svgTime }}
-                    <div>37</div>
+                    <div>{{ (statistics.movingTimeInSeconds / 3600)|number_format(0, '.', ' ') }}</div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">hours</div>
                 </li>
                 <li class="flex items-center gap-x-0.5 px-2">
                     {{ svgChallenges }}
-                    <div>10</div>
+                    <div> {{ statistics.challengesCompleted }}</div>
                 </li>
                 <li class="flex items-center gap-x-0.5 px-2">
                     {{ svgCalories }}
-                    <div>3000</div>
+                    <div>{{ statistics.totalCalories|number_format(0, '.', ' ') }}</div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">kcal</div>
                 </li>
                 <li class="flex items-center gap-x-0.5 pl-2">
                     {{ svgHashtag }}
-                    <div>21</div>
+                    <div>{{ statistics.numberOfRides }}</div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">rides</div>
                 </li>
             </ul>
