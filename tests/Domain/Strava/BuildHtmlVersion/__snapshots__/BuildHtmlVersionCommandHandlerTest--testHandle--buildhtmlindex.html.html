@@ -241,7 +241,7 @@
         initTabs();
         initPopovers();
         initTooltips();
-        const modalLinks = rootNode.querySelectorAll('a[data-modal-id]');
+        const modalLinks = rootNode.querySelectorAll('a[data-model-content-url]');
         modalLinks.forEach(function(node) {
             node.addEventListener('click', function (e) {
                 if(modal){
@@ -250,7 +250,6 @@
                 }
                 e.preventDefault();
 
-                const modalId = node.getAttribute('data-modal-id')
                 modal = new Modal(modalSkeletonNode, {
                     placement: 'bottom',
                     closable: true,
@@ -263,7 +262,6 @@
                             cancelable: true,
                             detail: {
                                 node: modalSkeletonNode,
-                                modalId: modalId
                             }
                         }));
                     },
