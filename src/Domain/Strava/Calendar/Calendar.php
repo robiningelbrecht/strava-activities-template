@@ -37,11 +37,11 @@ final readonly class Calendar
         $numberOfDaysInPreviousMonth = $previousMonth->getNumberOfDays();
 
         $days = DayCollection::empty();
-        for ($i = $this->month->getWeekDayOfFirstDay(); $i > 1; --$i) {
+        for ($i = 1; $i < $this->month->getWeekDayOfFirstDay(); ++$i) {
             // Prepend with days of previous month.
-            $dayNumber = $numberOfDaysInPreviousMonth - $i;
+            $dayNumber = $numberOfDaysInPreviousMonth - ($this->month->getWeekDayOfFirstDay() - $i - 1);
             $days->add(Day::create(
-                dayNumber: $numberOfDaysInPreviousMonth - $i,
+                dayNumber: $dayNumber,
                 isCurrentMonth: false,
                 activities: $this->activities->filterOnDate(SerializableDateTime::createFromFormat(
                     format: 'd-n-Y',

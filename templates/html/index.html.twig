@@ -223,56 +223,60 @@
     });
 
     const modalSkeletonNode = document.getElementById('modal-skeleton');
-    const modals = [];
+    let modal = null;
     document.addEventListener('pageWasLoaded', () => {
+        initElements(document);
+    });
+    document.addEventListener('modalWasLoaded', (event) => {
+        event.detail.node.querySelector('button.close').addEventListener('click', function (e) {
+            e.preventDefault();
+            modal.hide();
+        });
+        initElements(event.detail.node);
+    });
+
+    const initElements = (rootNode)=> {
         lazyLoad.update();
 
         initTabs();
         initPopovers();
         initTooltips();
-        initCharts(document.querySelectorAll('[data-echarts-options]'));
-
-        const modalLinks = document.querySelectorAll('a[data-modal-id]');
+        const modalLinks = rootNode.querySelectorAll('a[data-modal-id]');
         modalLinks.forEach(function(node) {
-            const modalId = node.getAttribute('data-modal-id')
-            modals[modalId] = new Modal(modalSkeletonNode, {
-                placement: 'bottom',
-                closable: true,
-                backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-[60]',
-                onShow: async () => {
-                    const response = await fetch(node.getAttribute('data-model-content-url'));
-                    modalSkeletonNode.querySelector('#modal-content').innerHTML = await response.text();
-                    document.dispatchEvent(new CustomEvent('modalWasLoaded', {
-                        bubbles: true,
-                        cancelable: true,
-                        detail: {
-                            node: modalSkeletonNode,
-                            modalId: modalId
-                        }
-                    }));
-                },
-                onHide: ()=> {
-                    modalSkeletonNode.querySelector('#modal-content').innerHTML = '';
-                }
-            });
             node.addEventListener('click', function (e) {
+                if(modal){
+                    // Only allow one open modal at a time.
+                    modal.hide();
+                }
                 e.preventDefault();
-                modals[modalId].toggle();
+
+                const modalId = node.getAttribute('data-modal-id')
+                modal = new Modal(modalSkeletonNode, {
+                    placement: 'bottom',
+                    closable: true,
+                    backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-[60]',
+                    onShow: async () => {
+                        const response = await fetch(node.getAttribute('data-model-content-url'));
+                        modalSkeletonNode.querySelector('#modal-content').innerHTML = await response.text();
+                        document.dispatchEvent(new CustomEvent('modalWasLoaded', {
+                            bubbles: true,
+                            cancelable: true,
+                            detail: {
+                                node: modalSkeletonNode,
+                                modalId: modalId
+                            }
+                        }));
+                    },
+                    onHide: ()=> {
+                        modalSkeletonNode.querySelector('#modal-content').innerHTML = '';
+                    }
+                });
+
+                modal.toggle();
             });
         });
-    });
-    document.addEventListener('modalWasLoaded', (event) => {
-        event.detail.node.querySelector('button.close').addEventListener('click', function (e) {
-            e.preventDefault();
-            modals[event.detail.modalId].hide();
-        });
-        initCharts(event.detail.node.querySelectorAll('[data-echarts-options]'));
-        initPopovers();
-        lazyLoad.update();
-    });
 
-    const initCharts = (nodes) => {
-        nodes.forEach(function(chartNode) {
+        rootNode.querySelectorAll('[data-echarts-options]').forEach(function(chartNode) {
             const chart = echarts.init(chartNode);
             window.addEventListener('resize', function() {
                 chart.resize();
@@ -280,7 +284,7 @@
             const chartOptions = JSON.parse(chartNode.getAttribute('data-echarts-options'));
             chart.setOption(chartOptions);
         });
-    }
+    };
 </script>
 </body>
 </html>
