@@ -90,6 +90,11 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             startDateFirstActivity: $allActivities->getFirstActivityStartDate(),
             now: $now
         );
+        $monthlyStatistics = MonthlyStatistics::fromActivitiesAndChallenges(
+            activities: $allActivities,
+            challenges: $allChallenges,
+            months: $allMonths,
+        );
 
         /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($allActivities as $activity) {
@@ -244,11 +249,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $this->filesystem->write(
             'build/html/monthly-stats.html',
             $this->twig->load('html/monthly-stats.html.twig')->render([
-                'monthlyStatistics' => MonthlyStatistics::fromActivitiesAndChallenges(
-                    activities: $allActivities,
-                    challenges: $allChallenges,
-                    months: $allMonths,
-                ),
+                'monthlyStatistics' => $monthlyStatistics,
             ]),
         );
 
@@ -259,6 +260,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 $this->twig->load('html/month.html.twig')->render([
                     'hasPreviousMonth' => $month->getId() != $allActivities->getFirstActivityStartDate()->format(Month::MONTH_ID_FORMAT),
                     'hasNextMonth' => $month->getId() != $now->format(Month::MONTH_ID_FORMAT),
+                    'statistics' => $monthlyStatistics->getStatisticsForMonth($month),
                     'calendar' => Calendar::create(
                         month: $month,
                         activities: $allActivities

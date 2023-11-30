@@ -59,7 +59,7 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
     </tr>
     </thead>
     <tbody>
-    {% for statistic in monthlyStatistics.getRows() %}
+    {% for statistic in monthlyStatistics.getStatistics() %}
         <tr>
             <td align="center">{{ statistic.month }}</td>
             <td align="center">{{ statistic.numberOfRides }}</td>
