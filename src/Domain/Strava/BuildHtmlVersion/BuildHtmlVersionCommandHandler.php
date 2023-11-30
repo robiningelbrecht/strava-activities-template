@@ -26,6 +26,8 @@ use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Domain\Strava\Athlete\AthleteWeightRepository;
 use App\Domain\Strava\Athlete\HeartRateZone;
 use App\Domain\Strava\Athlete\TimeInHeartRateZoneChartBuilder;
+use App\Domain\Strava\Calendar\Calendar;
+use App\Domain\Strava\Calendar\Month;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
 use App\Domain\Strava\Ftp\FtpHistoryChartBuilder;
@@ -253,7 +255,12 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         foreach ($period as $date) {
             $this->filesystem->write(
                 'build/html/month/month-'.$date->format('Y-m').'.html',
-                $this->twig->load('html/month.html.twig')->render([]),
+                $this->twig->load('html/month.html.twig')->render([
+                    'calendar' => Calendar::create(
+                        month: Month::fromDate(SerializableDateTime::fromDateTimeImmutable($date)),
+                        activities: $allActivities
+                    ),
+                ]),
             );
         }
 
