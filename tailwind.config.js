@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
     darkMode: 'class',
     content: [
@@ -8,13 +7,13 @@ module.exports = {
         "./node_modules/flowbite/**/*.js"
     ],
     theme: {
-        colors: {
-            'strava-orange': '#F26722',
+        extend: {
+            colors: {
+                'strava-orange': '#F26722',
+            },
         },
-        extend: {},
     },
     plugins: [
         require('flowbite/plugin')
     ]
 }
-
