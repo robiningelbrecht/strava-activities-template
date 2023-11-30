@@ -28,6 +28,7 @@ use App\Domain\Strava\Athlete\HeartRateZone;
 use App\Domain\Strava\Athlete\TimeInHeartRateZoneChartBuilder;
 use App\Domain\Strava\Calendar\Calendar;
 use App\Domain\Strava\Calendar\Month;
+use App\Domain\Strava\Calendar\MonthCollection;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
 use App\Domain\Strava\Ftp\FtpHistoryChartBuilder;
@@ -85,6 +86,10 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $activityHighlights = ActivityHighlights::fromActivities($allActivities);
         $weekdayStats = WeekdayStats::fromActivities($allActivities);
         $dayTimeStats = DaytimeStats::fromActivities($allActivities);
+        $allMonths = MonthCollection::create(
+            startDateFirstActivity: $allActivities->getFirstActivityStartDate(),
+            now: $now
+        );
 
         /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($allActivities as $activity) {
@@ -242,22 +247,20 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 'monthlyStatistics' => MonthlyStatistics::fromActivitiesAndChallenges(
                     activities: $allActivities,
                     challenges: $allChallenges,
-                    now: $now,
+                    months: $allMonths,
                 ),
             ]),
         );
 
-        $period = new \DatePeriod(
-            $allActivities->getFirstActivityStartDate()->modify('first day of this month'),
-            new \DateInterval('P1M'),
-            $now->modify('last day of this month')
-        );
-        foreach ($period as $date) {
+        /** @var Month $month */
+        foreach ($allMonths as $month) {
             $this->filesystem->write(
-                'build/html/month/month-'.$date->format('Y-m').'.html',
+                'build/html/month/month-'.$month->getId().'.html',
                 $this->twig->load('html/month.html.twig')->render([
+                    'hasPreviousMonth' => $month->getId() != $allActivities->getFirstActivityStartDate()->format(Month::MONTH_ID_FORMAT),
+                    'hasNextMonth' => $month->getId() != $now->format(Month::MONTH_ID_FORMAT),
                     'calendar' => Calendar::create(
-                        month: Month::fromDate(SerializableDateTime::fromDateTimeImmutable($date)),
+                        month: $month,
                         activities: $allActivities
                     ),
                 ]),
@@ -275,7 +278,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     DistanceOverTimePerGearChartBuilder::fromGearAndActivities(
                         gearCollection: $allBikes,
                         activityCollection: $allActivities,
-                        now: $now,
+                        months: $allMonths,
                     )
                         ->build()
                 ),

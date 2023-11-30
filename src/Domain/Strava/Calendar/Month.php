@@ -8,6 +8,7 @@ use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final readonly class Month
 {
+    public const MONTH_ID_FORMAT = 'Y-m';
     private SerializableDateTime $firstDay;
 
     private function __construct(
@@ -45,7 +46,7 @@ final readonly class Month
 
     public function getId(): string
     {
-        return $this->firstDay->format('Y-m');
+        return $this->firstDay->format(self::MONTH_ID_FORMAT);
     }
 
     public function getNumberOfDays(): int
