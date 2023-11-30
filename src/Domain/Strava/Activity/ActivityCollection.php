@@ -29,4 +29,12 @@ final class ActivityCollection extends Collection
 
         return $startDate;
     }
+
+    public function filterOnDate(SerializableDateTime $date): ActivityCollection
+    {
+        return ActivityCollection::fromArray(array_filter(
+            $this->toArray(),
+            fn (Activity $activity) => $activity->getStartDate()->format('Ymd') === $date->format('Ymd')
+        ));
+    }
 }

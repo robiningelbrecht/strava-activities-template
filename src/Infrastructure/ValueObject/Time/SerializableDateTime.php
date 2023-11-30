@@ -4,10 +4,10 @@ namespace App\Infrastructure\ValueObject\Time;
 
 class SerializableDateTime extends \DateTimeImmutable implements \JsonSerializable, \Stringable
 {
-    public static function createFromFormat(string $format, string $datetime, $timezone = null): self|false
+    public static function createFromFormat(string $format, string $datetime, $timezone = null): self
     {
         if (!$datetime = parent::createFromFormat($format, $datetime, $timezone)) {
-            return false;
+            throw new \InvalidArgumentException(sprintf('Invalid date format %s for %s', $format, $datetime));
         }
 
         return self::fromString(
