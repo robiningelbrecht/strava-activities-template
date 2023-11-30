@@ -43,6 +43,11 @@ final readonly class Month
         return $this->firstDay->format('F Y');
     }
 
+    public function getId(): string
+    {
+        return $this->firstDay->format('Y-m');
+    }
+
     public function getNumberOfDays(): int
     {
         return (int) $this->firstDay->format('t');
