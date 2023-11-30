@@ -142,6 +142,7 @@ final readonly class MonthlyStatistics
             'numberOfRides' => count($activities),
             'totalDistance' => array_sum(array_map(fn (Activity $activity) => $activity->getDistance(), $activities)),
             'totalElevation' => array_sum(array_map(fn (Activity $activity) => $activity->getElevation(), $activities)),
+            'totalCalories' => array_sum(array_map(fn (Activity $activity) => $activity->getCalories(), $activities)),
             'movingTime' => CarbonInterval::seconds(array_sum(array_map(fn (Activity $activity) => $activity->getMovingTimeInSeconds(), $activities)))->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),
         ];
     }

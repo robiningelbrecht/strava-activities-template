@@ -53,6 +53,11 @@
                                     {{ svgHeartRate }}
                                 </div>
                             </th>
+                            <th scope="col" class="px-6 py-3">
+                                <div class="flex items-center justify-center">
+                                    {{ svgCalories }}
+                                </div>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -81,6 +86,9 @@
                                 </td>
                                 <td class="px-6 py-2 {{ activityHighlights.getHighestAverageHeartRate() == activity.getAverageHeartRate() ? 'text-strava-orange font-bold': '' }}">
                                     {{ activity.getAverageHeartRate() ?? 'n/a' }}
+                                </td>
+                                <td class="px-6 py-2 {{ activityHighlights.getCalories() == activity.getCalories() ? 'text-strava-orange font-bold': '' }}">
+                                    {{ activity.getCalories() }}<span class="text-xs">kcal</span>
                                 </td>
                             </tr>
                         {% endfor %}

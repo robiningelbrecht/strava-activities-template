@@ -39,6 +39,7 @@ final readonly class GearStatistics
                 'elevation' => array_sum(array_map(fn (Activity $activity) => $activity->getElevation(), $activitiesWithBike)),
                 'averageDistance' => $countActivitiesWithBike > 0 ? $bike->getDistanceInKm() / $countActivitiesWithBike : 0,
                 'averageSpeed' => $movingTimeInSeconds > 0 ? ($bike->getDistanceInKm() / $movingTimeInSeconds) * 3600 : 0,
+                'totalCalories' => array_sum(array_map(fn (Activity $activity) => $activity->getCalories(), $activitiesWithBike)),
             ];
         }, $this->bikes->toArray());
 
@@ -58,6 +59,7 @@ final readonly class GearStatistics
             'elevation' => $distanceWithOtherBike,
             'averageDistance' => $distanceWithOtherBike / $countActivitiesWithOtherBike,
             'averageSpeed' => ($distanceWithOtherBike / $movingTimeInSeconds) * 3600,
+            'totalCalories' => array_sum(array_map(fn (Activity $activity) => $activity->getCalories(), $activitiesWithOtherBike)),
         ];
 
         return $statistics;
