@@ -110,9 +110,11 @@ final class Activity
         return $this->data['kudos_count'] ?? 0;
     }
 
-    public function updateKudoCount(int $count): void
+    public function updateKudoCount(int $count): self
     {
         $this->data['kudos_count'] = $count;
+
+        return $this;
     }
 
     public function getGearId(): ?string
@@ -120,9 +122,11 @@ final class Activity
         return $this->gearId;
     }
 
-    public function updateGearId(string $gearId = null): void
+    public function updateGearId(string $gearId = null): self
     {
         $this->gearId = $gearId;
+
+        return $this;
     }
 
     public function getGearName(): ?string
@@ -228,9 +232,11 @@ final class Activity
         return trim(str_replace('Zwift - ', '', $this->data['name']));
     }
 
-    public function updateName(string $name): void
+    public function updateName(string $name): self
     {
         $this->data['name'] = $name;
+
+        return $this;
     }
 
     public function getDistance(): float
