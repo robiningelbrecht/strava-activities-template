@@ -11,9 +11,7 @@ use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Time\Sleep;
-use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\UuidFactory;
-use Lcobucci\Clock\Clock;
 use League\Flysystem\FilesystemOperator;
 
 #[AsCommandHandler]
@@ -25,7 +23,6 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
         private Strava $strava,
         private ChallengeRepository $challengeRepository,
         private FilesystemOperator $filesystem,
-        private Clock $clock,
         private UuidFactory $uuidFactory,
         private Sleep $sleep
     ) {
@@ -62,7 +59,7 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
         }
 
         foreach ($challenges as $stravaChallenge) {
-            $createdOn = $stravaChallenge['completedOn'] ?? SerializableDateTime::fromDateTimeImmutable($this->clock->now());
+            $createdOn = $stravaChallenge['completedOn'];
             $challengeId = ChallengeId::fromDateAndName(
                 $createdOn,
                 $stravaChallenge['name'],
