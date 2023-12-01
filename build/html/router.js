@@ -5,10 +5,9 @@ const spinner = app.querySelector('#spinner');
 const menu = document.querySelector('aside');
 const menuItems = document.querySelectorAll("aside li a[data-router-navigate]");
 const mobileNavTriggerEl = document.querySelector('[data-drawer-target="drawer-navigation"]');
+const defaultRoute = 'dashboard.html';
 
 const renderContent = async (page) => {
-    const currentPage = app.getAttribute('data-router-current');
-
     if(!menu.hasAttribute('aria-hidden')){
         // Trigger click event to close mobile nav.
         mobileNavTriggerEl.dispatchEvent(
@@ -18,11 +17,6 @@ const renderContent = async (page) => {
                 view: window
             })
         );
-    }
-
-    if (currentPage === page) {
-        // Do not reload the same page.
-        return
     }
 
     // Show loader.
@@ -68,12 +62,34 @@ const registerNavItems = (items) => {
     items.forEach(function (to) {
         to.addEventListener("click", (e) => {
             e.preventDefault();
-            renderContent(to.getAttribute('data-router-navigate'));
+            const route = to.getAttribute('data-router-navigate');
+            const currentRoute = app.getAttribute('data-router-current');
+            if (currentRoute === route) {
+                // Do not reload the same page.
+                return
+            }
+
+            renderContent(route);
+            window.history.pushState({
+                route: route
+            }, "", '#'+route);
         });
     });
 };
 
+const registerBrowserBackAndForth = () => {
+    window.onpopstate = function (e) {
+        renderContent(e.state.route);
+    };
+};
+
+
 (function boot() {
+    const route = location.hash.replace('#', '') || defaultRoute;
     registerNavItems(menuItems);
-    renderContent('dashboard.html');
+    registerBrowserBackAndForth();
+    renderContent(route);
+    window.history.replaceState({
+        route: route
+    }, "", '#'.route);
 })();
