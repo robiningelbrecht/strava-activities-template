@@ -42,7 +42,8 @@ const renderContent = async (page) => {
     document.querySelector('aside li a[data-router-navigate="'+page+'"]').classList.add('active');
 
     // There might be other nav links on the newly loaded page, make sure they are registered.
-    registerNavLinks();
+    const nav =  document.querySelectorAll("nav a[data-router-navigate], main a[data-router-navigate]");
+    registerNavItems(nav);
 
     document.dispatchEvent(new CustomEvent('pageWasLoaded', {
         bubbles: true,
@@ -51,11 +52,6 @@ const renderContent = async (page) => {
             page: page
         }
     }));
-};
-
-const registerNavLinks = () => {
-    const nav =  document.querySelectorAll("nav a[data-router-navigate], main a[data-router-navigate]");
-    registerNavItems(nav);
 };
 
 const registerNavItems = (items) => {
