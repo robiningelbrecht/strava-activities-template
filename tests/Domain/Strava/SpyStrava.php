@@ -11,6 +11,7 @@ use App\Domain\Strava\StravaClientSecret;
 use App\Domain\Strava\StravaRefreshToken;
 use App\Infrastructure\Environment\Settings;
 use App\Infrastructure\Serialization\Json;
+use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
@@ -143,6 +144,7 @@ class SpyStrava extends Strava
                 'logo_url' => Settings::getAppRoot().'/tests/cat.webp',
                 'url' => 'https://www.strava.com',
                 'challenge_id' => '123456',
+                'completedOn' => SerializableDateTime::fromString('2023-10-01'),
             ],
             [
                 'name' => 'Challenge 2',
@@ -150,6 +152,7 @@ class SpyStrava extends Strava
                 'logo_url' => Settings::getAppRoot().'/tests/cat.webp',
                 'url' => 'https://www.strava.com',
                 'challenge_id' => '654321',
+                'completedOn' => SerializableDateTime::fromString('2023-10-01'),
             ],
         ];
     }

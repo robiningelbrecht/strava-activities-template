@@ -320,6 +320,40 @@ class StravaTest extends TestCase
         $this->strava->getChallengesOnPublicProfile();
     }
 
+    public function testGetChallengesOnPublicProfileWhenTimeNotFound(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('athletes/10', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/public-profile-without-time.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge timestamp'));
+
+        $this->strava->getChallengesOnPublicProfile();
+    }
+
+    public function testGetChallengesOnPublicProfileWhenTimeNIsEmpty(): void
+    {
+        $this->client
+            ->expects($this->once())
+            ->method('request')
+            ->willReturnCallback(function (string $method, string $path, array $options) {
+                $this->assertEquals('GET', $method);
+                $this->assertEquals('athletes/10', $path);
+
+                return new Response(200, [], file_get_contents(__DIR__.'/public-profile-with-empty-time.html'));
+            });
+
+        $this->expectExceptionObject(new \RuntimeException('Could not fetch Strava challenge timestamp'));
+
+        $this->strava->getChallengesOnPublicProfile();
+    }
+
     public function testGetChallengesOnTrophyCase(): void
     {
         $this->client

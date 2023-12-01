@@ -190,12 +190,15 @@ class Strava
                 throw new \RuntimeException('Could not fetch Strava challenge challengeId');
             }
             if (!preg_match('/<time[\s\S]*>(?<match>.*?)<\/time>/', $match, $completedOn)) {
-                throw new \RuntimeException('Could not fetch Strava challenge time');
+                throw new \RuntimeException('Could not fetch Strava challenge timestamp');
+            }
+            if (empty(trim($completedOn['match']))) {
+                throw new \RuntimeException('Could not fetch Strava challenge timestamp');
             }
 
             $challenges[] = [
                 'name' => $challengeName['match'],
-                'completedOn' => SerializableDateTime::createFromFormat('d M Y', '01 '.trim($completedOn['match'])),
+                'completedOn' => SerializableDateTime::createFromFormat('d M Y H:i:s', '01 '.trim($completedOn['match'].' 00:00:00')),
                 'teaser' => $teaser['match'],
                 'logo_url' => $logoUrl['match'],
                 'url' => $url['match'],
