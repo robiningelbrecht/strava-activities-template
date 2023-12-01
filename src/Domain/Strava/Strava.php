@@ -189,9 +189,13 @@ class Strava
             if (!preg_match('/<img src="https[\S]+\/challenges\/(?<match>.*?)\/[\S]+.png" alt="[\s\S]*"[\s\S]*\/>/U', $match, $challengeId)) {
                 throw new \RuntimeException('Could not fetch Strava challenge challengeId');
             }
+            if (!preg_match('/<time[\s\S]*>(?<match>.*?)<\/time>/', $match, $completedOn)) {
+                throw new \RuntimeException('Could not fetch Strava challenge time');
+            }
 
             $challenges[] = [
                 'name' => $challengeName['match'],
+                'completedOn' => SerializableDateTime::createFromFormat('d M Y', '01 '.trim($completedOn['match'])),
                 'teaser' => $teaser['match'],
                 'logo_url' => $logoUrl['match'],
                 'url' => $url['match'],
