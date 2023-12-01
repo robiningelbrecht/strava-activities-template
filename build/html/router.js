@@ -60,7 +60,7 @@ const renderContent = async (page) => {
 };
 
 const registerNavLinks = () => {
-    const nav =  document.querySelectorAll("main a[data-router-navigate]");
+    const nav =  document.querySelectorAll("nav a[data-router-navigate], main a[data-router-navigate]");
     registerNavItems(nav);
 };
 
