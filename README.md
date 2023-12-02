@@ -137,7 +137,7 @@ All notable changes to this project will be documented in this file.
 
 #### [2023-12-03]
 
-* Added challenge consistency table
+* Added challenge consistency table (thanks to [rubenbuysse](https://github.com/rubenbuysse))
 
 #### [2023-12-01]
 
