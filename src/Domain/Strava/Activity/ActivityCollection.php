@@ -47,11 +47,19 @@ final class ActivityCollection extends Collection
         ));
     }
 
-    public function filterOnDateRange(SerializableDateTime $startDate, SerializableDateTime $endDate): ActivityCollection
+    public function filterOnDateRange(SerializableDateTime $fromDate, SerializableDateTime $toDate): ActivityCollection
     {
         return ActivityCollection::fromArray(array_filter(
             $this->toArray(),
-            fn (Activity $activity) => $activity->getStartDate() >= $startDate && $activity->getStartDate() <= $endDate
+            fn (Activity $activity) => $activity->getStartDate()->isAfterOrOn($fromDate) && $activity->getStartDate()->isBeforeOrOn($toDate)
+        ));
+    }
+
+    public function filterOnActivityType(ActivityType $activityType): ActivityCollection
+    {
+        return ActivityCollection::fromArray(array_filter(
+            $this->toArray(),
+            fn (Activity $activity) => $activityType === $activity->getType()
         ));
     }
 }

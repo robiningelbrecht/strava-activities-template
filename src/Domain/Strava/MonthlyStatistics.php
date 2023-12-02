@@ -102,7 +102,7 @@ final readonly class MonthlyStatistics
      */
     public function getTotals(): array
     {
-        return $this->getTotalsForActivities($this->activities->toArray());
+        return $this->getTotalsForActivities($this->activities);
     }
 
     /**
@@ -110,10 +110,7 @@ final readonly class MonthlyStatistics
      */
     public function getTotalsForOutsideBikeRides(): array
     {
-        $outsideBikeRides = array_filter(
-            $this->activities->toArray(),
-            fn (Activity $activity) => ActivityType::RIDE === $activity->getType()
-        );
+        $outsideBikeRides = $this->activities->filterOnActivityType(ActivityType::RIDE);
 
         return $this->getTotalsForActivities($outsideBikeRides);
     }
@@ -123,21 +120,18 @@ final readonly class MonthlyStatistics
      */
     public function getTotalsForZwift(): array
     {
-        $virtualRides = array_filter(
-            $this->activities->toArray(),
-            fn (Activity $activity) => ActivityType::VIRTUAL_RIDE === $activity->getType()
-        );
+        $virtualRides = $this->activities->filterOnActivityType(ActivityType::VIRTUAL_RIDE);
 
         return $this->getTotalsForActivities($virtualRides);
     }
 
     /**
-     * @param Activity[] $activities
-     *
      * @return array<mixed>
      */
-    private function getTotalsForActivities(array $activities): array
+    private function getTotalsForActivities(ActivityCollection $activities): array
     {
+        $activities = $activities->toArray();
+
         return [
             'numberOfRides' => count($activities),
             'totalDistance' => array_sum(array_map(fn (Activity $activity) => $activity->getDistance(), $activities)),
