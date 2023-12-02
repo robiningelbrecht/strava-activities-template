@@ -145,7 +145,7 @@ final class WeeklyDistanceChartBuilder
             if (!array_key_exists($week, $distancePerWeek)) {
                 continue;
             }
-            $distancePerWeek[$week][1] += $activity->getDistance();
+            $distancePerWeek[$week][1] += $activity->getDistanceInKilometer();
         }
 
         return array_values($distancePerWeek);

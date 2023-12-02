@@ -52,7 +52,7 @@ final readonly class DistanceOverTimePerGearChartBuilder
                 continue;
             }
             $month = $activity->getStartDate()->format(Month::MONTH_ID_FORMAT);
-            $distancePerGearAndMonth[$activity->getGearId()][$month] += $activity->getDistance();
+            $distancePerGearAndMonth[$activity->getGearId()][$month] += $activity->getDistanceInKilometer();
         }
 
         $series = [];

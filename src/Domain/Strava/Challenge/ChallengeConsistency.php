@@ -61,7 +61,7 @@ final readonly class ChallengeConsistency
             $consistency[ConsistencyChallenge::KM_1250->value][] = $monthlyStats['totalDistance'] >= 1250;
             $consistency[ConsistencyChallenge::CLIMBING_7500->value][] = $monthlyStats['totalElevation'] >= 7500;
             $consistency[ConsistencyChallenge::GRAN_FONDO->value][] = max(array_map(
-                fn (Activity $activity) => $activity->getDistance(),
+                fn (Activity $activity) => $activity->getDistanceInKilometer(),
                 $activities->toArray()
             )) >= 100;
 

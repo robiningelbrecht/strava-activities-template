@@ -36,7 +36,7 @@ final readonly class GearStatistics
                 'distance' => $bike->getDistanceInKm(),
                 'numberOfRides' => $countActivitiesWithBike,
                 'movingTime' => CarbonInterval::seconds($movingTimeInSeconds)->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),
-                'elevation' => array_sum(array_map(fn (Activity $activity) => $activity->getElevation(), $activitiesWithBike)),
+                'elevation' => array_sum(array_map(fn (Activity $activity) => $activity->getElevationInMeter(), $activitiesWithBike)),
                 'averageDistance' => $countActivitiesWithBike > 0 ? $bike->getDistanceInKm() / $countActivitiesWithBike : 0,
                 'averageSpeed' => $movingTimeInSeconds > 0 ? ($bike->getDistanceInKm() / $movingTimeInSeconds) * 3600 : 0,
                 'totalCalories' => array_sum(array_map(fn (Activity $activity) => $activity->getCalories(), $activitiesWithBike)),
@@ -48,12 +48,12 @@ final readonly class GearStatistics
         if (0 === $countActivitiesWithOtherBike) {
             return $statistics;
         }
-        $distanceWithOtherBike = array_sum(array_map(fn (Activity $activity) => $activity->getDistance(), $activitiesWithOtherBike));
+        $distanceWithOtherBike = array_sum(array_map(fn (Activity $activity) => $activity->getDistanceInKilometer(), $activitiesWithOtherBike));
         $movingTimeInSeconds = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTimeInSeconds(), $activitiesWithOtherBike));
 
         $statistics[] = [
             'name' => 'Other',
-            'distance' => array_sum(array_map(fn (Activity $activity) => $activity->getDistance(), $activitiesWithOtherBike)),
+            'distance' => array_sum(array_map(fn (Activity $activity) => $activity->getDistanceInKilometer(), $activitiesWithOtherBike)),
             'numberOfRides' => $countActivitiesWithOtherBike,
             'movingTime' => CarbonInterval::seconds($movingTimeInSeconds)->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']),
             'elevation' => $distanceWithOtherBike,
