@@ -62,16 +62,16 @@
                                     {{ statistic.numberOfRides }}
                                 </td>
                                 <td class="px-2 py-2 truncate">
-                                    {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                                    {{ statistic.totalDistance|formatNumber(0) }}<span class="text-xs">km</span>
                                 </td>
                                 <td class="px-2 py-2 truncate">
-                                    {{ statistic.totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                                    {{ statistic.totalElevation|formatNumber(0) }}<span class="text-xs">m</span>
                                 </td>
                                 <td class="px-2 py-2 truncate">
                                     {{ statistic.movingTime }}
                                 </td>
                                 <td class="px-2 py-2 truncate">
-                                    {{ statistic.totalCalories|number_format(0, '.', ' ') }}<span class="text-xs">kcal</span>
+                                    {{ statistic.totalCalories|formatNumber(0) }}<span class="text-xs">kcal</span>
                                 </td>
                                 <td class="px-2 py-2 truncate">
                                     {{ statistic.challengesCompleted }}
