@@ -2,7 +2,7 @@
 
 namespace App\Domain\Weather\OpenMeteo;
 
-final readonly class Weather implements \JsonSerializable
+final readonly class Weather
 {
     /**
      * @param array<mixed> $data
@@ -73,13 +73,5 @@ final readonly class Weather implements \JsonSerializable
             79 => 'Cold',
             default => throw new \RuntimeException('Unsupported weather code')
         };
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->data;
     }
 }
