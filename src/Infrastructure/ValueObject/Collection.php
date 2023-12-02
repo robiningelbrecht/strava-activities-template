@@ -98,6 +98,11 @@ abstract class Collection implements \Countable, \IteratorAggregate, \JsonSerial
         return end($items);
     }
 
+    public function reverse(): static
+    {
+        return static::fromArray(array_reverse($this->toArray()));
+    }
+
     /**
      * @return array<T>
      */

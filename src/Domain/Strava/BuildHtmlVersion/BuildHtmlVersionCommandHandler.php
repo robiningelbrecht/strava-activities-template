@@ -29,6 +29,7 @@ use App\Domain\Strava\Athlete\TimeInHeartRateZoneChartBuilder;
 use App\Domain\Strava\Calendar\Calendar;
 use App\Domain\Strava\Calendar\Month;
 use App\Domain\Strava\Calendar\MonthCollection;
+use App\Domain\Strava\Challenge\ChallengeConsistency;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
 use App\Domain\Strava\Ftp\FtpHistoryChartBuilder;
@@ -198,6 +199,11 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                         timeInSecondsInHeartRateZoneFive: $this->activityHeartRateRepository->findTotalTimeInSecondsInHeartRateZone(HeartRateZone::FIVE),
                     )
                         ->build(),
+                ),
+                'challengeConsistency' => ChallengeConsistency::create(
+                    months: $allMonths,
+                    monthlyStatistics: $monthlyStatistics,
+                    activities: $allActivities
                 ),
             ]),
         );

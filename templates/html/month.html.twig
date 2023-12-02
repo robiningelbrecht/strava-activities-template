@@ -70,7 +70,7 @@
     <!-- Modal body -->
     <div class="p-4 md:p-5 space-y-4">
         <div class="grid grid-cols-1 gap-4">
-            <div class="flex flex-col bg-gray-200 dark:bg-gray-600">
+            <div class="flex flex-col">
                 <div class="grid grid-cols-7 gap-px leading-6 font-semibold text-xs text-center border border-b-0 dark:border-gray-600">
                     <div class="py-2 bg-white dark:bg-gray-700">
                         Mon
@@ -94,9 +94,9 @@
                         Sun
                     </div>
                 </div>
-                <div class="grid grid-cols-7 gap-px leading-6 text-xs w-full border dark:border-gray-600">
+                <div class="grid grid-cols-7 gap-px leading-6 text-xs w-full bg-gray-200 dark:bg-gray-600 border dark:border-gray-600">
                     {% for day in calendar.getDays() %}
-                        <div class="relative py-2 px-3 {{ day.isCurrentMonth ? 'bg-white dark:bg-gray-700' : 'bg-gray-100 dark:bg-gray-800' }}">
+                        <div class="py-2 px-3 {{ day.isCurrentMonth ? 'bg-white dark:bg-gray-700' : 'bg-gray-100 dark:bg-gray-800' }}">
                             <div class="text-right text-gray-400">
                                 {{ day.getDayNumber() }}
                             </div>

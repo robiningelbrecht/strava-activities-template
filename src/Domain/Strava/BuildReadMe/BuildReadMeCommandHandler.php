@@ -9,6 +9,7 @@ use App\Domain\Strava\Activity\BuildEddingtonChart\Eddington;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Strava\Calendar\MonthCollection;
+use App\Domain\Strava\Challenge\ChallengeConsistency;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
 use App\Domain\Strava\Gear\GearRepository;
@@ -40,7 +41,19 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
     {
         assert($command instanceof BuildReadMe);
 
+        $now = SerializableDateTime::fromDateTimeImmutable($this->clock->now());
         $allActivities = $this->activityRepository->findAll();
+        $allChallenges = $this->challengeRepository->findAll();
+        $allBikes = $this->gearRepository->findAll();
+        $allMonths = MonthCollection::create(
+            startDateFirstActivity: $allActivities->getFirstActivityStartDate(),
+            now: $now
+        );
+        $monthlyStatistics = MonthlyStatistics::fromActivitiesAndChallenges(
+            activities: $allActivities,
+            challenges: $allChallenges,
+            months: $allMonths,
+        );
 
         foreach ($allActivities as &$activity) {
             if (!$activity->getGearId()) {
@@ -50,30 +63,26 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
                 $this->gearRepository->find($activity->getGearId())->getName()
             );
         }
-        $allChallenges = $this->challengeRepository->findAll();
-        $allBikes = $this->gearRepository->findAll();
 
         $this->filesystem->write('README.md', $this->twig->load('readme.html.twig')->render([
             'totals' => ActivityTotals::fromActivities(
-                $allActivities,
-                SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
+                activities: $allActivities,
+                now: $now,
             ),
             'allActivities' => $this->twig->load('strava-activities.html.twig')->render([
                 'activities' => $allActivities,
             ]),
-            'monthlyStatistics' => MonthlyStatistics::fromActivitiesAndChallenges(
-                activities: $allActivities,
-                challenges: $allChallenges,
-                months: MonthCollection::create(
-                    startDateFirstActivity: $allActivities->getFirstActivityStartDate(),
-                    now: SerializableDateTime::fromDateTimeImmutable($this->clock->now())
-                ),
-            ),
+            'monthlyStatistics' => $monthlyStatistics,
             'bikeStatistics' => GearStatistics::fromActivitiesAndGear(
                 activities: $allActivities,
                 bikes: $allBikes
             ),
             'powerOutputs' => $this->activityPowerRepository->findBest(),
+            'challengeConsistency' => ChallengeConsistency::create(
+                months: $allMonths,
+                monthlyStatistics: $monthlyStatistics,
+                activities: $allActivities
+            ),
             'challenges' => $allChallenges,
             'eddington' => Eddington::fromActivities($allActivities),
             'weekdayStats' => WeekdayStats::fromActivities($allActivities),

@@ -27,30 +27,4 @@ class ActivityStreamCollection extends Collection
 
         return null;
     }
-
-    public function canBuildChartData(): bool
-    {
-        if (empty(array_filter(
-            $this->toArray(),
-            fn (ActivityStream $stream) => StreamType::CADENCE === $stream->getStreamType()
-        ))) {
-            return false;
-        }
-
-        if (empty(array_filter(
-            $this->toArray(),
-            fn (ActivityStream $stream) => StreamType::WATTS === $stream->getStreamType()
-        ))) {
-            return false;
-        }
-
-        if (empty(array_filter(
-            $this->toArray(),
-            fn (ActivityStream $stream) => StreamType::HEART_RATE === $stream->getStreamType()
-        ))) {
-            return false;
-        }
-
-        return true;
-    }
 }
