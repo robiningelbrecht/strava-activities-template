@@ -70,10 +70,10 @@
                                     {{ render('html/component/activity-title.html.twig', {'activity': activity, 'ellipses': 30}) }}
                                 </td>
                                 <td class="px-6 py-2 {{ activityHighlights.getLongestDistance() == activity.getDistanceInKilometer() ? 'text-strava-orange font-bold': '' }}">
-                                    {{ activity.getDistanceInKilometer() }}<span class="text-xs">km</span>
+                                    {{ activity.getDistanceInKilometer()|formatNumber(0) }}<span class="text-xs">km</span>
                                 </td>
                                 <td class="px-6 py-2 {{ activityHighlights.getHighestElevation() == activity.getElevationInMeter() ? 'text-strava-orange font-bold': '' }}">
-                                    {{ activity.getElevationInMeter() }}<span class="text-xs">m</span>
+                                    {{ activity.getElevationInMeter()|formatNumber(0) }}<span class="text-xs">m</span>
                                 </td>
                                 <td class="px-6 py-2 {{ activityHighlights.getLongestMovingTimeFormatted() == activity.getMovingTimeFormatted() ? 'text-strava-orange font-bold': '' }}">
                                     {{ activity.getMovingTimeFormatted() }}
@@ -273,20 +273,20 @@
                                 </td>
                                 <td class="px-6 py-2 truncate">
                                     {% if statistic.totalDistance > 0 %}
-                                        {{ statistic.averageDistance|number_format(0, '.', ' ') }}<span class="text-xs">km avg</span> /
-                                        {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km total</span>
+                                        {{ statistic.averageDistance|formatNumber(0) }}<span class="text-xs">km avg</span> /
+                                        {{ statistic.totalDistance|formatNumber(0) }}<span class="text-xs">km total</span>
                                     {% else %}
                                         0<span class="text-xs">km</span>
                                     {% endif %}
                                 </td>
                                 <td class="px-6 py-2 truncate">
-                                    {{ statistic.totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                                    {{ statistic.totalElevation|formatNumber(0) }}<span class="text-xs">m</span>
                                 </td>
                                 <td class="px-6 py-2 truncate">
                                     {{ statistic.movingTimeForHumans }}
                                 </td>
                                 <td class="px-6 py-2 truncate">
-                                    {{ statistic.averageSpeed|number_format(1, '.', ' ') }}<span class="text-xs">km/h</span>
+                                    {{ statistic.averageSpeed|formatNumber(1) }}<span class="text-xs">km/h</span>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -344,20 +344,20 @@
                                 </td>
                                 <td class="px-6 py-2 truncate">
                                     {% if statistic.totalDistance > 0 %}
-                                        {{ statistic.averageDistance|number_format(0, '.', ' ') }}<span class="text-xs">km avg</span> /
-                                        {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km total</span>
+                                        {{ statistic.averageDistance|formatNumber(0) }}<span class="text-xs">km avg</span> /
+                                        {{ statistic.totalDistance|formatNumber(0) }}<span class="text-xs">km total</span>
                                     {% else %}
                                         0<span class="text-xs">km</span>
                                     {% endif %}
                                 </td>
                                 <td class="px-6 py-2 truncate">
-                                    {{ statistic.totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                                    {{ statistic.totalElevation|formatNumber(0) }}<span class="text-xs">m</span>
                                 </td>
                                 <td class="px-6 py-2 truncate">
                                     {{ statistic.movingTimeForHumans }}
                                 </td>
                                 <td class="px-6 py-2 truncate">
-                                    {{ statistic.averageSpeed|number_format(1, '.', ' ') }}<span class="text-xs">km/h</span>
+                                    {{ statistic.averageSpeed|formatNumber(1) }}<span class="text-xs">km/h</span>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -413,20 +413,20 @@
                                 </td>
                                 <td class="px-6 py-2 truncate">
                                     {% if statistic.totalDistance > 0 %}
-                                        {{ statistic.averageDistance|number_format(0, '.', ' ') }}<span class="text-xs">km avg</span> /
-                                        {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km total</span>
+                                        {{ statistic.averageDistance|formatNumber(0) }}<span class="text-xs">km avg</span> /
+                                        {{ statistic.totalDistance|formatNumber(0) }}<span class="text-xs">km total</span>
                                     {% else %}
                                         0<span class="text-xs">km</span>
                                     {% endif %}
                                 </td>
                                 <td class="px-6 py-2 truncate">
-                                    {{ statistic.totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                                    {{ statistic.totalElevation|formatNumber(0) }}<span class="text-xs">m</span>
                                 </td>
                                 <td class="px-6 py-2 truncate">
                                     {{ statistic.movingTimeForHumans }}
                                 </td>
                                 <td class="px-6 py-2 truncate">
-                                    {{ statistic.averageSpeed|number_format(1, '.', ' ') }}<span class="text-xs">km/h</span>
+                                    {{ statistic.averageSpeed|formatNumber(1) }}<span class="text-xs">km/h</span>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -474,7 +474,7 @@
                         {% set longestActivity = trivia.getLongestActivity() %}
                         <div class="text-center">
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Longest ride</dd>
-                            <dt class="mb-1 font-extrabold">{{ longestActivity.getDistanceInKilometer() }}<span class="text-xs">km</span></dt>
+                            <dt class="mb-1 font-extrabold">{{ longestActivity.getDistanceInKilometer()|formatNumber(0) }}<span class="text-xs">km</span></dt>
                             <a href="{{ longestActivity.getUrl() }}" class="text-xs text-blue-600 hover:underline">
                                 {{ longestActivity.getName()|ellipses(30) }}
                             </a>
@@ -484,7 +484,7 @@
                         {% set highestElevationActivity = trivia.getActivityWithHighestElevation() %}
                         <div class="text-center">
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Highest elevation</dd>
-                            <dt class="mb-1 font-extrabold">{{ highestElevationActivity.getElevationInMeter() }}<span class="text-xs">m</span></dt>
+                            <dt class="mb-1 font-extrabold">{{ highestElevationActivity.getElevationInMeter()|formatNumber(0) }}<span class="text-xs">m</span></dt>
                             <a href="{{ highestElevationActivity.getUrl() }}" class="text-xs text-blue-600 hover:underline">
                                 {{ highestElevationActivity.getName()|ellipses(30) }}
                             </a>
