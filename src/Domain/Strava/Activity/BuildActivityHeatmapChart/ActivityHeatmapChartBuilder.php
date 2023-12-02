@@ -159,9 +159,9 @@ final class ActivityHeatmapChartBuilder
      */
     private function getData(): array
     {
-        $activities = array_filter(
-            $this->activities->toArray(),
-            fn (Activity $activity) => $activity->getStartDate()->isAfterOrOn($this->fromDate) && $activity->getStartDate()->isBeforeOrOn($this->toDate)
+        $activities = $this->activities->filterOnDateRange(
+            fromDate: $this->fromDate,
+            toDate: $this->toDate
         );
 
         $data = $rawData = [];
