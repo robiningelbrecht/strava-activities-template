@@ -44,6 +44,11 @@ final readonly class Month
         return $this->firstDay->format('F Y');
     }
 
+    public function getShortLabel(): string
+    {
+        return $this->firstDay->format('M Y');
+    }
+
     public function getId(): string
     {
         return $this->firstDay->format(self::MONTH_ID_FORMAT);
@@ -58,6 +63,11 @@ final readonly class Month
     {
         // Numeric representation of week day, 1 (for Monday) through 7 (for Sunday)
         return (int) $this->firstDay->format('N');
+    }
+
+    public function getFirstMonday(): SerializableDateTime
+    {
+        return $this->firstDay->modify('first monday of this month');
     }
 
     public function getPreviousMonth(): self
