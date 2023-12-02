@@ -31,17 +31,17 @@
             <ul class="hidden md:flex text-center mr-2 divide-x divide-gray-200 dark:divide-gray-700">
                 <li class="flex items-center gap-x-0.5 pr-2">
                     {{ svgDistance }}
-                    <div>{{ statistics.totalDistance|number_format(0, '.', ' ') }}</div>
+                    <div>{{ statistics.totalDistance|formatNumber(0) }}</div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">km</div>
                 </li>
                 <li class="flex items-center gap-x-0.5 px-2">
                     {{ svgElevation }}
-                    <div>{{ statistics.totalElevation|number_format(0, '.', ' ') }}</div>
+                    <div>{{ statistics.totalElevation|formatNumber(0) }}</div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">m</div>
                 </li>
                 <li class="flex items-center gap-x-0.5 px-2">
                     {{ svgTime }}
-                    <div>{{ (statistics.movingTimeInSeconds / 3600)|number_format(0, '.', ' ') }}</div>
+                    <div>{{ (statistics.movingTimeInSeconds / 3600)|formatNumber(0) }}</div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">hours</div>
                 </li>
                 <li class="flex items-center gap-x-0.5 px-2">
@@ -50,7 +50,7 @@
                 </li>
                 <li class="flex items-center gap-x-0.5 px-2">
                     {{ svgCalories }}
-                    <div>{{ statistics.totalCalories|number_format(0, '.', ' ') }}</div>
+                    <div>{{ statistics.totalCalories|formatNumber(0) }}</div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">kcal</div>
                 </li>
                 <li class="flex items-center gap-x-0.5 pl-2">
