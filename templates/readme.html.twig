@@ -81,16 +81,16 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
     <tr>
         <td align="center"><b>Outside</b></td>
         <td align="center"><b>{{ monthlyStatistics.getTotalsForOutsideBikeRides().numberOfRides }}</td>
-        <td align="center"><b>{{ monthlyStatistics.getTotalsForOutsideBikeRides().totalDistance|number_format(0, '.', ' ') }} <sup><sub>km</sub></sup></b></td>
-        <td align="center"><b>{{ monthlyStatistics.getTotalsForOutsideBikeRides().totalElevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></b></td>
+        <td align="center"><b>{{ monthlyStatistics.getTotalsForOutsideBikeRides().totalDistance|formatNumber(0) }} <sup><sub>km</sub></sup></b></td>
+        <td align="center"><b>{{ monthlyStatistics.getTotalsForOutsideBikeRides().totalElevation|formatNumber(0) }} <sup><sub>m</sub></sup></b></td>
         <td align="center"><b>{{ monthlyStatistics.getTotalsForOutsideBikeRides().movingTime }}</b></td>
         <td align="center"></td>
     </tr>
     <tr>
         <td align="center"><b>Total</b></td>
         <td align="center"><b>{{ monthlyStatistics.getTotals().numberOfRides }}</td>
-        <td align="center"><b>{{ monthlyStatistics.getTotals().totalDistance|number_format(0, '.', ' ') }} <sup><sub>km</sub></sup></b></td>
-        <td align="center"><b>{{ monthlyStatistics.getTotals().totalElevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></b></td>
+        <td align="center"><b>{{ monthlyStatistics.getTotals().totalDistance|formatNumber(0) }} <sup><sub>km</sub></sup></b></td>
+        <td align="center"><b>{{ monthlyStatistics.getTotals().totalElevation|formatNumber(0) }} <sup><sub>m</sub></sup></b></td>
         <td align="center"><b>{{ monthlyStatistics.getTotals().movingTime }}</b></td>
         <td align="center"></td>
     </tr>
@@ -123,15 +123,15 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
             <td align="center">{{ statistic.numberOfRides }}</td>
             <td align="center">
                 {% if statistic.totalDistance > 0 %}
-                    {{ statistic.averageDistance|number_format(0, '.', ' ') }} <sup><sub>km avg</sub></sup> /
-                    {{ statistic.totalDistance|number_format(0, '.', ' ') }} <sup><sub>km total</sub></sup>
+                    {{ statistic.averageDistance|formatNumber(0) }} <sup><sub>km avg</sub></sup> /
+                    {{ statistic.totalDistance|formatNumber(0) }} <sup><sub>km total</sub></sup>
                 {% else %}
                     0 <sup><sub>km</sub></sup>
                 {% endif %}
             </td>
-            <td align="center">{{ statistic.totalElevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></td>
+            <td align="center">{{ statistic.totalElevation|formatNumber(0) }} <sup><sub>m</sub></sup></td>
             <td align="center">{{ statistic.movingTimeForHumans }}</td>
-            <td align="center">{{ statistic.averageSpeed|number_format(1, '.', ' ') }} <sup><sub>km/h</sub></sup></td>
+            <td align="center">{{ statistic.averageSpeed|formatNumber(1) }} <sup><sub>km/h</sub></sup></td>
         </tr>
     {% endfor %}
     </tbody>
@@ -160,15 +160,15 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
             <td align="center">{{ statistic.numberOfRides }}</td>
             <td align="center">
                 {% if statistic.totalDistance > 0 %}
-                    {{ statistic.averageDistance|number_format(0, '.', ' ') }} <sup><sub>km avg</sub></sup> /
-                    {{ statistic.totalDistance|number_format(0, '.', ' ') }} <sup><sub>km total</sub></sup>
+                    {{ statistic.averageDistance|formatNumber(0) }} <sup><sub>km avg</sub></sup> /
+                    {{ statistic.totalDistance|formatNumber(0) }} <sup><sub>km total</sub></sup>
                 {% else %}
                     0 <sup><sub>km</sub></sup>
                 {% endif %}
             </td>
-            <td align="center">{{ statistic.totalElevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></td>
+            <td align="center">{{ statistic.totalElevation|formatNumber(0) }} <sup><sub>m</sub></sup></td>
             <td align="center">{{ statistic.movingTimeForHumans }}</td>
-            <td align="center">{{ statistic.averageSpeed|number_format(1, '.', ' ') }} <sup><sub>km/h</sub></sup></td>
+            <td align="center">{{ statistic.averageSpeed|formatNumber(1) }} <sup><sub>km/h</sub></sup></td>
         </tr>
     {% endfor %}
     </tbody>
@@ -194,15 +194,15 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
             <td align="center">{{ statistic.numberOfRides }}</td>
             <td align="center">
                 {% if statistic.distance > 0 %}
-                    {{ statistic.averageDistance|number_format(0, '.', ' ') }} <sup><sub>km avg</sub></sup> /
-                    {{ statistic.distance|number_format(0, '.', ' ') }} <sup><sub>km total</sub></sup>
+                    {{ statistic.averageDistance|formatNumber(0) }} <sup><sub>km avg</sub></sup> /
+                    {{ statistic.distance|formatNumber(0) }} <sup><sub>km total</sub></sup>
                 {% else %}
                     0 <sup><sub>km</sub></sup>
                 {% endif %}
             </td>
-            <td align="center">{{ statistic.elevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></td>
+            <td align="center">{{ statistic.elevation|formatNumber(0) }} <sup><sub>m</sub></sup></td>
             <td align="center">{{ statistic.movingTime }}</td>
-            <td align="center">{{ statistic.averageSpeed|number_format(1, '.', ' ') }} <sup><sub>km/h</sub></sup></td>
+            <td align="center">{{ statistic.averageSpeed|formatNumber(1) }} <sup><sub>km/h</sub></sup></td>
         </tr>
     {% endfor %}
     </tbody>
@@ -278,15 +278,15 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
             <td align="center">{{ statistic.numberOfRides }}</td>
             <td align="center">
                 {% if statistic.totalDistance > 0 %}
-                     {{ statistic.averageDistance|number_format(0, '.', ' ') }} <sup><sub>km avg</sub></sup> /
-                     {{ statistic.totalDistance|number_format(0, '.', ' ') }} <sup><sub>km total</sub></sup>
+                     {{ statistic.averageDistance|formatNumber(0) }} <sup><sub>km avg</sub></sup> /
+                     {{ statistic.totalDistance|formatNumber(0) }} <sup><sub>km total</sub></sup>
                 {% else %}
                     0 <sup><sub>km</sub></sup>
                 {% endif %}
             </td>
-            <td align="center">{{ statistic.totalElevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></td>
+            <td align="center">{{ statistic.totalElevation|formatNumber(0) }} <sup><sub>m</sub></sup></td>
             <td align="center">{{ statistic.movingTimeForHumans }}</td>
-            <td align="center">{{ statistic.averageSpeed|number_format(1, '.', ' ') }} <sup><sub>km/h</sub></sup></td>
+            <td align="center">{{ statistic.averageSpeed|formatNumber(1) }} <sup><sub>km/h</sub></sup></td>
         </tr>
     {% endfor %}
     </tbody>
