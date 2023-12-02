@@ -33,6 +33,7 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
 {% endif %}
 <kbd><a href="#eddington-chart">Eddington</a></kbd> |
 <kbd><a href="#distance-breakdown">Distance breakdown</a></kbd> |
+<kbd><a href="#challenge-consistency">Challenge consistency</a></kbd> |
 {% if challenges is not empty %}
 <kbd><a href="#completed-challenges">Completed challenges</a></kbd>
 {% endif %}
@@ -286,6 +287,33 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
             <td align="center">{{ statistic.totalElevation|number_format(0, '.', ' ') }} <sup><sub>m</sub></sup></td>
             <td align="center">{{ statistic.movingTimeForHumans }}</td>
             <td align="center">{{ statistic.averageSpeed|number_format(1, '.', ' ') }} <sup><sub>km/h</sub></sup></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+## Challenge consistency
+
+<table>
+    <thead>
+    <tr>
+        <th></th>
+        {% for month in challengeConsistency.getMonths() %}
+        <th align="center">{{ month.getShortLabel() }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for challenge, achievements in challengeConsistency.getConsistencies() %}
+        <tr>
+            <td align="center">{{ challenge }}</td>
+            {% for achieved in achievements %}
+            <td align="center">
+                {% if achieved %}
+                    <img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/check-mark.svg" width="20" alt="Check mark" title="Check mark"/>
+                {% endif %}
+            </td>
+            {% endfor %}
         </tr>
     {% endfor %}
     </tbody>
