@@ -14,7 +14,7 @@ final readonly class ActivityHighlights
         return max(array_map(fn (Activity $activity) => $activity->getDistanceInKilometer(), $this->activities->toArray()));
     }
 
-    public function getHighestElevation(): int
+    public function getHighestElevation(): float
     {
         return max(array_map(fn (Activity $activity) => $activity->getElevationInMeter(), $this->activities->toArray()));
     }
