@@ -251,7 +251,7 @@ final class Activity
 
     public function getCalories(): int
     {
-        return (int) round($this->data['calories'] ?? 0);
+        return $this->data['calories'] ?? 0;
     }
 
     public function getAveragePower(): ?int
