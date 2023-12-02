@@ -135,6 +135,10 @@ For any feedback, help or feature requests, please [open a new issue](https://gi
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
 
+#### [2023-12-03]
+
+* Added challenge consistency table
+
 #### [2023-12-01]
 
 * Added a monthly calendar view for activities
