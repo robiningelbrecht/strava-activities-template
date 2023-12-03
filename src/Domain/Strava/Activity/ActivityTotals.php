@@ -79,7 +79,7 @@ final readonly class ActivityTotals
 
     public function getTotalDaysOfCycling(): int
     {
-        return count(array_unique(array_map(fn (Activity $activity) => $activity->getStartDate()->format('Ymd'), $this->activities->toArray())));
+        return count(array_unique($this->activities->map(fn (Activity $activity) => $activity->getStartDate()->format('Ymd'))));
     }
 
     public static function fromActivities(ActivityCollection $activities, SerializableDateTime $now): self

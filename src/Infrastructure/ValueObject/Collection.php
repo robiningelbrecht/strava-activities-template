@@ -125,9 +125,22 @@ abstract class Collection implements \Countable, \IteratorAggregate, \JsonSerial
         return static::fromArray(array_reverse($this->items));
     }
 
+    /**
+     * @return array<mixed>
+     */
+    public function map(\Closure $closure): array
+    {
+        return array_map(fn ($item): mixed => $closure($item), $this->items);
+    }
+
     public function sum(\Closure $closure): int|float
     {
-        return array_sum(array_map(fn ($item): int|float => $closure($item), $this->items));
+        return array_sum($this->map(fn ($item): int|float => $closure($item)));
+    }
+
+    public function max(\Closure $closure): int|float
+    {
+        return max($this->map(fn ($item): int|float => $closure($item)));
     }
 
     public function filter(\Closure $closure = null): static
@@ -136,7 +149,7 @@ abstract class Collection implements \Countable, \IteratorAggregate, \JsonSerial
             return static::fromArray(array_filter($this->items));
         }
 
-        return static::fromArray(array_filter($this->items, fn ($item): int|float => $closure($item)));
+        return static::fromArray(array_filter($this->items, fn ($item): mixed => $closure($item)));
     }
 
     /**
