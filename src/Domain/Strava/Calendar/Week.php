@@ -11,7 +11,7 @@ final readonly class Week
     public const WEEK_ID_FORMAT = 'Y-W';
 
     private function __construct(
-        public SerializableDateTime $date,
+        private SerializableDateTime $date,
     ) {
     }
 
