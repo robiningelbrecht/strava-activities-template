@@ -20,7 +20,7 @@ final readonly class Trivia
 
     public function getTotalKudosReceived(): int
     {
-        return array_sum(array_map(fn (Activity $activity) => $activity->getKudoCount(), $this->activities->toArray()));
+        return $this->activities->sum(fn (Activity $activity) => $activity->getKudoCount());
     }
 
     public function getMostKudotedActivity(): Activity
