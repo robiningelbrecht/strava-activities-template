@@ -64,14 +64,12 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
             );
         }
 
-        $this->filesystem->write('README.md', $this->twig->load('readme.html.twig')->render([
+        $this->filesystem->write('README.md', $this->twig->load('markdown/readme.html.twig')->render([
             'totals' => ActivityTotals::fromActivities(
                 activities: $allActivities,
                 now: $now,
             ),
-            'allActivities' => $this->twig->load('strava-activities.html.twig')->render([
-                'activities' => $allActivities,
-            ]),
+            'allActivities' => $allActivities,
             'monthlyStatistics' => $monthlyStatistics,
             'bikeStatistics' => GearStatistics::fromActivitiesAndGear(
                 activities: $allActivities,
