@@ -18,13 +18,10 @@ class ActivityStreamCollection extends Collection
 
     public function getByStreamType(StreamType $streamType): ?ActivityStream
     {
-        if ($steams = array_filter(
-            $this->toArray(),
+        $steams = $this->filter(
             fn (ActivityStream $stream) => $streamType === $stream->getStreamType()
-        )) {
-            return reset($steams);
-        }
+        );
 
-        return null;
+        return $steams->getFirst();
     }
 }
