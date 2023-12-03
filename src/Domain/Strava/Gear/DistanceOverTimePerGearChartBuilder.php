@@ -55,6 +55,10 @@ final readonly class DistanceOverTimePerGearChartBuilder
             $distancePerGearAndMonth[$activity->getGearId()][$month] += $activity->getDistanceInKilometer();
         }
 
+        foreach ($distancePerGearAndMonth as $gearId => $months) {
+            $distancePerGearAndMonth[$gearId] = array_map('round', $months);
+        }
+
         $series = [];
         $selectedSeries = [];
 
