@@ -40,6 +40,7 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
         /** @var HeartRate[] $best */
         $best = [];
 
+        /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $stream */
         foreach ($heartRateStreams as $stream) {
             foreach (self::TIME_INTERVAL_IN_SECONDS as $timeIntervalInSeconds) {
                 if (!$heartRate = $stream->getBestAverageForTimeInterval($timeIntervalInSeconds)) {

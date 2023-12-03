@@ -176,6 +176,48 @@
                     </table>
                 </div>
             </div>
+            <!-- HIGHEST HEART RATES -->
+            <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <h3 class="mb-4 text-lg font-semibold">
+                    Highest heart rate over time
+                </h3>
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 sticky left-0 bg-gray-50 dark:bg-gray-700">
+                                <div class="flex items-center justify-center">
+                                    {{ svgTime }}
+                                </div>
+                            </th>
+                            <th scope="col" class="px-2 py-3">
+                                <div class="flex items-center justify-center">
+                                    {{ svgHeartRate }}
+                                </div>
+                            </th>
+                            <th>
+
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for heartRate in heartRates %}
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td class="px-6 py-2 sticky left-0 bg-white dark:bg-gray-800 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ heartRate.getTime() }}
+                                </td>
+                                <td class="px-2 py-2">
+                                    {{ heartRate.getRate() }}<span class="text-xs">bpm</span>
+                                </td>
+                                <td class="px-6 py-2 text-left truncate">
+                                    {{ render('html/component/activity-title.html.twig', {'activity': heartRate.getActivity()}) }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <!-- HEART RATE ZONES -->
             <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <h3 class="mb-4 text-lg font-semibold">
