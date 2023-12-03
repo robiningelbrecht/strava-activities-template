@@ -104,7 +104,7 @@
                                 <td class="px-2 py-2 truncate lg:sticky lg:left-0 {{ cycle(['bg-white dark:bg-gray-900', 'bg-gray-50 dark:bg-gray-800'], loop.index0) }}">
                                     {{ render('html/component/activity-title.html.twig', {'activity': activity, 'ellipses': 50}) }}
                                 </td>
-                                <td data-sort="{{ activity.getDistanceInKilometer() }}" class="px-6 py-2 {{ activityHighlights.getLongestDistance() == activity.getDistance() ? 'text-strava-orange font-bold': '' }}">
+                                <td data-sort="{{ activity.getDistanceInKilometer() }}" class="px-6 py-2 {{ activityHighlights.getLongestDistance() == activity.getDistanceInKilometer() ? 'text-strava-orange font-bold': '' }}">
                                     {{ activity.getDistanceInKilometer()|formatNumber(0) }}<span class="text-xs">km</span>
                                 </td>
                                 <td data-sort="{{ activity.getElevationInMeter() }}" class="px-6 py-2 {{ activityHighlights.getHighestElevation() == activity.getElevationInMeter() ? 'text-strava-orange font-bold': '' }}">
