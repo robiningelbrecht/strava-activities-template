@@ -7,6 +7,7 @@ namespace App\Domain\Strava\Challenge;
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Calendar\MonthCollection;
+use App\Domain\Strava\Calendar\Week;
 use App\Domain\Strava\MonthlyStatistics;
 
 final readonly class ChallengeConsistency
@@ -65,19 +66,15 @@ final readonly class ChallengeConsistency
             ) >= 100;
 
             // First monday of the month until 4 weeks later, sunday.
-            $startDate = $month->getFirstMonday();
+            $week = Week::fromDate($month->getFirstMonday());
             $hasTwoDaysOfActivity = true;
             for ($i = 0; $i < 4; ++$i) {
-                $endDate = $startDate->add(new \DateInterval('P6D'));
-                $numberOfActivities = count($this->activities->filterOnDateRange(
-                    $startDate,
-                    $endDate,
-                ));
+                $numberOfActivities = count($this->activities->filterOnWeek($week));
                 if ($numberOfActivities < 2) {
                     $hasTwoDaysOfActivity = false;
                     break;
                 }
-                $startDate = $endDate->add(new \DateInterval('P1D'));
+                $week = $week->getNextWeek();
             }
 
             $consistency[ConsistencyChallenge::TWO_DAYS_OF_ACTIVITY_4_WEEKS->value][] = $hasTwoDaysOfActivity;

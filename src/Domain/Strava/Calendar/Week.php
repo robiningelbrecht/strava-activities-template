@@ -11,7 +11,7 @@ final readonly class Week
     public const WEEK_ID_FORMAT = 'Y-W';
 
     private function __construct(
-        private SerializableDateTime $date,
+        public SerializableDateTime $date,
     ) {
     }
 
@@ -30,5 +30,10 @@ final readonly class Week
     public function getLabel(): string
     {
         return $this->date->format('M Y');
+    }
+
+    public function getNextWeek(): Week
+    {
+        return Week::fromDate($this->date->modify('next monday'));
     }
 }
