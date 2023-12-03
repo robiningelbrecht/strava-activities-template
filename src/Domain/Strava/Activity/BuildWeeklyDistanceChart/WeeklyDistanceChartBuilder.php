@@ -59,7 +59,7 @@ final class WeeklyDistanceChartBuilder
         );
         $zoomValueSpan = 10;
         if (!$this->useDataZoom) {
-            $weeks = $weeks->slice($zoomValueSpan + 1);
+            $weeks = $weeks->slice(($zoomValueSpan + 1) * -1);
         }
         $data = $this->getData($weeks);
         $xAxisLabels = [];
