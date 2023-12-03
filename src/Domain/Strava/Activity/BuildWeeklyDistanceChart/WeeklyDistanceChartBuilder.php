@@ -148,6 +148,10 @@ final class WeeklyDistanceChartBuilder
             $distancePerWeek[$week][1] += $activity->getDistanceInKilometer();
         }
 
+        foreach ($distancePerWeek as $week => $data) {
+            $distancePerWeek[$week][1] = round($data[1]);
+        }
+
         return array_values($distancePerWeek);
     }
 }
