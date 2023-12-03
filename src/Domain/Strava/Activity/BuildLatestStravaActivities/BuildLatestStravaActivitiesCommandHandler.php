@@ -25,7 +25,7 @@ final readonly class BuildLatestStravaActivitiesCommandHandler implements Comman
 
         $this->filesystem->write(
             'build/strava-activities-latest.md',
-            $this->twig->load('strava-activities.html.twig')->render([
+            $this->twig->load('markdown/strava-activities.html.twig')->render([
                 'activities' => $this->activityRepository->findAll(5),
                 'addLinkToAllActivities' => true,
             ])
