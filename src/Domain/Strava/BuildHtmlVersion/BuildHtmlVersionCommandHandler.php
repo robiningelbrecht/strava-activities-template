@@ -201,6 +201,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     )
                         ->build(),
                 ),
+                'heartRates' => $this->activityHeartRateRepository->findHighest(),
                 'challengeConsistency' => ChallengeConsistency::create(
                     months: $allMonths,
                     monthlyStatistics: $monthlyStatistics,

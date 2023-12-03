@@ -9,6 +9,7 @@ use App\Domain\Strava\Athlete\HeartRateZone;
 use App\Infrastructure\KeyValue\Key;
 use App\Infrastructure\KeyValue\KeyValueStore;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use Carbon\CarbonInterval;
 
 final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateRepository
 {
@@ -27,6 +28,38 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
         $cachedHeartRateZones = $this->getCachedHeartRateZones();
 
         return array_sum(array_map(fn (array $heartRateZones) => $heartRateZones[$heartRateZone->value], $cachedHeartRateZones));
+    }
+
+    /**
+     * @return HeartRate[]
+     */
+    public function findHighest(): array
+    {
+        $heartRateStreams = $this->activityStreamRepository->findByStreamType(StreamType::HEART_RATE);
+
+        /** @var HeartRate[] $best */
+        $best = [];
+
+        /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $stream */
+        foreach ($heartRateStreams as $stream) {
+            foreach (self::TIME_INTERVAL_IN_SECONDS as $timeIntervalInSeconds) {
+                if (!$heartRate = $stream->getBestAverageForTimeInterval($timeIntervalInSeconds)) {
+                    continue;
+                }
+                if (!isset($best[$timeIntervalInSeconds]) || $best[$timeIntervalInSeconds]->getRate() < $heartRate) {
+                    $activity = $this->activityRepository->find($stream->getActivityId());
+                    $interval = CarbonInterval::seconds($timeIntervalInSeconds);
+
+                    $best[$timeIntervalInSeconds] = HeartRate::fromState(
+                        time: (int) $interval->totalHours ? $interval->totalHours.' h' : ((int) $interval->totalMinutes ? $interval->totalMinutes.' m' : $interval->totalSeconds.' s'),
+                        rate: $heartRate,
+                        activity: $activity,
+                    );
+                }
+            }
+        }
+
+        return $best;
     }
 
     /**
