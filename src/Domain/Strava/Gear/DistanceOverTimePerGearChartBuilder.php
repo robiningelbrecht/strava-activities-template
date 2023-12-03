@@ -109,15 +109,6 @@ final readonly class DistanceOverTimePerGearChartBuilder
             'legend' => [
                 'selected' => $selectedSeries,
             ],
-            'toolbox' => [
-                'feature' => [
-                    'dataZoom' => [
-                        'yAxisIndex' => 'none',
-                    ],
-                    'restore' => [
-                    ],
-                ],
-            ],
             'xAxis' => [
                 [
                     'type' => 'category',
