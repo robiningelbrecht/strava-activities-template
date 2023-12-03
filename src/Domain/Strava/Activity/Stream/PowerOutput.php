@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Strava;
+namespace App\Domain\Strava\Activity\Stream;
 
 use App\Domain\Strava\Activity\Activity;
 

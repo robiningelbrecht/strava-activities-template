@@ -3,7 +3,6 @@
 namespace App\Domain\Strava\Activity\Stream;
 
 use App\Domain\Strava\Activity\ActivityRepository;
-use App\Domain\Strava\PowerOutput;
 use Carbon\CarbonInterval;
 
 final class StreamBasedActivityPowerRepository implements ActivityPowerRepository
@@ -84,7 +83,7 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
     }
 
     /**
-     * @return array<mixed>
+     * @return PowerOutput[]
      */
     public function findBest(): array
     {

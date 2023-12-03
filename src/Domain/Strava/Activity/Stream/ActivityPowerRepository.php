@@ -12,7 +12,7 @@ interface ActivityPowerRepository
     public function findBestForActivity(int $activityId): array;
 
     /**
-     * @return array<mixed>
+     * @return PowerOutput[]
      */
     public function findBest(): array;
 

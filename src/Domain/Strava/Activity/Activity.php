@@ -2,8 +2,8 @@
 
 namespace App\Domain\Strava\Activity;
 
+use App\Domain\Strava\Activity\Stream\PowerOutput;
 use App\Domain\Strava\Ftp\FtpValue;
-use App\Domain\Strava\PowerOutput;
 use App\Domain\Weather\OpenMeteo\Weather;
 use App\Infrastructure\Time\TimeFormatter;
 use App\Infrastructure\ValueObject\Geography\Latitude;
