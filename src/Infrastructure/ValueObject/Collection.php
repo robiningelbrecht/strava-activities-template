@@ -100,7 +100,21 @@ abstract class Collection implements \Countable, \IteratorAggregate, \JsonSerial
 
     public function reverse(): static
     {
-        return static::fromArray(array_reverse($this->toArray()));
+        return static::fromArray(array_reverse($this->items));
+    }
+
+    public function sum(\Closure $closure): int|float
+    {
+        return array_sum(array_map(fn ($item): int|float => $closure($item), $this->items));
+    }
+
+    public function filter(\Closure $closure = null): static
+    {
+        if (is_null($closure)) {
+            return static::fromArray(array_filter($this->items));
+        }
+
+        return static::fromArray(array_filter($this->items, fn ($item): int|float => $closure($item)));
     }
 
     /**
