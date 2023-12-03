@@ -21,6 +21,7 @@
       <directory>src/Domain</directory>
       <directory>src/Console</directory>
       <directory>src/Infrastructure/KeyValue</directory>
+      <directory>src/Infrastructure/ValueObject/Time/Calendar</directory>
       <directory>src/Infrastructure/Repository</directory>
     </include>
   </source>

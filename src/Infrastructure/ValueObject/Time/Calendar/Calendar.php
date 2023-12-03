@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Strava\Calendar;
+namespace App\Infrastructure\ValueObject\Time\Calendar;
 
 use App\Domain\Strava\Activity\ActivityCollection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;

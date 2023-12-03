@@ -26,9 +26,6 @@ use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Domain\Strava\Athlete\AthleteWeightRepository;
 use App\Domain\Strava\Athlete\HeartRateZone;
 use App\Domain\Strava\Athlete\TimeInHeartRateZoneChartBuilder;
-use App\Domain\Strava\Calendar\Calendar;
-use App\Domain\Strava\Calendar\Month;
-use App\Domain\Strava\Calendar\MonthCollection;
 use App\Domain\Strava\Challenge\ChallengeConsistency;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
@@ -46,6 +43,9 @@ use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\KeyValue\Key;
 use App\Infrastructure\KeyValue\KeyValueStore;
 use App\Infrastructure\Serialization\Json;
+use App\Infrastructure\ValueObject\Time\Calendar\Calendar;
+use App\Infrastructure\ValueObject\Time\Calendar\Month;
+use App\Infrastructure\ValueObject\Time\Calendar\MonthCollection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Lcobucci\Clock\Clock;
 use League\Flysystem\FilesystemOperator;
@@ -88,7 +88,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $weekdayStats = WeekdayStats::fromActivities($allActivities);
         $dayTimeStats = DaytimeStats::fromActivities($allActivities);
         $allMonths = MonthCollection::create(
-            startDateFirstActivity: $allActivities->getFirstActivityStartDate(),
+            startDate: $allActivities->getFirstActivityStartDate(),
             now: $now
         );
         $monthlyStatistics = MonthlyStatistics::fromActivitiesAndChallenges(
