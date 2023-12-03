@@ -65,11 +65,7 @@ final class WeeklyDistanceChartBuilder
         $xAxisLabels = [];
         /** @var Week $week */
         foreach ($weeks as $week) {
-            if (!$this->useDataZoom && $week == $weeks->getFirst()) {
-                $xAxisLabels[] = '';
-                continue;
-            }
-            if (in_array($week->getLabel(), $xAxisLabels)) {
+            if ($week == $weeks->getFirst() || in_array($week->getLabel(), $xAxisLabels)) {
                 $xAxisLabels[] = '';
                 continue;
             }
