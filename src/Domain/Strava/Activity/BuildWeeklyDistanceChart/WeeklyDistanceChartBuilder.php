@@ -3,12 +3,15 @@
 namespace App\Domain\Strava\Activity\BuildWeeklyDistanceChart;
 
 use App\Domain\Strava\Activity\ActivityCollection;
+use App\Domain\Strava\Calendar\Week;
+use App\Domain\Strava\Calendar\WeekCollection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final class WeeklyDistanceChartBuilder
 {
     private bool $animation;
     private ?string $backgroundColor;
+    private bool $useDataZoom;
 
     private function __construct(
         private readonly ActivityCollection $activities,
@@ -16,6 +19,7 @@ final class WeeklyDistanceChartBuilder
     ) {
         $this->animation = false;
         $this->backgroundColor = '#ffffff';
+        $this->useDataZoom = false;
     }
 
     public static function fromActivities(ActivityCollection $activities, SerializableDateTime $now): self
@@ -37,11 +41,37 @@ final class WeeklyDistanceChartBuilder
         return $this;
     }
 
+    public function withDataZoom(bool $flag): self
+    {
+        $this->useDataZoom = $flag;
+
+        return $this;
+    }
+
     /**
      * @return array<mixed>
      */
     public function build(): array
     {
+        $weeks = WeekCollection::create(
+            startDateFirstActivity: $this->activities->getFirstActivityStartDate(),
+            now: $this->now
+        );
+        $zoomValueSpan = 10;
+        if (!$this->useDataZoom) {
+            $weeks = $weeks->slice($zoomValueSpan + 1);
+        }
+        $data = $this->getData($weeks);
+        $xAxisLabels = [];
+        /** @var Week $week */
+        foreach ($weeks as $week) {
+            if (in_array($week->getLabel(), $xAxisLabels)) {
+                $xAxisLabels[] = '';
+                continue;
+            }
+            $xAxisLabels[] = $week->getLabel();
+        }
+
         return [
             'animation' => $this->animation,
             'backgroundColor' => $this->backgroundColor,
@@ -51,28 +81,30 @@ final class WeeklyDistanceChartBuilder
             'grid' => [
                 'left' => '3%',
                 'right' => '4%',
-                'bottom' => '3%',
+                'bottom' => '50px',
                 'containLabel' => true,
             ],
+            'dataZoom' => $this->useDataZoom ? [
+                [
+                    'type' => 'inside',
+                    'startValue' => count($weeks),
+                    'endValue' => count($weeks) - $zoomValueSpan,
+                    'minValueSpan' => $zoomValueSpan,
+                    'maxValueSpan' => $zoomValueSpan,
+                    'brushSelect' => false,
+                    'zoomLock' => true,
+                ],
+                [
+                ],
+            ] : [],
             'xAxis' => [
                 [
-                    'type' => 'time',
+                    'type' => 'category',
                     'boundaryGap' => false,
                     'axisTick' => [
                         'show' => false,
                     ],
-                    'axisLabel' => [
-                        'formatter' => [
-                            'year' => '{yyyy}',
-                            'month' => '{MMM}',
-                            'day' => '',
-                            'hour' => '{HH}:{mm}',
-                            'minute' => '{HH}:{mm}',
-                            'second' => '{HH}:{mm}:{ss}',
-                            'millisecond' => '{hh}:{mm}:{ss} {SSS}',
-                            'none' => '{yyyy}-{MM}-{dd} {hh}:{mm}:{ss} {SSS}',
-                        ],
-                    ],
+                    'data' => $xAxisLabels,
                     'splitLine' => [
                         'show' => true,
                         'lineStyle' => [
@@ -90,6 +122,7 @@ final class WeeklyDistanceChartBuilder
                     'axisLabel' => [
                         'formatter' => '{value} km',
                     ],
+                    'max' => 50 * ceil(max($data) / 50),
                 ],
             ],
             'series' => [
@@ -114,7 +147,7 @@ final class WeeklyDistanceChartBuilder
                     'emphasis' => [
                         'focus' => 'series',
                     ],
-                    'data' => $this->getData(),
+                    'data' => $data,
                 ],
             ],
         ];
@@ -123,34 +156,25 @@ final class WeeklyDistanceChartBuilder
     /**
      * @return array<mixed>
      */
-    private function getData(): array
+    private function getData(WeekCollection $weeks): array
     {
-        /** @var SerializableDateTime $startDate */
-        $startDate = SerializableDateTime::createFromFormat('Y-m-d', $this->now->modify('-10 weeks')->format('Y-m-d'));
-        $interval = new \DateInterval('P1W');
-        $period = new \DatePeriod($startDate, $interval, $this->now->modify('+1 day'));
-
         $distancePerWeek = [];
 
-        foreach ($period as $date) {
-            $distancePerWeek[$date->format('YW')] = [
-                $date->modify('monday this week')->format('Y-m-d'),
-                0,
-            ];
+        /** @var \App\Domain\Strava\Calendar\Week $week */
+        foreach ($weeks as $week) {
+            $distancePerWeek[$week->getId()] = 0;
         }
 
         /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($this->activities as $activity) {
-            $week = $activity->getStartDate()->format('YW');
+            $week = $activity->getStartDate()->format(Week::WEEK_ID_FORMAT);
             if (!array_key_exists($week, $distancePerWeek)) {
                 continue;
             }
-            $distancePerWeek[$week][1] += $activity->getDistanceInKilometer();
+            $distancePerWeek[$week] += $activity->getDistanceInKilometer();
         }
 
-        foreach ($distancePerWeek as $week => $data) {
-            $distancePerWeek[$week][1] = round($data[1]);
-        }
+        $distancePerWeek = array_map('round', $distancePerWeek);
 
         return array_values($distancePerWeek);
     }

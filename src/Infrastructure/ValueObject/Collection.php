@@ -161,6 +161,13 @@ abstract class Collection implements \Countable, \IteratorAggregate, \JsonSerial
         return static::fromArray($this->items);
     }
 
+    public function slice(int $offset, int $length = null, bool $preserve_keys = false): static
+    {
+        return static::fromArray(
+            array_slice($this->items, $offset, $length, $preserve_keys)
+        );
+    }
+
     /**
      * @return array<T>
      */
