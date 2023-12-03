@@ -21,7 +21,7 @@ final readonly class ActivityHighlights
 
     public function getHighestAveragePower(): int
     {
-        return (int) $this->activities->max(fn (Activity $activity) => $activity->getAveragePower());
+        return (int) $this->activities->max(fn (Activity $activity) => $activity->getAveragePower() ?? 0);
     }
 
     public function getFastestAverageSpeed(): float
@@ -31,7 +31,7 @@ final readonly class ActivityHighlights
 
     public function getHighestAverageHeartRate(): int
     {
-        return (int) $this->activities->max(fn (Activity $activity) => $activity->getAverageHeartRate());
+        return (int) $this->activities->max(fn (Activity $activity) => $activity->getAverageHeartRate() ?? 0);
     }
 
     public function getCalories(): int
