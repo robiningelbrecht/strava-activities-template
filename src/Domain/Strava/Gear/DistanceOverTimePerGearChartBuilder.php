@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Strava\Gear;
 
 use App\Domain\Strava\Activity\ActivityCollection;
-use App\Infrastructure\ValueObject\Time\Calendar\Month;
-use App\Infrastructure\ValueObject\Time\Calendar\MonthCollection;
+use App\Domain\Strava\Calendar\Month;
+use App\Domain\Strava\Calendar\MonthCollection;
 
 final readonly class DistanceOverTimePerGearChartBuilder
 {
@@ -38,7 +38,7 @@ final readonly class DistanceOverTimePerGearChartBuilder
 
         $xAxisValues = [];
         $distancePerGearAndMonth = [];
-        /** @var \App\Infrastructure\ValueObject\Time\Calendar\Month $month */
+        /** @var \App\Domain\Strava\Calendar\Month $month */
         foreach ($this->months as $month) {
             $xAxisValues[] = $month->getLabel();
             /** @var \App\Domain\Strava\Gear\Gear $gear */

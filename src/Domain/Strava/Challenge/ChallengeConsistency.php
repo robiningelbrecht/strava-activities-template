@@ -6,9 +6,9 @@ namespace App\Domain\Strava\Challenge;
 
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
+use App\Domain\Strava\Calendar\MonthCollection;
+use App\Domain\Strava\Calendar\Week;
 use App\Domain\Strava\MonthlyStatistics;
-use App\Infrastructure\ValueObject\Time\Calendar\MonthCollection;
-use App\Infrastructure\ValueObject\Time\Calendar\Week;
 
 final readonly class ChallengeConsistency
 {
@@ -46,7 +46,7 @@ final readonly class ChallengeConsistency
     {
         $consistency = [];
 
-        /** @var \App\Infrastructure\ValueObject\Time\Calendar\Month $month */
+        /** @var \App\Domain\Strava\Calendar\Month $month */
         foreach ($this->months as $month) {
             if (!$monthlyStats = $this->monthlyStatistics->getStatisticsForMonth($month)) {
                 foreach (ConsistencyChallenge::cases() as $consistencyChallenge) {

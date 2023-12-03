@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\ValueObject\Time\Calendar;
+namespace App\Domain\Strava\Calendar;
 
 use App\Domain\Strava\Activity\ActivityCollection;
 
