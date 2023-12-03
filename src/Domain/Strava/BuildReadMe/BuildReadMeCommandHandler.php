@@ -8,7 +8,6 @@ use App\Domain\Strava\Activity\BuildDaytimeStatsChart\DaytimeStats;
 use App\Domain\Strava\Activity\BuildEddingtonChart\Eddington;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
-use App\Domain\Strava\Calendar\MonthCollection;
 use App\Domain\Strava\Challenge\ChallengeConsistency;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\DistanceBreakdown;
@@ -18,6 +17,7 @@ use App\Domain\Strava\MonthlyStatistics;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
+use App\Infrastructure\ValueObject\Time\Calendar\MonthCollection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Lcobucci\Clock\Clock;
 use League\Flysystem\FilesystemOperator;
@@ -46,7 +46,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
         $allChallenges = $this->challengeRepository->findAll();
         $allBikes = $this->gearRepository->findAll();
         $allMonths = MonthCollection::create(
-            startDateFirstActivity: $allActivities->getFirstActivityStartDate(),
+            startDate: $allActivities->getFirstActivityStartDate(),
             now: $now
         );
         $monthlyStatistics = MonthlyStatistics::fromActivitiesAndChallenges(

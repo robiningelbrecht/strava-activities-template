@@ -55,6 +55,11 @@ class SerializableDateTime extends \DateTimeImmutable implements \JsonSerializab
         return intval($this->format('i'));
     }
 
+    public function getWeekNumber(): int
+    {
+        return (int) $this->format('W');
+    }
+
     public function isAfterOrOn(SerializableDateTime $that): bool
     {
         return $this >= $that;

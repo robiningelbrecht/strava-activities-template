@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Strava\Calendar;
+namespace App\Infrastructure\ValueObject\Time\Calendar;
 
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
@@ -30,5 +30,10 @@ final readonly class Week
     public function getLabel(): string
     {
         return $this->date->format('M Y');
+    }
+
+    public function getNextWeek(): Week
+    {
+        return Week::fromDate($this->date->modify('next monday'));
     }
 }

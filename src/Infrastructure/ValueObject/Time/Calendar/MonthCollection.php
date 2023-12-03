@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Strava\Calendar;
+namespace App\Infrastructure\ValueObject\Time\Calendar;
 
 use App\Infrastructure\ValueObject\Collection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -18,12 +18,12 @@ final class MonthCollection extends Collection
     }
 
     public static function create(
-        SerializableDateTime $startDateFirstActivity,
+        SerializableDateTime $startDate,
         SerializableDateTime $now
     ): self {
         $months = MonthCollection::empty();
         $period = new \DatePeriod(
-            $startDateFirstActivity->modify('first day of this month'),
+            $startDate->modify('first day of this month'),
             new \DateInterval('P1M'),
             $now->modify('last day of this month')
         );

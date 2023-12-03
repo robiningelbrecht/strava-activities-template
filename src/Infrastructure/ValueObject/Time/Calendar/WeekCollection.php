@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Strava\Calendar;
+namespace App\Infrastructure\ValueObject\Time\Calendar;
 
 use App\Infrastructure\ValueObject\Collection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -18,13 +18,13 @@ final class WeekCollection extends Collection
     }
 
     public static function create(
-        SerializableDateTime $startDateFirstActivity,
+        SerializableDateTime $startDate,
         SerializableDateTime $now
     ): self {
         $weeks = WeekCollection::empty();
 
         $period = new \DatePeriod(
-            $startDateFirstActivity,
+            $startDate,
             new \DateInterval('P1W'),
             $now
         );

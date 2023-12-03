@@ -5,10 +5,10 @@ namespace App\Domain\Strava;
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityType;
-use App\Domain\Strava\Calendar\Month;
-use App\Domain\Strava\Calendar\MonthCollection;
 use App\Domain\Strava\Challenge\Challenge;
 use App\Domain\Strava\Challenge\ChallengeCollection;
+use App\Infrastructure\ValueObject\Time\Calendar\Month;
+use App\Infrastructure\ValueObject\Time\Calendar\MonthCollection;
 use Carbon\CarbonInterval;
 
 final readonly class MonthlyStatistics
@@ -42,7 +42,7 @@ final readonly class MonthlyStatistics
     private function buildStatistics(): array
     {
         $statistics = [];
-        /** @var \App\Domain\Strava\Calendar\Month $month */
+        /** @var \App\Infrastructure\ValueObject\Time\Calendar\Month $month */
         foreach ($this->months as $month) {
             $statistics[$month->getId()] = [
                 'id' => $month->getId(),
