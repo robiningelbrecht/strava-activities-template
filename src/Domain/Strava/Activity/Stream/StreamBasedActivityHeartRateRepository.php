@@ -63,7 +63,7 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
         }
 
         $activities = $this->activityRepository->findAll();
-        $heartRateStreams = $this->activityStreamRepository->findByStreamType(StreamType::HEART_RATE)->toArray();
+        $heartRateStreams = $this->activityStreamRepository->findByStreamType(StreamType::HEART_RATE);
         $athleteBirthday = SerializableDateTime::fromString((string) $this->keyValueStore->find(Key::ATHLETE_BIRTHDAY)->getValue());
 
         /** @var \App\Domain\Strava\Activity\Activity $activity */
@@ -75,9 +75,9 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
                 4 => 0,
                 5 => 0,
             ];
-            $heartRateStreamsForActivity = array_filter($heartRateStreams, fn (ActivityStream $stream) => $stream->getActivityId() == $activity->getId());
+            $heartRateStreamsForActivity = $heartRateStreams->filter(fn (ActivityStream $stream) => $stream->getActivityId() == $activity->getId());
 
-            if (!$heartRateStreamsForActivity) {
+            if ($heartRateStreamsForActivity->isEmpty()) {
                 continue;
             }
 
@@ -87,7 +87,7 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
             }
 
             /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $stream */
-            $stream = reset($heartRateStreamsForActivity);
+            $stream = $heartRateStreamsForActivity->getFirst();
             foreach (HeartRateZone::cases() as $heartRateZone) {
                 [$minHeartRate, $maxHeartRate] = $heartRateZone->getMinMaxRange($athleteMaxHeartRate);
                 $secondsInZone = count(array_filter($stream->getData(), fn (int $heartRate) => $heartRate >= $minHeartRate && $heartRate <= $maxHeartRate));

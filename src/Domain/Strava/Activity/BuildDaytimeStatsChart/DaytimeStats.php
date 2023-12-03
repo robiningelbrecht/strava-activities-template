@@ -27,7 +27,7 @@ final readonly class DaytimeStats
     public function getData(): array
     {
         $statistics = [];
-        $totalMovingTime = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTimeInSeconds(), $this->activities->toArray()));
+        $totalMovingTime = $this->activities->sum(fn (Activity $activity) => $activity->getMovingTimeInSeconds());
 
         foreach (Daytime::cases() as $daytime) {
             $statistics[$daytime->value] = [

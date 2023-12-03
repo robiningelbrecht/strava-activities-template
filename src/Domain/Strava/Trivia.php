@@ -20,12 +20,12 @@ final readonly class Trivia
 
     public function getTotalKudosReceived(): int
     {
-        return array_sum(array_map(fn (Activity $activity) => $activity->getKudoCount(), $this->activities->toArray()));
+        return (int) $this->activities->sum(fn (Activity $activity) => $activity->getKudoCount());
     }
 
     public function getMostKudotedActivity(): Activity
     {
-        $mostKudotedActivity = $this->activities->toArray()[0];
+        $mostKudotedActivity = $this->activities->getFirst();
         foreach ($this->activities as $activity) {
             if ($activity->getKudoCount() < $mostKudotedActivity->getKudoCount()) {
                 continue;
@@ -38,7 +38,7 @@ final readonly class Trivia
 
     public function getFirstActivity(): Activity
     {
-        $fistActivity = $this->activities->toArray()[0];
+        $fistActivity = $this->activities->getFirst();
         foreach ($this->activities as $activity) {
             if ($activity->getStartDate() > $fistActivity->getStartDate()) {
                 continue;
@@ -51,7 +51,7 @@ final readonly class Trivia
 
     public function getEarliestActivity(): Activity
     {
-        $earliestActivity = $this->activities->toArray()[0];
+        $earliestActivity = $this->activities->getFirst();
         foreach ($this->activities as $activity) {
             if ($activity->getStartDate()->getMinutesSinceStartOfDay() > $earliestActivity->getStartDate()->getMinutesSinceStartOfDay()) {
                 continue;
@@ -64,7 +64,7 @@ final readonly class Trivia
 
     public function getLatestActivity(): Activity
     {
-        $latestActivity = $this->activities->toArray()[0];
+        $latestActivity = $this->activities->getFirst();
         foreach ($this->activities as $activity) {
             if ($activity->getStartDate()->getMinutesSinceStartOfDay() < $latestActivity->getStartDate()->getMinutesSinceStartOfDay()) {
                 continue;
@@ -77,7 +77,7 @@ final readonly class Trivia
 
     public function getLongestActivity(): Activity
     {
-        $longestActivity = $this->activities->toArray()[0];
+        $longestActivity = $this->activities->getFirst();
         foreach ($this->activities as $activity) {
             if ($activity->getDistanceInKilometer() < $longestActivity->getDistanceInKilometer()) {
                 continue;
@@ -90,7 +90,7 @@ final readonly class Trivia
 
     public function getActivityWithHighestElevation(): Activity
     {
-        $mostElevationActivity = $this->activities->toArray()[0];
+        $mostElevationActivity = $this->activities->getFirst();
         foreach ($this->activities as $activity) {
             if ($activity->getElevationInMeter() < $mostElevationActivity->getElevationInMeter()) {
                 continue;
@@ -103,7 +103,7 @@ final readonly class Trivia
 
     public function getFastestActivity(): Activity
     {
-        $fastestActivity = $this->activities->toArray()[0];
+        $fastestActivity = $this->activities->getFirst();
         foreach ($this->activities as $activity) {
             if ($activity->getAverageSpeedInKmPerH() < $fastestActivity->getAverageSpeedInKmPerH()) {
                 continue;
@@ -116,9 +116,8 @@ final readonly class Trivia
 
     public function getMostConsecutiveDaysOfCycling(): DateCollection
     {
-        return DateCollection::fromDates(array_map(
+        return DateCollection::fromDates($this->activities->map(
             fn (Activity $activity) => $activity->getStartDate(),
-            $this->activities->toArray(),
         ))->getLongestConsecutiveDateRange();
     }
 }

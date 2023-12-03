@@ -33,33 +33,21 @@ final class ActivityCollection extends Collection
 
     public function filterOnDate(SerializableDateTime $date): ActivityCollection
     {
-        return ActivityCollection::fromArray(array_filter(
-            $this->toArray(),
-            fn (Activity $activity) => $activity->getStartDate()->format('Ymd') === $date->format('Ymd')
-        ));
+        return $this->filter(fn (Activity $activity) => $activity->getStartDate()->format('Ymd') === $date->format('Ymd'));
     }
 
     public function filterOnMonth(Month $month): ActivityCollection
     {
-        return ActivityCollection::fromArray(array_filter(
-            $this->toArray(),
-            fn (Activity $activity) => $activity->getStartDate()->format(Month::MONTH_ID_FORMAT) === $month->getId()
-        ));
+        return $this->filter(fn (Activity $activity) => $activity->getStartDate()->format(Month::MONTH_ID_FORMAT) === $month->getId());
     }
 
     public function filterOnDateRange(SerializableDateTime $fromDate, SerializableDateTime $toDate): ActivityCollection
     {
-        return ActivityCollection::fromArray(array_filter(
-            $this->toArray(),
-            fn (Activity $activity) => $activity->getStartDate()->isAfterOrOn($fromDate) && $activity->getStartDate()->isBeforeOrOn($toDate)
-        ));
+        return $this->filter(fn (Activity $activity) => $activity->getStartDate()->isAfterOrOn($fromDate) && $activity->getStartDate()->isBeforeOrOn($toDate));
     }
 
     public function filterOnActivityType(ActivityType $activityType): ActivityCollection
     {
-        return ActivityCollection::fromArray(array_filter(
-            $this->toArray(),
-            fn (Activity $activity) => $activityType === $activity->getType()
-        ));
+        return $this->filter(fn (Activity $activity) => $activityType === $activity->getType());
     }
 }

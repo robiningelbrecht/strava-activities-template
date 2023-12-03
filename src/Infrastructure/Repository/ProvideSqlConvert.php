@@ -16,6 +16,6 @@ trait ProvideSqlConvert
 
     public function toWhereInValueForCollection(Collection $values): string
     {
-        return $this->toWhereInValue(array_map(fn (\BackedEnum $enum) => $enum->value, $values->toArray()));
+        return $this->toWhereInValue($values->map(fn (\BackedEnum $enum) => $enum->value));
     }
 }

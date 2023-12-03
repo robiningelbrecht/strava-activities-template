@@ -89,18 +89,76 @@ abstract class Collection implements \Countable, \IteratorAggregate, \JsonSerial
     }
 
     /**
-     * @return T|false
+     * @return T|null
+     */
+    public function getFirst(): mixed
+    {
+        if ($this->isEmpty()) {
+            return null;
+        }
+
+        $items = $this->toArray();
+        /** @var T $item */
+        $item = reset($items);
+
+        return $item;
+    }
+
+    /**
+     * @return T|null
      */
     public function getLast(): mixed
     {
-        $items = $this->toArray();
+        if ($this->isEmpty()) {
+            return null;
+        }
 
-        return end($items);
+        $items = $this->toArray();
+        /** @var T $item */
+        $item = end($items);
+
+        return $item;
     }
 
     public function reverse(): static
     {
-        return static::fromArray(array_reverse($this->toArray()));
+        return static::fromArray(array_reverse($this->items));
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function map(\Closure $closure): array
+    {
+        return array_map(fn ($item): mixed => $closure($item), $this->items);
+    }
+
+    public function sum(\Closure $closure): int|float
+    {
+        return array_sum($this->map(fn ($item): int|float => $closure($item)));
+    }
+
+    public function max(\Closure $closure): int|float
+    {
+        return max($this->map(fn ($item): int|float => $closure($item)));
+    }
+
+    public function filter(\Closure $closure = null): static
+    {
+        if (is_null($closure)) {
+            return static::fromArray(array_filter($this->items));
+        }
+
+        return static::fromArray(array_filter($this->items, fn ($item): mixed => $closure($item)));
+    }
+
+    public function usort(\Closure $closure): static
+    {
+        usort($this->items, function ($a, $b) use ($closure) {
+            return $closure($a, $b);
+        });
+
+        return static::fromArray($this->items);
     }
 
     /**

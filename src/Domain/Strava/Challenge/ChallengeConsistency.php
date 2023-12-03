@@ -60,10 +60,9 @@ final readonly class ChallengeConsistency
             $consistency[ConsistencyChallenge::KM_600->value][] = $monthlyStats['totalDistance'] >= 600;
             $consistency[ConsistencyChallenge::KM_1250->value][] = $monthlyStats['totalDistance'] >= 1250;
             $consistency[ConsistencyChallenge::CLIMBING_7500->value][] = $monthlyStats['totalElevation'] >= 7500;
-            $consistency[ConsistencyChallenge::GRAN_FONDO->value][] = max(array_map(
+            $consistency[ConsistencyChallenge::GRAN_FONDO->value][] = $activities->max(
                 fn (Activity $activity) => $activity->getDistanceInKilometer(),
-                $activities->toArray()
-            )) >= 100;
+            ) >= 100;
 
             // First monday of the month until 4 weeks later, sunday.
             $startDate = $month->getFirstMonday();

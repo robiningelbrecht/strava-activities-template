@@ -15,22 +15,22 @@ final readonly class ActivityTotals
 
     public function getDistance(): float
     {
-        return array_sum(array_map(fn (Activity $activity) => $activity->getDistanceInKilometer(), $this->activities->toArray()));
+        return $this->activities->sum(fn (Activity $activity) => $activity->getDistanceInKilometer());
     }
 
     public function getElevation(): float
     {
-        return array_sum(array_map(fn (Activity $activity) => $activity->getElevationInMeter(), $this->activities->toArray()));
+        return $this->activities->sum(fn (Activity $activity) => $activity->getElevationInMeter());
     }
 
     public function getCalories(): int
     {
-        return array_sum(array_map(fn (Activity $activity) => $activity->getCalories(), $this->activities->toArray()));
+        return (int) $this->activities->sum(fn (Activity $activity) => $activity->getCalories());
     }
 
     public function getMovingTimeFormatted(): string
     {
-        $seconds = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTimeInSeconds(), $this->activities->toArray()));
+        $seconds = $this->activities->sum(fn (Activity $activity) => $activity->getMovingTimeInSeconds());
 
         return CarbonInterval::seconds($seconds)->cascade()->forHumans(['short' => true, 'minimumUnit' => 'minute']);
     }
@@ -79,7 +79,7 @@ final readonly class ActivityTotals
 
     public function getTotalDaysOfCycling(): int
     {
-        return count(array_unique(array_map(fn (Activity $activity) => $activity->getStartDate()->format('Ymd'), $this->activities->toArray())));
+        return count(array_unique($this->activities->map(fn (Activity $activity) => $activity->getStartDate()->format('Ymd'))));
     }
 
     public static function fromActivities(ActivityCollection $activities, SerializableDateTime $now): self

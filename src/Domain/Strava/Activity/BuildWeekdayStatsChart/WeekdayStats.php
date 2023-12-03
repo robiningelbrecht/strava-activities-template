@@ -28,7 +28,7 @@ final readonly class WeekdayStats
     {
         $statistics = [];
         $daysOfTheWeekMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        $totalMovingTime = array_sum(array_map(fn (Activity $activity) => $activity->getMovingTimeInSeconds(), $this->activities->toArray()));
+        $totalMovingTime = $this->activities->sum(fn (Activity $activity) => $activity->getMovingTimeInSeconds());
 
         foreach ([1, 2, 3, 4, 5, 6, 0] as $weekDay) {
             $statistics[$daysOfTheWeekMap[$weekDay]] = [
