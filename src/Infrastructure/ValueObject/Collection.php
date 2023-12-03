@@ -152,6 +152,15 @@ abstract class Collection implements \Countable, \IteratorAggregate, \JsonSerial
         return static::fromArray(array_filter($this->items, fn ($item): mixed => $closure($item)));
     }
 
+    public function usort(\Closure $closure): static
+    {
+        usort($this->items, function ($a, $b) use ($closure) {
+            return $closure($a, $b);
+        });
+
+        return static::fromArray($this->items);
+    }
+
     /**
      * @return array<T>
      */

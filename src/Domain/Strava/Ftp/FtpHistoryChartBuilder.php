@@ -125,12 +125,11 @@ final class FtpHistoryChartBuilder
                     'symbolSize' => 6,
                     'showSymbol' => true,
                     'data' => [
-                        ...array_map(
+                        ...$this->ftps->map(
                             fn (Ftp $ftp) => [
                                 $ftp->getSetOn()->format('Y-m-d'),
                                 $ftp->getFtp(),
                             ],
-                            $this->ftps->toArray(),
                         ),
                         $this->ftps->getLast() && $this->now->format('Y-m-d') != $this->ftps->getLast()->getSetOn()->format('Y-m-d') ?
                         [
@@ -156,12 +155,11 @@ final class FtpHistoryChartBuilder
                     'symbolSize' => 6,
                     'showSymbol' => true,
                     'data' => [
-                        ...array_map(
+                        ...$this->ftps->map(
                             fn (Ftp $ftp) => [
                                 $ftp->getSetOn()->format('Y-m-d'),
                                 $ftp->getRelativeFtp(),
-                            ],
-                            $this->ftps->toArray(),
+                            ]
                         ),
                         $this->ftps->getLast() && $this->now->format('Y-m-d') != $this->ftps->getLast()->getSetOn()->format('Y-m-d') ?
                         [

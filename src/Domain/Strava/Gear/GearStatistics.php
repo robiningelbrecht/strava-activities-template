@@ -26,7 +26,7 @@ final readonly class GearStatistics
      */
     public function getRows(): array
     {
-        $statistics = array_map(function (Gear $bike) {
+        $statistics = $this->bikes->map(function (Gear $bike) {
             $activitiesWithBike = $this->activities->filter(fn (Activity $activity) => $activity->getGearId() == $bike->getId());
             $countActivitiesWithBike = count($activitiesWithBike);
             $movingTimeInSeconds = $activitiesWithBike->sum(fn (Activity $activity) => $activity->getMovingTimeInSeconds());
@@ -41,7 +41,7 @@ final readonly class GearStatistics
                 'averageSpeed' => $movingTimeInSeconds > 0 ? ($bike->getDistanceInKm() / $movingTimeInSeconds) * 3600 : 0,
                 'totalCalories' => $activitiesWithBike->sum(fn (Activity $activity) => $activity->getCalories()),
             ];
-        }, $this->bikes->toArray());
+        });
 
         $activitiesWithOtherBike = $this->activities->filter(fn (Activity $activity) => empty($activity->getGearId()));
         $countActivitiesWithOtherBike = count($activitiesWithOtherBike);
