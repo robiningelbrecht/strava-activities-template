@@ -32,7 +32,7 @@ final class Eddington
             if (!array_key_exists($day, Eddington::$distancesPerDay)) {
                 Eddington::$distancesPerDay[$day] = 0;
             }
-            Eddington::$distancesPerDay[$day] += $activity->getDistance();
+            Eddington::$distancesPerDay[$day] += $activity->getDistanceInKilometer();
         }
 
         return Eddington::$distancesPerDay;

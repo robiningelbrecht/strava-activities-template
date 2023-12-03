@@ -11,12 +11,12 @@ final readonly class ActivityHighlights
 
     public function getLongestDistance(): float
     {
-        return max(array_map(fn (Activity $activity) => $activity->getDistance(), $this->activities->toArray()));
+        return max(array_map(fn (Activity $activity) => $activity->getDistanceInKilometer(), $this->activities->toArray()));
     }
 
-    public function getHighestElevation(): int
+    public function getHighestElevation(): float
     {
-        return max(array_map(fn (Activity $activity) => $activity->getElevation(), $this->activities->toArray()));
+        return max(array_map(fn (Activity $activity) => $activity->getElevationInMeter(), $this->activities->toArray()));
     }
 
     public function getHighestAveragePower(): int

@@ -239,19 +239,19 @@ final class Activity
         return $this;
     }
 
-    public function getDistance(): float
+    public function getDistanceInKilometer(): float
     {
-        return round($this->data['distance'] / 1000);
+        return $this->data['distance'] / 1000;
     }
 
-    public function getElevation(): int
+    public function getElevationInMeter(): float
     {
-        return (int) round($this->data['total_elevation_gain']);
+        return $this->data['total_elevation_gain'];
     }
 
     public function getCalories(): int
     {
-        return (int) round($this->data['calories'] ?? 0);
+        return $this->data['calories'] ?? 0;
     }
 
     public function getAveragePower(): ?int

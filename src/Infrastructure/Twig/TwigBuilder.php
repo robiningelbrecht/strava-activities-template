@@ -22,6 +22,7 @@ final readonly class TwigBuilder
         $twig->addFunction(new TwigFunction('render', [new RenderTemplateTwigExtension($twig), 'render']));
         $twig->addFilter(new TwigFilter('repeat', [StrRepeatTwigExtension::class, 'doRepeat']));
         $twig->addFilter(new TwigFilter('ellipses', [StrEllipsisTwigExtension::class, 'doEllipses']));
+        $twig->addFilter(new TwigFilter('formatNumber', [FormatNumberTwigExtension::class, 'doFormat']));
 
         return $twig;
     }

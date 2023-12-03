@@ -79,7 +79,7 @@ final readonly class Trivia
     {
         $longestActivity = $this->activities->toArray()[0];
         foreach ($this->activities as $activity) {
-            if ($activity->getDistance() < $longestActivity->getDistance()) {
+            if ($activity->getDistanceInKilometer() < $longestActivity->getDistanceInKilometer()) {
                 continue;
             }
             $longestActivity = $activity;
@@ -92,7 +92,7 @@ final readonly class Trivia
     {
         $mostElevationActivity = $this->activities->toArray()[0];
         foreach ($this->activities as $activity) {
-            if ($activity->getElevation() < $mostElevationActivity->getElevation()) {
+            if ($activity->getElevationInMeter() < $mostElevationActivity->getElevationInMeter()) {
                 continue;
             }
             $mostElevationActivity = $activity;

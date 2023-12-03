@@ -104,11 +104,11 @@
                                 <td class="px-2 py-2 truncate lg:sticky lg:left-0 {{ cycle(['bg-white dark:bg-gray-900', 'bg-gray-50 dark:bg-gray-800'], loop.index0) }}">
                                     {{ render('html/component/activity-title.html.twig', {'activity': activity, 'ellipses': 50}) }}
                                 </td>
-                                <td data-sort="{{ activity.getDistance() }}" class="px-6 py-2 {{ activityHighlights.getLongestDistance() == activity.getDistance() ? 'text-strava-orange font-bold': '' }}">
-                                    {{ activity.getDistance() }}<span class="text-xs">km</span>
+                                <td data-sort="{{ activity.getDistanceInKilometer() }}" class="px-6 py-2 {{ activityHighlights.getLongestDistance() == activity.getDistanceInKilometer() ? 'text-strava-orange font-bold': '' }}">
+                                    {{ activity.getDistanceInKilometer()|formatNumber(0) }}<span class="text-xs">km</span>
                                 </td>
-                                <td data-sort="{{ activity.getElevation() }}" class="px-6 py-2 {{ activityHighlights.getHighestElevation() == activity.getElevation() ? 'text-strava-orange font-bold': '' }}">
-                                    {{ activity.getElevation() }}<span class="text-xs">m</span>
+                                <td data-sort="{{ activity.getElevationInMeter() }}" class="px-6 py-2 {{ activityHighlights.getHighestElevation() == activity.getElevationInMeter() ? 'text-strava-orange font-bold': '' }}">
+                                    {{ activity.getElevationInMeter()|formatNumber(0) }}<span class="text-xs">m</span>
                                 </td>
                                 <td data-sort="{{ activity.getMovingTimeInSeconds() }}" class="px-6 py-2 {{ activityHighlights.getLongestMovingTimeFormatted() == activity.getMovingTimeFormatted() ? 'text-strava-orange font-bold': '' }}">
                                     {{ activity.getMovingTimeFormatted() }}
@@ -123,7 +123,7 @@
                                     {{ activity.getAverageHeartRate() ?? 'n/a' }}
                                 </td>
                                 <td data-sort="{{ activity.getCalories() }}" class="px-6 py-2 {{ activityHighlights.getCalories() == activity.getCalories() ? 'text-strava-orange font-bold': '' }}">
-                                    {{ activity.getCalories()|number_format(0, '.', ' ') }}<span class="text-xs">kcal</span>
+                                    {{ activity.getCalories()|formatNumber(0) }}<span class="text-xs">kcal</span>
                                 </td>
                                 {% for timeInterval in timeIntervals %}
                                     {% set powerOutput = activity.getBestAveragePowerForTimeInterval(timeInterval) %}

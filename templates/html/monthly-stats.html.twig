@@ -62,16 +62,16 @@
                                     {{ statistic.numberOfRides }}
                                 </td>
                                 <td class="px-2 py-2 truncate">
-                                    {{ statistic.totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                                    {{ statistic.totalDistance|formatNumber(0) }}<span class="text-xs">km</span>
                                 </td>
                                 <td class="px-2 py-2 truncate">
-                                    {{ statistic.totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                                    {{ statistic.totalElevation|formatNumber(0) }}<span class="text-xs">m</span>
                                 </td>
                                 <td class="px-2 py-2 truncate">
                                     {{ statistic.movingTime }}
                                 </td>
                                 <td class="px-2 py-2 truncate">
-                                    {{ statistic.totalCalories|number_format(0, '.', ' ') }}<span class="text-xs">kcal</span>
+                                    {{ statistic.totalCalories|formatNumber(0) }}<span class="text-xs">kcal</span>
                                 </td>
                                 <td class="px-2 py-2 truncate">
                                     {{ statistic.challengesCompleted }}
@@ -88,16 +88,16 @@
                                 {{ monthlyStatistics.getTotalsForZwift().numberOfRides }}
                             </td>
                             <td class="px-2 py-2">
-                                {{ monthlyStatistics.getTotalsForZwift().totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                                {{ monthlyStatistics.getTotalsForZwift().totalDistance|formatNumber(0) }}<span class="text-xs">km</span>
                             </td>
                             <td class="px-2 py-2">
-                                {{ monthlyStatistics.getTotalsForZwift().totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                                {{ monthlyStatistics.getTotalsForZwift().totalElevation|formatNumber(0) }}<span class="text-xs">m</span>
                             </td>
                             <td class="px-2 py-2">
                                 {{ monthlyStatistics.getTotalsForZwift().movingTime }}
                             </td>
                             <td class="px-2 py-2">
-                                {{ monthlyStatistics.getTotalsForZwift().totalCalories|number_format(0, '.', ' ') }}<span class="text-xs">kcal</span>
+                                {{ monthlyStatistics.getTotalsForZwift().totalCalories|formatNumber(0) }}<span class="text-xs">kcal</span>
                             </td>
                             <td class="px-2 py-2">
                             </td>
@@ -110,16 +110,16 @@
                                 {{ monthlyStatistics.getTotalsForOutsideBikeRides().numberOfRides }}
                             </td>
                             <td class="px-2 py-2">
-                                {{ monthlyStatistics.getTotalsForOutsideBikeRides().totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                                {{ monthlyStatistics.getTotalsForOutsideBikeRides().totalDistance|formatNumber(0) }}<span class="text-xs">km</span>
                             </td>
                             <td class="px-2 py-2">
-                                {{ monthlyStatistics.getTotalsForOutsideBikeRides().totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                                {{ monthlyStatistics.getTotalsForOutsideBikeRides().totalElevation|formatNumber(0) }}<span class="text-xs">m</span>
                             </td>
                             <td class="px-2 py-2">
                                 {{ monthlyStatistics.getTotalsForOutsideBikeRides().movingTime }}
                             </td>
                             <td class="px-2 py-2">
-                                {{ monthlyStatistics.getTotalsForOutsideBikeRides().totalCalories|number_format(0, '.', ' ') }}<span class="text-xs">kcal</span>
+                                {{ monthlyStatistics.getTotalsForOutsideBikeRides().totalCalories|formatNumber(0) }}<span class="text-xs">kcal</span>
                             </td>
                             <td class="px-2 py-2">
                             </td>
@@ -132,16 +132,16 @@
                                 {{ monthlyStatistics.getTotals().numberOfRides }}
                             </td>
                             <td class="px-2 py-2">
-                                {{ monthlyStatistics.getTotals().totalDistance|number_format(0, '.', ' ') }}<span class="text-xs">km</span>
+                                {{ monthlyStatistics.getTotals().totalDistance|formatNumber(0) }}<span class="text-xs">km</span>
                             </td>
                             <td class="px-2 py-2">
-                                {{ monthlyStatistics.getTotals().totalElevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                                {{ monthlyStatistics.getTotals().totalElevation|formatNumber(0) }}<span class="text-xs">m</span>
                             </td>
                             <td class="px-2 py-2">
                                 {{ monthlyStatistics.getTotals().movingTime }}
                             </td>
                             <td class="px-2 py-2">
-                                {{ monthlyStatistics.getTotals().totalCalories|number_format(0, '.', ' ') }}<span class="text-xs">kcal</span>
+                                {{ monthlyStatistics.getTotals().totalCalories|formatNumber(0) }}<span class="text-xs">kcal</span>
                             </td>
                             <td class="px-2 py-2">
                             </td>

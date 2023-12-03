@@ -65,23 +65,23 @@
                                 </td>
                                 <td class="px-6 py-2 truncate">
                                     {% if statistic.distance > 0 %}
-                                        {{ statistic.averageDistance|number_format(0, '.', ' ') }}<span class="text-xs">km avg</span> /
-                                        {{ statistic.distance|number_format(0, '.', ' ') }}<span class="text-xs">km total</span>
+                                        {{ statistic.averageDistance|formatNumber(0) }}<span class="text-xs">km avg</span> /
+                                        {{ statistic.distance|formatNumber(0) }}<span class="text-xs">km total</span>
                                     {% else %}
                                         0<span class="text-xs">km</span>
                                     {% endif %}
                                 </td>
                                 <td class="px-6 py-2 truncate">
-                                    {{ statistic.elevation|number_format(0, '.', ' ') }}<span class="text-xs">m</span>
+                                    {{ statistic.elevation|formatNumber(0) }}<span class="text-xs">m</span>
                                 </td>
                                 <td class="px-6 py-2 truncate">
                                     {{ statistic.movingTime }}
                                 </td>
                                 <td class="px-6 py-2 truncate">
-                                    {{ statistic.averageSpeed|number_format(1, '.', ' ') }}<span class="text-xs">km/h</span>
+                                    {{ statistic.averageSpeed|formatNumber(1) }}<span class="text-xs">km/h</span>
                                 </td>
                                 <td class="px-6 py-2 truncate">
-                                    {{ statistic.totalCalories|number_format(0, '.', ' ') }}<span class="text-xs">kcal</span>
+                                    {{ statistic.totalCalories|formatNumber(0) }}<span class="text-xs">kcal</span>
                                 </td>
                             </tr>
                         {% endfor %}
