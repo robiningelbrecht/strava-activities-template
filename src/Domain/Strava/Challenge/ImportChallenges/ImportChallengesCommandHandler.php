@@ -43,13 +43,13 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
         $challenges = [];
         try {
             $challenges = $this->strava->getChallengesOnPublicProfile();
-        } catch (\Throwable) {
-            $command->getOutput()->writeln('Could not import challenges from public profile...');
+        } catch (\Throwable $e) {
+            $command->getOutput()->writeln('Could not import challenges from public profile: '.$e->getMessage());
         }
         try {
             $challenges = [...$challenges, ...$this->strava->getChallengesOnTrophyCase()];
-        } catch (\Throwable) {
-            $command->getOutput()->writeln('Could not import challenges from trophy case page...');
+        } catch (\Throwable $e) {
+            $command->getOutput()->writeln('Could not import challenges from trophy case page: '.$e->getMessage());
         }
 
         if (empty($challenges)) {
@@ -81,7 +81,7 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
                         );
                     } catch (\Throwable $e) {
                         $command->getOutput()->writeln(sprintf(
-                            '  => Could not challenge "%s", error: %s',
+                            '  => Could not import "%s", error: %s',
                             $challenge->getName(),
                             $e->getMessage()
                         ));

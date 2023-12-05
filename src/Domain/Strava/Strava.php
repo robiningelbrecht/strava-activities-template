@@ -174,7 +174,7 @@ class Strava
 
         $challenges = [];
         foreach ($matches['matches'] as $match) {
-            if (!preg_match('/<h4>(?<match>.*?)<\/h4>/U', $match, $challengeName)) {
+            if (!preg_match('/<h4[\s\S]*>(?<match>.*?)<\/h4>/U', $match, $challengeName)) {
                 throw new \RuntimeException('Could not fetch Strava challenge name');
             }
             if (!preg_match('/<a href="[\S]*" title="(?<match>.*?)" class="[\S]*"[\s\S]*\/>/U', $match, $teaser)) {
