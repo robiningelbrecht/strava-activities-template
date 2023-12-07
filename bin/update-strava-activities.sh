@@ -36,6 +36,7 @@ mkdir -p migrations
 
 # Delete install files
 rm -Rf files/install
+rm -Rf files/maps
 # Delete test suite
 rm -Rf tests
 # Delete template again.
