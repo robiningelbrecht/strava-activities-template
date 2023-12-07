@@ -4,8 +4,8 @@
 
 {% autoescape false %}
     <!-- Modal header -->
-    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-        <h3 class="max-w-[30%] sm:max-w-[50%] md:max-w-[100%] truncate text-xl font-semibold text-gray-900 dark:text-white">
+    <div class="z-[10000] sticky top-0 bg-white dark:bg-gray-700 flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+        <h3 class="max-w-[30%] sm:max-w-[50%] md:max-w-[100%] truncate text-lg font-semibold text-gray-900 dark:text-white">
             <a class="hover:underline" href="{{ activity.getUrl() }}" rel="nofollow">{{ activity.getName() }}</a>
         </h3>
         <span class="mx-1 text-xs font-normal text-gray-500 dark:text-gray-400">-</span>
@@ -239,5 +239,11 @@
                 </div>
             {% endif %}
         </div>
+        {% if activity.getPolylineSummary() %}
+            <div class="grid grid-cols-1 gap-4">
+                {% set leafletRoutes = [activity.getPolylineSummary()] %}
+                <div class="h-[350px]" data-leaflet-routes='{{ leafletRoutes|json_encode() }}'></div>
+            </div>
+        {% endif %}
     </div>
 {% endautoescape %}
