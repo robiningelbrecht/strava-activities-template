@@ -16,9 +16,13 @@ mv -f strava-activities-template/build/html/echarts/echarts.min.js build/html/ec
 mv -f strava-activities-template/build/html/flowbite/flowbite.js build/html/flowbite/flowbite.js
 mv -f strava-activities-template/build/html/flowbite/tailwind.css build/html/flowbite/tailwind.css
 mv -f strava-activities-template/build/html/flowbite/tailwind.min.css build/html/flowbite/tailwind.min.css
+mv -f strava-activities-template/build/html/leaflet/leaflet.css build/html/leaflet/leaflet.css
+mv -f strava-activities-template/build/html/leaflet/leaflet.js build/html/leaflet/leaflet.js
+mv -f strava-activities-template/build/html/leaflet/leaflet.polyline.encoded.js build/html/leaflet/leaflet.polyline.encoded.js
 mv -f strava-activities-template/build/html/dark-mode-toggle.js build/html/dark-mode-toggle.js
 mv -f strava-activities-template/build/html/favicon.ico build/html/favicon.ico
 mv -f strava-activities-template/build/html/placeholder.webp build/html/placeholder.webp
+mv -f strava-activities-template/build/html/lazyload.min.js build/html/lazyload.min.js
 mv -f strava-activities-template/build/html/router.js build/html/router.js
 mv -f strava-activities-template/build/html/sortable.min.js build/html/sortable.min.js
 
