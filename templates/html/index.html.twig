@@ -396,16 +396,18 @@
 
         // Render Leaflet maps.
         rootNode.querySelectorAll('[data-leaflet-routes]').forEach(function (mapNode) {
-            const map = L.map(mapNode);
+            const map = L.map(mapNode, {
+                scrollWheelZoom: false
+            });
             L.tileLayer(
                 'https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.png',
                 {
-                    maxZoom: 18
+                    maxZoom: 14,
                 }
             ).addTo(map);
 
             const featureGroup = L.featureGroup();
-            JSON.parse(mapNode.getAttribute('data-leaflet-routes')).forEach((route)=> {
+            JSON.parse(mapNode.getAttribute('data-leaflet-routes')).forEach((route) => {
                 L.polyline(
                     L.Polyline.fromEncoded(route).getLatLngs(),
                     {
@@ -418,7 +420,7 @@
             });
 
             featureGroup.addTo(map);
-            map.fitBounds(featureGroup.getBounds());
+            map.fitBounds(featureGroup.getBounds(), {maxZoom: 14});
         });
     };
 </script>

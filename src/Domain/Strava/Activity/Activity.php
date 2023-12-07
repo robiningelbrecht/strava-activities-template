@@ -407,4 +407,9 @@ final class Activity
     {
         return $this->data;
     }
+
+    public function getPolylineSummary(): ?string
+    {
+        return $this->data['map']['summary_polyline'] ?? null;
+    }
 }
