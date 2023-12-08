@@ -28,6 +28,9 @@ final readonly class Coordinate implements \JsonSerializable
         return $this->longitude;
     }
 
+    /**
+     * @return \App\Infrastructure\ValueObject\Geography\FloatLiteral[]
+     */
     public function jsonSerialize(): array
     {
         return [$this->getLatitude(), $this->getLongitude()];

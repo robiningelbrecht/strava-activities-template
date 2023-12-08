@@ -102,7 +102,6 @@ enum LeafletMap: string
                 Coordinate::createFromLatAndLng(Latitude::fromString('54.0254'), Longitude::fromString('-1.6320')),
                 Coordinate::createFromLatAndLng(Latitude::fromString('53.9491'), Longitude::fromString('-1.5022')),
             ],
-            default => throw new \RuntimeException('Not implemented'),
         };
     }
 
