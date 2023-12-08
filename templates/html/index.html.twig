@@ -395,29 +395,40 @@
         });
 
         // Render Leaflet maps.
-        rootNode.querySelectorAll('[data-leaflet-routes]').forEach(function (mapNode) {
+        rootNode.querySelectorAll('[data-leaflet]').forEach(function (mapNode) {
+            const data = JSON.parse(mapNode.getAttribute('data-leaflet'));
             const map = L.map(mapNode, {
-                scrollWheelZoom: false
+                scrollWheelZoom: false,
+                minZoom: data.minZoom,
+                maxZoom: data.maxZoom,
             });
-            L.tileLayer(
-                'https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.png',
-                {
-                    maxZoom: 14,
-                }
-            ).addTo(map);
+            if (data.tileLayer) {
+                L.tileLayer(
+                    data.tileLayer
+                ).addTo(map);
+            }
 
             const featureGroup = L.featureGroup();
-            JSON.parse(mapNode.getAttribute('data-leaflet-routes')).forEach((route) => {
+            data.routes.forEach((route) => {
                 L.polyline(
                     L.Polyline.fromEncoded(route).getLatLngs(),
                     {
                         color: '#F26722',
                         weight: 2,
-                        opacity: 0.7,
+                        opacity: 0.9,
                         lineJoin: 'round'
                     }
                 ).addTo(featureGroup);
             });
+
+            if (data.imageOverlay) {
+                L.imageOverlay(
+                    data.imageOverlay,
+                    data.bounds,
+                {attribution: '© <a href="https://zwift.com" rel="noreferrer noopener">Zwift</a>',}
+                ).addTo(map);
+                map.setMaxBounds(data.bounds);
+            }
 
             featureGroup.addTo(map);
             map.fitBounds(featureGroup.getBounds(), {maxZoom: 14});

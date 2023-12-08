@@ -239,10 +239,19 @@
                 </div>
             {% endif %}
         </div>
-        {% if activity.getPolylineSummary() %}
+        {% if leaflet %}
             <div class="grid grid-cols-1 gap-4">
-                {% set leafletRoutes = [activity.getPolylineSummary()] %}
-                <div class="h-[350px]" data-leaflet-routes='{{ leafletRoutes|json_encode() }}'></div>
+                {%
+                    set leafletOptions = {
+                    'routes': leaflet.routes,
+                    'tileLayer': leaflet.map.getTileLayer(),
+                    'minZoom': leaflet.map.getMinZoom(),
+                    'maxZoom': leaflet.map.getMaxZoom(),
+                    'imageOverlay': leaflet.map.getOverlayImageUrl(),
+                    'bounds': leaflet.map.getBounds(),
+                    }
+                %}
+                <div class="h-[350px]" style="background-color:#bbbbbb" data-leaflet='{{ leafletOptions|json_encode }}'></div>
             </div>
         {% endif %}
     </div>
