@@ -4,8 +4,10 @@ namespace App\Domain\Strava\Activity;
 
 use App\Domain\Strava\Activity\Stream\PowerOutput;
 use App\Domain\Strava\Ftp\FtpValue;
+use App\Domain\Strava\LeafletMap;
 use App\Domain\Weather\OpenMeteo\Weather;
 use App\Infrastructure\Time\TimeFormatter;
+use App\Infrastructure\ValueObject\Geography\Coordinate;
 use App\Infrastructure\ValueObject\Geography\Latitude;
 use App\Infrastructure\ValueObject\Geography\Longitude;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -411,5 +413,20 @@ final class Activity
     public function getPolylineSummary(): ?string
     {
         return $this->data['map']['summary_polyline'] ?? null;
+    }
+
+    public function getLeafletMap(): ?LeafletMap
+    {
+        if (empty($this->data['start_latlng'])) {
+            return null;
+        }
+        if (ActivityType::RIDE === $this->getType()) {
+            return LeafletMap::DEFAULT;
+        }
+
+        return LeafletMap::fromStartingCoordinate(Coordinate::createFromLatAndLng(
+            latitude: Latitude::fromString($this->data['start_latlng'][0]),
+            longitude: Longitude::fromString($this->data['start_latlng'][1]),
+        ));
     }
 }

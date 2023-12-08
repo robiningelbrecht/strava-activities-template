@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\ValueObject\Geography;
 
-abstract readonly class FloatLiteral
+abstract readonly class FloatLiteral implements \JsonSerializable
 {
     final private function __construct(private float $float)
     {
@@ -39,5 +39,10 @@ abstract readonly class FloatLiteral
         }
 
         return static::fromString($string);
+    }
+
+    public function jsonSerialize(): float
+    {
+        return $this->toFloat();
     }
 }
