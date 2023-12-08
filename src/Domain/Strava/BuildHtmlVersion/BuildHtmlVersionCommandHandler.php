@@ -317,6 +317,10 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 'build/html/activity/activity-'.$activity->getId().'.html',
                 $this->twig->load('html/activity.html.twig')->render([
                     'activity' => $activity,
+                    'leaflet' => $activity->getLeafletMap() ? [
+                        'routes' => [$activity->getPolylineSummary()],
+                        'map' => $activity->getLeafletMap(),
+                    ] : null,
                     'heartRateDistributionChart' => $heartRateData ? Json::encode(
                         HeartRateDistributionChartBuilder::fromHeartRateData(
                             heartRateData: $heartRateData,
