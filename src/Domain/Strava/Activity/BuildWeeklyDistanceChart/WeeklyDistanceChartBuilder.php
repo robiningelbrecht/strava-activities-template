@@ -104,6 +104,9 @@ final class WeeklyDistanceChartBuilder
                     'axisTick' => [
                         'show' => false,
                     ],
+                    'axisLabel' => [
+                        'interval' => 0,
+                    ],
                     'data' => $xAxisLabels,
                     'splitLine' => [
                         'show' => true,
