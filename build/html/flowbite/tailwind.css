@@ -20,8 +20,7 @@ table.sortable th[aria-sort="descending"] svg.sort{
     fill: #FC4A02;
 }
 
-.leaflet-tile-pane,
-.leaflet-image-layer{
+.leaflet-tile-pane{
     -webkit-filter: grayscale(100%);
     filter: grayscale(100%);
 }
