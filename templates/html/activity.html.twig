@@ -251,7 +251,7 @@
                     'bounds': leaflet.map.getBounds(),
                     }
                 %}
-                <div class="h-[350px]" style="background-color:#bbbbbb" data-leaflet='{{ leafletOptions|json_encode }}'></div>
+                <div class="h-[350px]" style="background-color:{{ leaflet.map.getBackgroundColor() }}" data-leaflet='{{ leafletOptions|json_encode }}'></div>
             </div>
         {% endif %}
     </div>

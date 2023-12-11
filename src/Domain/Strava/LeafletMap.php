@@ -120,7 +120,12 @@ enum LeafletMap: string
             return 1;
         }
 
-        return 13;
+        return 12;
+    }
+
+    public function getBackgroundColor(): string
+    {
+        return '#bbbbb7';
     }
 
     public static function fromStartingCoordinate(Coordinate $coordinate): self
