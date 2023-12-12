@@ -54,7 +54,6 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                 $command->getOutput()->writeln(sprintf('  => Updated activity "%s"', $activity->getName()));
             } catch (EntityNotFound) {
                 try {
-                    /** @var SerializableDateTime $startDate */
                     $startDate = SerializableDateTime::createFromFormat(
                         Activity::DATE_TIME_FORMAT,
                         $stravaActivity['start_date_local']
