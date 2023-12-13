@@ -193,6 +193,10 @@
                 }
                 %}
                 <div class="h-[350px]" style="background-color:{{ leaflet.map.getBackgroundColor() }}" data-leaflet='{{ leafletOptions|json_encode }}'></div>
+            {% else %}
+                <div>
+                    <img class="h-auto max-w-full rounded-lg lazy" src="{{ placeholderImage }}" data-src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities-template/master/files/maps/not-found.jpg" alt="No map"/>
+                </div>
             {% endif %}
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
