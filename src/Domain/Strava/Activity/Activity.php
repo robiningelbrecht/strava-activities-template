@@ -417,7 +417,7 @@ final class Activity
 
     public function getLeafletMap(): ?LeafletMap
     {
-        if (empty($this->data['start_latlng'])) {
+        if (!$this->getLatitude() || !$this->getLongitude()) {
             return null;
         }
         if (ActivityType::RIDE === $this->getType()) {
@@ -425,8 +425,8 @@ final class Activity
         }
 
         return LeafletMap::fromStartingCoordinate(Coordinate::createFromLatAndLng(
-            latitude: Latitude::fromString($this->data['start_latlng'][0]),
-            longitude: Longitude::fromString($this->data['start_latlng'][1]),
+            latitude: $this->getLatitude(),
+            longitude: $this->getLongitude(),
         ));
     }
 }
