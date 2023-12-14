@@ -123,7 +123,7 @@
                                     {{ activity.getAverageHeartRate() ?? 'n/a' }}
                                 </td>
                                 <td data-sort="{{ activity.getCalories() }}" class="px-6 py-2 {{ activityHighlights.getCalories() == activity.getCalories() ? 'text-strava-orange font-bold': '' }}">
-                                    {{ activity.getCalories()|formatNumber(0) }}<span class="text-xs">kcal</span>
+                                    {{ activity.getCalories() }}<span class="text-xs">kcal</span>
                                 </td>
                                 {% for timeInterval in timeIntervals %}
                                     {% set powerOutput = activity.getBestAveragePowerForTimeInterval(timeInterval) %}
