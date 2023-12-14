@@ -26,25 +26,25 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div>
                 <div class="mb-4 grid grid-cols-5 gap-2">
-                    <div class="flex flex-col items-center justify-center px-2 py-4 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
+                    <div class="flex flex-col items-center justify-center px-2 py-2 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                         <div class="text-center">
                             <dd class="text-xs text-gray-500 dark:text-gray-400">Distance</dd>
                             <dt class="font-extrabold">{{ activity.getDistanceInKilometer()|formatNumber(0) }}<span class="text-xs">km</span></dt>
                         </div>
                     </div>
-                    <div class="flex flex-col items-center justify-center px-2 py-4 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
+                    <div class="flex flex-col items-center justify-center px-2 py-2 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                         <div class="text-center">
                             <dd class="text-xs text-gray-500 dark:text-gray-400">Moving time</dd>
                             <dt class="font-extrabold">{{ activity.getMovingTimeFormatted() }}</dt>
                         </div>
                     </div>
-                    <div class="flex flex-col items-center justify-center px-2 py-4 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
+                    <div class="flex flex-col items-center justify-center px-2 py-2 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                         <div class="text-center">
                             <dd class="text-xs text-gray-500 dark:text-gray-400">Elevation</dd>
                             <dt class="font-extrabold">{{ activity.getElevationInMeter()|formatNumber(0) }}<span class="text-xs">m</span></dt>
                         </div>
                     </div>
-                    <div class="flex flex-col items-center justify-center px-2 py-4 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
+                    <div class="flex flex-col items-center justify-center px-2 py-2 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
                         <div class="text-center">
                             <dd class="text-xs text-gray-500 dark:text-gray-400">Calories</dd>
                             <dt class="font-extrabold">{{ activity.getCalories() }}</dt>
@@ -79,71 +79,96 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-                <div class="mb-4 grid grid-cols-4 gap-2">
-                    <div class="flex flex-col items-center justify-center px-2 py-4 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
-                        <div class="text-center">
-                            <dd class="text-xs text-gray-500 dark:text-gray-400">Speed</dd>
-                            {% set averageSpeed = activity.getAverageSpeedInKmPerH() %}
-                            {% if averageSpeed %}
-                                <dt class="font-extrabold">{{ averageSpeed }} <span class="text-xs">km/h</span></dt>
-                            {% else %}
-                                <dt class="font-extrabold">n/a</dt>
-                            {% endif %}
-                            {% set maxSpeed = activity.getMaxSpeedInKmPerH() %}
-                            {% if maxSpeed %}
-                                <dd class="text-xs text-gray-500 dark:text-gray-400">
-                                    {{ maxSpeed }} <span class="text-xs">km/h</span>
-                                </dd>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center justify-center px-2 py-4 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
-                        <div class="text-center">
-                            <dd class="text-xs text-gray-500 dark:text-gray-400">Heart rate</dd>
-                            {% set averageHearRate = activity.getAverageHeartRate() %}
-                            {% if averageHearRate %}
-                                <dt class="font-extrabold">{{ averageHearRate }} <span class="text-xs">bpm</span></dt>
-                            {% else %}
-                                <dt class="font-extrabold">n/a</dt>
-                            {% endif %}
-                            {% set maxHearRate = activity.getMaxHeartRate() %}
-                            {% if maxHearRate %}
-                                <dd class="text-xs text-gray-500 dark:text-gray-400">
-                                    {{ maxHearRate }} <span class="text-xs">bpm</span>
-                                </dd>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center justify-center px-2 py-4 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
-                        <div class="text-center">
-                            <dd class="text-xs text-gray-500 dark:text-gray-400">Cadence</dd>
-                            {% set averageCadence = activity.getAverageCadence() %}
-                            <dt class="font-extrabold">{{ averageCadence ?: 'n/a' }}</dt>
-                            {% set maxCadence = activity.getMaxCadence() %}
-                            {% if maxCadence %}
-                                <dd class="text-xs text-gray-500 dark:text-gray-400">
-                                    {{ maxCadence }}
-                                </dd>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center justify-center px-2 py-4 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
-                        <div class="text-center">
-                            <dd class="text-xs text-gray-500 dark:text-gray-400">Power</dd>
-                            {% set averagePower = activity.getAveragePower() %}
-                            {% if averagePower %}
-                                <dt class="font-extrabold">{{ averagePower }}<span class="text-xs">w</span></dt>
-                            {% else %}
-                                <dt class="font-extrabold">n/a</dt>
-                            {% endif %}
-                            {% set maxPower = activity.getMaxPower() %}
-                            {% if maxPower %}
-                                <dd class="text-xs text-gray-500 dark:text-gray-400">
+                <div class="mb-4 relative overflow-x-auto px-2 py-2 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
+                    <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-2 py-2">
+
+                            </th>
+                            <th scope="col" class="px-2 py-2">
+                                Speed
+                            </th>
+                            <th scope="col" class="px-2 py-2">
+                                Heart rate
+                            </th>
+                            <th scope="col" class="px-2 py-2">
+                                Cadence
+                            </th>
+                            <th scope="col" class="px-2 py-2">
+                                Power
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="border-b dark:border-gray-600">
+                            <th class="px-2 py-2">
+                                Avg
+                            </th>
+                            <td class="px-2 py-2 text-sm">
+                                {% set averageSpeed = activity.getAverageSpeedInKmPerH() %}
+                                {% if averageSpeed %}
+                                    {{ averageSpeed }}<span class="text-xs">km/h</span>
+                                {% else %}
+                                    n/a
+                                {% endif %}
+                            </td>
+                            <td class="px-2 py-2 text-sm">
+                                {% set averageHearRate = activity.getAverageHeartRate() %}
+                                {% if averageHearRate %}
+                                    {{ averageHearRate }}<span class="text-xs">bpm</span>
+                                {% else %}
+                                    n/a
+                                {% endif %}
+                            </td>
+                            <td class="px-2 py-2 text-sm">
+                                {% set averageCadence = activity.getAverageCadence() %}
+                                {{ averageCadence ?: 'n/a'  }}
+                            </td>
+                            <td class="px-2 py-2 text-sm">
+                                {% set averagePower = activity.getAveragePower() %}
+                                {% if averagePower %}
+                                    {{ averagePower }}<span class="text-xs">w</span>
+                                {% else %}
+                                    n/a
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="px-2 py-2">
+                                Max
+                            </th>
+                            <td class="px-2 py-2 text-sm">
+                                {% set maxSpeed = activity.getMaxSpeedInKmPerH() %}
+                                {% if maxSpeed %}
+                                    {{ maxSpeed }}<span class="text-xs">km/h</span>
+                                {% else %}
+                                    n/a
+                                {% endif %}
+                            </td>
+                            <td class="px-2 py-2 text-sm">
+                                {% set maxHearRate = activity.getMaxHeartRate() %}
+                                {% if maxHearRate %}
+                                    {{ maxHearRate }}<span class="text-xs">bpm</span>
+                                {% else %}
+                                    n/a
+                                {% endif %}
+                            </td>
+                            <td class="px-2 py-2 text-sm">
+                                {% set maxCadence = activity.getMaxCadence() %}
+                                {{ maxCadence ?: 'n/a'  }}
+                            </td>
+                            <td class="px-2 py-2 text-sm">
+                                {% set maxPower = activity.getMaxPower() %}
+                                {% if maxPower %}
                                     {{ maxPower }}<span class="text-xs">w</span>
-                                </dd>
-                            {% endif %}
-                        </div>
-                    </div>
+                                {% else %}
+                                    n/a
+                                {% endif %}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
                 {% if activity.hasDetailedPowerData() %}
                     <div class="relative overflow-x-auto px-2 py-2 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-600">
@@ -155,7 +180,7 @@
                                 {% for timeInterval in timeIntervals %}
                                     {% set powerOutput = activity.getBestAveragePowerForTimeInterval(timeInterval) %}
                                     {% if powerOutput %}
-                                        <th scope="col" colspan="2" class="px-6 py-2">
+                                        <th scope="col" colspan="2" class="px-2 py-2">
                                             {{ timeIntervalLabels[loop.index0] }}
                                         </th>
                                     {% endif %}
