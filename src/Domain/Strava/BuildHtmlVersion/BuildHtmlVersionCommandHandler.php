@@ -243,9 +243,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             'build/html/eddington.html',
             $this->twig->load('html/eddington.html.twig')->render([
                 'eddingtonChart' => Json::encode(
-                    EddingtonChartBuilder::fromEddington(
-                        Eddington::fromActivities($allActivities)
-                    )
+                    EddingtonChartBuilder::fromEddington($eddington)
                         ->withAnimation(true)
                         ->withoutBackgroundColor()
                         ->build(),

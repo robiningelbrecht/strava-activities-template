@@ -9,18 +9,20 @@
     </li>
 {% endblock %}
 {% block content %}
-{% autoescape false %}
-    <!-- EDDINGTON -->
-    <div class="grid grid-cols-1 mb-4">
-        <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <blockquote class="p-4 my-4 border-l-4 border-gray-300 bg-gray-50 dark:border-gray-500 dark:bg-gray-800">
-                <p class="italic leading-relaxed text-gray-600 dark:text-white mb-4">The Eddington number in the context of cycling is defined as the maximum number E such that the cyclist has cycled at least E km on at least E days.</p>
-                <p class="italic leading-relaxed text-gray-600 dark:text-white">For example, an Eddington number of 70 would imply that the cyclist has cycled at least 70 km in a day on at least 70 occasions.
-                    Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably)
-                    require more than five new long-distance rides, since any rides shorter than 75 km will no longer be included in the reckoning.</p>
-            </blockquote>
-            <div class="h-64" data-echarts-options='{{ eddingtonChart }}'></div>
-            <div class="mt-10">
+    {% autoescape false %}
+        <div class="grid grid-cols-1 gap-4">
+            <!-- EDDINGTON -->
+            <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <blockquote class="p-4 border-l-4 border-gray-300 bg-gray-50 dark:border-gray-500 dark:bg-gray-800">
+                    <p class="italic leading-relaxed text-gray-600 dark:text-white mb-4">The Eddington number in the context of cycling is defined as the maximum number E such that the cyclist has cycled at least E km on at least E days.</p>
+                    <p class="italic leading-relaxed text-gray-600 dark:text-white">For example, an Eddington number of 70 would imply that the cyclist has cycled at least 70 km in a day on at least 70 occasions.
+                        Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably)
+                        require more than five new long-distance rides, since any rides shorter than 75 km will no longer be included in the reckoning.</p>
+                </blockquote>
+                <div class="h-64" data-echarts-options='{{ eddingtonChart }}'></div>
+            </div>
+            <!-- DAYS NEEDED -->
+            <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <h3 class="font-bold mb-2">Days needed</h3>
                 <div class="relative overflow-x-auto">
                     <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
@@ -45,7 +47,8 @@
                     </table>
                 </div>
             </div>
-            <div class="mt-10">
+            <!-- HISTORY -->
+            <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <h3 class="font-bold mb-2">History</h3>
                 <div class="relative overflow-x-auto">
                     <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
@@ -71,6 +74,5 @@
                 </div>
             </div>
         </div>
-    </div>
-{% endautoescape %}
+    {% endautoescape %}
 {% endblock %}
