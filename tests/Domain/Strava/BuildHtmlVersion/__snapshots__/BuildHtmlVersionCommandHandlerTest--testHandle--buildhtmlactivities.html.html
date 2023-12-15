@@ -18,8 +18,19 @@
             <!-- ALL ACTIVITIES -->
         <div class="grid grid-cols-1 mb-4">
             <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <form class="mb-2 flex items-center">
+                    <label for="search" class="sr-only">Search</label>
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"></path>
+                            </svg>
+                        </div>
+                        <input id="search" type="text" placeholder="Search activity..." class="table-search bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    </div>
+                </form>
                 <div class="relative overflow-x-auto">
-                    <table class="sortable w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                    <table class="searchable sortable w-full text-sm text-center text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-2 py-3 cursor-pointer">
@@ -100,7 +111,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                                                    <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                                                    <tr data-searchables="Night Ride" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                                 <td data-sort="1694552738" class="px-2 py-2">
                                     <div class="w-[4.5rem]">12-09-23</div>
                                 </td>
@@ -150,7 +161,7 @@
                                                                                                                                                                                     <td class="px-2 py-2"></td>
                                         <td class="px-2 py-2"></td>
                                                                                                 </tr>
-                                                    <tr class="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                                                    <tr data-searchables="Night Ride" class="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
                                 <td data-sort="1694466338" class="px-2 py-2">
                                     <div class="w-[4.5rem]">11-09-23</div>
                                 </td>
@@ -200,7 +211,7 @@
                                                                                                                                                                                     <td class="px-2 py-2"></td>
                                         <td class="px-2 py-2"></td>
                                                                                                 </tr>
-                                                    <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                                                    <tr data-searchables="Night Ride" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                                 <td data-sort="1693947938" class="px-2 py-2">
                                     <div class="w-[4.5rem]">05-09-23</div>
                                 </td>
@@ -250,7 +261,7 @@
                                                                                                                                                                                     <td class="px-2 py-2"></td>
                                         <td class="px-2 py-2"></td>
                                                                                                 </tr>
-                                                    <tr class="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                                                    <tr data-searchables="Night Ride" class="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
                                 <td data-sort="1693861538" class="px-2 py-2">
                                     <div class="w-[4.5rem]">04-09-23</div>
                                 </td>
@@ -300,7 +311,7 @@
                                                                                                                                                                                     <td class="px-2 py-2"></td>
                                         <td class="px-2 py-2"></td>
                                                                                                 </tr>
-                                                    <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                                                    <tr data-searchables="Watopia Flat Forward in London" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                                 <td data-sort="1693499735" class="px-2 py-2">
                                     <div class="w-[4.5rem]">31-08-23</div>
                                 </td>
@@ -382,7 +393,7 @@
                                             3.16<span class="text-xs">w/kg</span>
                                         </td>
                                                                                                 </tr>
-                                                    <tr class="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                                                    <tr data-searchables="Morning Ride" class="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
                                 <td data-sort="1690623243" class="px-2 py-2">
                                     <div class="w-[4.5rem]">29-07-23</div>
                                 </td>
@@ -432,7 +443,7 @@
                                                                                                                                                                                     <td class="px-2 py-2"></td>
                                         <td class="px-2 py-2"></td>
                                                                                                 </tr>
-                                                    <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                                                    <tr data-searchables="Morning Ride" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                                 <td data-sort="1690536843" class="px-2 py-2">
                                     <div class="w-[4.5rem]">28-07-23</div>
                                 </td>
@@ -482,7 +493,7 @@
                                                                                                                                                                                     <td class="px-2 py-2"></td>
                                         <td class="px-2 py-2"></td>
                                                                                                 </tr>
-                                                    <tr class="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                                                    <tr data-searchables="Morning Ride" class="border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
                                 <td data-sort="1674984843" class="px-2 py-2">
                                     <div class="w-[4.5rem]">29-01-23</div>
                                 </td>

@@ -429,4 +429,12 @@ final class Activity
             longitude: $this->getLongitude(),
         ));
     }
+
+    /**
+     * @return string[]
+     */
+    public function getSearchables(): array
+    {
+        return [$this->getName()];
+    }
 }

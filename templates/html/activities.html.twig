@@ -14,8 +14,19 @@
         <!-- ALL ACTIVITIES -->
         <div class="grid grid-cols-1 mb-4">
             <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <form class="mb-2 flex items-center">
+                    <label for="search" class="sr-only">Search</label>
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                        </div>
+                        <input id="search" type="text" placeholder="Search activity..." class="table-search bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    </div>
+                </form>
                 <div class="relative overflow-x-auto">
-                    <table class="sortable w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                    <table class="searchable sortable w-full text-sm text-center text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-2 py-3 cursor-pointer">
@@ -97,7 +108,7 @@
                         </thead>
                         <tbody>
                         {% for activity in activities %}
-                            <tr class="{{ cycle(['bg-white border-b dark:bg-gray-900 dark:border-gray-700', 'border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700'], loop.index0) }}">
+                            <tr data-searchables="{{ activity.getSearchables()|join(' ') }}" class="{{ cycle(['bg-white border-b dark:bg-gray-900 dark:border-gray-700', 'border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700'], loop.index0) }}">
                                 <td data-sort="{{ activity.getStartDate().getTimestamp() }}" class="px-2 py-2">
                                     <div class="w-[4.5rem]">{{ activity.getStartDate().format('d-m-y') }}</div>
                                 </td>

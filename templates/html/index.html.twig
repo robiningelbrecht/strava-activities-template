@@ -306,6 +306,7 @@
 <script src="echarts/echarts.min.js"></script>
 <script src="lazyload.min.js"></script>
 <script src="sortable.min.js"></script>
+<script src="searchable.js"></script>
 <script src="flowbite/flowbite.js"></script>
 <script src="dark-mode-toggle.js"></script>
 <script src="router.js"></script>
@@ -343,6 +344,8 @@
         initTabs();
         initPopovers();
         initTooltips();
+        initSearchableTables();
+
         const modalLinks = rootNode.querySelectorAll('a[data-model-content-url]');
         modalLinks.forEach(function (node) {
             node.addEventListener('click', function (e) {
