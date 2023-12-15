@@ -20,6 +20,7 @@ mv -f strava-activities-template/build/html/favicon.ico build/html/favicon.ico
 mv -f strava-activities-template/build/html/placeholder.webp build/html/placeholder.webp
 mv -f strava-activities-template/build/html/lazyload.min.js build/html/lazyload.min.js
 mv -f strava-activities-template/build/html/router.js build/html/router.js
+mv -f strava-activities-template/build/html/searchable.js build/html/searchable.js
 mv -f strava-activities-template/build/html/sortable.min.js build/html/sortable.min.js
 
 mv -f strava-activities-template/tailwind.config.js tailwind.config.js
