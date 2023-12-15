@@ -17,7 +17,7 @@ final class Eddington
     }
 
     /**
-     * @return array<mixed>
+     * @return array<string, float|int>
      */
     private function getDistancesPerDay(): array
     {
