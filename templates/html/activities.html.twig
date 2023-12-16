@@ -119,7 +119,7 @@
                                     {{ activity.getDistanceInKilometer()|formatNumber(0) }}<span class="text-xs">km</span>
                                 </td>
                                 <td data-sort="{{ activity.getElevationInMeter() }}" class="px-6 py-2 {{ activityHighlights.getHighestElevation() == activity.getElevationInMeter() ? 'text-strava-orange font-bold': '' }}">
-                                    {{ activity.getElevationInMeter()|formatNumber(0) }}<span class="text-xs">m</span>
+                                    <div class="w-[4rem]">{{ activity.getElevationInMeter()|formatNumber(0) }}<span class="text-xs">m</span></div>
                                 </td>
                                 <td data-sort="{{ activity.getMovingTimeInSeconds() }}" class="px-6 py-2 {{ activityHighlights.getLongestMovingTimeFormatted() == activity.getMovingTimeFormatted() ? 'text-strava-orange font-bold': '' }}">
                                     {{ activity.getMovingTimeFormatted() }}
