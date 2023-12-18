@@ -301,12 +301,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         foreach ($allActivities as $activity) {
             $streams = $this->activityStreamRepository->findByActivityAndStreamTypes(
                 activityId: $activity->getId(),
-                streamTypes: StreamTypeCollection::fromArray([
-                    StreamType::VELOCITY,
-                    StreamType::WATTS,
-                    StreamType::HEART_RATE,
-                    StreamType::CADENCE,
-                ])
+                streamTypes: StreamTypeCollection::fromArray([StreamType::CADENCE])
             );
 
             if ($cadenceStream = $streams->getByStreamType(StreamType::CADENCE)) {
