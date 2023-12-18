@@ -51,12 +51,34 @@ final readonly class DbalSegmentEffortRepository implements SegmentEffortReposit
         $sql = 'INSERT INTO SegmentEffort (segmentEffortId, segmentId, activityId, startDateTime, data)
         VALUES (:segmentEffortId, :segmentId, :activityId, :startDateTime, :data)';
 
+        $data = $segmentEffort->getData();
+        if (isset($data['segment'])) {
+            unset($data['segment']);
+        }
+
         $this->connection->executeStatement($sql, [
             'segmentEffortId' => $segmentEffort->getId(),
             'segmentId' => $segmentEffort->getSegmentId(),
             'activityId' => $segmentEffort->getActivityId(),
             'startDateTime' => $segmentEffort->getStartDateTime(),
-            'data' => Json::encode($segmentEffort->getData()),
+            'data' => Json::encode($data),
+        ]);
+    }
+
+    public function update(SegmentEffort $segmentEffort): void
+    {
+        $sql = 'UPDATE SegmentEffort 
+        SET data = :data
+        WHERE segmentEffortId = :segmentEffortId';
+
+        $data = $segmentEffort->getData();
+        if (isset($data['segment'])) {
+            unset($data['segment']);
+        }
+
+        $this->connection->executeStatement($sql, [
+            'segmentEffortId' => $segmentEffort->getId(),
+            'data' => Json::encode($data),
         ]);
     }
 
