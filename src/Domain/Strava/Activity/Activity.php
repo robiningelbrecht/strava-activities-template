@@ -437,4 +437,12 @@ final class Activity
     {
         return [$this->getName()];
     }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getSegmentEfforts(): array
+    {
+        return $this->data['segment_efforts'] ?? [];
+    }
 }

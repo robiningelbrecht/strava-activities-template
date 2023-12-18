@@ -18,6 +18,10 @@ use App\Domain\Strava\Ftp\DbalFtpRepository;
 use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Gear\DbalGearRepository;
 use App\Domain\Strava\Gear\GearRepository;
+use App\Domain\Strava\Segment\DbalSegmentRepository;
+use App\Domain\Strava\Segment\SegmentEffort\DbalSegmentEffortRepository;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortRepository;
+use App\Domain\Strava\Segment\SegmentRepository;
 use App\Domain\Strava\StravaClientId;
 use App\Domain\Strava\StravaClientSecret;
 use App\Domain\Strava\StravaRefreshToken;
@@ -69,6 +73,8 @@ return [
     ChallengeRepository::class => DI\autowire(DbalChallengeRepository::class),
     FtpRepository::class => DI\autowire(DbalFtpRepository::class),
     GearRepository::class => DI\autowire(DbalGearRepository::class),
+    SegmentRepository::class => DI\autowire(DbalSegmentRepository::class),
+    SegmentEffortRepository::class => DI\autowire(DbalSegmentEffortRepository::class),
     // Twig Environment.
     FilesystemLoader::class => DI\create(FilesystemLoader::class)->constructor($appRoot.'/templates'),
     TwigEnvironment::class => DI\factory([TwigBuilder::class, 'build']),
