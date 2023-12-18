@@ -27,7 +27,7 @@ final readonly class DbalActivityStreamRepository implements ActivityStreamRepos
         try {
             $importedActivityStreams = explode(',', $this->keyValueStore->find(Key::IMPORTED_ACTIVITY_STREAMS)->getValue());
         } catch (EntityNotFound) {
-            $importedActivityStreams = [];
+            return false;
         }
 
         return in_array($activityId, $importedActivityStreams);
