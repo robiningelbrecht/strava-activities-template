@@ -373,6 +373,21 @@ class StravaTest extends TestCase
         $this->assertMatchesJsonSnapshot($challenges);
     }
 
+    public function testGetChallengesOnTrophyCaseWhenFileNotFound(): void
+    {
+        $this->filesystemOperator
+            ->expects($this->once())
+            ->method('fileExists')
+            ->willReturn(false);
+
+        $this->filesystemOperator
+            ->expects($this->never())
+            ->method('read');
+
+        $challenges = $this->strava->getChallengesOnTrophyCase();
+        $this->assertEmpty($challenges);
+    }
+
     public function testGetChallengesOnTrophyCaseWithDefaultHtml(): void
     {
         $this->filesystemOperator
