@@ -108,6 +108,11 @@ final class DbalActivityRepository implements ActivityRepository
         ]);
     }
 
+    /**
+     * @param array<mixed> $data
+     *
+     * @return array<mixed>
+     */
     private function cleanData(array $data): array
     {
         if (isset($data['map']['polyline'])) {
