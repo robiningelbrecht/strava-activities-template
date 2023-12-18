@@ -89,7 +89,7 @@ final class DbalActivityRepository implements ActivityRepository
         $this->connection->executeStatement($sql, [
             'activityId' => $activity->getId(),
             'startDateTime' => $activity->getStartDate(),
-            'data' => Json::encode($activity->getData()),
+            'data' => Json::encode($this->cleanData($activity->getData())),
             'weather' => Json::encode($activity->getAllWeatherData()),
             'gearId' => $activity->getGearId(),
         ]);
@@ -103,9 +103,35 @@ final class DbalActivityRepository implements ActivityRepository
 
         $this->connection->executeStatement($sql, [
             'activityId' => $activity->getId(),
-            'data' => Json::encode($activity->getData()),
+            'data' => Json::encode($this->cleanData($activity->getData())),
             'gearId' => $activity->getGearId(),
         ]);
+    }
+
+    /**
+     * @param array<mixed> $data
+     *
+     * @return array<mixed>
+     */
+    private function cleanData(array $data): array
+    {
+        if (isset($data['map']['polyline'])) {
+            unset($data['map']['polyline']);
+        }
+        if (isset($data['laps'])) {
+            unset($data['laps']);
+        }
+        if (isset($data['splits_standard'])) {
+            unset($data['splits_standard']);
+        }
+        if (isset($data['splits_metric'])) {
+            unset($data['splits_metric']);
+        }
+        if (isset($data['stats_visibility'])) {
+            unset($data['stats_visibility']);
+        }
+
+        return $data;
     }
 
     /**
