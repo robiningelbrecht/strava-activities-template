@@ -1,0 +1,4 @@
+Importing segments and efforts...
+  => Added segment "Segment One"
+  => Added segment effort for "Segment One"
+  => Added segment effort for "Segment One"

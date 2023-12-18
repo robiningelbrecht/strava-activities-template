@@ -7,6 +7,7 @@ use App\Domain\Strava\Activity\Stream\ImportActivityStreams\ImportActivityStream
 use App\Domain\Strava\Challenge\ImportChallenges\ImportChallenges;
 use App\Domain\Strava\Gear\ImportGear\ImportGear;
 use App\Domain\Strava\ReachedStravaApiRateLimits;
+use App\Domain\Strava\Segment\ImportSegments\ImportSegments;
 use App\Infrastructure\CQRS\CommandBus;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -18,7 +19,7 @@ final class ImportStravaDataConsoleCommand extends Command
 {
     public function __construct(
         private readonly CommandBus $commandBus,
-        private readonly ReachedStravaApiRateLimits $reachedStravaApiRateLimits
+        private readonly ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
     ) {
         parent::__construct();
     }
@@ -28,6 +29,7 @@ final class ImportStravaDataConsoleCommand extends Command
         $this->reachedStravaApiRateLimits->clear();
         $this->commandBus->dispatch(new ImportActivities($output));
         $this->commandBus->dispatch(new ImportActivityStreams($output));
+        $this->commandBus->dispatch(new ImportSegments($output));
         $this->commandBus->dispatch(new ImportGear($output));
         $this->commandBus->dispatch(new ImportChallenges($output));
 

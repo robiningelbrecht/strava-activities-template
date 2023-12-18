@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Eventing;
 
-abstract class DomainEvent implements \JsonSerializable
+abstract readonly class DomainEvent implements \JsonSerializable
 {
     public function getShortClassName(): string
     {
