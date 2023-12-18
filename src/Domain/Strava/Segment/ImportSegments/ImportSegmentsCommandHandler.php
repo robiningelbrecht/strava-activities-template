@@ -54,7 +54,8 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
                 }
 
                 try {
-                    $this->segmentEffortRepository->find($activitySegmentEffort['id']);
+                    $segmentEffort = $this->segmentEffortRepository->find($activitySegmentEffort['id']);
+                    $this->segmentEffortRepository->update($segmentEffort);
                 } catch (EntityNotFound) {
                     $this->segmentEffortRepository->add(SegmentEffort::create(
                         segmentEffortId: $activitySegmentEffort['id'],
