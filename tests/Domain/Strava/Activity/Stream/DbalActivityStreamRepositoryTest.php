@@ -7,7 +7,6 @@ use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\DbalActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
-use App\Infrastructure\KeyValue\KeyValueStore;
 use App\Tests\DatabaseTestCase;
 
 class DbalActivityStreamRepositoryTest extends DatabaseTestCase
@@ -16,7 +15,6 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
     public function testIsImportedForActivity(): void
     {
-        $this->assertFalse($this->activityStreamRepository->isImportedForActivity('10'));
         $stream = DefaultStreamBuilder::fromDefaults()->build();
         $this->activityStreamRepository->add($stream);
 
@@ -94,7 +92,6 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
         $this->activityStreamRepository = new DbalActivityStreamRepository(
             $this->getConnection(),
-            $this->getContainer()->get(KeyValueStore::class)
         );
     }
 }

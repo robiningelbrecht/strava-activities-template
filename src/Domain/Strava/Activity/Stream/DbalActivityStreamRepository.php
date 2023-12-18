@@ -2,11 +2,6 @@
 
 namespace App\Domain\Strava\Activity\Stream;
 
-use App\Infrastructure\Exception\EntityNotFound;
-use App\Infrastructure\KeyValue\Key;
-use App\Infrastructure\KeyValue\KeyValue;
-use App\Infrastructure\KeyValue\KeyValueStore;
-use App\Infrastructure\KeyValue\Value;
 use App\Infrastructure\Repository\ProvideSqlConvert;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -17,20 +12,19 @@ final readonly class DbalActivityStreamRepository implements ActivityStreamRepos
     use ProvideSqlConvert;
 
     public function __construct(
-        private Connection $connection,
-        private KeyValueStore $keyValueStore,
+        private Connection $connection
     ) {
     }
 
     public function isImportedForActivity(int $activityId): bool
     {
-        try {
-            $importedActivityStreams = explode(',', $this->keyValueStore->find(Key::IMPORTED_ACTIVITY_STREAMS)->getValue());
-        } catch (EntityNotFound) {
-            return false;
-        }
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select('*')
+            ->from('ActivityStream')
+            ->andWhere('activityId = :activityId')
+            ->setParameter('activityId', $activityId);
 
-        return in_array($activityId, $importedActivityStreams);
+        return !empty($queryBuilder->executeQuery()->fetchOne());
     }
 
     public function hasOneForActivityAndStreamType(int $activityId, StreamType $streamType): bool
@@ -86,22 +80,6 @@ final readonly class DbalActivityStreamRepository implements ActivityStreamRepos
             'data' => Json::encode($stream->getData()),
             'createdOn' => $stream->getCreatedOn(),
         ]);
-
-        // Keep track of activities we imported streams for.
-        try {
-            $importedActivityStreams = explode(',', $this->keyValueStore->find(Key::IMPORTED_ACTIVITY_STREAMS)->getValue());
-        } catch (EntityNotFound) {
-            $importedActivityStreams = [];
-        }
-        $activityId = (string) $stream->getActivityId();
-        if (!in_array($activityId, $importedActivityStreams)) {
-            $importedActivityStreams[] = $activityId;
-        }
-
-        $this->keyValueStore->save(KeyValue::fromState(
-            key: Key::IMPORTED_ACTIVITY_STREAMS,
-            value: Value::fromString(implode(',', $importedActivityStreams)),
-        ));
     }
 
     /**
