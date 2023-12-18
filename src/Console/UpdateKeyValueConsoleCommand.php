@@ -23,7 +23,7 @@ final class UpdateKeyValueConsoleCommand extends Command
         parent::__construct();
     }
 
-    public function configure()
+    public function configure(): void
     {
         parent::configure();
 

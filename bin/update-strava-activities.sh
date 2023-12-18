@@ -51,6 +51,7 @@ composer install --prefer-dist
 
 # Run migrations.
 ./vendor/bin/doctrine-migrations migrate --no-interaction
+bin/console app:strava:vacuum
 
 # Exit when only template update.
 if [ "$1" == "--only-template" ]; then
