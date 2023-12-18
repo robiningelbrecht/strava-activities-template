@@ -16,12 +16,12 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
     public function testIsImportedForActivity(): void
     {
+        $this->assertFalse($this->activityStreamRepository->isImportedForActivity('10'));
         $stream = DefaultStreamBuilder::fromDefaults()->build();
         $this->activityStreamRepository->add($stream);
 
         $this->assertTrue($this->activityStreamRepository->isImportedForActivity($stream->getActivityId()));
         $this->assertFalse($this->activityStreamRepository->isImportedForActivity('1'));
-        $this->assertFalse($this->activityStreamRepository->isImportedForActivity('10'));
     }
 
     public function testHasOneForActivityAndStreamType(): void
