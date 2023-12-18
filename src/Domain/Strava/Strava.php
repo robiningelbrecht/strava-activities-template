@@ -8,6 +8,7 @@ use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
+use League\Flysystem\FilesystemOperator;
 
 class Strava
 {
@@ -19,6 +20,7 @@ class Strava
         private readonly StravaClientId $stravaClientId,
         private readonly StravaClientSecret $stravaClientSecret,
         private readonly StravaRefreshToken $stravaRefreshToken,
+        private readonly FilesystemOperator $filesystemOperator,
     ) {
     }
 
@@ -214,7 +216,10 @@ class Strava
      */
     public function getChallengesOnTrophyCase(): array
     {
-        $contents = $this->request('https://raw.githubusercontent.com/'.$_ENV['REPOSITORY_NAME'].'/master/files/strava-challenge-history.html');
+        if (!$this->filesystemOperator->fileExists('files/strava-challenge-history.html')) {
+            return [];
+        }
+        $contents = $this->filesystemOperator->read('files/strava-challenge-history.html');
         if (ImportChallengesCommandHandler::DEFAULT_STRAVA_CHALLENGE_HISTORY == trim($contents)) {
             return [];
         }
