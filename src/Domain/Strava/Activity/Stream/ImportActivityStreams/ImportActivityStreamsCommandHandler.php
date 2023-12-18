@@ -35,11 +35,10 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
         $command->getOutput()->writeln('Importing activity streams...');
 
         foreach ($this->activityRepository->findActivityIds() as $activityId) {
-            if ($this->activityStreamRepository->hasOneForActivity($activityId)) {
+            if ($this->activityStreamRepository->isImportedForActivity($activityId)) {
                 // Streams for this activity have been imported already, skip.
                 continue;
             }
-
             $stravaStreams = [];
             try {
                 $stravaStreams = $this->strava->getAllActivityStreams($activityId);

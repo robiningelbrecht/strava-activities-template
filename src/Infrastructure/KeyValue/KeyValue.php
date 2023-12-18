@@ -12,7 +12,7 @@ final readonly class KeyValue
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string')]
         private Key $key,
-        #[ORM\Column(type: 'string')]
+        #[ORM\Column(type: 'text')]
         private Value $value,
     ) {
     }

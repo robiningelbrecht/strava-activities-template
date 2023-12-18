@@ -4,7 +4,7 @@ namespace App\Domain\Strava\Activity\Stream;
 
 interface ActivityStreamRepository
 {
-    public function hasOneForActivity(int $activityId): bool;
+    public function isImportedForActivity(int $activityId): bool;
 
     public function hasOneForActivityAndStreamType(int $activityId, StreamType $streamType): bool;
 
