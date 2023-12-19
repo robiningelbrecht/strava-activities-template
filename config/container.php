@@ -28,6 +28,7 @@ use App\Domain\Strava\StravaRefreshToken;
 use App\Domain\Weather\OpenMeteo\LiveOpenMeteo;
 use App\Domain\Weather\OpenMeteo\OpenMeteo;
 use App\Infrastructure\Console\ConsoleCommandContainer;
+use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Environment\Environment;
 use App\Infrastructure\Environment\Settings;
 use App\Infrastructure\KeyValue\DbalKeyValueStore;
@@ -79,8 +80,8 @@ return [
     FilesystemLoader::class => DI\create(FilesystemLoader::class)->constructor($appRoot.'/templates'),
     TwigEnvironment::class => DI\factory([TwigBuilder::class, 'build']),
     // Doctrine Dbal.
-    Connection::class => function (Settings $settings): Connection {
-        return DriverManager::getConnection($settings->get('doctrine.connection'));
+    Connection::class => function (ConnectionFactory $connectionFactory): Connection {
+        return $connectionFactory->getDefault();
     },
     // Doctrine EntityManager.
     EntityManager::class => function (Settings $settings): EntityManager {
@@ -89,7 +90,7 @@ return [
             $settings->get('doctrine.dev_mode'),
         );
 
-        $connection = DriverManager::getConnection($settings->get('doctrine.connection'), $config);
+        $connection = DriverManager::getConnection($settings->get('doctrine.connections.default'), $config);
 
         return new EntityManager($connection, $config);
     },

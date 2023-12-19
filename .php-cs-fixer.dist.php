@@ -7,8 +7,8 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('docker')
     ->exclude('bin');
 
-return (new PhpCsFixer\Config)
+return (new PhpCsFixer\Config())
     ->setRules([
-        '@Symfony' => true
+        '@Symfony' => true,
     ])
     ->setFinder($finder);

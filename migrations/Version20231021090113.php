@@ -20,7 +20,7 @@ final class Version20231021090113 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE Activity ADD COLUMN weather CLOB DEFAULT NULL --(DC2Type:json)');
+        $this->addSql('ALTER TABLE Activity ADD COLUMN weather CLOB DEFAULT NULL');
         $this->addSql("UPDATE Activity SET weather = JSON_EXTRACT(data, '$.weather')");
     }
 

@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__.'/../vendor/autoload.php';
+
+use App\Infrastructure\DependencyInjection\ContainerFactory;
+use App\Infrastructure\Doctrine\Command\MigrateCommand;
+use App\Infrastructure\Environment\Settings;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
+use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
+use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
+use Doctrine\Migrations\DependencyFactory;
+use Doctrine\Migrations\Tools\Console\Command;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMSetup;
+use Symfony\Component\Console\Application;
+
+/** @var \DI\Container $container */
+$container = ContainerFactory::create();
+$settings = $container->get(Settings::class);
+$ormConfig = ORMSetup::createAttributeMetadataConfiguration(
+    $settings->get('doctrine.metadata_dirs'),
+    $settings->get('doctrine.dev_mode'),
+);
+$migrationConfig = new ConfigurationArray($settings->get('doctrine.migrations'));
+
+$defaultDependencyFactory = DependencyFactory::fromEntityManager(
+    configurationLoader: $migrationConfig,
+    emLoader: new ExistingEntityManager(new EntityManager($container->get(Connection::class), $ormConfig))
+);
+
+$cli = new Application('Doctrine Migrations');
+$cli->setCatchExceptions(true);
+$cli->addCommands([
+    new Command\DiffCommand($defaultDependencyFactory),
+    new MigrateCommand(
+        container: $container,
+        migrationConfig: $migrationConfig,
+    ),
+]);
+$cli->run();

@@ -2,8 +2,9 @@
 nginx
 vendor
 var
-.php-cs-fixer.cache
 .phpunit.cache
+.php-cs-fixer.cache
 .phpunit.result.cache
 node_modules
 RATE_LIMITS_REACHED
+database/db.strava-read
