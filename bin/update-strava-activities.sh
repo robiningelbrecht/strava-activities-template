@@ -50,7 +50,7 @@ git diff --staged --quiet || git commit -m"Updated template to latest version"
 composer install --prefer-dist
 
 # Run migrations.
-./vendor/bin/doctrine-migrations migrate --no-interaction
+bin/doctrine-migrations migrate --no-interaction
 
 # Exit when only template update.
 if [ "$1" == "--only-template" ]; then

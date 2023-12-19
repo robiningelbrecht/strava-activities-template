@@ -28,6 +28,7 @@ use App\Domain\Strava\StravaRefreshToken;
 use App\Domain\Weather\OpenMeteo\LiveOpenMeteo;
 use App\Domain\Weather\OpenMeteo\OpenMeteo;
 use App\Infrastructure\Console\ConsoleCommandContainer;
+use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Environment\Environment;
 use App\Infrastructure\Environment\Settings;
 use App\Infrastructure\KeyValue\DbalKeyValueStore;
@@ -38,10 +39,6 @@ use App\Infrastructure\Twig\TwigBuilder;
 use App\Infrastructure\ValueObject\RandomUuidFactory;
 use App\Infrastructure\ValueObject\UuidFactory;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\ORMSetup;
 use Dotenv\Dotenv;
 use Lcobucci\Clock\Clock;
 use Lcobucci\Clock\SystemClock;
@@ -79,21 +76,9 @@ return [
     FilesystemLoader::class => DI\create(FilesystemLoader::class)->constructor($appRoot.'/templates'),
     TwigEnvironment::class => DI\factory([TwigBuilder::class, 'build']),
     // Doctrine Dbal.
-    Connection::class => function (Settings $settings): Connection {
-        return DriverManager::getConnection($settings->get('doctrine.connection'));
+    Connection::class => function (ConnectionFactory $connectionFactory): Connection {
+        return $connectionFactory->getDefault();
     },
-    // Doctrine EntityManager.
-    EntityManager::class => function (Settings $settings): EntityManager {
-        $config = ORMSetup::createAttributeMetadataConfiguration(
-            $settings->get('doctrine.metadata_dirs'),
-            $settings->get('doctrine.dev_mode'),
-        );
-
-        $connection = DriverManager::getConnection($settings->get('doctrine.connection'), $config);
-
-        return new EntityManager($connection, $config);
-    },
-    EntityManagerInterface::class => DI\get(EntityManager::class),
     // Console command application.
     Application::class => function (ConsoleCommandContainer $consoleCommandContainer) {
         $application = new Application();

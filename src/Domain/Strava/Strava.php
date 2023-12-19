@@ -92,6 +92,8 @@ class Strava
             ]));
             $allActivities = array_merge($allActivities, $activities);
             ++$page;
+            // Try to avoid too many calls.
+            sleep(1);
         } while (count($activities) > 0);
 
         return $allActivities;
