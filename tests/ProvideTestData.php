@@ -211,7 +211,7 @@ trait ProvideTestData
                 ->withSegmentId(1)
                 ->withActivityId(9542782314)
                 ->withData([
-                    'elapsed_time' => 10.3,
+                    'elapsed_time' => 9.3,
                     'average_watts' => 200,
                     'distance' => 100,
                 ])
