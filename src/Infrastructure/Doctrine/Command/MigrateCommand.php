@@ -7,7 +7,6 @@ namespace App\Infrastructure\Doctrine\Command;
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
-use App\Infrastructure\Environment\Settings;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Time\Year;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
@@ -23,7 +22,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'migrations:migrate', description: 'Execute a migration to a specified version or the latest available version.')]
 final class MigrateCommand extends Command
 {
-    private readonly Settings $settings;
     private readonly ConnectionFactory $connectionFactory;
     private readonly Strava $strava;
 
@@ -32,7 +30,6 @@ final class MigrateCommand extends Command
         private readonly ConfigurationLoader $migrationConfig,
     ) {
         parent::__construct();
-        $this->settings = $this->container->get(Settings::class);
         $this->connectionFactory = $this->container->get(ConnectionFactory::class);
         $this->strava = $this->container->get(Strava::class);
     }
@@ -86,6 +83,7 @@ final class MigrateCommand extends Command
 
             $version = $dependencyFactory->getVersionAliasResolver()->resolveVersionAlias('latest');
             $plan = $dependencyFactory->getMigrationPlanCalculator()->getPlanUntilVersion($version);
+            /* @phpstan-ignore-next-line */
             $databasePathParts = explode('/', $dependencyFactory->getConnection()->getParams()['path']);
             $databaseName = end($databasePathParts);
             if (0 === count($plan)) {

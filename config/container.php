@@ -39,6 +39,10 @@ use App\Infrastructure\Twig\TwigBuilder;
 use App\Infrastructure\ValueObject\RandomUuidFactory;
 use App\Infrastructure\ValueObject\UuidFactory;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMSetup;
 use Dotenv\Dotenv;
 use Lcobucci\Clock\Clock;
 use Lcobucci\Clock\SystemClock;
@@ -79,6 +83,18 @@ return [
     Connection::class => function (ConnectionFactory $connectionFactory): Connection {
         return $connectionFactory->getDefault();
     },
+    // Doctrine EntityManager.
+    EntityManager::class => function (Settings $settings): EntityManager {
+        $config = ORMSetup::createAttributeMetadataConfiguration(
+            $settings->get('doctrine.metadata_dirs'),
+            $settings->get('doctrine.dev_mode'),
+        );
+
+        $connection = DriverManager::getConnection($settings->get('doctrine.connections.default'), $config);
+
+        return new EntityManager($connection, $config);
+    },
+    EntityManagerInterface::class => DI\get(EntityManager::class),
     // Console command application.
     Application::class => function (ConsoleCommandContainer $consoleCommandContainer) {
         $application = new Application();
