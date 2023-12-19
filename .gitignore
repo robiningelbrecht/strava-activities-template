@@ -2,6 +2,7 @@
 nginx
 vendor
 var
+.phpunit.cache
 .php-cs-fixer.cache
 .phpunit.result.cache
 node_modules
