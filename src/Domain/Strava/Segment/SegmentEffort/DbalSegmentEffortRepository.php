@@ -38,7 +38,7 @@ final readonly class DbalSegmentEffortRepository implements SegmentEffortReposit
             ->from('SegmentEffort')
             ->andWhere('segmentId = :segmentId')
             ->setParameter('segmentId', $segmentId)
-            ->orderBy('startDateTime', 'DESC');
+            ->orderBy("JSON_EXTRACT(data, '$.elapsed_time')", 'ASC');
 
         return SegmentEffortCollection::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),
