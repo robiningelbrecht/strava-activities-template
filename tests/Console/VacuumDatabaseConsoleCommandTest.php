@@ -3,6 +3,9 @@
 namespace App\Tests\Console;
 
 use App\Console\VacuumDatabaseConsoleCommand;
+use App\Domain\Strava\Activity\ActivityRepository;
+use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
+use App\Infrastructure\ValueObject\Time\Year;
 use App\Tests\ConsoleCommandTestCase;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -15,11 +18,35 @@ class VacuumDatabaseConsoleCommandTest extends ConsoleCommandTestCase
     use MatchesSnapshots;
 
     private VacuumDatabaseConsoleCommand $vacuumDatabaseConsoleCommand;
-    private MockObject $connection;
+    private MockObject $connectionFactory;
+    private MockObject $activityRepository;
 
     public function testExecute(): void
     {
-        $this->connection
+        $connection = $this->createMock(Connection::class);
+        $this->connectionFactory
+            ->expects($this->once())
+            ->method('getDefault')
+            ->willReturn($connection);
+
+        $connection
+            ->expects($this->once())
+            ->method('executeStatement')
+            ->with('VACUUM');
+
+        $this->activityRepository
+            ->expects($this->once())
+            ->method('findUniqueYears')
+            ->willReturn([Year::fromInt(2023)]);
+
+        $connection = $this->createMock(Connection::class);
+        $this->connectionFactory
+            ->expects($this->once())
+            ->method('getForYear')
+            ->with(Year::fromInt(2023))
+            ->willReturn($connection);
+
+        $connection
             ->expects($this->once())
             ->method('executeStatement')
             ->with('VACUUM');
@@ -37,10 +64,12 @@ class VacuumDatabaseConsoleCommandTest extends ConsoleCommandTestCase
     {
         parent::setUp();
 
-        $this->connection = $this->createMock(Connection::class);
+        $this->connectionFactory = $this->createMock(ConnectionFactory::class);
+        $this->activityRepository = $this->createMock(ActivityRepository::class);
 
         $this->vacuumDatabaseConsoleCommand = new VacuumDatabaseConsoleCommand(
-            $this->connection
+            $this->connectionFactory,
+            $this->activityRepository
         );
     }
 

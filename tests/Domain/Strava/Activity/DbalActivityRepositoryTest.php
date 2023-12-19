@@ -7,6 +7,7 @@ use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\DbalActivityRepository;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use App\Infrastructure\ValueObject\Time\Year;
 use App\Tests\DatabaseTestCase;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
@@ -114,6 +115,33 @@ class DbalActivityRepositoryTest extends DatabaseTestCase
         $this->assertEquals(
             [1, 2],
             $this->activityRepository->findUniqueGearIds()
+        );
+    }
+
+    public function testFindUniqueYears(): void
+    {
+        $activityOne = ActivityBuilder::fromDefaults()
+            ->withActivityId(1)
+            ->withGearId(1)
+            ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 14:00:34'))
+            ->build();
+        $this->activityRepository->add($activityOne);
+        $activityTwo = ActivityBuilder::fromDefaults()
+            ->withActivityId(2)
+            ->withGearId(2)
+            ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 13:00:34'))
+            ->build();
+        $this->activityRepository->add($activityTwo);
+        $activityThree = ActivityBuilder::fromDefaults()
+            ->withActivityId(3)
+            ->withGearId(1)
+            ->withStartDateTime(SerializableDateTime::fromString('2023-10-09 14:00:34'))
+            ->build();
+        $this->activityRepository->add($activityThree);
+
+        $this->assertEquals(
+            [Year::fromInt(2023)],
+            $this->activityRepository->findUniqueYears()
         );
     }
 

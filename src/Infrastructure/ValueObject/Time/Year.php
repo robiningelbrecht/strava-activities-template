@@ -18,6 +18,13 @@ final readonly class Year implements \Stringable
         );
     }
 
+    public static function fromInt(int $year): self
+    {
+        return new self(
+            year: $year,
+        );
+    }
+
     public function __toString(): string
     {
         return (string) $this->year;

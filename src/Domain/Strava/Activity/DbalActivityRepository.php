@@ -5,6 +5,7 @@ namespace App\Domain\Strava\Activity;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use App\Infrastructure\ValueObject\Time\Year;
 use Doctrine\DBAL\Connection;
 
 final class DbalActivityRepository implements ActivityRepository
@@ -79,6 +80,23 @@ final class DbalActivityRepository implements ActivityRepository
             ->orderBy('startDateTime', 'DESC');
 
         return $queryBuilder->executeQuery()->fetchFirstColumn();
+    }
+
+    /**
+     * @return \App\Infrastructure\ValueObject\Time\Year[]
+     */
+    public function findUniqueYears(): array
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select("STRFTIME('%Y', startDateTime)")
+            ->distinct()
+            ->from('Activity')
+            ->orderBy('startDateTime', 'DESC');
+
+        return array_map(
+            callback: fn (int $year) => Year::fromInt($year),
+            array: $queryBuilder->executeQuery()->fetchFirstColumn()
+        );
     }
 
     public function add(Activity $activity): void

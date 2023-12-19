@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Console;
 
-use Doctrine\DBAL\Connection;
+use App\Domain\Strava\Activity\ActivityRepository;
+use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,16 +15,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class VacuumDatabaseConsoleCommand extends Command
 {
     public function __construct(
-        private readonly Connection $connection
+        private readonly ConnectionFactory $connectionFactory,
+        private readonly ActivityRepository $activityRepository,
     ) {
         parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->connection->executeStatement('VACUUM');
+        $this->connectionFactory->getDefault()->executeStatement('VACUUM');
+        foreach ($this->activityRepository->findUniqueYears() as $year) {
+            $this->connectionFactory->getForYear($year)->executeStatement('VACUUM');
+        }
 
-        $output->writeln('Database got vacuumed 🧹');
+        $output->writeln('Databases got vacuumed 🧹');
 
         return Command::SUCCESS;
     }
