@@ -20,6 +20,10 @@ trait TimeFormatter
             ]));
         }
 
+        if (!$interval->minutes && !$interval->hours) {
+            return $interval->seconds.'s';
+        }
+
         $movingTime = implode(':', array_map(fn (int $value) => sprintf('%02d', $value), [
             $interval->minutes,
             $interval->seconds,

@@ -38,6 +38,8 @@ use App\Domain\Strava\Gear\DistanceOverTimePerGearChartBuilder;
 use App\Domain\Strava\Gear\GearRepository;
 use App\Domain\Strava\Gear\GearStatistics;
 use App\Domain\Strava\MonthlyStatistics;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortRepository;
+use App\Domain\Strava\Segment\SegmentRepository;
 use App\Domain\Strava\Trivia;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
@@ -63,6 +65,8 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         private ActivityStreamRepository $activityStreamRepository,
         private ActivityHeartRateRepository $activityHeartRateRepository,
         private AthleteWeightRepository $athleteWeightRepository,
+        private SegmentRepository $segmentRepository,
+        private SegmentEffortRepository $segmentEffortRepository,
         private FtpRepository $ftpRepository,
         private KeyValueStore $keyValueStore,
         private Environment $twig,
@@ -83,6 +87,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $allBikes = $this->gearRepository->findAll();
         $allImages = $this->imageRepository->findAll();
         $allFtps = $this->ftpRepository->findAll();
+        $allSegments = $this->segmentRepository->findAll();
         $eddington = Eddington::fromActivities($allActivities);
         $activityHighlights = ActivityHighlights::fromActivities($allActivities);
         $weekdayStats = WeekdayStats::fromActivities($allActivities);
@@ -252,9 +257,30 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             ]),
         );
 
+        /** @var \App\Domain\Strava\Segment\Segment $segment */
+        foreach ($allSegments as $segment) {
+            $segmentEfforts = $this->segmentEffortRepository->findBySegmentId($segment->getId());
+            $segment->enrichWithBestEffort($segmentEfforts->getBestEffort());
+
+            /** @var \App\Domain\Strava\Segment\SegmentEffort\SegmentEffort $segmentEffort */
+            foreach ($segmentEfforts as $segmentEffort) {
+                $segmentEffort->enrichWithActivity($allActivities->getByActivityId($segmentEffort->getActivityId()));
+            }
+
+            $this->filesystem->write(
+                'build/html/segment/segment-'.$segment->getId().'.html',
+                $this->twig->load('html/segment.html.twig')->render([
+                    'segment' => $segment,
+                    'segmentEfforts' => $segmentEfforts,
+                ]),
+            );
+        }
+
         $this->filesystem->write(
             'build/html/segments.html',
-            $this->twig->load('html/segments.html.twig')->render(),
+            $this->twig->load('html/segments.html.twig')->render([
+                'segments' => $allSegments,
+            ]),
         );
 
         $this->filesystem->write(

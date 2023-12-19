@@ -34,9 +34,9 @@ final readonly class DbalSegmentRepository implements SegmentRepository
     public function findAll(): SegmentCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
-        $queryBuilder->select('*')
+        $queryBuilder->select('*', '(SELECT COUNT(*) FROM SegmentEffort WHERE SegmentEffort.segmentId = Segment.segmentId) as countCompleted')
             ->from('Segment')
-            ->orderBy('name', 'ASC');
+            ->orderBy('countCompleted', 'DESC');
 
         return SegmentCollection::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),

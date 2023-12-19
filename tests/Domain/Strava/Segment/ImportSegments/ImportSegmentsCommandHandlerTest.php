@@ -4,9 +4,11 @@ namespace App\Tests\Domain\Strava\Segment\ImportSegments;
 
 use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Segment\ImportSegments\ImportSegments;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortRepository;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
 use App\Tests\Domain\Strava\Activity\ActivityBuilder;
+use App\Tests\Domain\Strava\Segment\SegmentEffort\SegmentEffortBuilder;
 use App\Tests\SpyOutput;
 use Spatie\Snapshots\MatchesSnapshots;
 
@@ -58,6 +60,18 @@ class ImportSegmentsCommandHandlerTest extends DatabaseTestCase
             ActivityBuilder::fromDefaults()
                 ->withActivityId(3)
                 ->withData([])
+                ->build()
+        );
+        $this->getContainer()->get(SegmentEffortRepository::class)->add(
+            SegmentEffortBuilder::fromDefaults()
+                ->withId(2)
+                ->withSegmentId(1)
+                ->withActivityId(9542782314)
+                ->withData([
+                    'elapsed_time' => 9.3,
+                    'average_watts' => 200,
+                    'distance' => 100,
+                ])
                 ->build()
         );
 

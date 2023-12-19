@@ -53,4 +53,18 @@ final class SegmentEffortBuilder
 
         return $this;
     }
+
+    public function withActivityId(int $activityId): self
+    {
+        $this->activityId = $activityId;
+
+        return $this;
+    }
+
+    public function withData(array $data): self
+    {
+        $this->data = $data;
+
+        return $this;
+    }
 }
