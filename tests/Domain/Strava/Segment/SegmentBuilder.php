@@ -11,7 +11,7 @@ final class SegmentBuilder
 {
     private int $segmentId;
     private Name $name;
-    private readonly array $data;
+    private array $data;
 
     private function __construct()
     {
@@ -44,6 +44,13 @@ final class SegmentBuilder
     public function withName(Name $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function withData(array $data): self
+    {
+        $this->data = $data;
 
         return $this;
     }

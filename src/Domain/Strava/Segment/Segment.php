@@ -72,11 +72,6 @@ final class Segment
         return $this->data['distance'] / 1000;
     }
 
-    public function getElevationInMeter(): float
-    {
-        return $this->data['elevation_high'] - $this->data['elevation_low'];
-    }
-
     public function getMaxGradient(): float
     {
         return $this->data['maximum_grade'];

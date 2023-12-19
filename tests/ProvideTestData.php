@@ -12,17 +12,22 @@ use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Ftp\FtpValue;
 use App\Domain\Strava\Gear\GearRepository;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortRepository;
+use App\Domain\Strava\Segment\SegmentRepository;
 use App\Infrastructure\KeyValue\DbalKeyValueStore;
 use App\Infrastructure\KeyValue\Key;
 use App\Infrastructure\KeyValue\KeyValue;
 use App\Infrastructure\KeyValue\Value;
 use App\Infrastructure\Serialization\Json;
+use App\Infrastructure\ValueObject\String\Name;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\Domain\Strava\Activity\ActivityBuilder;
 use App\Tests\Domain\Strava\Activity\Stream\DefaultStreamBuilder;
 use App\Tests\Domain\Strava\Challenge\ChallengeBuilder;
 use App\Tests\Domain\Strava\Ftp\FtpBuilder;
 use App\Tests\Domain\Strava\Gear\GearBuilder;
+use App\Tests\Domain\Strava\Segment\SegmentBuilder;
+use App\Tests\Domain\Strava\Segment\SegmentEffort\SegmentEffortBuilder;
 use Psr\Container\ContainerInterface;
 
 trait ProvideTestData
@@ -157,6 +162,70 @@ trait ProvideTestData
                 ->withStreamType(StreamType::HEART_RATE)
                 ->withCreatedOn(SerializableDateTime::fromString('2023-09-27 19:48:21'))
                 ->withData(Json::decode('[177,177,177,177,178,178,178,178,178,178]'))
+                ->build()
+        );
+
+        /** @var SegmentRepository $segmentRepository */
+        $segmentRepository = $this->getContainer()->get(SegmentRepository::class);
+        $segmentRepository->add(
+            SegmentBuilder::fromDefaults()
+                ->withId(1)
+                ->withName(Name::fromString('Segment One'))
+                ->withData([
+                    'distance' => 100,
+                    'maximum_grade' => 5.3,
+                    'activity_type' => 'VirtualRide',
+                ])
+                ->build()
+        );
+        $segmentRepository->add(
+            SegmentBuilder::fromDefaults()
+                ->withId(2)
+                ->withName(Name::fromString('Segment Two'))
+                ->withData([
+                    'distance' => 110,
+                    'maximum_grade' => 1,
+                    'activity_type' => 'Ride',
+                ])
+                ->build()
+        );
+
+        /** @var SegmentEffortRepository $segmentEffortRepository */
+        $segmentEffortRepository = $this->getContainer()->get(SegmentEffortRepository::class);
+
+        $segmentEffortRepository->add(
+            SegmentEffortBuilder::fromDefaults()
+                ->withId(1)
+                ->withSegmentId(1)
+                ->withActivityId(9542782314)
+                ->withData([
+                    'elapsed_time' => 10.3,
+                    'average_watts' => 200,
+                    'distance' => 100,
+                ])
+                ->build()
+        );
+        $segmentEffortRepository->add(
+            SegmentEffortBuilder::fromDefaults()
+                ->withId(2)
+                ->withSegmentId(1)
+                ->withActivityId(9542782314)
+                ->withData([
+                    'elapsed_time' => 10.3,
+                    'average_watts' => 200,
+                    'distance' => 100,
+                ])
+                ->build()
+        );
+        $segmentEffortRepository->add(
+            SegmentEffortBuilder::fromDefaults()
+                ->withId(3)
+                ->withSegmentId(2)
+                ->withActivityId(9542782314)
+                ->withData([
+                    'elapsed_time' => 10.3,
+                    'distance' => 100,
+                ])
                 ->build()
         );
 
