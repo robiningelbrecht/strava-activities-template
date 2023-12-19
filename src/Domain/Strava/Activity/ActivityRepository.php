@@ -18,6 +18,11 @@ interface ActivityRepository
      */
     public function findUniqueGearIds(): array;
 
+    /**
+     * @return \App\Infrastructure\ValueObject\Time\Year[]
+     */
+    public function findUniqueYears(): array;
+
     public function add(Activity $activity): void;
 
     public function update(Activity $activity): void;

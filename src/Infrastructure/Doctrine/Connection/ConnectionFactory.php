@@ -9,10 +9,10 @@ use App\Infrastructure\ValueObject\Time\Year;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 
-final readonly class ConnectionFactory
+class ConnectionFactory
 {
     public function __construct(
-        private Settings $settings
+        private readonly Settings $settings
     ) {
     }
 
