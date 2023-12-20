@@ -13,7 +13,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/** @deprecated Remove when executed */
+/**
+ * @codeCoverageIgnore
+ *
+ * @deprecated Remove when executed
+ */
 #[AsCommand(name: 'app:strava:migrate-to-yearly-database', description: 'Migrate data to yearly databases')]
 class MigrateDataToYearlyDatabasesConsoleCommand extends Command
 {
