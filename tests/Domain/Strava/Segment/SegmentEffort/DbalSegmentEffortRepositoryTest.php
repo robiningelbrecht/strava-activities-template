@@ -38,6 +38,7 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
         $segmentEffortOne = SegmentEffortBuilder::fromDefaults()
             ->withId(1)
             ->withSegmentId(1)
+            ->withData(['segment' => 'lal'])
             ->build();
         $this->segmentEffortRepository->add($segmentEffortOne);
 
@@ -54,7 +55,13 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
         $this->segmentEffortRepository->add($segmentEffortThree);
 
         $this->assertEquals(
-            SegmentEffortCollection::fromArray([$segmentEffortOne, $segmentEffortTwo]),
+            SegmentEffortCollection::fromArray([
+                SegmentEffortBuilder::fromDefaults()
+                    ->withId(1)
+                    ->withSegmentId(1)
+                    ->build(),
+                $segmentEffortTwo,
+            ]),
             $this->segmentEffortDetailsRepository->findBySegmentId($segmentEffortOne->getSegmentId())
         );
     }
