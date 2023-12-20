@@ -41,7 +41,7 @@ final readonly class CopyDataToReadDatabaseCommandHandler implements CommandHand
         }
         $command->getOutput()->writeln('  => Emptied database');
 
-        // First copy data from the general database.
+        // First copy data from the default database.
         $this->copyData(
             databaseToAttach: $this->settings->get('doctrine.connections.default.path'),
             tablesToCopy: ['Ftp', 'Gear', 'KeyValue', 'Segment']

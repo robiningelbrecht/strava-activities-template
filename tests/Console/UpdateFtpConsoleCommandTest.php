@@ -4,8 +4,8 @@ namespace App\Tests\Console;
 
 use App\Console\UpdateFtpConsoleCommand;
 use App\Domain\Strava\Ftp\Ftp;
-use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Ftp\FtpValue;
+use App\Domain\Strava\Ftp\WriteModel\FtpRepository;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\ConsoleCommandTestCase;
 use PHPUnit\Framework\MockObject\MockObject;

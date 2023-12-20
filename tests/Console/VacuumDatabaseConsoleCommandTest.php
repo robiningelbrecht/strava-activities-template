@@ -3,7 +3,7 @@
 namespace App\Tests\Console;
 
 use App\Console\VacuumDatabaseConsoleCommand;
-use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
+use App\Domain\Strava\StravaYears;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\ValueObject\Time\Year;
 use App\Tests\ConsoleCommandTestCase;
@@ -19,7 +19,7 @@ class VacuumDatabaseConsoleCommandTest extends ConsoleCommandTestCase
 
     private VacuumDatabaseConsoleCommand $vacuumDatabaseConsoleCommand;
     private MockObject $connectionFactory;
-    private MockObject $activityRepository;
+    private MockObject $stravaYears;
 
     public function testExecute(): void
     {
@@ -34,9 +34,9 @@ class VacuumDatabaseConsoleCommandTest extends ConsoleCommandTestCase
             ->method('executeStatement')
             ->with('VACUUM');
 
-        $this->activityRepository
+        $this->stravaYears
             ->expects($this->once())
-            ->method('findUniqueYears')
+            ->method('getYears')
             ->willReturn([Year::fromInt(2023)]);
 
         $connection = $this->createMock(Connection::class);
@@ -65,11 +65,11 @@ class VacuumDatabaseConsoleCommandTest extends ConsoleCommandTestCase
         parent::setUp();
 
         $this->connectionFactory = $this->createMock(ConnectionFactory::class);
-        $this->activityRepository = $this->createMock(ActivityRepository::class);
+        $this->stravaYears = $this->createMock(StravaYears::class);
 
         $this->vacuumDatabaseConsoleCommand = new VacuumDatabaseConsoleCommand(
             $this->connectionFactory,
-            $this->activityRepository
+            $this->stravaYears
         );
     }
 

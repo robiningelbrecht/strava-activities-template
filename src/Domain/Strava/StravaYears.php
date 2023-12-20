@@ -9,10 +9,10 @@ use App\Infrastructure\ValueObject\Time\YearCollection;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\StorageAttributes;
 
-final readonly class StravaYears
+class StravaYears
 {
     public function __construct(
-        private FilesystemOperator $filesystemOperator
+        private readonly FilesystemOperator $filesystemOperator
     ) {
     }
 
