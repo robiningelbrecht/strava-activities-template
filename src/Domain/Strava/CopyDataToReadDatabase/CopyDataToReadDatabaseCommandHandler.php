@@ -37,6 +37,9 @@ final readonly class CopyDataToReadDatabaseCommandHandler implements CommandHand
         $this->stravaYears->getYears();
         // Make sure the read DB is empty
         foreach ($this->schemaManager->listTableNames() as $tableName) {
+            if ('doctrine_migration_versions' === $tableName) {
+                continue;
+            }
             $this->readOnlyConnection->executeStatement('DELETE FROM '.$tableName);
         }
         $command->getOutput()->writeln('  => Emptied database');
