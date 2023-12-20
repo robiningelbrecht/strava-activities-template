@@ -80,7 +80,7 @@ class DbalSegmentRepositoryTest extends DatabaseTestCase
         parent::setUp();
 
         $this->segmentRepository = new DbalSegmentRepository(
-            $this->getConnection()
+            $this->getConnectionFactory()
         );
     }
 }

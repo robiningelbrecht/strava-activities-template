@@ -61,7 +61,7 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
         parent::setUp();
 
         $this->segmentEffortRepository = new DbalSegmentEffortRepository(
-            $this->getConnection()
+            $this->getConnectionFactory()
         );
     }
 }

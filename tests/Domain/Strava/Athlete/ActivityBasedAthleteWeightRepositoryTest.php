@@ -2,7 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Athlete;
 
-use App\Domain\Strava\Activity\ActivityRepository;
+use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Athlete\ActivityBasedAthleteWeightRepository;
 use App\Domain\Strava\Athlete\AthleteWeightRepository;
 use App\Infrastructure\Exception\EntityNotFound;
@@ -87,7 +87,7 @@ class ActivityBasedAthleteWeightRepositoryTest extends DatabaseTestCase
         parent::setUp();
 
         $this->athleteWeightRepository = new ActivityBasedAthleteWeightRepository(
-            $this->getConnection()
+            $this->getConnectionFactory()
         );
     }
 }

@@ -2,38 +2,60 @@
 
 namespace App\Tests;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
+use App\Infrastructure\Environment\Settings;
+use App\Infrastructure\ValueObject\Time\Year;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\Tools\SchemaTool;
 
 abstract class DatabaseTestCase extends ContainerTestCase
 {
-    protected static ?Connection $connection = null;
+    protected static ?ConnectionFactory $connectionFactory = null;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        if (!self::$connection) {
-            self::$connection = $this->getContainer()->get(Connection::class);
+        if (!self::$connectionFactory) {
+            self::$connectionFactory = $this->getContainer()->get(ConnectionFactory::class);
         }
 
-        $this->createTestDatabase();
+        $this->createTestDatabases();
     }
 
-    public function getConnection(): Connection
+    public function getConnectionFactory(): ?ConnectionFactory
     {
-        return self::$connection;
+        return self::$connectionFactory;
     }
 
-    private function createTestDatabase(): void
+    private function createTestDatabases(): void
     {
-        /** @var EntityManagerInterface $entityManager */
-        $entityManager = $this->getContainer()->get(EntityManagerInterface::class);
+        $container = $this->getContainer();
+        /** @var Settings $settings */
+        $settings = $container->get(Settings::class);
+        /** @var ConnectionFactory $connectionFactory */
+        $connectionFactory = $container->get(ConnectionFactory::class);
 
-        $schemaTool = new SchemaTool($entityManager);
-        $classes = $entityManager->getMetadataFactory()->getAllMetadata();
-        $schemaTool->dropDatabase();
-        $schemaTool->createSchema($classes);
+        $connections = [
+            $connectionFactory->getDefault(),
+            $connectionFactory->getReadOnly(),
+            $connectionFactory->getForYear(Year::fromInt(2023)),
+            $connectionFactory->getForYear(Year::fromInt(2024)),
+        ];
+        foreach ($connections as $connection) {
+            $entityManager = new EntityManager(
+                conn: $connection,
+                config: ORMSetup::createAttributeMetadataConfiguration(
+                    $settings->get('doctrine.metadata_dirs'),
+                    $settings->get('doctrine.dev_mode'),
+                )
+            );
+
+            $schemaTool = new SchemaTool($entityManager);
+            $classes = $entityManager->getMetadataFactory()->getAllMetadata();
+            $schemaTool->dropDatabase();
+            $schemaTool->createSchema($classes);
+        }
     }
 }

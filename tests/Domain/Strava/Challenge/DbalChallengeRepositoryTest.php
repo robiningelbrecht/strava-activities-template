@@ -55,7 +55,7 @@ class DbalChallengeRepositoryTest extends DatabaseTestCase
         parent::setUp();
 
         $this->challengeRepository = new DbalChallengeRepository(
-            $this->getConnection()
+            $this->getConnectionFactory()
         );
     }
 }

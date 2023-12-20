@@ -2,8 +2,8 @@
 
 namespace App\Tests\Domain\Strava\Activity\ImportActivities;
 
-use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\ImportActivities\ImportActivities;
+use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;

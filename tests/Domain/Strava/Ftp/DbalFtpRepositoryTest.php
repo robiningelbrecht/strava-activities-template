@@ -125,7 +125,7 @@ class DbalFtpRepositoryTest extends DatabaseTestCase
         parent::setUp();
 
         $this->ftpRepository = new DbalFtpRepository(
-            $this->getConnection()
+            $this->getConnectionFactory()
         );
     }
 }

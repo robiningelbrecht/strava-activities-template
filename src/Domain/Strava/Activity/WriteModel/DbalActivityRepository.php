@@ -34,7 +34,7 @@ final readonly class DbalActivityRepository implements ActivityRepository
         SET data = :data, gearId = :gearId
         WHERE activityId = :activityId';
 
-        $this->$this->connectionFactory->getForYear(Year::fromDate($activity->getStartDate()))->executeStatement($sql, [
+        $this->connectionFactory->getForYear(Year::fromDate($activity->getStartDate()))->executeStatement($sql, [
             'activityId' => $activity->getId(),
             'data' => Json::encode($this->cleanData($activity->getData())),
             'gearId' => $activity->getGearId(),

@@ -83,7 +83,7 @@ class DbalGearRepositoryTest extends DatabaseTestCase
         parent::setUp();
 
         $this->gearRepository = new DbalGearRepository(
-            $this->getConnection()
+            $this->getConnectionFactory()
         );
     }
 }

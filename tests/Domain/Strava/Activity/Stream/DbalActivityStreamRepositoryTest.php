@@ -91,7 +91,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
         parent::setUp();
 
         $this->activityStreamRepository = new DbalActivityStreamRepository(
-            $this->getConnection(),
+            $this->getConnectionFactory(),
         );
     }
 }

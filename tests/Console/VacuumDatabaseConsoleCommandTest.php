@@ -3,7 +3,7 @@
 namespace App\Tests\Console;
 
 use App\Console\VacuumDatabaseConsoleCommand;
-use App\Domain\Strava\Activity\ActivityRepository;
+use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\ValueObject\Time\Year;
 use App\Tests\ConsoleCommandTestCase;

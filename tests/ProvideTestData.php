@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
+use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Challenge\ChallengeId;
 use App\Domain\Strava\Challenge\ChallengeRepository;
 use App\Domain\Strava\Ftp\FtpRepository;

@@ -39,7 +39,7 @@ class DbalKeyValueStoreTest extends DatabaseTestCase
         parent::setUp();
 
         $this->keyValueStore = new DbalKeyValueStore(
-            $this->getConnection()
+            $this->getConnectionFactory()
         );
     }
 }
