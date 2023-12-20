@@ -27,6 +27,22 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
         );
     }
 
+    public function testUpdate(): void
+    {
+        $segmentEffort = SegmentEffortBuilder::fromDefaults()
+            ->build();
+        $this->segmentEffortRepository->add($segmentEffort);
+        $segmentEffort = SegmentEffortBuilder::fromDefaults()
+            ->withData(['segment' => 'lol'])
+            ->build();
+        $this->segmentEffortRepository->update($segmentEffort);
+
+        $this->assertEquals(
+            SegmentEffortBuilder::fromDefaults()->build(),
+            $this->segmentEffortDetailsRepository->find($segmentEffort->getId())
+        );
+    }
+
     public function testItShouldThrowWhenNotFound(): void
     {
         $this->expectException(EntityNotFound::class);
@@ -38,7 +54,6 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
         $segmentEffortOne = SegmentEffortBuilder::fromDefaults()
             ->withId(1)
             ->withSegmentId(1)
-            ->withData(['segment' => 'lal'])
             ->build();
         $this->segmentEffortRepository->add($segmentEffortOne);
 
@@ -55,13 +70,7 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
         $this->segmentEffortRepository->add($segmentEffortThree);
 
         $this->assertEquals(
-            SegmentEffortCollection::fromArray([
-                SegmentEffortBuilder::fromDefaults()
-                    ->withId(1)
-                    ->withSegmentId(1)
-                    ->build(),
-                $segmentEffortTwo,
-            ]),
+            SegmentEffortCollection::fromArray([$segmentEffortOne, $segmentEffortTwo]),
             $this->segmentEffortDetailsRepository->findBySegmentId($segmentEffortOne->getSegmentId())
         );
     }
