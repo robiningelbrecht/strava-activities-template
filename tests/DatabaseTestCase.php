@@ -4,7 +4,6 @@ namespace App\Tests;
 
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Environment\Settings;
-use App\Infrastructure\ValueObject\Time\Year;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -37,25 +36,17 @@ abstract class DatabaseTestCase extends ContainerTestCase
         /** @var ConnectionFactory $connectionFactory */
         $connectionFactory = $container->get(ConnectionFactory::class);
 
-        $connections = [
-            $connectionFactory->getDefault(),
-            $connectionFactory->getReadOnly(),
-            $connectionFactory->getForYear(Year::fromInt(2023)),
-            $connectionFactory->getForYear(Year::fromInt(2024)),
-        ];
-        foreach ($connections as $connection) {
-            $entityManager = new EntityManager(
-                conn: $connection,
-                config: ORMSetup::createAttributeMetadataConfiguration(
-                    $settings->get('doctrine.metadata_dirs'),
-                    $settings->get('doctrine.dev_mode'),
-                )
-            );
+        $entityManager = new EntityManager(
+            conn: $connectionFactory->getDefault(),
+            config: ORMSetup::createAttributeMetadataConfiguration(
+                $settings->get('doctrine.metadata_dirs'),
+                $settings->get('doctrine.dev_mode'),
+            )
+        );
 
-            $schemaTool = new SchemaTool($entityManager);
-            $classes = $entityManager->getMetadataFactory()->getAllMetadata();
-            $schemaTool->dropDatabase();
-            $schemaTool->createSchema($classes);
-        }
+        $schemaTool = new SchemaTool($entityManager);
+        $classes = $entityManager->getMetadataFactory()->getAllMetadata();
+        $schemaTool->dropDatabase();
+        $schemaTool->createSchema($classes);
     }
 }

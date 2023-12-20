@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
+use App\Domain\Strava\Activity\Stream\WriteModel\ActivityStreamRepository;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Challenge\ChallengeId;
-use App\Domain\Strava\Challenge\ChallengeRepository;
-use App\Domain\Strava\Ftp\FtpRepository;
+use App\Domain\Strava\Challenge\WriteModel\ChallengeRepository;
 use App\Domain\Strava\Ftp\FtpValue;
-use App\Domain\Strava\Gear\GearRepository;
-use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortRepository;
-use App\Domain\Strava\Segment\SegmentRepository;
-use App\Infrastructure\KeyValue\DbalKeyValueStore;
+use App\Domain\Strava\Ftp\WriteModel\FtpRepository;
+use App\Domain\Strava\Gear\WriteModel\GearRepository;
+use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
+use App\Domain\Strava\Segment\WriteModel\SegmentRepository;
 use App\Infrastructure\KeyValue\Key;
 use App\Infrastructure\KeyValue\KeyValue;
 use App\Infrastructure\KeyValue\Value;
+use App\Infrastructure\KeyValue\WriteModel\DbalKeyValueStore;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\String\Name;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
