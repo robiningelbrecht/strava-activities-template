@@ -1,6 +1,7 @@
 {
-    "commandName": "App.Domain.Strava.Activity.BuildLatestStravaActivities.BuildLatestStravaActivities",
+    "commandName": "App.Domain.Strava.CopyDataToReadDatabase.CopyDataToReadDatabase",
     "payload": {
-        "metadata": []
+        "metadata": [],
+        "output": {}
     }
 }

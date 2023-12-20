@@ -1,5 +1,5 @@
 {
-    "commandName": "App.Domain.Strava.Activity.BuildWeeklyDistanceChart.BuildWeeklyDistanceChart",
+    "commandName": "App.Domain.Strava.Activity.BuildLatestStravaActivities.BuildLatestStravaActivities",
     "payload": {
         "metadata": []
     }
