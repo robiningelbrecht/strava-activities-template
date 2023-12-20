@@ -42,6 +42,7 @@ rm -Rf files/install
 rm -Rf files/maps
 # Delete test suite
 rm -Rf tests
+rm -Rf config/container_test.php
 # Delete template again.
 rm -Rf strava-activities-template
 
