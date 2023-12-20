@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console;
 
-use App\Domain\Strava\Activity\ActivityRepository;
+use App\Domain\Strava\StravaYears;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -16,7 +16,7 @@ final class VacuumDatabaseConsoleCommand extends Command
 {
     public function __construct(
         private readonly ConnectionFactory $connectionFactory,
-        private readonly ActivityRepository $activityRepository,
+        private readonly StravaYears $stravaYears,
     ) {
         parent::__construct();
     }
@@ -24,7 +24,7 @@ final class VacuumDatabaseConsoleCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->connectionFactory->getDefault()->executeStatement('VACUUM');
-        foreach ($this->activityRepository->findUniqueYears() as $year) {
+        foreach ($this->stravaYears->getYears() as $year) {
             $this->connectionFactory->getForYear($year)->executeStatement('VACUUM');
         }
 

@@ -10,6 +10,7 @@ use App\Domain\Strava\Activity\BuildWeekdayStatsChart\BuildWeekdayStatsChart;
 use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\BuildWeeklyDistanceChart;
 use App\Domain\Strava\BuildHtmlVersion\BuildHtmlVersion;
 use App\Domain\Strava\BuildReadMe\BuildReadMe;
+use App\Domain\Strava\CopyDataToReadDatabase\CopyDataToReadDatabase;
 use App\Domain\Strava\ReachedStravaApiRateLimits;
 use App\Infrastructure\CQRS\CommandBus;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -35,6 +36,7 @@ final class BuildStravaActivityFilesConsoleCommand extends Command
             return Command::SUCCESS;
         }
 
+        $this->commandBus->dispatch(new CopyDataToReadDatabase($output));
         $output->writeln('Building latest activities...');
         $this->commandBus->dispatch(new BuildLatestStravaActivities());
         $output->writeln('Building weekly distance chart...');

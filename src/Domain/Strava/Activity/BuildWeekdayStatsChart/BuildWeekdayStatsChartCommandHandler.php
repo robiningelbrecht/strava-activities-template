@@ -2,7 +2,7 @@
 
 namespace App\Domain\Strava\Activity\BuildWeekdayStatsChart;
 
-use App\Domain\Strava\Activity\ActivityRepository;
+use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
@@ -13,7 +13,7 @@ use League\Flysystem\FilesystemOperator;
 final readonly class BuildWeekdayStatsChartCommandHandler implements CommandHandler
 {
     public function __construct(
-        private ActivityRepository $activityRepository,
+        private ActivityDetailsRepository $activityDetailsRepository,
         private FilesystemOperator $filesystem
     ) {
     }
@@ -29,7 +29,7 @@ final readonly class BuildWeekdayStatsChartCommandHandler implements CommandHand
                     'width' => 1000,
                     'height' => 300,
                     'options' => WeekdayStatsChartsBuilder::fromWeekdayStats(
-                        WeekdayStats::fromActivities($this->activityRepository->findAll()),
+                        WeekdayStats::fromActivities($this->activityDetailsRepository->findAll()),
                     )->build(),
                 ],
                 JSON_PRETTY_PRINT

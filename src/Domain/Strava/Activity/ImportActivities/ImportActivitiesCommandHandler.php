@@ -3,8 +3,9 @@
 namespace App\Domain\Strava\Activity\ImportActivities;
 
 use App\Domain\Strava\Activity\Activity;
-use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\ActivityType;
+use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
+use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\ReachedStravaApiRateLimits;
 use App\Domain\Strava\Strava;
 use App\Domain\Weather\OpenMeteo\OpenMeteo;
@@ -25,6 +26,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
         private Strava $strava,
         private OpenMeteo $openMeteo,
         private ActivityRepository $activityRepository,
+        private ActivityDetailsRepository $activityDetailsRepository,
         private FilesystemOperator $filesystem,
         private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
         private UuidFactory $uuidFactory,
@@ -45,7 +47,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
             }
 
             try {
-                $activity = $this->activityRepository->find($stravaActivity['id']);
+                $activity = $this->activityDetailsRepository->find($stravaActivity['id']);
                 $activity
                     ->updateName($stravaActivity['name'])
                     ->updateKudoCount($stravaActivity['kudos_count'] ?? 0)

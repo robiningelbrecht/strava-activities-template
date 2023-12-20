@@ -54,8 +54,14 @@ composer install --prefer-dist
 # Run migrations.
 bin/doctrine-migrations migrate --no-interaction
 
+# Migrate data to new DBs (if needed). Remove this when data has been migrated.
+bin/console app:strava:migrate-to-yearly-database
+
 # Exit when only template update.
 if [ "$1" == "--only-template" ]; then
+  exit 0;
+fi
+if [ "$1" == "--template-only" ]; then
   exit 0;
 fi
 

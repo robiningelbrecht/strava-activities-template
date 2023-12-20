@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Domain\Strava\Ftp\Ftp;
-use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Ftp\FtpValue;
+use App\Domain\Strava\Ftp\WriteModel\FtpRepository;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

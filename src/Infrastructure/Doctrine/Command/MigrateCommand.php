@@ -67,7 +67,7 @@ final class MigrateCommand extends Command
 
         $connections = [
             $this->connectionFactory->getDefault(),
-            $this->connectionFactory->getRead(),
+            $this->connectionFactory->getReadOnly(),
             ...array_map(
                 fn (Year $year) => $this->connectionFactory->getForYear($year),
                 $uniqueYears,

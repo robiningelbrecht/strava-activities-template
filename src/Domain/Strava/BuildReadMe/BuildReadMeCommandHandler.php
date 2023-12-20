@@ -2,18 +2,18 @@
 
 namespace App\Domain\Strava\BuildReadMe;
 
-use App\Domain\Strava\Activity\ActivityRepository;
 use App\Domain\Strava\Activity\ActivityTotals;
 use App\Domain\Strava\Activity\BuildDaytimeStatsChart\DaytimeStats;
 use App\Domain\Strava\Activity\BuildEddingtonChart\Eddington;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
-use App\Domain\Strava\Activity\Stream\ActivityPowerRepository;
+use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
+use App\Domain\Strava\Activity\Stream\ReadModel\ActivityPowerRepository;
 use App\Domain\Strava\Calendar\MonthCollection;
 use App\Domain\Strava\Challenge\ChallengeConsistency;
-use App\Domain\Strava\Challenge\ChallengeRepository;
+use App\Domain\Strava\Challenge\ReadModel\ChallengeDetailsRepository;
 use App\Domain\Strava\DistanceBreakdown;
-use App\Domain\Strava\Gear\GearRepository;
 use App\Domain\Strava\Gear\GearStatistics;
+use App\Domain\Strava\Gear\ReadModel\GearDetailsRepository;
 use App\Domain\Strava\MonthlyStatistics;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
@@ -27,9 +27,9 @@ use Twig\Environment;
 final readonly class BuildReadMeCommandHandler implements CommandHandler
 {
     public function __construct(
-        private ActivityRepository $activityRepository,
-        private ChallengeRepository $challengeRepository,
-        private GearRepository $gearRepository,
+        private ActivityDetailsRepository $activityDetailsRepository,
+        private ChallengeDetailsRepository $challengeDetailsRepository,
+        private GearDetailsRepository $gearDetailsRepository,
         private ActivityPowerRepository $activityPowerRepository,
         private Environment $twig,
         private FilesystemOperator $filesystem,
@@ -42,9 +42,9 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
         assert($command instanceof BuildReadMe);
 
         $now = SerializableDateTime::fromDateTimeImmutable($this->clock->now());
-        $allActivities = $this->activityRepository->findAll();
-        $allChallenges = $this->challengeRepository->findAll();
-        $allBikes = $this->gearRepository->findAll();
+        $allActivities = $this->activityDetailsRepository->findAll();
+        $allChallenges = $this->challengeDetailsRepository->findAll();
+        $allBikes = $this->gearDetailsRepository->findAll();
         $allMonths = MonthCollection::create(
             startDate: $allActivities->getFirstActivityStartDate(),
             now: $now
@@ -60,7 +60,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
                 continue;
             }
             $activity->enrichWithGearName(
-                $this->gearRepository->find($activity->getGearId())->getName()
+                $this->gearDetailsRepository->find($activity->getGearId())->getName()
             );
         }
 

@@ -2,9 +2,10 @@
 
 namespace App\Domain\Strava\Gear\ImportGear;
 
-use App\Domain\Strava\Activity\ActivityRepository;
+use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Gear\Gear;
-use App\Domain\Strava\Gear\GearRepository;
+use App\Domain\Strava\Gear\ReadModel\GearDetailsRepository;
+use App\Domain\Strava\Gear\WriteModel\GearRepository;
 use App\Domain\Strava\ReachedStravaApiRateLimits;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\Attribute\AsCommandHandler;
@@ -21,8 +22,9 @@ final readonly class ImportGearCommandHandler implements CommandHandler
 {
     public function __construct(
         private Strava $strava,
-        private ActivityRepository $activityRepository,
+        private ActivityDetailsRepository $activityDetailsRepository,
         private GearRepository $gearRepository,
+        private GearDetailsRepository $gearDetailsRepository,
         private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
         private Clock $clock,
         private Sleep $sleep
@@ -34,7 +36,7 @@ final readonly class ImportGearCommandHandler implements CommandHandler
         assert($command instanceof ImportGear);
         $command->getOutput()->writeln('Importing gear...');
 
-        $gearIds = array_filter($this->activityRepository->findUniqueGearIds());
+        $gearIds = array_filter($this->activityDetailsRepository->findUniqueGearIds());
 
         foreach ($gearIds as $gearId) {
             try {
@@ -53,7 +55,7 @@ final readonly class ImportGearCommandHandler implements CommandHandler
             }
 
             try {
-                $gear = $this->gearRepository->find($gearId);
+                $gear = $this->gearDetailsRepository->find($gearId);
                 $gear->updateDistance($stravaGear['distance'], $stravaGear['converted_distance']);
                 $this->gearRepository->update($gear);
             } catch (EntityNotFound) {
