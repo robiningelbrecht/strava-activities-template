@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Tests\Domain\Strava\Activity;
+namespace App\Tests\Domain\Strava\Activity\WriteModel;
 
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Activity\WriteModel\DbalActivityRepository;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Time\Year;
 use App\Tests\DatabaseTestCase;
+use App\Tests\Domain\Strava\Activity\ActivityBuilder;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Spatie\Snapshots\MatchesSnapshots;
 
