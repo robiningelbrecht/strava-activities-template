@@ -4,7 +4,7 @@ namespace App\Tests\Domain\Strava\Segment\ImportSegments;
 
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Segment\ImportSegments\ImportSegments;
-use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortRepository;
+use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
 use App\Tests\Domain\Strava\Activity\ActivityBuilder;

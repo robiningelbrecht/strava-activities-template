@@ -3,8 +3,8 @@
 namespace App\Tests\Domain\Strava\Athlete;
 
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
-use App\Domain\Strava\Athlete\ActivityBasedAthleteWeightRepository;
-use App\Domain\Strava\Athlete\AthleteWeightRepository;
+use App\Domain\Strava\Athlete\ReadModel\ActivityBasedAthleteWeightRepository;
+use App\Domain\Strava\Athlete\ReadModel\AthleteWeightRepository;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Weight;

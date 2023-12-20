@@ -3,8 +3,8 @@
 namespace App\Tests\Domain\Strava\Gear\ImportGear;
 
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
-use App\Domain\Strava\Gear\GearRepository;
 use App\Domain\Strava\Gear\ImportGear\ImportGear;
+use App\Domain\Strava\Gear\WriteModel\GearRepository;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;

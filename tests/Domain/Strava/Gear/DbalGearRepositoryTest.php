@@ -2,15 +2,18 @@
 
 namespace App\Tests\Domain\Strava\Gear;
 
-use App\Domain\Strava\Gear\DbalGearRepository;
 use App\Domain\Strava\Gear\GearCollection;
-use App\Domain\Strava\Gear\GearRepository;
+use App\Domain\Strava\Gear\ReadModel\DbalGearDetailsRepository;
+use App\Domain\Strava\Gear\ReadModel\GearDetailsRepository;
+use App\Domain\Strava\Gear\WriteModel\DbalGearRepository;
+use App\Domain\Strava\Gear\WriteModel\GearRepository;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Tests\DatabaseTestCase;
 
 class DbalGearRepositoryTest extends DatabaseTestCase
 {
     private GearRepository $gearRepository;
+    private GearDetailsRepository $gearDetailsRepository;
 
     public function testFindAndSave(): void
     {
@@ -22,14 +25,14 @@ class DbalGearRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             $gear,
-            $this->gearRepository->find($gear->getId())
+            $this->gearDetailsRepository->find($gear->getId())
         );
     }
 
     public function testItShouldThrowWhenNotFound(): void
     {
         $this->expectException(EntityNotFound::class);
-        $this->gearRepository->find('1');
+        $this->gearDetailsRepository->find('1');
     }
 
     public function testFindAll(): void
@@ -52,7 +55,7 @@ class DbalGearRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             GearCollection::fromArray([$gearTwo, $gearOne, $gearThree]),
-            $this->gearRepository->findAll()
+            $this->gearDetailsRepository->findAll()
         );
     }
 
@@ -74,7 +77,7 @@ class DbalGearRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             30000,
-            $this->gearRepository->find(1)->getDistanceInMeter()
+            $this->gearDetailsRepository->find(1)->getDistanceInMeter()
         );
     }
 
@@ -83,6 +86,9 @@ class DbalGearRepositoryTest extends DatabaseTestCase
         parent::setUp();
 
         $this->gearRepository = new DbalGearRepository(
+            $this->getConnectionFactory()
+        );
+        $this->gearDetailsRepository = new DbalGearDetailsRepository(
             $this->getConnectionFactory()
         );
     }

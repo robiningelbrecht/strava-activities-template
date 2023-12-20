@@ -2,8 +2,8 @@
 
 namespace App\Tests\Domain\Strava\Activity\Stream\ImportActivityStreams;
 
-use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\ImportActivityStreams\ImportActivityStreams;
+use App\Domain\Strava\Activity\Stream\WriteModel\ActivityStreamRepository;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\CommandBus;

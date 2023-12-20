@@ -6,6 +6,7 @@ use App\Console\VacuumDatabaseConsoleCommand;
 use App\Domain\Strava\StravaYears;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\ValueObject\Time\Year;
+use App\Infrastructure\ValueObject\Time\YearCollection;
 use App\Tests\ConsoleCommandTestCase;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -37,7 +38,7 @@ class VacuumDatabaseConsoleCommandTest extends ConsoleCommandTestCase
         $this->stravaYears
             ->expects($this->once())
             ->method('getYears')
-            ->willReturn([Year::fromInt(2023)]);
+            ->willReturn(YearCollection::fromArray([Year::fromInt(2023)]));
 
         $connection = $this->createMock(Connection::class);
         $this->connectionFactory
