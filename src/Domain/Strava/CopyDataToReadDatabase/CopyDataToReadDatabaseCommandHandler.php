@@ -21,12 +21,12 @@ final readonly class CopyDataToReadDatabaseCommandHandler implements CommandHand
     private Connection $readOnlyConnection;
 
     public function __construct(
-        private ConnectionFactory $connectionFactory,
+        ConnectionFactory $connectionFactory,
         private Settings $settings,
         private StravaYears $stravaYears
     ) {
-        $this->readOnlyConnection = $this->connectionFactory->getReadOnly();
-        $this->schemaManager = $this->connectionFactory->getDefault()->createSchemaManager();
+        $this->readOnlyConnection = $connectionFactory->getReadOnly();
+        $this->schemaManager = $connectionFactory->getDefault()->createSchemaManager();
     }
 
     public function handle(DomainCommand $command): void
@@ -34,7 +34,6 @@ final readonly class CopyDataToReadDatabaseCommandHandler implements CommandHand
         assert($command instanceof CopyDataToReadDatabase);
         $command->getOutput()->writeln('Copying data to read database...');
 
-        $this->stravaYears->getYears();
         // Make sure the read DB is empty
         foreach ($this->schemaManager->listTableNames() as $tableName) {
             if ('doctrine_migration_versions' === $tableName) {

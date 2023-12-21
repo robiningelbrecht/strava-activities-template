@@ -1,0 +1,5 @@
+Copying data to read database...
+  => Emptied database
+  => Copied general data
+  => Copied data for "2023"
+  => Copied data for "2024"
