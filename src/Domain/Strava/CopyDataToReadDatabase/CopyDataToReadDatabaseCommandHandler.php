@@ -37,8 +37,7 @@ final readonly class CopyDataToReadDatabaseCommandHandler implements CommandHand
         // Make sure the read DB is empty
         foreach ($this->schemaManager->listTableNames() as $tableName) {
             if ('doctrine_migration_versions' === $tableName) {
-                /* @codeCoverageIgnore */
-                continue;
+                continue; // @codeCoverageIgnore
             }
             $this->readOnlyConnection->executeStatement('DELETE FROM '.$tableName);
         }
