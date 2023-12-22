@@ -46,6 +46,14 @@ rm -Rf config/container_test.php
 # Delete template again.
 rm -Rf strava-activities-template
 
+# Exit when only template update.
+if [ "$1" == "--only-template" ]; then
+  exit 0;
+fi
+if [ "$1" == "--template-only" ]; then
+  exit 0;
+fi
+
 git add .
 git status
 git diff --staged --quiet || git commit -m"Updated template to latest version"
@@ -58,14 +66,6 @@ bin/doctrine-migrations migrate --no-interaction
 
 # Migrate data to new DBs (if needed). Remove this when data has been migrated.
 bin/console app:strava:migrate-to-yearly-database
-
-# Exit when only template update.
-if [ "$1" == "--only-template" ]; then
-  exit 0;
-fi
-if [ "$1" == "--template-only" ]; then
-  exit 0;
-fi
 
 # Update strava stats.
 bin/console app:strava:import-data
