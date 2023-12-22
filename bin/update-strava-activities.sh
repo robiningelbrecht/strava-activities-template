@@ -64,9 +64,6 @@ composer install --prefer-dist
 rm -Rf database/db.strava-read
 bin/doctrine-migrations migrate --no-interaction
 
-# Migrate data to new DBs (if needed). Remove this when data has been migrated.
-bin/console app:strava:migrate-to-yearly-database
-
 # Update strava stats.
 bin/console app:strava:import-data
 bin/console app:strava:build-files
