@@ -6,7 +6,6 @@ use App\Domain\Strava\Activity\Stream\PowerOutput;
 use App\Domain\Strava\Ftp\FtpValue;
 use App\Domain\Strava\LeafletMap;
 use App\Domain\Weather\OpenMeteo\Weather;
-use App\Infrastructure\Eventing\AggregateRoot;
 use App\Infrastructure\Time\TimeFormatter;
 use App\Infrastructure\ValueObject\Geography\Coordinate;
 use App\Infrastructure\ValueObject\Geography\Latitude;
@@ -16,7 +15,7 @@ use App\Infrastructure\ValueObject\Weight;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-final class Activity extends AggregateRoot
+final class Activity
 {
     use TimeFormatter;
 
@@ -437,11 +436,6 @@ final class Activity extends AggregateRoot
     public function getSearchables(): array
     {
         return [$this->getName()];
-    }
-
-    public function delete(): void
-    {
-        $this->recordThat(new ActivityWasDeleted($this->getId()));
     }
 
     /**
