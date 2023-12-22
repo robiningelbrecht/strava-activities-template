@@ -8,6 +8,7 @@ use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortCollection;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\DbalSegmentEffortRepository;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
 use App\Infrastructure\Exception\EntityNotFound;
+use App\Infrastructure\ValueObject\Time\Year;
 use App\Tests\DatabaseTestCase;
 
 class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
@@ -72,6 +73,53 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
         $this->assertEquals(
             SegmentEffortCollection::fromArray([$segmentEffortOne, $segmentEffortTwo]),
             $this->segmentEffortDetailsRepository->findBySegmentId($segmentEffortOne->getSegmentId())
+        );
+    }
+
+    public function testFindByActivityId(): void
+    {
+        $segmentEffortOne = SegmentEffortBuilder::fromDefaults()
+            ->withId(1)
+            ->withActivityId(1)
+            ->build();
+        $this->segmentEffortRepository->add($segmentEffortOne);
+
+        $segmentEffortTwo = SegmentEffortBuilder::fromDefaults()
+            ->withId(2)
+            ->withActivityId(1)
+            ->build();
+        $this->segmentEffortRepository->add($segmentEffortTwo);
+
+        $segmentEffortThree = SegmentEffortBuilder::fromDefaults()
+            ->withId(3)
+            ->withActivityId(2)
+            ->build();
+        $this->segmentEffortRepository->add($segmentEffortThree);
+
+        $this->assertEquals(
+            SegmentEffortCollection::fromArray([$segmentEffortOne, $segmentEffortTwo]),
+            $this->segmentEffortDetailsRepository->findByActivityId($segmentEffortOne->getActivityId())
+        );
+    }
+
+    public function testDelete(): void
+    {
+        $segmentEffortOne = SegmentEffortBuilder::fromDefaults()->build();
+        $this->segmentEffortRepository->add($segmentEffortOne);
+
+        $this->assertEquals(
+            1,
+            $this->getConnectionFactory()
+                ->getForYear(Year::fromDate($segmentEffortOne->getStartDateTime()))
+                ->executeQuery('SELECT COUNT(*) FROM SegmentEffort')->fetchOne()
+        );
+
+        $this->segmentEffortRepository->delete($segmentEffortOne);
+        $this->assertEquals(
+            0,
+            $this->getConnectionFactory()
+                ->getForYear(Year::fromDate($segmentEffortOne->getStartDateTime()))
+                ->executeQuery('SELECT COUNT(*) FROM Activity')->fetchOne()
         );
     }
 

@@ -51,4 +51,14 @@ final readonly class DbalSegmentEffortRepository implements SegmentEffortReposit
             'data' => Json::encode($data),
         ]);
     }
+
+    public function delete(SegmentEffort $segmentEffort): void
+    {
+        $sql = 'DELETE FROM SegmentEffort 
+        WHERE segmentEffortId = :segmentEffortId';
+
+        $this->connectionFactory->getForYear(Year::fromDate($segmentEffort->getStartDateTime()))->executeStatement($sql, [
+            'segmentEffortId' => $segmentEffort->getId(),
+        ]);
+    }
 }

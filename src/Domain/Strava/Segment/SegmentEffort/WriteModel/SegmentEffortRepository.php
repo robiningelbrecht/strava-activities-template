@@ -11,4 +11,6 @@ interface SegmentEffortRepository
     public function add(SegmentEffort $segmentEffort): void;
 
     public function update(SegmentEffort $segmentEffort): void;
+
+    public function delete(SegmentEffort $segmentEffort): void;
 }

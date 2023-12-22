@@ -12,4 +12,6 @@ interface SegmentEffortDetailsRepository
     public function find(int $id): SegmentEffort;
 
     public function findBySegmentId(int $segmentId): SegmentEffortCollection;
+
+    public function findByActivityId(int $activityId): SegmentEffortCollection;
 }
