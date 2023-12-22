@@ -119,7 +119,7 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
             0,
             $this->getConnectionFactory()
                 ->getForYear(Year::fromDate($segmentEffortOne->getStartDateTime()))
-                ->executeQuery('SELECT COUNT(*) FROM Activity')->fetchOne()
+                ->executeQuery('SELECT COUNT(*) FROM SegmentEffort')->fetchOne()
         );
     }
 

@@ -9,6 +9,7 @@ use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Domain\Strava\Activity\Stream\WriteModel\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\WriteModel\DbalActivityStreamRepository;
+use App\Infrastructure\ValueObject\Time\Year;
 use App\Tests\DatabaseTestCase;
 
 class DbalActivityStreamRepositoryTest extends DatabaseTestCase
@@ -86,6 +87,62 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
                 activityId: 1,
                 streamTypes: StreamTypeCollection::fromArray([StreamType::WATTS, StreamType::CADENCE])
             )
+        );
+    }
+
+    public function testFindByActivity(): void
+    {
+        $streamOne = DefaultStreamBuilder::fromDefaults()
+            ->withActivityId(1)
+            ->withStreamType(StreamType::WATTS)
+            ->build();
+        $this->activityStreamRepository->add($streamOne);
+        $streamTwo = DefaultStreamBuilder::fromDefaults()
+            ->withActivityId(1)
+            ->withStreamType(StreamType::CADENCE)
+            ->build();
+        $this->activityStreamRepository->add($streamTwo);
+        $this->activityStreamRepository->add(
+            DefaultStreamBuilder::fromDefaults()
+                ->withActivityId(2)
+                ->withStreamType(StreamType::CADENCE)
+                ->build()
+        );
+
+        $this->assertEquals(
+            ActivityStreamCollection::fromArray([$streamTwo, $streamOne]),
+            $this->activityStreamDetailsRepository->findByActivityId(
+                activityId: 1,
+            )
+        );
+    }
+
+    public function testDelete(): void
+    {
+        $streamOne = DefaultStreamBuilder::fromDefaults()
+            ->withActivityId(1)
+            ->withStreamType(StreamType::WATTS)
+            ->build();
+        $this->activityStreamRepository->add($streamOne);
+        $streamTwo = DefaultStreamBuilder::fromDefaults()
+            ->withActivityId(1)
+            ->withStreamType(StreamType::CADENCE)
+            ->build();
+        $this->activityStreamRepository->add($streamTwo);
+
+        $this->assertEquals(
+            2,
+            $this->getConnectionFactory()
+                ->getForYear(Year::fromDate($streamOne->getCreatedOn()))
+                ->executeQuery('SELECT COUNT(*) FROM ActivityStream')->fetchOne()
+        );
+
+        $this->activityStreamRepository->delete($streamOne);
+        $this->assertEquals(
+            1,
+            $this->getConnectionFactory()
+                ->getForYear(Year::fromDate($streamTwo->getCreatedOn()))
+                ->executeQuery('SELECT COUNT(*) FROM ActivityStream')->fetchOne()
         );
     }
 

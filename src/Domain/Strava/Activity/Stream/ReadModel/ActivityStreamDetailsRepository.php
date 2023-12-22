@@ -15,4 +15,6 @@ interface ActivityStreamDetailsRepository
     public function findByStreamType(StreamType $streamType): ActivityStreamCollection;
 
     public function findByActivityAndStreamTypes(int $activityId, StreamTypeCollection $streamTypes): ActivityStreamCollection;
+
+    public function findByActivityId(int $activityId): ActivityStreamCollection;
 }
