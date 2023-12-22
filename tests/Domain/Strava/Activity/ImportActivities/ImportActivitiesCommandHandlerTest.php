@@ -3,11 +3,15 @@
 namespace App\Tests\Domain\Strava\Activity\ImportActivities;
 
 use App\Domain\Strava\Activity\ImportActivities\ImportActivities;
+use App\Domain\Strava\Activity\Stream\WriteModel\ActivityStreamRepository;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
+use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
 use App\Tests\Domain\Strava\Activity\ActivityBuilder;
+use App\Tests\Domain\Strava\Activity\Stream\DefaultStreamBuilder;
+use App\Tests\Domain\Strava\Segment\SegmentEffort\SegmentEffortBuilder;
 use App\Tests\Domain\Strava\SpyStrava;
 use App\Tests\SpyOutput;
 use League\Flysystem\FilesystemOperator;
@@ -58,6 +62,24 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
                     'name' => 'Delete this one',
                 ])
                 ->withActivityId(1000)
+                ->build()
+        );
+        $segmentEffortOne = SegmentEffortBuilder::fromDefaults()
+            ->withActivityId(1000)
+            ->build();
+        $this->getContainer()->get(SegmentEffortRepository::class)->add($segmentEffortOne);
+        $stream = DefaultStreamBuilder::fromDefaults()
+            ->withActivityId(1000)
+            ->build();
+        $this->getContainer()->get(ActivityStreamRepository::class)->add($stream);
+
+        $this->getContainer()->get(ActivityRepository::class)->add(
+            ActivityBuilder::fromDefaults()
+                ->withData([
+                    'kudos_count' => 1,
+                    'name' => 'Delete this one as well',
+                ])
+                ->withActivityId(1001)
                 ->build()
         );
 
