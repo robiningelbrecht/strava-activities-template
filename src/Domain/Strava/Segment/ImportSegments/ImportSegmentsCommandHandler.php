@@ -41,7 +41,7 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
         /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($this->activityDetailsRepository->findAll() as $activity) {
             if (!$segmentEfforts = $activity->getSegmentEfforts()) {
-                // No segments or we already imported and delete them from the activity.
+                // No segments or we already imported and deleted them from the activity.
                 continue;
             }
 
