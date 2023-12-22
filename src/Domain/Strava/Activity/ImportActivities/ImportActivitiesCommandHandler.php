@@ -132,6 +132,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
         }
 
         foreach ($activitiesToDelete as $activity) {
+            $activity->delete();
             $this->activityRepository->delete($activity);
             $command->getOutput()->writeln(sprintf('  => Deleted activity "%s"', $activity->getName()));
         }

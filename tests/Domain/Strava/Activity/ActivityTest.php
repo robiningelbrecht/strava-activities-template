@@ -3,12 +3,16 @@
 namespace App\Tests\Domain\Strava\Activity;
 
 use App\Domain\Strava\Ftp\FtpValue;
+use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Spatie\Snapshots\MatchesSnapshots;
 
 class ActivityTest extends TestCase
 {
+    use MatchesSnapshots;
+
     #[DataProvider(methodName: 'provideDataAthleteAgeData')]
     public function testGetAthleteAge(
         SerializableDateTime $activityStartDate,
@@ -70,6 +74,14 @@ class ActivityTest extends TestCase
         $this->assertNull(
             $activityWithFtp->getIntensity(),
         );
+    }
+
+    public function testDelete(): void
+    {
+        $activity = ActivityBuilder::fromDefaults()->build();
+        $activity->delete();
+
+        $this->assertMatchesJsonSnapshot(Json::encode($activity->getRecordedEvents()));
     }
 
     public static function provideDataAthleteAgeData(): array
