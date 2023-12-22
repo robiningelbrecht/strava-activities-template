@@ -31,9 +31,33 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
                 ->build()
         );
 
+        $this->commandBus->dispatch(new ImportActivities($output));
+
+        $this->assertMatchesTextSnapshot($output);
+
+        /** @var \App\Tests\SpyFileSystem $fileSystem */
+        $fileSystem = $this->getContainer()->get(FilesystemOperator::class);
+        $this->assertMatchesJsonSnapshot($fileSystem->getWrites());
+    }
+
+    public function testHandleWithActivityDelete(): void
+    {
+        $output = new SpyOutput();
+        $this->strava->setMaxNumberOfCallsBeforeTriggering429(1000);
+
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(0)
+                ->withActivityId(4)
+                ->build()
+        );
+
+        $this->getContainer()->get(ActivityRepository::class)->add(
+            ActivityBuilder::fromDefaults()
+                ->withData([
+                    'kudos_count' => 1,
+                    'name' => 'Delete this one',
+                ])
+                ->withActivityId(1000)
                 ->build()
         );
 
