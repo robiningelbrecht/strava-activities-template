@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava\Activity\BuildDaytimeStatsChart;
 
-use App\Domain\Strava\Activity\ActivityRepository;
+use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
@@ -15,7 +15,7 @@ use League\Flysystem\FilesystemOperator;
 final readonly class BuildDaytimeStatsChartCommandHandler implements CommandHandler
 {
     public function __construct(
-        private ActivityRepository $activityRepository,
+        private ActivityDetailsRepository $activityDetailsRepository,
         private FilesystemOperator $filesystem
     ) {
     }
@@ -31,7 +31,7 @@ final readonly class BuildDaytimeStatsChartCommandHandler implements CommandHand
                     'width' => 1000,
                     'height' => 300,
                     'options' => DaytimeStatsChartsBuilder::fromDaytimeStats(
-                        DaytimeStats::fromActivities($this->activityRepository->findAll()),
+                        DaytimeStats::fromActivities($this->activityDetailsRepository->findAll()),
                     )->build(),
                 ],
                 JSON_PRETTY_PRINT

@@ -42,8 +42,17 @@ rm -Rf files/install
 rm -Rf files/maps
 # Delete test suite
 rm -Rf tests
+rm -Rf config/container_test.php
 # Delete template again.
 rm -Rf strava-activities-template
+
+# Exit when only template update.
+if [ "$1" == "--only-template" ]; then
+  exit 0;
+fi
+if [ "$1" == "--template-only" ]; then
+  exit 0;
+fi
 
 git add .
 git status
@@ -52,12 +61,11 @@ git diff --staged --quiet || git commit -m"Updated template to latest version"
 composer install --prefer-dist
 
 # Run migrations.
+rm -Rf database/db.strava-read
 bin/doctrine-migrations migrate --no-interaction
 
-# Exit when only template update.
-if [ "$1" == "--only-template" ]; then
-  exit 0;
-fi
+# Migrate data to new DBs (if needed). Remove this when data has been migrated.
+bin/console app:strava:migrate-to-yearly-database
 
 # Update strava stats.
 bin/console app:strava:import-data

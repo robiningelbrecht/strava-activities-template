@@ -2,28 +2,27 @@
 
 namespace App\Domain\Strava\Activity\Stream\ImportActivityStreams;
 
-use App\Domain\Strava\Activity\ActivityRepository;
-use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
+use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\Stream\DefaultStream;
+use App\Domain\Strava\Activity\Stream\ReadModel\ActivityStreamDetailsRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
+use App\Domain\Strava\Activity\Stream\WriteModel\ActivityStreamRepository;
 use App\Domain\Strava\ReachedStravaApiRateLimits;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Time\Sleep;
-use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use GuzzleHttp\Exception\ClientException;
-use Lcobucci\Clock\Clock;
 
 #[AsCommandHandler]
 final readonly class ImportActivityStreamsCommandHandler implements CommandHandler
 {
     public function __construct(
         private Strava $strava,
-        private ActivityRepository $activityRepository,
+        private ActivityDetailsRepository $activityDetailsRepository,
         private ActivityStreamRepository $activityStreamRepository,
-        private Clock $clock,
+        private ActivityStreamDetailsRepository $activityStreamDetailsRepository,
         private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
         private Sleep $sleep,
     ) {
@@ -34,8 +33,8 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
         assert($command instanceof ImportActivityStreams);
         $command->getOutput()->writeln('Importing activity streams...');
 
-        foreach ($this->activityRepository->findActivityIds() as $activityId) {
-            if ($this->activityStreamRepository->isImportedForActivity($activityId)) {
+        foreach ($this->activityDetailsRepository->findActivityIds() as $activityId) {
+            if ($this->activityStreamDetailsRepository->isImportedForActivity($activityId)) {
                 // Streams for this activity have been imported already, skip.
                 continue;
             }
@@ -73,6 +72,7 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
                 ];
             }
 
+            $activity = $this->activityDetailsRepository->find($activityId);
             foreach ($stravaStreams as $stravaStream) {
                 if (!$streamType = StreamType::tryFrom($stravaStream['type'])) {
                     continue;
@@ -82,7 +82,7 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
                     activityId: $activityId,
                     streamType: $streamType,
                     streamData: $stravaStream['data'],
-                    createdOn: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
+                    createdOn: $activity->getStartDate(),
                 );
                 $this->activityStreamRepository->add($stream);
                 $command->getOutput()->writeln(sprintf('  => Imported activity stream "%s"', $stream->getName()));

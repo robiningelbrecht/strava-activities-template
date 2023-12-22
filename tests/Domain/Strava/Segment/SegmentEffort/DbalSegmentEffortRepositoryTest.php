@@ -2,15 +2,18 @@
 
 namespace App\Tests\Domain\Strava\Segment\SegmentEffort;
 
-use App\Domain\Strava\Segment\SegmentEffort\DbalSegmentEffortRepository;
+use App\Domain\Strava\Segment\SegmentEffort\ReadModel\DbalSegmentEffortDetailsRepository;
+use App\Domain\Strava\Segment\SegmentEffort\ReadModel\SegmentEffortDetailsRepository;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortCollection;
-use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortRepository;
+use App\Domain\Strava\Segment\SegmentEffort\WriteModel\DbalSegmentEffortRepository;
+use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Tests\DatabaseTestCase;
 
 class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
 {
     private SegmentEffortRepository $segmentEffortRepository;
+    private SegmentEffortDetailsRepository $segmentEffortDetailsRepository;
 
     public function testFindAndSave(): void
     {
@@ -20,14 +23,30 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             $segmentEffort,
-            $this->segmentEffortRepository->find($segmentEffort->getId())
+            $this->segmentEffortDetailsRepository->find($segmentEffort->getId())
+        );
+    }
+
+    public function testUpdate(): void
+    {
+        $segmentEffort = SegmentEffortBuilder::fromDefaults()
+            ->build();
+        $this->segmentEffortRepository->add($segmentEffort);
+        $segmentEffort = SegmentEffortBuilder::fromDefaults()
+            ->withData(['segment' => 'lol'])
+            ->build();
+        $this->segmentEffortRepository->update($segmentEffort);
+
+        $this->assertEquals(
+            SegmentEffortBuilder::fromDefaults()->build(),
+            $this->segmentEffortDetailsRepository->find($segmentEffort->getId())
         );
     }
 
     public function testItShouldThrowWhenNotFound(): void
     {
         $this->expectException(EntityNotFound::class);
-        $this->segmentEffortRepository->find(1);
+        $this->segmentEffortDetailsRepository->find(1);
     }
 
     public function testFindBySegmentId(): void
@@ -52,7 +71,7 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             SegmentEffortCollection::fromArray([$segmentEffortOne, $segmentEffortTwo]),
-            $this->segmentEffortRepository->findBySegmentId($segmentEffortOne->getSegmentId())
+            $this->segmentEffortDetailsRepository->findBySegmentId($segmentEffortOne->getSegmentId())
         );
     }
 
@@ -61,7 +80,10 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
         parent::setUp();
 
         $this->segmentEffortRepository = new DbalSegmentEffortRepository(
-            $this->getConnection()
+            $this->getConnectionFactory()
+        );
+        $this->segmentEffortDetailsRepository = new DbalSegmentEffortDetailsRepository(
+            $this->getConnectionFactory()
         );
     }
 }

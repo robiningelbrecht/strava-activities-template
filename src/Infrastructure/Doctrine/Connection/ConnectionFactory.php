@@ -19,7 +19,8 @@ class ConnectionFactory
     public function getForYear(Year $year): Connection
     {
         $connection = $this->settings->get('doctrine.connections.year_based');
-        $connection['path'] .= '-'.$year;
+
+        $connection['path'] = str_replace('%YEAR%', (string) $year, $connection['path']);
 
         return DriverManager::getConnection($connection);
     }
@@ -31,7 +32,7 @@ class ConnectionFactory
         return DriverManager::getConnection($connection);
     }
 
-    public function getRead(): Connection
+    public function getReadOnly(): Connection
     {
         $connection = $this->settings->get('doctrine.connections.read');
 

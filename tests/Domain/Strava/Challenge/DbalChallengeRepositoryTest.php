@@ -4,8 +4,10 @@ namespace App\Tests\Domain\Strava\Challenge;
 
 use App\Domain\Strava\Challenge\ChallengeCollection;
 use App\Domain\Strava\Challenge\ChallengeId;
-use App\Domain\Strava\Challenge\ChallengeRepository;
-use App\Domain\Strava\Challenge\DbalChallengeRepository;
+use App\Domain\Strava\Challenge\ReadModel\ChallengeDetailsRepository;
+use App\Domain\Strava\Challenge\ReadModel\DbalChallengeDetailsRepository;
+use App\Domain\Strava\Challenge\WriteModel\ChallengeRepository;
+use App\Domain\Strava\Challenge\WriteModel\DbalChallengeRepository;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\DatabaseTestCase;
@@ -13,6 +15,7 @@ use App\Tests\DatabaseTestCase;
 class DbalChallengeRepositoryTest extends DatabaseTestCase
 {
     private ChallengeRepository $challengeRepository;
+    private ChallengeDetailsRepository $challengeDetailsRepository;
 
     public function testFindAndSave(): void
     {
@@ -21,14 +24,14 @@ class DbalChallengeRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             $challenge,
-            $this->challengeRepository->find($challenge->getId())
+            $this->challengeDetailsRepository->find($challenge->getId())
         );
     }
 
     public function testItShouldThrowWhenNotFound(): void
     {
         $this->expectException(EntityNotFound::class);
-        $this->challengeRepository->find(ChallengeId::fromString('1'));
+        $this->challengeDetailsRepository->find(ChallengeId::fromString('1'));
     }
 
     public function testFindAll(): void
@@ -46,7 +49,7 @@ class DbalChallengeRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             ChallengeCollection::fromArray([$challengeTwo, $challengeOne]),
-            $this->challengeRepository->findAll()
+            $this->challengeDetailsRepository->findAll()
         );
     }
 
@@ -55,7 +58,10 @@ class DbalChallengeRepositoryTest extends DatabaseTestCase
         parent::setUp();
 
         $this->challengeRepository = new DbalChallengeRepository(
-            $this->getConnection()
+            $this->getConnectionFactory()
+        );
+        $this->challengeDetailsRepository = new DbalChallengeDetailsRepository(
+            $this->getConnectionFactory()
         );
     }
 }

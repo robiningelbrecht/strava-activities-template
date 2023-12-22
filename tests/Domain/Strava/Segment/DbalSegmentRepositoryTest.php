@@ -2,10 +2,12 @@
 
 namespace App\Tests\Domain\Strava\Segment;
 
-use App\Domain\Strava\Segment\DbalSegmentRepository;
+use App\Domain\Strava\Segment\ReadModel\DbalSegmentDetailsRepository;
+use App\Domain\Strava\Segment\ReadModel\SegmentDetailsRepository;
 use App\Domain\Strava\Segment\SegmentCollection;
-use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortRepository;
-use App\Domain\Strava\Segment\SegmentRepository;
+use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
+use App\Domain\Strava\Segment\WriteModel\DbalSegmentRepository;
+use App\Domain\Strava\Segment\WriteModel\SegmentRepository;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\String\Name;
 use App\Tests\DatabaseTestCase;
@@ -14,6 +16,7 @@ use App\Tests\Domain\Strava\Segment\SegmentEffort\SegmentEffortBuilder;
 class DbalSegmentRepositoryTest extends DatabaseTestCase
 {
     private SegmentRepository $segmentRepository;
+    private SegmentDetailsRepository $segmentDetailsRepository;
 
     public function testFindAndSave(): void
     {
@@ -23,14 +26,14 @@ class DbalSegmentRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             $segment,
-            $this->segmentRepository->find($segment->getId())
+            $this->segmentDetailsRepository->find($segment->getId())
         );
     }
 
     public function testItShouldThrowWhenNotFound(): void
     {
         $this->expectException(EntityNotFound::class);
-        $this->segmentRepository->find(1);
+        $this->segmentDetailsRepository->find(1);
     }
 
     public function testFindAll(): void
@@ -71,7 +74,7 @@ class DbalSegmentRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             SegmentCollection::fromArray([$segmentOne, $segmentThree, $segmentTwo]),
-            $this->segmentRepository->findAll()
+            $this->segmentDetailsRepository->findAll()
         );
     }
 
@@ -80,7 +83,10 @@ class DbalSegmentRepositoryTest extends DatabaseTestCase
         parent::setUp();
 
         $this->segmentRepository = new DbalSegmentRepository(
-            $this->getConnection()
+            $this->getConnectionFactory()
+        );
+        $this->segmentDetailsRepository = new DbalSegmentDetailsRepository(
+            $this->getConnectionFactory()
         );
     }
 }

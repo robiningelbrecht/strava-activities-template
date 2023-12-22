@@ -2,11 +2,13 @@
 
 use App\Domain\Strava\Strava;
 use App\Domain\Weather\OpenMeteo\OpenMeteo;
+use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\UuidFactory;
 use App\Tests\Domain\Strava\SpyStrava;
 use App\Tests\Domain\Weather\OpenMeteo\SpyOpenMeteo;
+use App\Tests\FakeConnectionFactory;
 use App\Tests\Infrastructure\ValueObject\FakeUuidFactory;
 use App\Tests\NullSleep;
 use App\Tests\PausedClock;
@@ -21,4 +23,5 @@ return [
     UuidFactory::class => new FakeUuidFactory(),
     FilesystemOperator::class => fn () => new SpyFileSystem(),
     OpenMeteo::class => new SpyOpenMeteo(),
+    ConnectionFactory::class => new FakeConnectionFactory(),
 ];

@@ -5,10 +5,8 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 use App\Infrastructure\DependencyInjection\ContainerFactory;
 use App\Infrastructure\Doctrine\Command\MigrateCommand;
+use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Environment\Settings;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
 use Doctrine\Migrations\DependencyFactory;
@@ -28,7 +26,7 @@ $migrationConfig = new ConfigurationArray($settings->get('doctrine.migrations'))
 
 $defaultDependencyFactory = DependencyFactory::fromEntityManager(
     configurationLoader: $migrationConfig,
-    emLoader: new ExistingEntityManager(new EntityManager($container->get(Connection::class), $ormConfig))
+    emLoader: new ExistingEntityManager(new EntityManager($container->get(ConnectionFactory::class)->getDefault(), $ormConfig))
 );
 
 $cli = new Application('Doctrine Migrations');

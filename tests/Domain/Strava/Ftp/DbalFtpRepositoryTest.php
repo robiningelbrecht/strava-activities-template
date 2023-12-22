@@ -2,10 +2,12 @@
 
 namespace App\Tests\Domain\Strava\Ftp;
 
-use App\Domain\Strava\Ftp\DbalFtpRepository;
 use App\Domain\Strava\Ftp\FtpCollection;
-use App\Domain\Strava\Ftp\FtpRepository;
 use App\Domain\Strava\Ftp\FtpValue;
+use App\Domain\Strava\Ftp\ReadModel\DbalFtpDetailsRepository;
+use App\Domain\Strava\Ftp\ReadModel\FtpDetailsRepository;
+use App\Domain\Strava\Ftp\WriteModel\DbalFtpRepository;
+use App\Domain\Strava\Ftp\WriteModel\FtpRepository;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\DatabaseTestCase;
@@ -13,6 +15,7 @@ use App\Tests\DatabaseTestCase;
 class DbalFtpRepositoryTest extends DatabaseTestCase
 {
     private FtpRepository $ftpRepository;
+    private FtpDetailsRepository $ftpDetailsRepository;
 
     public function testFindForDate(): void
     {
@@ -39,27 +42,27 @@ class DbalFtpRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             $ftpOne,
-            $this->ftpRepository->find(SerializableDateTime::fromString('2023-05-24'))
+            $this->ftpDetailsRepository->find(SerializableDateTime::fromString('2023-05-24'))
         );
         $this->assertEquals(
             $ftpTwo,
-            $this->ftpRepository->find(SerializableDateTime::fromString('2023-05-25'))
+            $this->ftpDetailsRepository->find(SerializableDateTime::fromString('2023-05-25'))
         );
         $this->assertEquals(
             $ftpTwo,
-            $this->ftpRepository->find(SerializableDateTime::fromString('2023-06-25'))
+            $this->ftpDetailsRepository->find(SerializableDateTime::fromString('2023-06-25'))
         );
         $this->assertEquals(
             $ftpThree,
-            $this->ftpRepository->find(SerializableDateTime::fromString('2023-08-04'))
+            $this->ftpDetailsRepository->find(SerializableDateTime::fromString('2023-08-04'))
         );
         $this->assertEquals(
             $ftpFour,
-            $this->ftpRepository->find(SerializableDateTime::fromString('2023-09-24'))
+            $this->ftpDetailsRepository->find(SerializableDateTime::fromString('2023-09-24'))
         );
         $this->assertEquals(
             $ftpFour,
-            $this->ftpRepository->find(SerializableDateTime::fromString('2023-10-24'))
+            $this->ftpDetailsRepository->find(SerializableDateTime::fromString('2023-10-24'))
         );
     }
 
@@ -88,7 +91,7 @@ class DbalFtpRepositoryTest extends DatabaseTestCase
 
         $this->expectException(EntityNotFound::class);
 
-        $this->ftpRepository->find(SerializableDateTime::fromString('2023-01-01'));
+        $this->ftpDetailsRepository->find(SerializableDateTime::fromString('2023-01-01'));
     }
 
     public function testFindAll(): void
@@ -116,7 +119,7 @@ class DbalFtpRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             FtpCollection::fromArray([$ftpOne, $ftpTwo, $ftpThree, $ftpFour]),
-            $this->ftpRepository->findAll()
+            $this->ftpDetailsRepository->findAll()
         );
     }
 
@@ -125,7 +128,10 @@ class DbalFtpRepositoryTest extends DatabaseTestCase
         parent::setUp();
 
         $this->ftpRepository = new DbalFtpRepository(
-            $this->getConnection()
+            $this->getConnectionFactory()
+        );
+        $this->ftpDetailsRepository = new DbalFtpDetailsRepository(
+            $this->getConnectionFactory()
         );
     }
 }

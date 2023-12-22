@@ -46,7 +46,7 @@ return [
             ],
             'year_based' => [
                 'driver' => 'pdo_sqlite',
-                'path' => Settings::getAppRoot().'/'.$_ENV['DATABASE_NAME'],
+                'path' => Settings::getAppRoot().'/'.$_ENV['DATABASE_NAME'].'-%YEAR%',
             ],
         ],
         'migrations' => [

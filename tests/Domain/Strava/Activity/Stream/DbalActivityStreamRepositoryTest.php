@@ -3,23 +3,26 @@
 namespace App\Tests\Domain\Strava\Activity\Stream;
 
 use App\Domain\Strava\Activity\Stream\ActivityStreamCollection;
-use App\Domain\Strava\Activity\Stream\ActivityStreamRepository;
-use App\Domain\Strava\Activity\Stream\DbalActivityStreamRepository;
+use App\Domain\Strava\Activity\Stream\ReadModel\ActivityStreamDetailsRepository;
+use App\Domain\Strava\Activity\Stream\ReadModel\DbalActivityStreamDetailsRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
+use App\Domain\Strava\Activity\Stream\WriteModel\ActivityStreamRepository;
+use App\Domain\Strava\Activity\Stream\WriteModel\DbalActivityStreamRepository;
 use App\Tests\DatabaseTestCase;
 
 class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 {
     private ActivityStreamRepository $activityStreamRepository;
+    private ActivityStreamDetailsRepository $activityStreamDetailsRepository;
 
     public function testIsImportedForActivity(): void
     {
         $stream = DefaultStreamBuilder::fromDefaults()->build();
         $this->activityStreamRepository->add($stream);
 
-        $this->assertTrue($this->activityStreamRepository->isImportedForActivity($stream->getActivityId()));
-        $this->assertFalse($this->activityStreamRepository->isImportedForActivity('1'));
+        $this->assertTrue($this->activityStreamDetailsRepository->isImportedForActivity($stream->getActivityId()));
+        $this->assertFalse($this->activityStreamDetailsRepository->isImportedForActivity('1'));
     }
 
     public function testHasOneForActivityAndStreamType(): void
@@ -27,15 +30,15 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
         $stream = DefaultStreamBuilder::fromDefaults()->build();
         $this->activityStreamRepository->add($stream);
 
-        $this->assertTrue($this->activityStreamRepository->hasOneForActivityAndStreamType(
+        $this->assertTrue($this->activityStreamDetailsRepository->hasOneForActivityAndStreamType(
             activityId: $stream->getActivityId(),
             streamType: $stream->getStreamType()
         ));
-        $this->assertFalse($this->activityStreamRepository->hasOneForActivityAndStreamType(
+        $this->assertFalse($this->activityStreamDetailsRepository->hasOneForActivityAndStreamType(
             activityId: 1,
             streamType: $stream->getStreamType()
         ));
-        $this->assertFalse($this->activityStreamRepository->hasOneForActivityAndStreamType(
+        $this->assertFalse($this->activityStreamDetailsRepository->hasOneForActivityAndStreamType(
             activityId: $stream->getActivityId(),
             streamType: StreamType::CADENCE
         ));
@@ -48,7 +51,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             ActivityStreamCollection::fromArray([$stream]),
-            $this->activityStreamRepository->findByStreamType($stream->getStreamType())
+            $this->activityStreamDetailsRepository->findByStreamType($stream->getStreamType())
         );
     }
 
@@ -79,7 +82,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             ActivityStreamCollection::fromArray([$streamTwo, $streamOne]),
-            $this->activityStreamRepository->findByActivityAndStreamTypes(
+            $this->activityStreamDetailsRepository->findByActivityAndStreamTypes(
                 activityId: 1,
                 streamTypes: StreamTypeCollection::fromArray([StreamType::WATTS, StreamType::CADENCE])
             )
@@ -91,7 +94,10 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
         parent::setUp();
 
         $this->activityStreamRepository = new DbalActivityStreamRepository(
-            $this->getConnection(),
+            $this->getConnectionFactory(),
+        );
+        $this->activityStreamDetailsRepository = new DbalActivityStreamDetailsRepository(
+            $this->getConnectionFactory(),
         );
     }
 }
