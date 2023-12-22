@@ -4,13 +4,15 @@ namespace App\Domain\Strava\Activity\WriteModel;
 
 use App\Domain\Strava\Activity\Activity;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
+use App\Infrastructure\Eventing\EventBus;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\Year;
 
 final readonly class DbalActivityRepository implements ActivityRepository
 {
     public function __construct(
-        private ConnectionFactory $connectionFactory
+        private ConnectionFactory $connectionFactory,
+        private EventBus $eventBus
     ) {
     }
 
@@ -39,6 +41,18 @@ final readonly class DbalActivityRepository implements ActivityRepository
             'data' => Json::encode($this->cleanData($activity->getData())),
             'gearId' => $activity->getGearId(),
         ]);
+    }
+
+    public function delete(Activity $activity): void
+    {
+        $sql = 'DELETE FROM Activity 
+        WHERE activityId = :activityId';
+
+        $this->connectionFactory->getForYear(Year::fromDate($activity->getStartDate()))->executeStatement($sql, [
+            'activityId' => $activity->getId(),
+        ]);
+
+        $this->eventBus->publish(...$activity->getRecordedEvents());
     }
 
     /**
