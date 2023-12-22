@@ -25,11 +25,13 @@ final readonly class DistanceBreakdown
      */
     public function getRows(): array
     {
-        $breakdownOnKm = 10;
+        $numberOfBreakdowns = 11;
         $statistics = [];
         $longestDistanceForActivity = $this->activities->max(
             fn (Activity $activity) => $activity->getDistanceInKilometer()
         );
+
+        $breakdownOnKm = ceil(($longestDistanceForActivity / $numberOfBreakdowns) / 5) * 5;
 
         $range = range($breakdownOnKm, ceil($longestDistanceForActivity / $breakdownOnKm) * $breakdownOnKm, $breakdownOnKm);
         foreach ($range as $breakdownLimit) {
