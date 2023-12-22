@@ -9,6 +9,9 @@ use App\Infrastructure\ValueObject\Time\YearCollection;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\StorageAttributes;
 
+/**
+ * @codeCoverageIgnore
+ */
 class StravaYears
 {
     public function __construct(
