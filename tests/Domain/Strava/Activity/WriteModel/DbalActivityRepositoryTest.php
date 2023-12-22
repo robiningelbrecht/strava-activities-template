@@ -4,11 +4,13 @@ namespace App\Tests\Domain\Strava\Activity\WriteModel;
 
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Activity\WriteModel\DbalActivityRepository;
+use App\Infrastructure\Eventing\EventBus;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Time\Year;
 use App\Tests\DatabaseTestCase;
 use App\Tests\Domain\Strava\Activity\ActivityBuilder;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use PHPUnit\Framework\MockObject\MockObject;
 use Spatie\Snapshots\MatchesSnapshots;
 
 class DbalActivityRepositoryTest extends DatabaseTestCase
@@ -16,6 +18,7 @@ class DbalActivityRepositoryTest extends DatabaseTestCase
     use MatchesSnapshots;
 
     private ActivityRepository $activityRepository;
+    private MockObject $eventBus;
 
     public function testItShouldSaveAndFind(): void
     {
@@ -65,12 +68,36 @@ class DbalActivityRepositoryTest extends DatabaseTestCase
         );
     }
 
+    public function testDelete(): void
+    {
+        $activity = ActivityBuilder::fromDefaults()->build();
+        $this->activityRepository->add($activity);
+
+        $this->assertEquals(
+            1,
+            $this->getConnectionFactory()
+                ->getForYear(Year::fromDate($activity->getStartDate()))
+                ->executeQuery('SELECT COUNT(*) FROM Activity')->fetchOne()
+        );
+
+        $this->activityRepository->delete($activity);
+        $this->assertEquals(
+            0,
+            $this->getConnectionFactory()
+                ->getForYear(Year::fromDate($activity->getStartDate()))
+                ->executeQuery('SELECT COUNT(*) FROM Activity')->fetchOne()
+        );
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->eventBus = $this->createMock(EventBus::class);
+
         $this->activityRepository = new DbalActivityRepository(
-            $this->getConnectionFactory()
+            $this->getConnectionFactory(),
+            $this->eventBus
         );
     }
 }

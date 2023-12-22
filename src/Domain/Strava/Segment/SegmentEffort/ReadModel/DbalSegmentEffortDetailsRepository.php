@@ -52,6 +52,20 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
         ));
     }
 
+    public function findByActivityId(int $activityId): SegmentEffortCollection
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select('*')
+            ->from('SegmentEffort')
+            ->andWhere('activityId = :activityId')
+            ->setParameter('activityId', $activityId);
+
+        return SegmentEffortCollection::fromArray(array_map(
+            fn (array $result) => $this->buildFromResult($result),
+            $queryBuilder->executeQuery()->fetchAllAssociative()
+        ));
+    }
+
     /**
      * @param array<mixed> $result
      */

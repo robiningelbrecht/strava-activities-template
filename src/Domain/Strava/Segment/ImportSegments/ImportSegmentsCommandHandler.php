@@ -78,7 +78,7 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
                 }
             }
 
-            // Delete segments from data on activity to reduce DB size?.
+            // Delete segments from data on activity to reduce DB size.
             $activity->removeSegments();
             $this->activityRepository->update($activity);
         }

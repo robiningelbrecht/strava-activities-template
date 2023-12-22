@@ -1,0 +1,6 @@
+Importing activities...
+  => Imported activity "Night Ride1"
+  => Imported activity "Watopia Flat Forward in London"
+  => Updated activity "Night Ride3"
+  => Imported activity "Night Ride4"
+  => Imported activity "Night Ride5"

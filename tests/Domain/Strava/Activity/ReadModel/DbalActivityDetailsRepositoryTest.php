@@ -7,6 +7,7 @@ use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\ReadModel\DbalActivityDetailsRepository;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Activity\WriteModel\DbalActivityRepository;
+use App\Infrastructure\Eventing\EventBus;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\DatabaseTestCase;
@@ -117,7 +118,8 @@ class DbalActivityDetailsRepositoryTest extends DatabaseTestCase
             $this->getConnectionFactory()
         );
         $this->activityRepository = new DbalActivityRepository(
-            $this->getConnectionFactory()
+            $this->getConnectionFactory(),
+            $this->getContainer()->get(EventBus::class),
         );
     }
 }

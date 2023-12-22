@@ -29,4 +29,16 @@ final readonly class DbalActivityStreamRepository implements ActivityStreamRepos
             'createdOn' => $stream->getCreatedOn(),
         ]);
     }
+
+    public function delete(ActivityStream $stream): void
+    {
+        $sql = 'DELETE FROM ActivityStream
+        WHERE activityId = :activityId
+        AND streamType = :streamType';
+
+        $this->connectionFactory->getForYear(Year::fromDate($stream->getCreatedOn()))->executeStatement($sql, [
+            'activityId' => $stream->getActivityId(),
+            'streamType' => $stream->getStreamType()->value,
+        ]);
+    }
 }

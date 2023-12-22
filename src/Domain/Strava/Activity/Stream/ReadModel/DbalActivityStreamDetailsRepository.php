@@ -78,6 +78,20 @@ final readonly class DbalActivityStreamDetailsRepository implements ActivityStre
         ));
     }
 
+    public function findByActivityId(int $activityId): ActivityStreamCollection
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select('*')
+            ->from('ActivityStream')
+            ->andWhere('activityId = :activityId')
+            ->setParameter('activityId', $activityId);
+
+        return ActivityStreamCollection::fromArray(array_map(
+            fn (array $result) => $this->buildFromResult($result),
+            $queryBuilder->executeQuery()->fetchAllAssociative()
+        ));
+    }
+
     /**
      * @param array<mixed> $result
      */
