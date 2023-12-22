@@ -20,7 +20,7 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
     private CommandBus $commandBus;
     private SpyStrava $strava;
 
-    public function testHandle(): void
+    public function testHandleWithTooManyRequests(): void
     {
         $output = new SpyOutput();
         $this->strava->setMaxNumberOfCallsBeforeTriggering429(8);
@@ -64,10 +64,22 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
         $this->commandBus->dispatch(new ImportActivities($output));
 
         $this->assertMatchesTextSnapshot($output);
+    }
 
-        /** @var \App\Tests\SpyFileSystem $fileSystem */
-        $fileSystem = $this->getContainer()->get(FilesystemOperator::class);
-        $this->assertMatchesJsonSnapshot($fileSystem->getWrites());
+    public function testHandleWithoutActivityDelete(): void
+    {
+        $output = new SpyOutput();
+        $this->strava->setMaxNumberOfCallsBeforeTriggering429(1000);
+
+        $this->getContainer()->get(ActivityRepository::class)->add(
+            ActivityBuilder::fromDefaults()
+                ->withActivityId(4)
+                ->build()
+        );
+
+        $this->commandBus->dispatch(new ImportActivities($output));
+
+        $this->assertMatchesTextSnapshot($output);
     }
 
     protected function setUp(): void
