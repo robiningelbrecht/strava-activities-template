@@ -4,6 +4,6 @@ namespace App\Domain\Strava;
 
 use App\Infrastructure\ValueObject\String\NonEmptyStringLiteral;
 
-class StravaClientId extends NonEmptyStringLiteral
+final readonly class StravaClientId extends NonEmptyStringLiteral
 {
 }

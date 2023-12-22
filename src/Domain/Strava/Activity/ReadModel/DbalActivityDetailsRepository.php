@@ -4,6 +4,7 @@ namespace App\Domain\Strava\Activity\ReadModel;
 
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
+use App\Domain\Strava\Activity\ActivityId;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
@@ -22,16 +23,16 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
         $this->connection = $connectionFactory->getReadOnly();
     }
 
-    public function find(int $id): Activity
+    public function find(ActivityId $activityId): Activity
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('Activity')
             ->andWhere('activityId = :activityId')
-            ->setParameter('activityId', $id);
+            ->setParameter('activityId', $activityId);
 
         if (!$result = $queryBuilder->executeQuery()->fetchAssociative()) {
-            throw new EntityNotFound(sprintf('Activity "%s" not found', $id));
+            throw new EntityNotFound(sprintf('Activity "%s" not found', $activityId));
         }
 
         return $this->buildFromResult($result);
@@ -92,7 +93,7 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
     private function buildFromResult(array $result): Activity
     {
         return Activity::fromState(
-            activityId: $result['activityId'],
+            activityId: ActivityId::fromString($result['activityId']),
             startDateTime: SerializableDateTime::fromString($result['startDateTime']),
             data: Json::decode($result['data']),
             weather: Json::decode($result['weather'] ?? '[]'),

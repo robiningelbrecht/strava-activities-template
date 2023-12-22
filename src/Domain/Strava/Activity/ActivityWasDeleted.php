@@ -9,11 +9,11 @@ use App\Infrastructure\Eventing\DomainEvent;
 final readonly class ActivityWasDeleted extends DomainEvent
 {
     public function __construct(
-        private int $activityId
+        private ActivityId $activityId
     ) {
     }
 
-    public function getActivityId(): int
+    public function getActivityId(): ActivityId
     {
         return $this->activityId;
     }

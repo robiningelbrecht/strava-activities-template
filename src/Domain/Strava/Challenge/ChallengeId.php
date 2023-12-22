@@ -7,7 +7,7 @@ namespace App\Domain\Strava\Challenge;
 use App\Infrastructure\ValueObject\String\NonEmptyStringLiteral;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
-class ChallengeId extends NonEmptyStringLiteral
+readonly class ChallengeId extends NonEmptyStringLiteral
 {
     public static function fromDateAndName(
         SerializableDateTime $createdOn,

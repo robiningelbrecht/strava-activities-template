@@ -34,7 +34,7 @@ final class Activity extends AggregateRoot
      */
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string', unique: true)]
-        private readonly int $activityId,
+        private readonly ActivityId $activityId,
         #[ORM\Column(type: 'datetime_immutable')]
         private readonly SerializableDateTime $startDateTime,
         #[ORM\Column(type: 'json')]
@@ -50,7 +50,7 @@ final class Activity extends AggregateRoot
      * @param array<mixed> $data
      */
     public static function create(
-        int $activityId,
+        ActivityId $activityId,
         SerializableDateTime $startDateTime,
         array $data,
         string $gearId = null,
@@ -68,7 +68,7 @@ final class Activity extends AggregateRoot
      * @param array<mixed> $weather
      */
     public static function fromState(
-        int $activityId,
+        ActivityId $activityId,
         SerializableDateTime $startDateTime,
         array $data,
         array $weather = [],
@@ -83,7 +83,7 @@ final class Activity extends AggregateRoot
         );
     }
 
-    public function getId(): int
+    public function getId(): ActivityId
     {
         return $this->activityId;
     }

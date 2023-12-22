@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\ValueObject\String;
 
-class Description extends NonEmptyStringLiteral
+final readonly class Description extends NonEmptyStringLiteral
 {
     public static function fromStringWithMaxChars(string $string, int $maxChars): self
     {
