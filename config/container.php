@@ -44,6 +44,8 @@ use App\Domain\Weather\OpenMeteo\OpenMeteo;
 use App\Infrastructure\Console\ConsoleCommandContainer;
 use App\Infrastructure\Environment\Environment;
 use App\Infrastructure\Environment\Settings;
+use App\Infrastructure\FileSystem\FileRepository;
+use App\Infrastructure\FileSystem\SystemFileRepository;
 use App\Infrastructure\KeyValue\ReadModel\DbalKeyValueStore as DbalKeyValueReadStore;
 use App\Infrastructure\KeyValue\ReadModel\KeyValueStore as KeyValueReadStore;
 use App\Infrastructure\KeyValue\WriteModel\DbalKeyValueStore as DbalKeyValueWriteStore;
@@ -118,4 +120,5 @@ return [
     FilesystemOperator::class => DI\create(Filesystem::class)->constructor(new LocalFilesystemAdapter(
         Settings::getAppRoot()
     )),
+    FileRepository::class => DI\autowire(SystemFileRepository::class),
 ];
