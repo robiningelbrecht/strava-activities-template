@@ -31,6 +31,12 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
                 ->build()
         );
 
+        $this->getContainer()->get(ActivityRepository::class)->add(
+            ActivityBuilder::fromDefaults()
+                ->withActivityId(0)
+                ->build()
+        );
+
         $this->commandBus->dispatch(new ImportActivities($output));
 
         $this->assertMatchesTextSnapshot($output);
