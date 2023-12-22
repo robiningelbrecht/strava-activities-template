@@ -6,6 +6,7 @@ namespace App\Domain\Strava\Segment\ImportSegments;
 
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
+use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Segment\ReadModel\SegmentDetailsRepository;
 use App\Domain\Strava\Segment\Segment;
 use App\Domain\Strava\Segment\SegmentEffort\ReadModel\SegmentEffortDetailsRepository;
@@ -24,6 +25,7 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
 {
     public function __construct(
         private ActivityDetailsRepository $activityDetailsRepository,
+        private ActivityRepository $activityRepository,
         private SegmentRepository $segmentRepository,
         private SegmentDetailsRepository $segmentDetailsRepository,
         private SegmentEffortRepository $segmentEffortRepository,
@@ -39,6 +41,7 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
         /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($this->activityDetailsRepository->findAll() as $activity) {
             if (!$segmentEfforts = $activity->getSegmentEfforts()) {
+                // No segments or we already imported and deleted them from the activity.
                 continue;
             }
 
@@ -74,6 +77,10 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
                     $command->getOutput()->writeln(sprintf('  => Added segment effort for "%s"', $segment->getName()));
                 }
             }
+
+            // Delete segments from data on activity to reduce DB size?.
+            $activity->removeSegments();
+            $this->activityRepository->update($activity);
         }
     }
 }

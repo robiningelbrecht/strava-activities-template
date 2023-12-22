@@ -445,4 +445,11 @@ final class Activity
     {
         return $this->data['segment_efforts'] ?? [];
     }
+
+    public function removeSegments(): void
+    {
+        if (isset($this->data['segment_efforts'])) {
+            unset($this->data['segment_efforts']);
+        }
+    }
 }
