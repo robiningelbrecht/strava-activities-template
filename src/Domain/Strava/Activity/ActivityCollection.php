@@ -59,7 +59,7 @@ final class ActivityCollection extends Collection
 
     public function getByActivityId(ActivityId $activityId): Activity
     {
-        $activities = $this->filter(fn (Activity $activity) => $activityId === $activity->getId())->toArray();
+        $activities = $this->filter(fn (Activity $activity) => $activityId == $activity->getId())->toArray();
 
         /** @var \App\Domain\Strava\Activity\Activity $activity */
         $activity = reset($activities);

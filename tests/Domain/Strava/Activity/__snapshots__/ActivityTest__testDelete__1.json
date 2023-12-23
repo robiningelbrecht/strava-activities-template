@@ -2,7 +2,7 @@
     {
         "eventName": "App.Domain.Strava.Activity.ActivityWasDeleted",
         "payload": {
-            "activityId": 903645
+            "activityId": "activity-903645"
         }
     }
 ]

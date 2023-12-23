@@ -105,7 +105,7 @@ class Strava
      */
     public function getActivity(ActivityId $activityId): array
     {
-        return Json::decode($this->request('api/v3/activities/'.$activityId, 'GET', [
+        return Json::decode($this->request('api/v3/activities/'.$activityId->toUnprefixedString(), 'GET', [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer '.$this->getAccessToken(),
             ],
@@ -115,9 +115,9 @@ class Strava
     /**
      * @return array<mixed>
      */
-    public function getActivityZones(int $id): array
+    public function getActivityZones(ActivityId $activityId): array
     {
-        return Json::decode($this->request('api/v3/activities/'.$id.'/zones', 'GET', [
+        return Json::decode($this->request('api/v3/activities/'.$activityId->toUnprefixedString().'/zones', 'GET', [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer '.$this->getAccessToken(),
             ],
@@ -129,7 +129,7 @@ class Strava
      */
     public function getAllActivityStreams(ActivityId $activityId): array
     {
-        return Json::decode($this->request('api/v3/activities/'.$activityId.'/streams', 'GET', [
+        return Json::decode($this->request('api/v3/activities/'.$activityId->toUnprefixedString().'/streams', 'GET', [
             RequestOptions::QUERY => [
                 'keys' => implode(',', array_map(fn (StreamType $streamType) => $streamType->value, StreamType::cases())),
             ],
@@ -144,7 +144,7 @@ class Strava
      */
     public function getActivityPhotos(ActivityId $activityId): array
     {
-        return Json::decode($this->request('api/v3/activities/'.$activityId.'/photos', 'GET', [
+        return Json::decode($this->request('api/v3/activities/'.$activityId->toUnprefixedString().'/photos', 'GET', [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer '.$this->getAccessToken(),
             ],

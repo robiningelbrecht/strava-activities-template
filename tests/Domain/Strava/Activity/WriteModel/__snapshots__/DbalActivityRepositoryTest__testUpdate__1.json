@@ -1,6 +1,6 @@
 [
     {
-        "activityId": "1",
+        "activityId": "activity-1",
         "startDateTime": "2023-10-10 14:00:34",
         "data": "{\"kudos_count\":3,\"name\":\"Test activity\"}",
         "weather": "[]",

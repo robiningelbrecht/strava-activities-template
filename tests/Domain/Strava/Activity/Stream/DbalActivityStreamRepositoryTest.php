@@ -24,7 +24,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
         $this->activityStreamRepository->add($stream);
 
         $this->assertTrue($this->activityStreamDetailsRepository->isImportedForActivity($stream->getActivityId()));
-        $this->assertFalse($this->activityStreamDetailsRepository->isImportedForActivity('1'));
+        $this->assertFalse($this->activityStreamDetailsRepository->isImportedForActivity(ActivityId::fromUnprefixed('1')));
     }
 
     public function testHasOneForActivityAndStreamType(): void
@@ -37,7 +37,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
             streamType: $stream->getStreamType()
         ));
         $this->assertFalse($this->activityStreamDetailsRepository->hasOneForActivityAndStreamType(
-            activityId: 1,
+            activityId: ActivityId::fromUnprefixed(1),
             streamType: $stream->getStreamType()
         ));
         $this->assertFalse($this->activityStreamDetailsRepository->hasOneForActivityAndStreamType(
