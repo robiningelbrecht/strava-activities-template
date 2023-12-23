@@ -338,7 +338,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             $powerData = $this->activityPowerRepository->findTimeInSecondsPerWattageForActivity($activity->getId());
 
             $this->filesystem->write(
-                'build/html/activity/activity-'.$activity->getId().'.html',
+                'build/html/activity/'.$activity->getId().'.html',
                 $this->twig->load('html/activity.html.twig')->render([
                     'activity' => $activity,
                     'leaflet' => $activity->getLeafletMap() ? [
