@@ -135,6 +135,10 @@ For any feedback, help or feature requests, please [open a new issue](https://gi
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
 
+#### [2023-12-23]
+
+* Delete orphaned activities (thanks to [mdleye](https://github.com/mdleye))
+
 #### [2023-12-21]
 
 * Split up database into multiple databases, one for each year there is data for
