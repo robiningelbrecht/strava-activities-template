@@ -31,18 +31,18 @@ class DbalChallengeRepositoryTest extends DatabaseTestCase
     public function testItShouldThrowWhenNotFound(): void
     {
         $this->expectException(EntityNotFound::class);
-        $this->challengeDetailsRepository->find(ChallengeId::fromString('1'));
+        $this->challengeDetailsRepository->find(ChallengeId::fromUnprefixed('1'));
     }
 
     public function testFindAll(): void
     {
         $challengeOne = ChallengeBuilder::fromDefaults()
-            ->withChallengeId(ChallengeId::fromString('1'))
+            ->withChallengeId(ChallengeId::fromUnprefixed('1'))
             ->withCreatedOn(SerializableDateTime::fromString('2023-10-10 14:00:34'))
             ->build();
         $this->challengeRepository->add($challengeOne);
         $challengeTwo = ChallengeBuilder::fromDefaults()
-            ->withChallengeId(ChallengeId::fromString('2'))
+            ->withChallengeId(ChallengeId::fromUnprefixed('2'))
             ->withCreatedOn(SerializableDateTime::fromString('2023-10-10 15:00:34'))
             ->build();
         $this->challengeRepository->add($challengeTwo);

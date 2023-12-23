@@ -22,6 +22,7 @@ final class Version20231223143049 extends AbstractMigration
         $this->addSql("UPDATE Activity SET activityId = 'activity-' || activityId");
         $this->addSql("UPDATE ActivityStream SET activityId = 'activity-' || activityId");
         $this->addSql("UPDATE SegmentEffort SET activityId = 'activity-' || activityId");
+        $this->addSql("UPDATE Challenge SET challengeId = 'challenge-' || challengeId");
     }
 
     public function down(Schema $schema): void

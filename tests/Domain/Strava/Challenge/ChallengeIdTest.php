@@ -24,12 +24,12 @@ class ChallengeIdTest extends TestCase
             [
                 SerializableDateTime::fromString('2022-10-23'),
                 'Short name with spaces',
-                ChallengeId::fromString('2022-10_short_name_with_spaces'),
+                ChallengeId::fromUnprefixed('2022-10_short_name_with_spaces'),
             ],
             [
                 SerializableDateTime::fromString('2023-01-23'),
                 str_repeat('r', 300),
-                ChallengeId::fromString('2023-01_'.str_repeat('r', 250)),
+                ChallengeId::fromUnprefixed('2023-01_'.str_repeat('r', 250)),
             ],
         ];
     }

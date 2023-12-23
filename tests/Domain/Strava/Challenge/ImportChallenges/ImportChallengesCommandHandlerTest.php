@@ -28,7 +28,7 @@ class ImportChallengesCommandHandlerTest extends DatabaseTestCase
 
         $this->getContainer()->get(ChallengeRepository::class)->add(
             ChallengeBuilder::fromDefaults()
-                ->withChallengeId(ChallengeId::fromString('2023-10_challenge_2'))
+                ->withChallengeId(ChallengeId::fromUnprefixed('2023-10_challenge_2'))
                 ->build()
         );
 
@@ -49,7 +49,7 @@ class ImportChallengesCommandHandlerTest extends DatabaseTestCase
 
         $this->getContainer()->get(ChallengeRepository::class)->add(
             ChallengeBuilder::fromDefaults()
-                ->withChallengeId(ChallengeId::fromString('2023-10_challenge_2'))
+                ->withChallengeId(ChallengeId::fromUnprefixed('2023-10_challenge_2'))
                 ->build()
         );
 
