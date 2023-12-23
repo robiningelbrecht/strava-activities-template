@@ -5,6 +5,7 @@ namespace App\Domain\Strava;
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Challenge\ImportChallenges\ImportChallengesCommandHandler;
+use App\Domain\Strava\Gear\GearId;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use GuzzleHttp\Client;
@@ -157,9 +158,9 @@ class Strava
     /**
      * @return array<mixed>
      */
-    public function getGear(string $id): array
+    public function getGear(GearId $gearId): array
     {
-        return Json::decode($this->request('api/v3/gear/'.$id, 'GET', [
+        return Json::decode($this->request('api/v3/gear/'.$gearId->toUnprefixedString(), 'GET', [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer '.$this->getAccessToken(),
             ],

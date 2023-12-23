@@ -6,6 +6,8 @@ use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\ActivityIdCollection;
+use App\Domain\Strava\Gear\GearId;
+use App\Domain\Strava\Gear\GearIdCollection;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
@@ -74,18 +76,19 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
         ));
     }
 
-    /**
-     * @return string[]
-     */
-    public function findUniqueGearIds(): array
+    public function findUniqueGearIds(): GearIdCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('gearId')
             ->distinct()
             ->from('Activity')
+            ->andWhere('gearId IS NOT NULL')
             ->orderBy('startDateTime', 'DESC');
 
-        return $queryBuilder->executeQuery()->fetchFirstColumn();
+        return GearIdCollection::fromArray(array_map(
+            fn (string $id) => GearId::fromString($id),
+            $queryBuilder->executeQuery()->fetchFirstColumn(),
+        ));
     }
 
     /**
@@ -98,7 +101,7 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
             startDateTime: SerializableDateTime::fromString($result['startDateTime']),
             data: Json::decode($result['data']),
             weather: Json::decode($result['weather'] ?? '[]'),
-            gearId: $result['gearId']
+            gearId: GearId::fromOptionalString($result['gearId']),
         );
     }
 }

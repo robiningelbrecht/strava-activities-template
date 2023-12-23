@@ -7,6 +7,7 @@ use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\ActivityType;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
+use App\Domain\Strava\Gear\GearId;
 use App\Domain\Strava\ReachedStravaApiRateLimits;
 use App\Domain\Strava\Strava;
 use App\Domain\Weather\OpenMeteo\OpenMeteo;
@@ -57,7 +58,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                 $activity
                     ->updateName($stravaActivity['name'])
                     ->updateKudoCount($stravaActivity['kudos_count'] ?? 0)
-                    ->updateGearId($stravaActivity['gear_id'] ?? null);
+                    ->updateGearId(GearId::fromOptionalUnprefixed($stravaActivity['gear_id'] ?? null));
                 $this->activityRepository->update($activity);
                 unset($activitiesToDelete[(string) $activity->getId()]);
                 $command->getOutput()->writeln(sprintf('  => Updated activity "%s"', $activity->getName()));
@@ -74,7 +75,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                             ...$this->strava->getActivity($activityId),
                             'athlete_weight' => $athlete['weight'],
                         ],
-                        gearId: $stravaActivity['gear_id'] ?? null
+                        gearId: GearId::fromOptionalUnprefixed($stravaActivity['gear_id'] ?? null)
                     );
 
                     $localImagePaths = [];

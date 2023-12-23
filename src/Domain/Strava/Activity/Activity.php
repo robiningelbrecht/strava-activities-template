@@ -4,6 +4,7 @@ namespace App\Domain\Strava\Activity;
 
 use App\Domain\Strava\Activity\Stream\PowerOutput;
 use App\Domain\Strava\Ftp\FtpValue;
+use App\Domain\Strava\Gear\GearId;
 use App\Domain\Strava\LeafletMap;
 use App\Domain\Weather\OpenMeteo\Weather;
 use App\Infrastructure\Eventing\AggregateRoot;
@@ -42,7 +43,7 @@ final class Activity extends AggregateRoot
         #[ORM\Column(type: 'json', nullable: true)]
         private array $weather = [],
         #[ORM\Column(type: 'string', nullable: true)]
-        private ?string $gearId = null,
+        private ?GearId $gearId = null,
     ) {
     }
 
@@ -53,7 +54,7 @@ final class Activity extends AggregateRoot
         ActivityId $activityId,
         SerializableDateTime $startDateTime,
         array $data,
-        string $gearId = null,
+        GearId $gearId = null,
     ): self {
         return new self(
             activityId: $activityId,
@@ -72,7 +73,7 @@ final class Activity extends AggregateRoot
         SerializableDateTime $startDateTime,
         array $data,
         array $weather = [],
-        string $gearId = null,
+        GearId $gearId = null,
     ): self {
         return new self(
             activityId: $activityId,
@@ -120,12 +121,12 @@ final class Activity extends AggregateRoot
         return $this;
     }
 
-    public function getGearId(): ?string
+    public function getGearId(): ?GearId
     {
         return $this->gearId;
     }
 
-    public function updateGearId(string $gearId = null): self
+    public function updateGearId(GearId $gearId = null): self
     {
         $this->gearId = $gearId;
 

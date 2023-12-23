@@ -6,6 +6,7 @@ namespace App\Tests\Domain\Strava\Activity;
 
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityId;
+use App\Domain\Strava\Gear\GearId;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final class ActivityBuilder
@@ -14,7 +15,7 @@ final class ActivityBuilder
     private SerializableDateTime $startDateTime;
     private array $data;
     private array $weather;
-    private ?string $gearId;
+    private ?GearId $gearId;
 
     private function __construct()
     {
@@ -51,7 +52,7 @@ final class ActivityBuilder
         return $this;
     }
 
-    public function withGearId(string $gearId): self
+    public function withGearId(GearId $gearId): self
     {
         $this->gearId = $gearId;
 

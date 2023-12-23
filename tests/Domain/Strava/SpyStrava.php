@@ -6,6 +6,7 @@ namespace App\Tests\Domain\Strava;
 
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\Stream\StreamType;
+use App\Domain\Strava\Gear\GearId;
 use App\Domain\Strava\Strava;
 use App\Domain\Strava\StravaClientId;
 use App\Domain\Strava\StravaClientSecret;
@@ -134,18 +135,18 @@ class SpyStrava extends Strava
         ];
     }
 
-    public function getGear(string $id): array
+    public function getGear(GearId $gearId): array
     {
         ++$this->numberOfCallsExecuted;
         $this->throw429IfMaxNumberOfCallsIsExceeded();
 
         $gears = [
-           'b12659861' => Json::decode('{"id":"b12659861","primary":false,"name":"Retro Race Bike","nickname":"Retro Race Bike","resource_state":3,"retired":false,"distance":1450147,"converted_distance":1450.1,"brand_name":null,"model_name":null,"frame_type":3,"description":"","weight":15,"createdOn":1687251898,"_id":1}'),
-           'b12659743' => Json::decode('{"id":"b12659743","primary":false,"name":"Zwift Hub","nickname":"Zwift Hub","resource_state":3,"retired":false,"distance":2831825,"converted_distance":2964.2,"brand_name":null,"model_name":null,"frame_type":3,"description":"This is a virtual trainer","weight":15,"createdOn":1687251898,"_id":2}'),
-            'b12659792' => Json::decode('{"id":"b12659792","primary":false,"name":"Elite Direto XR-T","nickname":"Elite Direto XR-T","resource_state":3,"retired":true,"distance":946270,"converted_distance":946.3,"brand_name":null,"model_name":null,"frame_type":3,"description":"This is a virtual trainer","weight":15,"createdOn":1687251899,"_id":3}'),
+            'gear-b12659861' => Json::decode('{"id":"b12659861","primary":false,"name":"Retro Race Bike","nickname":"Retro Race Bike","resource_state":3,"retired":false,"distance":1450147,"converted_distance":1450.1,"brand_name":null,"model_name":null,"frame_type":3,"description":"","weight":15,"createdOn":1687251898,"_id":1}'),
+            'gear-b12659743' => Json::decode('{"id":"b12659743","primary":false,"name":"Zwift Hub","nickname":"Zwift Hub","resource_state":3,"retired":false,"distance":2831825,"converted_distance":2964.2,"brand_name":null,"model_name":null,"frame_type":3,"description":"This is a virtual trainer","weight":15,"createdOn":1687251898,"_id":2}'),
+            'gear-b12659792' => Json::decode('{"id":"b12659792","primary":false,"name":"Elite Direto XR-T","nickname":"Elite Direto XR-T","resource_state":3,"retired":true,"distance":946270,"converted_distance":946.3,"brand_name":null,"model_name":null,"frame_type":3,"description":"This is a virtual trainer","weight":15,"createdOn":1687251899,"_id":3}'),
         ];
 
-        return $gears[$id];
+        return $gears[(string) $gearId];
     }
 
     public function getChallengesOnPublicProfile(): array

@@ -7,7 +7,7 @@ namespace App\Domain\Strava\Challenge;
 use App\Infrastructure\ValueObject\String\Identifier;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
-readonly class ChallengeId extends Identifier
+final readonly class ChallengeId extends Identifier
 {
     public static function getPrefix(): string
     {

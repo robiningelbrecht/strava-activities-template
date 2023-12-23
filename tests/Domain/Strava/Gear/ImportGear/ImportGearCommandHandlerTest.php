@@ -4,6 +4,7 @@ namespace App\Tests\Domain\Strava\Gear\ImportGear;
 
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
+use App\Domain\Strava\Gear\GearId;
 use App\Domain\Strava\Gear\ImportGear\ImportGear;
 use App\Domain\Strava\Gear\WriteModel\GearRepository;
 use App\Domain\Strava\Strava;
@@ -30,25 +31,25 @@ class ImportGearCommandHandlerTest extends DatabaseTestCase
 
         $this->getContainer()->get(GearRepository::class)->add(
             GearBuilder::fromDefaults()
-                ->withGearId('b12659861')
+                ->withGearId(GearId::fromUnprefixed('b12659861'))
                 ->build()
         );
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(1))
-                ->withGearId('b12659861')
+                ->withGearId(GearId::fromUnprefixed('b12659861'))
                 ->build()
         );
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(2))
-                ->withGearId('b12659743')
+                ->withGearId(GearId::fromUnprefixed('b12659743'))
                 ->build()
         );
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(3))
-                ->withGearId('b12659792')
+                ->withGearId(GearId::fromUnprefixed('b12659792'))
                 ->build()
         );
 

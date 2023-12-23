@@ -4,6 +4,7 @@ namespace App\Tests\Domain\Strava;
 
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Challenge\ImportChallenges\ImportChallengesCommandHandler;
+use App\Domain\Strava\Gear\GearId;
 use App\Domain\Strava\Strava;
 use App\Domain\Strava\StravaClientId;
 use App\Domain\Strava\StravaClientSecret;
@@ -202,7 +203,7 @@ class StravaTest extends TestCase
                 return new Response(200, [], Json::encode([]));
             });
 
-        $this->strava->getGear(3);
+        $this->strava->getGear(GearId::fromUnprefixed(3));
     }
 
     public function testGetChallengesOnPublicProfile(): void

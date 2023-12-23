@@ -3,6 +3,7 @@
 namespace App\Tests\Domain\Strava\Gear;
 
 use App\Domain\Strava\Gear\GearCollection;
+use App\Domain\Strava\Gear\GearId;
 use App\Domain\Strava\Gear\ReadModel\DbalGearDetailsRepository;
 use App\Domain\Strava\Gear\ReadModel\GearDetailsRepository;
 use App\Domain\Strava\Gear\WriteModel\DbalGearRepository;
@@ -18,7 +19,7 @@ class DbalGearRepositoryTest extends DatabaseTestCase
     public function testFindAndSave(): void
     {
         $gear = GearBuilder::fromDefaults()
-            ->withGearId(1)
+            ->withGearId(GearId::fromUnprefixed(1))
             ->withDistanceInMeter(1230)
             ->build();
         $this->gearRepository->add($gear);
@@ -32,23 +33,23 @@ class DbalGearRepositoryTest extends DatabaseTestCase
     public function testItShouldThrowWhenNotFound(): void
     {
         $this->expectException(EntityNotFound::class);
-        $this->gearDetailsRepository->find('1');
+        $this->gearDetailsRepository->find(GearId::fromUnprefixed('1'));
     }
 
     public function testFindAll(): void
     {
         $gearOne = GearBuilder::fromDefaults()
-            ->withGearId(1)
+            ->withGearId(GearId::fromUnprefixed(1))
             ->withDistanceInMeter(1230)
             ->build();
         $this->gearRepository->add($gearOne);
         $gearTwo = GearBuilder::fromDefaults()
-            ->withGearId(2)
+            ->withGearId(GearId::fromUnprefixed(2))
             ->withDistanceInMeter(10230)
             ->build();
         $this->gearRepository->add($gearTwo);
         $gearThree = GearBuilder::fromDefaults()
-            ->withGearId(3)
+            ->withGearId(GearId::fromUnprefixed(3))
             ->withDistanceInMeter(230)
             ->build();
         $this->gearRepository->add($gearThree);
@@ -62,7 +63,7 @@ class DbalGearRepositoryTest extends DatabaseTestCase
     public function testUpdate(): void
     {
         $gear = GearBuilder::fromDefaults()
-            ->withGearId(1)
+            ->withGearId(GearId::fromUnprefixed(1))
             ->withDistanceInMeter(1000)
             ->build();
         $this->gearRepository->add($gear);
@@ -77,7 +78,7 @@ class DbalGearRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             30000,
-            $this->gearDetailsRepository->find(1)->getDistanceInMeter()
+            $this->gearDetailsRepository->find(GearId::fromUnprefixed(1))->getDistanceInMeter()
         );
     }
 

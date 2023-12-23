@@ -36,7 +36,7 @@ final readonly class ImportGearCommandHandler implements CommandHandler
         assert($command instanceof ImportGear);
         $command->getOutput()->writeln('Importing gear...');
 
-        $gearIds = array_filter($this->activityDetailsRepository->findUniqueGearIds());
+        $gearIds = $this->activityDetailsRepository->findUniqueGearIds();
 
         foreach ($gearIds as $gearId) {
             try {

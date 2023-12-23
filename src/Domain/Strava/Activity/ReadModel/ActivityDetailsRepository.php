@@ -6,6 +6,7 @@ use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\ActivityIdCollection;
+use App\Domain\Strava\Gear\GearIdCollection;
 
 interface ActivityDetailsRepository
 {
@@ -15,8 +16,5 @@ interface ActivityDetailsRepository
 
     public function findActivityIds(): ActivityIdCollection;
 
-    /**
-     * @return string[]
-     */
-    public function findUniqueGearIds(): array;
+    public function findUniqueGearIds(): GearIdCollection;
 }

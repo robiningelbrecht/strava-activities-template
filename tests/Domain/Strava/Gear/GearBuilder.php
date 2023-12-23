@@ -5,18 +5,19 @@ declare(strict_types=1);
 namespace App\Tests\Domain\Strava\Gear;
 
 use App\Domain\Strava\Gear\Gear;
+use App\Domain\Strava\Gear\GearId;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final class GearBuilder
 {
-    private string $gearId;
+    private GearId $gearId;
     private SerializableDateTime $createdOn;
     private int $distanceInMeter;
     private array $data;
 
     private function __construct()
     {
-        $this->gearId = '1';
+        $this->gearId = GearId::fromUnprefixed('1');
         $this->createdOn = SerializableDateTime::fromString('2023-10-10');
         $this->distanceInMeter = 10023;
         $this->data = [
@@ -40,7 +41,7 @@ final class GearBuilder
         );
     }
 
-    public function withGearId(string $gearId): self
+    public function withGearId(GearId $gearId): self
     {
         $this->gearId = $gearId;
 

@@ -29,6 +29,15 @@ abstract readonly class Identifier extends NonEmptyStringLiteral implements \Jso
         return static::fromString(static::getPrefix().$unprefixed);
     }
 
+    public static function fromOptionalUnprefixed(?string $unprefixed): ?static
+    {
+        if (is_null($unprefixed)) {
+            return null;
+        }
+
+        return static::fromUnprefixed($unprefixed);
+    }
+
     public function toUnprefixedString(): string
     {
         return str_replace($this::getPrefix(), '', (string) $this);
