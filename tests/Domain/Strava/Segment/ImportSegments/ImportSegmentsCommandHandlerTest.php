@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Segment\ImportSegments;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Segment\ImportSegments\ImportSegments;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
@@ -24,7 +25,7 @@ class ImportSegmentsCommandHandlerTest extends DatabaseTestCase
 
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(1)
+                ->withActivityId(ActivityId::fromUnprefixed(1))
                 ->withData([
                     'segment_efforts' => [
                         [
@@ -41,7 +42,7 @@ class ImportSegmentsCommandHandlerTest extends DatabaseTestCase
         );
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(2)
+                ->withActivityId(ActivityId::fromUnprefixed(2))
                 ->withData([
                     'segment_efforts' => [
                         [
@@ -58,7 +59,7 @@ class ImportSegmentsCommandHandlerTest extends DatabaseTestCase
         );
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(3)
+                ->withActivityId(ActivityId::fromUnprefixed(3))
                 ->withData([])
                 ->build()
         );
@@ -66,7 +67,7 @@ class ImportSegmentsCommandHandlerTest extends DatabaseTestCase
             SegmentEffortBuilder::fromDefaults()
                 ->withId(2)
                 ->withSegmentId(1)
-                ->withActivityId(9542782314)
+                ->withActivityId(ActivityId::fromUnprefixed(9542782314))
                 ->withData([
                     'elapsed_time' => 9.3,
                     'average_watts' => 200,

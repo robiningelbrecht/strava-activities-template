@@ -5,6 +5,7 @@ namespace App\Domain\Strava\Activity\ReadModel;
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityId;
+use App\Domain\Strava\Activity\ActivityIdCollection;
 
 interface ActivityDetailsRepository
 {
@@ -12,10 +13,7 @@ interface ActivityDetailsRepository
 
     public function findAll(int $limit = null): ActivityCollection;
 
-    /**
-     * @return int[]
-     */
-    public function findActivityIds(): array;
+    public function findActivityIds(): ActivityIdCollection;
 
     /**
      * @return string[]

@@ -2,6 +2,7 @@
 
 namespace App\Domain\Strava;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Challenge\ImportChallenges\ImportChallengesCommandHandler;
 use App\Infrastructure\Serialization\Json;
@@ -102,9 +103,9 @@ class Strava
     /**
      * @return array<mixed>
      */
-    public function getActivity(int $id): array
+    public function getActivity(ActivityId $activityId): array
     {
-        return Json::decode($this->request('api/v3/activities/'.$id, 'GET', [
+        return Json::decode($this->request('api/v3/activities/'.$activityId, 'GET', [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer '.$this->getAccessToken(),
             ],
@@ -126,9 +127,9 @@ class Strava
     /**
      * @return array<mixed>
      */
-    public function getAllActivityStreams(int $id): array
+    public function getAllActivityStreams(ActivityId $activityId): array
     {
-        return Json::decode($this->request('api/v3/activities/'.$id.'/streams', 'GET', [
+        return Json::decode($this->request('api/v3/activities/'.$activityId.'/streams', 'GET', [
             RequestOptions::QUERY => [
                 'keys' => implode(',', array_map(fn (StreamType $streamType) => $streamType->value, StreamType::cases())),
             ],
@@ -141,7 +142,7 @@ class Strava
     /**
      * @return array<mixed>
      */
-    public function getActivityPhotos(int $activityId): array
+    public function getActivityPhotos(ActivityId $activityId): array
     {
         return Json::decode($this->request('api/v3/activities/'.$activityId.'/photos', 'GET', [
             RequestOptions::HEADERS => [

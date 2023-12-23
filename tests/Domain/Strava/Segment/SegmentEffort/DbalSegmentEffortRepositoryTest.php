@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Segment\SegmentEffort;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Segment\SegmentEffort\ReadModel\DbalSegmentEffortDetailsRepository;
 use App\Domain\Strava\Segment\SegmentEffort\ReadModel\SegmentEffortDetailsRepository;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortCollection;
@@ -80,19 +81,19 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
     {
         $segmentEffortOne = SegmentEffortBuilder::fromDefaults()
             ->withId(1)
-            ->withActivityId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(1))
             ->build();
         $this->segmentEffortRepository->add($segmentEffortOne);
 
         $segmentEffortTwo = SegmentEffortBuilder::fromDefaults()
             ->withId(2)
-            ->withActivityId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(1))
             ->build();
         $this->segmentEffortRepository->add($segmentEffortTwo);
 
         $segmentEffortThree = SegmentEffortBuilder::fromDefaults()
             ->withId(3)
-            ->withActivityId(2)
+            ->withActivityId(ActivityId::fromUnprefixed(2))
             ->build();
         $this->segmentEffortRepository->add($segmentEffortThree);
 

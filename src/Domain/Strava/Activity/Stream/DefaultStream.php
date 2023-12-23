@@ -2,6 +2,7 @@
 
 namespace App\Domain\Strava\Activity\Stream;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,7 +18,7 @@ final class DefaultStream implements ActivityStream
      */
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string')]
-        private readonly int $activityId,
+        private readonly ActivityId $activityId,
         #[ORM\Id, ORM\Column(type: 'string')]
         private readonly StreamType $streamType,
         #[ORM\Column(type: 'datetime_immutable')]
@@ -31,7 +32,7 @@ final class DefaultStream implements ActivityStream
      * @param array<mixed> $streamData
      */
     public static function create(
-        int $activityId,
+        ActivityId $activityId,
         StreamType $streamType,
         array $streamData,
         SerializableDateTime $createdOn
@@ -48,7 +49,7 @@ final class DefaultStream implements ActivityStream
      * @param array<mixed> $streamData
      */
     public static function fromState(
-        int $activityId,
+        ActivityId $activityId,
         StreamType $streamType,
         array $streamData,
         SerializableDateTime $createdOn
@@ -63,7 +64,7 @@ final class DefaultStream implements ActivityStream
 
     public function getName(): string
     {
-        return $this->getActivityId().' - '.$this->getStreamType()->value;
+        return $this->getActivityId()->toUnprefixedString().' - '.$this->getStreamType()->value;
     }
 
     public function getCreatedOn(): SerializableDateTime
@@ -71,7 +72,7 @@ final class DefaultStream implements ActivityStream
         return $this->createdOn;
     }
 
-    public function getActivityId(): int
+    public function getActivityId(): ActivityId
     {
         return $this->activityId;
     }

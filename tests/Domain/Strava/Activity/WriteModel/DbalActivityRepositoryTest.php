@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Activity\WriteModel;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Activity\WriteModel\DbalActivityRepository;
 use App\Infrastructure\Eventing\EventBus;
@@ -46,7 +47,7 @@ class DbalActivityRepositoryTest extends DatabaseTestCase
     public function testUpdate(): void
     {
         $activity = ActivityBuilder::fromDefaults()
-            ->withActivityId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 14:00:34'))
             ->withGearId('1')
             ->build();

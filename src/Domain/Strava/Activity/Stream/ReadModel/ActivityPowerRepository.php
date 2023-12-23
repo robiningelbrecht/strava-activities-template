@@ -2,6 +2,7 @@
 
 namespace App\Domain\Strava\Activity\Stream\ReadModel;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\Stream\PowerOutput;
 
 interface ActivityPowerRepository
@@ -11,7 +12,7 @@ interface ActivityPowerRepository
     /**
      * @return array<mixed>
      */
-    public function findBestForActivity(int $activityId): array;
+    public function findBestForActivity(ActivityId $activityId): array;
 
     /**
      * @return PowerOutput[]
@@ -21,5 +22,5 @@ interface ActivityPowerRepository
     /**
      * @return array<int, int>
      */
-    public function findTimeInSecondsPerWattageForActivity(int $activityId): array;
+    public function findTimeInSecondsPerWattageForActivity(ActivityId $activityId): array;
 }

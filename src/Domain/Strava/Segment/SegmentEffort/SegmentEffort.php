@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Strava\Segment\SegmentEffort;
 
 use App\Domain\Strava\Activity\Activity;
+use App\Domain\Strava\Activity\ActivityId;
 use App\Infrastructure\Time\TimeFormatter;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,7 +26,7 @@ final class SegmentEffort
         #[ORM\Column(type: 'string')]
         private readonly int $segmentId,
         #[ORM\Column(type: 'string')]
-        private readonly int $activityId,
+        private readonly ActivityId $activityId,
         #[ORM\Column(type: 'datetime_immutable')]
         private readonly SerializableDateTime $startDateTime,
         #[ORM\Column(type: 'json')]
@@ -39,7 +40,7 @@ final class SegmentEffort
     public static function create(
         int $segmentEffortId,
         int $segmentId,
-        int $activityId,
+        ActivityId $activityId,
         SerializableDateTime $startDateTime,
         array $data,
     ): self {
@@ -58,7 +59,7 @@ final class SegmentEffort
     public static function fromState(
         int $segmentEffortId,
         int $segmentId,
-        int $activityId,
+        ActivityId $activityId,
         SerializableDateTime $startDateTime,
         array $data,
     ): self {
@@ -81,7 +82,7 @@ final class SegmentEffort
         return $this->segmentId;
     }
 
-    public function getActivityId(): int
+    public function getActivityId(): ActivityId
     {
         return $this->activityId;
     }

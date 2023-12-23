@@ -2,6 +2,7 @@
 
 namespace App\Domain\Strava\Activity\Stream\ReadModel;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStream;
 use App\Domain\Strava\Activity\Stream\PowerOutput;
@@ -24,10 +25,10 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
     /**
      * @return array<mixed>
      */
-    public function findBestForActivity(int $activityId): array
+    public function findBestForActivity(ActivityId $activityId): array
     {
         if (array_key_exists($activityId, StreamBasedActivityPowerRepository::$cachedPowerOutputs)) {
-            return StreamBasedActivityPowerRepository::$cachedPowerOutputs[$activityId];
+            return StreamBasedActivityPowerRepository::$cachedPowerOutputs[(string) $activityId];
         }
 
         $activities = $this->activityDetailsRepository->findAll();
@@ -60,13 +61,13 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
             }
         }
 
-        return StreamBasedActivityPowerRepository::$cachedPowerOutputs[$activityId];
+        return StreamBasedActivityPowerRepository::$cachedPowerOutputs[(string) $activityId];
     }
 
     /**
      * @return array<int, int>
      */
-    public function findTimeInSecondsPerWattageForActivity(int $activityId): array
+    public function findTimeInSecondsPerWattageForActivity(ActivityId $activityId): array
     {
         if (!$this->activityStreamDetailsRepository->hasOneForActivityAndStreamType(
             activityId: $activityId,

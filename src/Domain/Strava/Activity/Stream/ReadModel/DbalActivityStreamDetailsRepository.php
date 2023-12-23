@@ -2,6 +2,7 @@
 
 namespace App\Domain\Strava\Activity\Stream\ReadModel;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\Stream\ActivityStream;
 use App\Domain\Strava\Activity\Stream\ActivityStreamCollection;
 use App\Domain\Strava\Activity\Stream\DefaultStream;
@@ -25,7 +26,7 @@ final readonly class DbalActivityStreamDetailsRepository implements ActivityStre
         $this->connection = $connectionFactory->getReadOnly();
     }
 
-    public function isImportedForActivity(int $activityId): bool
+    public function isImportedForActivity(ActivityId $activityId): bool
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
@@ -36,7 +37,7 @@ final readonly class DbalActivityStreamDetailsRepository implements ActivityStre
         return !empty($queryBuilder->executeQuery()->fetchOne());
     }
 
-    public function hasOneForActivityAndStreamType(int $activityId, StreamType $streamType): bool
+    public function hasOneForActivityAndStreamType(ActivityId $activityId, StreamType $streamType): bool
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
@@ -63,7 +64,7 @@ final readonly class DbalActivityStreamDetailsRepository implements ActivityStre
         ));
     }
 
-    public function findByActivityAndStreamTypes(int $activityId, StreamTypeCollection $streamTypes): ActivityStreamCollection
+    public function findByActivityAndStreamTypes(ActivityId $activityId, StreamTypeCollection $streamTypes): ActivityStreamCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
@@ -78,7 +79,7 @@ final readonly class DbalActivityStreamDetailsRepository implements ActivityStre
         ));
     }
 
-    public function findByActivityId(int $activityId): ActivityStreamCollection
+    public function findByActivityId(ActivityId $activityId): ActivityStreamCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
@@ -98,7 +99,7 @@ final readonly class DbalActivityStreamDetailsRepository implements ActivityStre
     private function buildFromResult(array $result): ActivityStream
     {
         return DefaultStream::fromState(
-            activityId: $result['activityId'],
+            activityId: ActivityId::fromString($result['activityId']),
             streamType: StreamType::from($result['streamType']),
             streamData: Json::decode($result['data']),
             createdOn: SerializableDateTime::fromString($result['createdOn']),

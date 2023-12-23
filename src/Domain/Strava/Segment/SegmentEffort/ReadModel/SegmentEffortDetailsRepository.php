@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava\Segment\SegmentEffort\ReadModel;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffort;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortCollection;
 
@@ -13,5 +14,5 @@ interface SegmentEffortDetailsRepository
 
     public function findBySegmentId(int $segmentId): SegmentEffortCollection;
 
-    public function findByActivityId(int $activityId): SegmentEffortCollection;
+    public function findByActivityId(ActivityId $activityId): SegmentEffortCollection;
 }

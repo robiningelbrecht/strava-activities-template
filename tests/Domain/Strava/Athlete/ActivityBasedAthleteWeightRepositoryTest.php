@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Athlete;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Athlete\ReadModel\ActivityBasedAthleteWeightRepository;
 use App\Domain\Strava\Athlete\ReadModel\AthleteWeightRepository;
@@ -19,7 +20,7 @@ class ActivityBasedAthleteWeightRepositoryTest extends DatabaseTestCase
     {
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(2)
+                ->withActivityId(ActivityId::fromUnprefixed(2))
                 ->withStartDateTime(SerializableDateTime::fromString('2023-02-01'))
                 ->withData([
                     'athlete_weight' => 68,
@@ -29,7 +30,7 @@ class ActivityBasedAthleteWeightRepositoryTest extends DatabaseTestCase
 
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(1)
+                ->withActivityId(ActivityId::fromUnprefixed(1))
                 ->withStartDateTime(SerializableDateTime::fromString('2023-04-01'))
                 ->withData([
                     'athlete_weight' => 69,
@@ -59,7 +60,7 @@ class ActivityBasedAthleteWeightRepositoryTest extends DatabaseTestCase
     {
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(2)
+                ->withActivityId(ActivityId::fromUnprefixed(2))
                 ->withStartDateTime(SerializableDateTime::fromString('2023-02-01'))
                 ->withData([
                     'athlete_weight' => 68,
@@ -69,7 +70,7 @@ class ActivityBasedAthleteWeightRepositoryTest extends DatabaseTestCase
 
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(1)
+                ->withActivityId(ActivityId::fromUnprefixed(1))
                 ->withStartDateTime(SerializableDateTime::fromString('2023-04-01'))
                 ->withData([
                     'athlete_weight' => 69,

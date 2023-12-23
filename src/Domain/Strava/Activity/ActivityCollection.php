@@ -57,7 +57,7 @@ final class ActivityCollection extends Collection
         return $this->filter(fn (Activity $activity) => $activityType === $activity->getType());
     }
 
-    public function getByActivityId(int $activityId): Activity
+    public function getByActivityId(ActivityId $activityId): Activity
     {
         $activities = $this->filter(fn (Activity $activity) => $activityId === $activity->getId())->toArray();
 

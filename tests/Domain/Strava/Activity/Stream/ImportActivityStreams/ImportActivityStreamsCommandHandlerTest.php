@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Activity\Stream\ImportActivityStreams;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\Stream\ImportActivityStreams\ImportActivityStreams;
 use App\Domain\Strava\Activity\Stream\WriteModel\ActivityStreamRepository;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
@@ -29,27 +30,27 @@ class ImportActivityStreamsCommandHandlerTest extends DatabaseTestCase
 
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(4)
+                ->withActivityId(ActivityId::fromUnprefixed(4))
                 ->build()
         );
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(5)
+                ->withActivityId(ActivityId::fromUnprefixed(5))
                 ->build()
         );
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(6)
+                ->withActivityId(ActivityId::fromUnprefixed(6))
                 ->build()
         );
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(7)
+                ->withActivityId(ActivityId::fromUnprefixed(7))
                 ->build()
         );
         $this->getContainer()->get(ActivityStreamRepository::class)->add(
             DefaultStreamBuilder::fromDefaults()
-                ->withActivityId(4)
+                ->withActivityId(ActivityId::fromUnprefixed(4))
                 ->build()
         );
 

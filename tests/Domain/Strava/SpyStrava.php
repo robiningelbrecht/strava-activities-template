@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Domain\Strava;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Strava;
 use App\Domain\Strava\StravaClientId;
@@ -80,20 +81,20 @@ class SpyStrava extends Strava
         return $this->activities;
     }
 
-    public function getActivity(int $id): array
+    public function getActivity(ActivityId $activityId): array
     {
         ++$this->numberOfCallsExecuted;
         $this->throw429IfMaxNumberOfCallsIsExceeded();
 
-        return $this->activities[$id];
+        return $this->activities[(string) $activityId];
     }
 
-    public function getAllActivityStreams(int $id): array
+    public function getAllActivityStreams(ActivityId $activityId): array
     {
         ++$this->numberOfCallsExecuted;
         $this->throw429IfMaxNumberOfCallsIsExceeded();
 
-        if (5 === $id) {
+        if (ActivityId::fromUnprefixed('5') == $activityId) {
             return [
                 [
                     'type' => 'distance',
@@ -114,7 +115,7 @@ class SpyStrava extends Strava
         ];
     }
 
-    public function getActivityPhotos(int $activityId): array
+    public function getActivityPhotos(ActivityId $activityId): array
     {
         ++$this->numberOfCallsExecuted;
         $this->throw429IfMaxNumberOfCallsIsExceeded();

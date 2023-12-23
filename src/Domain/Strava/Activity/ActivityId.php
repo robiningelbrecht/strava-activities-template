@@ -12,13 +12,4 @@ final readonly class ActivityId extends Identifier
     {
         return 'activity-';
     }
-
-    protected function validate(string $string): void
-    {
-        parent::validate($string);
-
-        if (!is_int($this->toUnprefixedString())) {
-            throw new \InvalidArgumentException($this->toUnprefixedString().' needs to be an integer');
-        }
-    }
 }

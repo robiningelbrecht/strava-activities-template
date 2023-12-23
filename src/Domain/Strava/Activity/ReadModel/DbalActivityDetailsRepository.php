@@ -5,6 +5,7 @@ namespace App\Domain\Strava\Activity\ReadModel;
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityId;
+use App\Domain\Strava\Activity\ActivityIdCollection;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
@@ -60,17 +61,17 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
         return DbalActivityDetailsRepository::$cachedActivities[$cacheKey];
     }
 
-    /**
-     * @return int[]
-     */
-    public function findActivityIds(): array
+    public function findActivityIds(): ActivityIdCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('activityId')
             ->from('Activity')
             ->orderBy('startDateTime', 'DESC');
 
-        return $queryBuilder->executeQuery()->fetchFirstColumn();
+        return ActivityIdCollection::fromArray(array_map(
+            fn (string $id) => ActivityId::fromString($id),
+            $queryBuilder->executeQuery()->fetchFirstColumn(),
+        ));
     }
 
     /**
