@@ -3,9 +3,11 @@
 namespace App\Domain\Strava\Activity\ImportActivities;
 
 use App\Domain\Strava\Activity\Activity;
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\ActivityType;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
+use App\Domain\Strava\Gear\GearId;
 use App\Domain\Strava\ReachedStravaApiRateLimits;
 use App\Domain\Strava\Strava;
 use App\Domain\Weather\OpenMeteo\OpenMeteo;
@@ -42,7 +44,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
         $athlete = $this->strava->getAthlete();
         $allActivities = $this->activityDetailsRepository->findAll();
         $activitiesToDelete = array_combine(
-            $allActivities->map(fn (Activity $activity) => $activity->getId()),
+            $allActivities->map(fn (Activity $activity) => (string) $activity->getId()),
             $allActivities->toArray(),
         );
 
@@ -50,15 +52,15 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
             if (!$activityType = ActivityType::tryFrom($stravaActivity['type'])) {
                 continue;
             }
-
+            $activityId = ActivityId::fromUnprefixed($stravaActivity['id']);
             try {
-                $activity = $this->activityDetailsRepository->find($stravaActivity['id']);
+                $activity = $this->activityDetailsRepository->find($activityId);
                 $activity
                     ->updateName($stravaActivity['name'])
                     ->updateKudoCount($stravaActivity['kudos_count'] ?? 0)
-                    ->updateGearId($stravaActivity['gear_id'] ?? null);
+                    ->updateGearId(GearId::fromOptionalUnprefixed($stravaActivity['gear_id'] ?? null));
                 $this->activityRepository->update($activity);
-                unset($activitiesToDelete[$activity->getId()]);
+                unset($activitiesToDelete[(string) $activity->getId()]);
                 $command->getOutput()->writeln(sprintf('  => Updated activity "%s"', $activity->getName()));
             } catch (EntityNotFound) {
                 try {
@@ -67,13 +69,13 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                         $stravaActivity['start_date_local']
                     );
                     $activity = Activity::create(
-                        activityId: $stravaActivity['id'],
+                        activityId: $activityId,
                         startDateTime: $startDate,
                         data: [
-                            ...$this->strava->getActivity($stravaActivity['id']),
+                            ...$this->strava->getActivity($activityId),
                             'athlete_weight' => $athlete['weight'],
                         ],
-                        gearId: $stravaActivity['gear_id'] ?? null
+                        gearId: GearId::fromOptionalUnprefixed($stravaActivity['gear_id'] ?? null)
                     );
 
                     $localImagePaths = [];
@@ -108,7 +110,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                     }
 
                     $this->activityRepository->add($activity);
-                    unset($activitiesToDelete[$activity->getId()]);
+                    unset($activitiesToDelete[(string) $activity->getId()]);
                     $command->getOutput()->writeln(sprintf('  => Imported activity "%s"', $activity->getName()));
                     // Try to avoid Strava rate limits.
                     $this->sleep->sweetDreams(10);

@@ -16,7 +16,7 @@ final class ChallengeBuilder
 
     private function __construct()
     {
-        $this->challengeId = ChallengeId::fromString('test');
+        $this->challengeId = ChallengeId::fromUnprefixed('test');
         $this->createdOn = SerializableDateTime::fromString('2023-10-10');
         $this->data = [];
     }

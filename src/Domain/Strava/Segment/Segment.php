@@ -19,7 +19,7 @@ final class Segment
      */
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string', unique: true)]
-        private readonly int $segmentId,
+        private readonly SegmentId $segmentId,
         #[ORM\Column(type: 'string', nullable: true)]
         private readonly Name $name,
         #[ORM\Column(type: 'json')]
@@ -31,7 +31,7 @@ final class Segment
      * @param array<mixed> $data
      */
     public static function create(
-        int $segmentId,
+        SegmentId $segmentId,
         Name $name,
         array $data,
     ): self {
@@ -46,7 +46,7 @@ final class Segment
      * @param array<mixed> $data
      */
     public static function fromState(
-        int $segmentId,
+        SegmentId $segmentId,
         Name $name,
         array $data,
     ): self {
@@ -57,7 +57,7 @@ final class Segment
         );
     }
 
-    public function getId(): int
+    public function getId(): SegmentId
     {
         return $this->segmentId;
     }

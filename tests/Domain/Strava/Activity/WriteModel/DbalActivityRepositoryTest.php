@@ -2,8 +2,10 @@
 
 namespace App\Tests\Domain\Strava\Activity\WriteModel;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Activity\WriteModel\DbalActivityRepository;
+use App\Domain\Strava\Gear\GearId;
 use App\Infrastructure\Eventing\EventBus;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Time\Year;
@@ -46,9 +48,9 @@ class DbalActivityRepositoryTest extends DatabaseTestCase
     public function testUpdate(): void
     {
         $activity = ActivityBuilder::fromDefaults()
-            ->withActivityId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 14:00:34'))
-            ->withGearId('1')
+            ->withGearId(GearId::fromUnprefixed('1'))
             ->build();
         $this->activityRepository->add($activity);
 
@@ -58,7 +60,7 @@ class DbalActivityRepositoryTest extends DatabaseTestCase
         );
 
         $activity->updateKudoCount(3);
-        $activity->updateGearId('10');
+        $activity->updateGearId(GearId::fromUnprefixed('10'));
         $this->activityRepository->update($activity);
 
         $this->assertMatchesJsonSnapshot(

@@ -2,6 +2,7 @@
 
 namespace App\Domain\Strava\Activity\Stream\ReadModel;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStream;
 use App\Domain\Strava\Activity\Stream\PowerOutput;
@@ -24,17 +25,17 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
     /**
      * @return array<mixed>
      */
-    public function findBestForActivity(int $activityId): array
+    public function findBestForActivity(ActivityId $activityId): array
     {
-        if (array_key_exists($activityId, StreamBasedActivityPowerRepository::$cachedPowerOutputs)) {
-            return StreamBasedActivityPowerRepository::$cachedPowerOutputs[$activityId];
+        if (array_key_exists((string) $activityId, StreamBasedActivityPowerRepository::$cachedPowerOutputs)) {
+            return StreamBasedActivityPowerRepository::$cachedPowerOutputs[(string) $activityId];
         }
 
         $activities = $this->activityDetailsRepository->findAll();
         $powerStreams = $this->activityStreamDetailsRepository->findByStreamType(StreamType::WATTS);
 
         foreach ($activities as $activity) {
-            StreamBasedActivityPowerRepository::$cachedPowerOutputs[$activity->getId()] = [];
+            StreamBasedActivityPowerRepository::$cachedPowerOutputs[(string) $activity->getId()] = [];
             $powerStreamsForActivity = $powerStreams->filter(fn (ActivityStream $stream) => $stream->getActivityId() == $activity->getId());
 
             if ($powerStreamsForActivity->isEmpty()) {
@@ -52,7 +53,7 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
                 if (!$bestRelativeAverageForTimeInterval = $stream->getBestRelativeAverageForTimeInterval($timeIntervalInSeconds, $activity->getAthleteWeight())) {
                     continue;
                 }
-                StreamBasedActivityPowerRepository::$cachedPowerOutputs[$activity->getId()][$timeIntervalInSeconds] = PowerOutput::fromState(
+                StreamBasedActivityPowerRepository::$cachedPowerOutputs[(string) $activity->getId()][$timeIntervalInSeconds] = PowerOutput::fromState(
                     time: (int) $interval->totalHours ? $interval->totalHours.' h' : ((int) $interval->totalMinutes ? $interval->totalMinutes.' m' : $interval->totalSeconds.' s'),
                     power: $bestAverageForTimeInterval,
                     relativePower: $bestRelativeAverageForTimeInterval,
@@ -60,13 +61,13 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
             }
         }
 
-        return StreamBasedActivityPowerRepository::$cachedPowerOutputs[$activityId];
+        return StreamBasedActivityPowerRepository::$cachedPowerOutputs[(string) $activityId];
     }
 
     /**
      * @return array<int, int>
      */
-    public function findTimeInSecondsPerWattageForActivity(int $activityId): array
+    public function findTimeInSecondsPerWattageForActivity(ActivityId $activityId): array
     {
         if (!$this->activityStreamDetailsRepository->hasOneForActivityAndStreamType(
             activityId: $activityId,

@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava\Challenge;
 
-use App\Infrastructure\ValueObject\String\NonEmptyStringLiteral;
+use App\Infrastructure\ValueObject\String\Identifier;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
-class ChallengeId extends NonEmptyStringLiteral
+final readonly class ChallengeId extends Identifier
 {
+    public static function getPrefix(): string
+    {
+        return 'challenge-';
+    }
+
     public static function fromDateAndName(
         SerializableDateTime $createdOn,
         string $name,
@@ -16,7 +21,7 @@ class ChallengeId extends NonEmptyStringLiteral
         /** @var string $sanitizedString */
         $sanitizedString = preg_replace("/\s+/", '_', substr($name, 0, 250));
 
-        return self::fromString(
+        return self::fromUnprefixed(
             $createdOn->format('Y-m_').strtolower($sanitizedString)
         );
     }

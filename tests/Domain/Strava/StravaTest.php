@@ -2,7 +2,9 @@
 
 namespace App\Tests\Domain\Strava;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Challenge\ImportChallenges\ImportChallengesCommandHandler;
+use App\Domain\Strava\Gear\GearId;
 use App\Domain\Strava\Strava;
 use App\Domain\Strava\StravaClientId;
 use App\Domain\Strava\StravaClientSecret;
@@ -101,7 +103,7 @@ class StravaTest extends TestCase
                 return new Response(200, [], Json::encode([]));
             });
 
-        $this->strava->getActivity(3);
+        $this->strava->getActivity(ActivityId::fromUnprefixed(3));
     }
 
     public function testGetActivityZones(): void
@@ -126,7 +128,7 @@ class StravaTest extends TestCase
                 return new Response(200, [], Json::encode([]));
             });
 
-        $this->strava->getActivityZones(3);
+        $this->strava->getActivityZones(ActivityId::fromUnprefixed(3));
     }
 
     public function testGetAllActivityStreams(): void
@@ -151,7 +153,7 @@ class StravaTest extends TestCase
                 return new Response(200, [], Json::encode([]));
             });
 
-        $this->strava->getAllActivityStreams(3);
+        $this->strava->getAllActivityStreams(ActivityId::fromUnprefixed(3));
     }
 
     public function testGetAllActivityPhotos(): void
@@ -176,7 +178,7 @@ class StravaTest extends TestCase
                 return new Response(200, [], Json::encode([]));
             });
 
-        $this->strava->getActivityPhotos(3);
+        $this->strava->getActivityPhotos(ActivityId::fromUnprefixed(3));
     }
 
     public function testGetGear(): void
@@ -201,7 +203,7 @@ class StravaTest extends TestCase
                 return new Response(200, [], Json::encode([]));
             });
 
-        $this->strava->getGear(3);
+        $this->strava->getGear(GearId::fromUnprefixed(3));
     }
 
     public function testGetChallengesOnPublicProfile(): void

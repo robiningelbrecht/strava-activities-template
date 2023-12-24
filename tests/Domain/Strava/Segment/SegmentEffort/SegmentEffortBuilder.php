@@ -4,22 +4,25 @@ declare(strict_types=1);
 
 namespace App\Tests\Domain\Strava\Segment\SegmentEffort;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffort;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortId;
+use App\Domain\Strava\Segment\SegmentId;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final class SegmentEffortBuilder
 {
-    private int $segmentEffortId;
-    private int $segmentId;
-    private int $activityId;
+    private SegmentEffortId $segmentEffortId;
+    private SegmentId $segmentId;
+    private ActivityId $activityId;
     private SerializableDateTime $startDateTime;
     private array $data;
 
     private function __construct()
     {
-        $this->segmentEffortId = 1;
-        $this->segmentId = 1;
-        $this->activityId = 1;
+        $this->segmentEffortId = SegmentEffortId::fromUnprefixed('1');
+        $this->segmentId = SegmentId::fromUnprefixed('1');
+        $this->activityId = ActivityId::fromUnprefixed('1');
         $this->startDateTime = SerializableDateTime::fromString('2023-10-10');
         $this->data = [];
     }
@@ -40,21 +43,21 @@ final class SegmentEffortBuilder
         );
     }
 
-    public function withId(int $id): self
+    public function withId(SegmentEffortId $id): self
     {
         $this->segmentEffortId = $id;
 
         return $this;
     }
 
-    public function withSegmentId(int $id): self
+    public function withSegmentId(SegmentId $id): self
     {
         $this->segmentId = $id;
 
         return $this;
     }
 
-    public function withActivityId(int $activityId): self
+    public function withActivityId(ActivityId $activityId): self
     {
         $this->activityId = $activityId;
 

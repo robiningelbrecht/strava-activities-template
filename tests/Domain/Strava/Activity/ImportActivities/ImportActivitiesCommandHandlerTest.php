@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Activity\ImportActivities;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\ImportActivities\ImportActivities;
 use App\Domain\Strava\Activity\Stream\WriteModel\ActivityStreamRepository;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
@@ -31,7 +32,7 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
 
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(4)
+                ->withActivityId(ActivityId::fromUnprefixed(4))
                 ->build()
         );
 
@@ -51,7 +52,7 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
 
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(4)
+                ->withActivityId(ActivityId::fromUnprefixed(4))
                 ->build()
         );
 
@@ -61,15 +62,15 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
                     'kudos_count' => 1,
                     'name' => 'Delete this one',
                 ])
-                ->withActivityId(1000)
+                ->withActivityId(ActivityId::fromUnprefixed(1000))
                 ->build()
         );
         $segmentEffortOne = SegmentEffortBuilder::fromDefaults()
-            ->withActivityId(1000)
+            ->withActivityId(ActivityId::fromUnprefixed(1000))
             ->build();
         $this->getContainer()->get(SegmentEffortRepository::class)->add($segmentEffortOne);
         $stream = DefaultStreamBuilder::fromDefaults()
-            ->withActivityId(1000)
+            ->withActivityId(ActivityId::fromUnprefixed(1000))
             ->build();
         $this->getContainer()->get(ActivityStreamRepository::class)->add($stream);
 
@@ -79,7 +80,7 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
                     'kudos_count' => 1,
                     'name' => 'Delete this one as well',
                 ])
-                ->withActivityId(1001)
+                ->withActivityId(ActivityId::fromUnprefixed(1001))
                 ->build()
         );
 
@@ -95,7 +96,7 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
 
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
-                ->withActivityId(4)
+                ->withActivityId(ActivityId::fromUnprefixed(4))
                 ->build()
         );
 

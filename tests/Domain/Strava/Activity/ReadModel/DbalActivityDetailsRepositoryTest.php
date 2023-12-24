@@ -3,10 +3,14 @@
 namespace App\Tests\Domain\Strava\Activity\ReadModel;
 
 use App\Domain\Strava\Activity\ActivityCollection;
+use App\Domain\Strava\Activity\ActivityId;
+use App\Domain\Strava\Activity\ActivityIdCollection;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\ReadModel\DbalActivityDetailsRepository;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Activity\WriteModel\DbalActivityRepository;
+use App\Domain\Strava\Gear\GearId;
+use App\Domain\Strava\Gear\GearIdCollection;
 use App\Infrastructure\Eventing\EventBus;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -32,23 +36,23 @@ class DbalActivityDetailsRepositoryTest extends DatabaseTestCase
     public function testItShouldThrowWhenNotFound(): void
     {
         $this->expectException(EntityNotFound::class);
-        $this->activityDetailsRepository->find(1);
+        $this->activityDetailsRepository->find(ActivityId::fromUnprefixed(1));
     }
 
     public function testFindAll(): void
     {
         $activityOne = ActivityBuilder::fromDefaults()
-            ->withActivityId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 14:00:34'))
             ->build();
         $this->activityRepository->add($activityOne);
         $activityTwo = ActivityBuilder::fromDefaults()
-            ->withActivityId(2)
+            ->withActivityId(ActivityId::fromUnprefixed(2))
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 13:00:34'))
             ->build();
         $this->activityRepository->add($activityTwo);
         $activityThree = ActivityBuilder::fromDefaults()
-            ->withActivityId(3)
+            ->withActivityId(ActivityId::fromUnprefixed(3))
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-09 14:00:34'))
             ->build();
         $this->activityRepository->add($activityThree);
@@ -62,23 +66,27 @@ class DbalActivityDetailsRepositoryTest extends DatabaseTestCase
     public function testFindActivityIds(): void
     {
         $activityOne = ActivityBuilder::fromDefaults()
-            ->withActivityId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 14:00:34'))
             ->build();
         $this->activityRepository->add($activityOne);
         $activityTwo = ActivityBuilder::fromDefaults()
-            ->withActivityId(2)
+            ->withActivityId(ActivityId::fromUnprefixed(2))
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 13:00:34'))
             ->build();
         $this->activityRepository->add($activityTwo);
         $activityThree = ActivityBuilder::fromDefaults()
-            ->withActivityId(3)
+            ->withActivityId(ActivityId::fromUnprefixed(3))
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-09 14:00:34'))
             ->build();
         $this->activityRepository->add($activityThree);
 
         $this->assertEquals(
-            [1, 2, 3],
+            ActivityIdCollection::fromArray([
+                ActivityId::fromUnprefixed(1),
+                ActivityId::fromUnprefixed(2),
+                ActivityId::fromUnprefixed(3),
+            ]),
             $this->activityDetailsRepository->findActivityIds()
         );
     }
@@ -86,26 +94,31 @@ class DbalActivityDetailsRepositoryTest extends DatabaseTestCase
     public function testFindUniqueGearIds(): void
     {
         $activityOne = ActivityBuilder::fromDefaults()
-            ->withActivityId(1)
-            ->withGearId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(1))
+            ->withGearId(GearId::fromUnprefixed(1))
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 14:00:34'))
             ->build();
         $this->activityRepository->add($activityOne);
         $activityTwo = ActivityBuilder::fromDefaults()
-            ->withActivityId(2)
-            ->withGearId(2)
+            ->withActivityId(ActivityId::fromUnprefixed(2))
+            ->withGearId(GearId::fromUnprefixed(2))
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 13:00:34'))
             ->build();
         $this->activityRepository->add($activityTwo);
         $activityThree = ActivityBuilder::fromDefaults()
-            ->withActivityId(3)
-            ->withGearId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(3))
+            ->withGearId(GearId::fromUnprefixed(1))
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-09 14:00:34'))
             ->build();
         $this->activityRepository->add($activityThree);
+        $this->activityRepository->add(ActivityBuilder::fromDefaults()
+            ->withActivityId(ActivityId::fromUnprefixed(4))
+            ->withoutGearId()
+            ->withStartDateTime(SerializableDateTime::fromString('2023-10-09 14:00:34'))
+            ->build());
 
         $this->assertEquals(
-            [1, 2],
+            GearIdCollection::fromArray([GearId::fromUnprefixed(1), GearId::fromUnprefixed(2)]),
             $this->activityDetailsRepository->findUniqueGearIds()
         );
     }

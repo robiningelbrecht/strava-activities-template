@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Activity\Stream;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\Stream\ActivityStreamCollection;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityStreamDetailsRepository;
 use App\Domain\Strava\Activity\Stream\ReadModel\DbalActivityStreamDetailsRepository;
@@ -23,7 +24,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
         $this->activityStreamRepository->add($stream);
 
         $this->assertTrue($this->activityStreamDetailsRepository->isImportedForActivity($stream->getActivityId()));
-        $this->assertFalse($this->activityStreamDetailsRepository->isImportedForActivity('1'));
+        $this->assertFalse($this->activityStreamDetailsRepository->isImportedForActivity(ActivityId::fromUnprefixed('1')));
     }
 
     public function testHasOneForActivityAndStreamType(): void
@@ -36,7 +37,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
             streamType: $stream->getStreamType()
         ));
         $this->assertFalse($this->activityStreamDetailsRepository->hasOneForActivityAndStreamType(
-            activityId: 1,
+            activityId: ActivityId::fromUnprefixed(1),
             streamType: $stream->getStreamType()
         ));
         $this->assertFalse($this->activityStreamDetailsRepository->hasOneForActivityAndStreamType(
@@ -59,24 +60,24 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
     public function testFindByActivityAndStreamTypes(): void
     {
         $streamOne = DefaultStreamBuilder::fromDefaults()
-            ->withActivityId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::WATTS)
             ->build();
         $this->activityStreamRepository->add($streamOne);
         $streamTwo = DefaultStreamBuilder::fromDefaults()
-            ->withActivityId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::CADENCE)
             ->build();
         $this->activityStreamRepository->add($streamTwo);
         $this->activityStreamRepository->add(
             DefaultStreamBuilder::fromDefaults()
-                ->withActivityId(1)
+                ->withActivityId(ActivityId::fromUnprefixed(1))
                 ->withStreamType(StreamType::HEART_RATE)
                 ->build()
         );
         $this->activityStreamRepository->add(
             DefaultStreamBuilder::fromDefaults()
-                ->withActivityId(2)
+                ->withActivityId(ActivityId::fromUnprefixed(2))
                 ->withStreamType(StreamType::CADENCE)
                 ->build()
         );
@@ -84,7 +85,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
         $this->assertEquals(
             ActivityStreamCollection::fromArray([$streamTwo, $streamOne]),
             $this->activityStreamDetailsRepository->findByActivityAndStreamTypes(
-                activityId: 1,
+                activityId: ActivityId::fromUnprefixed(1),
                 streamTypes: StreamTypeCollection::fromArray([StreamType::WATTS, StreamType::CADENCE])
             )
         );
@@ -93,18 +94,18 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
     public function testFindByActivity(): void
     {
         $streamOne = DefaultStreamBuilder::fromDefaults()
-            ->withActivityId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::WATTS)
             ->build();
         $this->activityStreamRepository->add($streamOne);
         $streamTwo = DefaultStreamBuilder::fromDefaults()
-            ->withActivityId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::CADENCE)
             ->build();
         $this->activityStreamRepository->add($streamTwo);
         $this->activityStreamRepository->add(
             DefaultStreamBuilder::fromDefaults()
-                ->withActivityId(2)
+                ->withActivityId(ActivityId::fromUnprefixed(2))
                 ->withStreamType(StreamType::CADENCE)
                 ->build()
         );
@@ -112,7 +113,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
         $this->assertEquals(
             ActivityStreamCollection::fromArray([$streamTwo, $streamOne]),
             $this->activityStreamDetailsRepository->findByActivityId(
-                activityId: 1,
+                activityId: ActivityId::fromUnprefixed(1),
             )
         );
     }
@@ -120,12 +121,12 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
     public function testDelete(): void
     {
         $streamOne = DefaultStreamBuilder::fromDefaults()
-            ->withActivityId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::WATTS)
             ->build();
         $this->activityStreamRepository->add($streamOne);
         $streamTwo = DefaultStreamBuilder::fromDefaults()
-            ->withActivityId(1)
+            ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::CADENCE)
             ->build();
         $this->activityStreamRepository->add($streamTwo);

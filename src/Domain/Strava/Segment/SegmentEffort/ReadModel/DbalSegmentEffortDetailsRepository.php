@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava\Segment\SegmentEffort\ReadModel;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffort;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortCollection;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortId;
+use App\Domain\Strava\Segment\SegmentId;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
@@ -22,22 +25,22 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
         $this->connection = $connectionFactory->getReadOnly();
     }
 
-    public function find(int $id): SegmentEffort
+    public function find(SegmentEffortId $segmentEffortId): SegmentEffort
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('SegmentEffort')
             ->andWhere('segmentEffortId = :segmentEffortId')
-            ->setParameter('segmentEffortId', $id);
+            ->setParameter('segmentEffortId', $segmentEffortId);
 
         if (!$result = $queryBuilder->executeQuery()->fetchAssociative()) {
-            throw new EntityNotFound(sprintf('segmentEffort "%s" not found', $id));
+            throw new EntityNotFound(sprintf('segmentEffort "%s" not found', $segmentEffortId));
         }
 
         return $this->buildFromResult($result);
     }
 
-    public function findBySegmentId(int $segmentId): SegmentEffortCollection
+    public function findBySegmentId(SegmentId $segmentId): SegmentEffortCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
@@ -52,7 +55,7 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
         ));
     }
 
-    public function findByActivityId(int $activityId): SegmentEffortCollection
+    public function findByActivityId(ActivityId $activityId): SegmentEffortCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
@@ -72,9 +75,9 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
     private function buildFromResult(array $result): SegmentEffort
     {
         return SegmentEffort::fromState(
-            segmentEffortId: (int) $result['segmentEffortId'],
-            segmentId: (int) $result['segmentId'],
-            activityId: (int) $result['activityId'],
+            segmentEffortId: SegmentEffortId::fromString($result['segmentEffortId']),
+            segmentId: SegmentId::fromString($result['segmentId']),
+            activityId: ActivityId::fromString($result['activityId']),
             startDateTime: SerializableDateTime::fromString($result['startDateTime']),
             data: Json::decode($result['data']),
         );

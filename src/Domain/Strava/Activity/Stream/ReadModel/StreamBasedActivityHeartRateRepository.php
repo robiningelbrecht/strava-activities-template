@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava\Activity\Stream\ReadModel;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStream;
 use App\Domain\Strava\Activity\Stream\HeartRate;
@@ -69,7 +70,7 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
     /**
      * @return array<int, int>
      */
-    public function findTimeInSecondsPerHeartRateForActivity(int $activityId): array
+    public function findTimeInSecondsPerHeartRateForActivity(ActivityId $activityId): array
     {
         if (!$this->activityStreamDetailsRepository->hasOneForActivityAndStreamType(
             activityId: $activityId,
@@ -105,7 +106,7 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
 
         /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($activities as $activity) {
-            StreamBasedActivityHeartRateRepository::$cachedHeartRateZonesPerActivity[$activity->getId()] = [
+            StreamBasedActivityHeartRateRepository::$cachedHeartRateZonesPerActivity[(string) $activity->getId()] = [
                 1 => 0,
                 2 => 0,
                 3 => 0,
@@ -128,7 +129,7 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
             foreach (HeartRateZone::cases() as $heartRateZone) {
                 [$minHeartRate, $maxHeartRate] = $heartRateZone->getMinMaxRange($athleteMaxHeartRate);
                 $secondsInZone = count(array_filter($stream->getData(), fn (int $heartRate) => $heartRate >= $minHeartRate && $heartRate <= $maxHeartRate));
-                StreamBasedActivityHeartRateRepository::$cachedHeartRateZonesPerActivity[$activity->getId()][$heartRateZone->value] = $secondsInZone;
+                StreamBasedActivityHeartRateRepository::$cachedHeartRateZonesPerActivity[(string) $activity->getId()][$heartRateZone->value] = $secondsInZone;
             }
         }
 

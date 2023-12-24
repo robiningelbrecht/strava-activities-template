@@ -5,17 +5,18 @@ declare(strict_types=1);
 namespace App\Tests\Domain\Strava\Segment;
 
 use App\Domain\Strava\Segment\Segment;
+use App\Domain\Strava\Segment\SegmentId;
 use App\Infrastructure\ValueObject\String\Name;
 
 final class SegmentBuilder
 {
-    private int $segmentId;
+    private SegmentId $segmentId;
     private Name $name;
     private array $data;
 
     private function __construct()
     {
-        $this->segmentId = 1;
+        $this->segmentId = SegmentId::fromUnprefixed('1');
         $this->name = Name::fromString('Segment');
         $this->data = [];
     }
@@ -34,7 +35,7 @@ final class SegmentBuilder
         );
     }
 
-    public function withId(int $id): self
+    public function withId(SegmentId $id): self
     {
         $this->segmentId = $id;
 

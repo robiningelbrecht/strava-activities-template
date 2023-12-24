@@ -2,6 +2,6 @@
 
 namespace App\Infrastructure\ValueObject\String;
 
-class Name extends NonEmptyStringLiteral
+final readonly class Name extends NonEmptyStringLiteral
 {
 }

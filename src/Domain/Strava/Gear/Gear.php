@@ -13,7 +13,7 @@ class Gear
      */
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string', unique: true)]
-        private readonly string $gearId,
+        private readonly GearId $gearId,
         #[ORM\Column(type: 'datetime_immutable')]
         private readonly SerializableDateTime $createdOn,
         #[ORM\Column(type: 'integer')]
@@ -27,7 +27,7 @@ class Gear
      * @param array<mixed> $data
      */
     public static function create(
-        string $gearId,
+        GearId $gearId,
         array $data,
         int $distanceInMeter,
         SerializableDateTime $createdOn
@@ -44,7 +44,7 @@ class Gear
      * @param array<mixed> $data
      */
     public static function fromState(
-        string $gearId,
+        GearId $gearId,
         array $data,
         int $distanceInMeter,
         SerializableDateTime $createdOn
@@ -57,7 +57,7 @@ class Gear
         );
     }
 
-    public function getId(): string
+    public function getId(): GearId
     {
         return $this->gearId;
     }

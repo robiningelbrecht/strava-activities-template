@@ -2,6 +2,7 @@
 
 namespace App\Domain\Strava\Activity\Stream;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Weight;
 
@@ -27,7 +28,7 @@ final readonly class PowerStream implements ActivityStream
         return $this->activityStream->getCreatedOn();
     }
 
-    public function getActivityId(): int
+    public function getActivityId(): ActivityId
     {
         return $this->activityStream->getActivityId();
     }

@@ -268,7 +268,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             }
 
             $this->filesystem->write(
-                'build/html/segment/segment-'.$segment->getId().'.html',
+                'build/html/segment/'.$segment->getId().'.html',
                 $this->twig->load('html/segment.html.twig')->render([
                     'segment' => $segment,
                     'segmentEfforts' => $segmentEfforts,
@@ -339,7 +339,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             $leafletMap = $activity->getLeafletMap();
 
             $this->filesystem->write(
-                'build/html/activity/activity-'.$activity->getId().'.html',
+                'build/html/activity/'.$activity->getId().'.html',
                 $this->twig->load('html/activity.html.twig')->render([
                     'activity' => $activity,
                     'leaflet' => $leafletMap ? [

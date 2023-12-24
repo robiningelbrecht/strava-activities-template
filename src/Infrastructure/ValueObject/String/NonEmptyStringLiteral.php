@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ValueObject\String;
 
-abstract class NonEmptyStringLiteral implements \JsonSerializable, \Stringable, StringLiteral
+abstract readonly class NonEmptyStringLiteral implements \JsonSerializable, \Stringable
 {
-    public function __construct(
-        private readonly string $string,
+    final private function __construct(
+        private string $string,
     ) {
-        $this->guardNonEmpty($string);
+        $this->validate($string);
     }
 
-    private function guardNonEmpty(string $string): void
+    protected function validate(string $string): void
     {
         if (empty($string)) {
             throw new \InvalidArgumentException(get_called_class().' can not be empty');

@@ -4,6 +4,10 @@ namespace App\Domain\Strava\Activity\ReadModel;
 
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
+use App\Domain\Strava\Activity\ActivityId;
+use App\Domain\Strava\Activity\ActivityIdCollection;
+use App\Domain\Strava\Gear\GearId;
+use App\Domain\Strava\Gear\GearIdCollection;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
@@ -22,16 +26,16 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
         $this->connection = $connectionFactory->getReadOnly();
     }
 
-    public function find(int $id): Activity
+    public function find(ActivityId $activityId): Activity
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('Activity')
             ->andWhere('activityId = :activityId')
-            ->setParameter('activityId', $id);
+            ->setParameter('activityId', $activityId);
 
         if (!$result = $queryBuilder->executeQuery()->fetchAssociative()) {
-            throw new EntityNotFound(sprintf('Activity "%s" not found', $id));
+            throw new EntityNotFound(sprintf('Activity "%s" not found', $activityId));
         }
 
         return $this->buildFromResult($result);
@@ -59,31 +63,32 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
         return DbalActivityDetailsRepository::$cachedActivities[$cacheKey];
     }
 
-    /**
-     * @return int[]
-     */
-    public function findActivityIds(): array
+    public function findActivityIds(): ActivityIdCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('activityId')
             ->from('Activity')
             ->orderBy('startDateTime', 'DESC');
 
-        return $queryBuilder->executeQuery()->fetchFirstColumn();
+        return ActivityIdCollection::fromArray(array_map(
+            fn (string $id) => ActivityId::fromString($id),
+            $queryBuilder->executeQuery()->fetchFirstColumn(),
+        ));
     }
 
-    /**
-     * @return string[]
-     */
-    public function findUniqueGearIds(): array
+    public function findUniqueGearIds(): GearIdCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('gearId')
             ->distinct()
             ->from('Activity')
+            ->andWhere('gearId IS NOT NULL')
             ->orderBy('startDateTime', 'DESC');
 
-        return $queryBuilder->executeQuery()->fetchFirstColumn();
+        return GearIdCollection::fromArray(array_map(
+            fn (string $id) => GearId::fromString($id),
+            $queryBuilder->executeQuery()->fetchFirstColumn(),
+        ));
     }
 
     /**
@@ -92,11 +97,11 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
     private function buildFromResult(array $result): Activity
     {
         return Activity::fromState(
-            activityId: $result['activityId'],
+            activityId: ActivityId::fromString($result['activityId']),
             startDateTime: SerializableDateTime::fromString($result['startDateTime']),
             data: Json::decode($result['data']),
             weather: Json::decode($result['weather'] ?? '[]'),
-            gearId: $result['gearId']
+            gearId: GearId::fromOptionalString($result['gearId']),
         );
     }
 }

@@ -2,6 +2,6 @@
 
 namespace App\Infrastructure\ValueObject\String;
 
-class Svg extends NonEmptyStringLiteral
+final readonly class Svg extends NonEmptyStringLiteral
 {
 }

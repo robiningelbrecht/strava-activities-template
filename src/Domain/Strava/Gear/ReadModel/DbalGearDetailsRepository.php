@@ -4,6 +4,7 @@ namespace App\Domain\Strava\Gear\ReadModel;
 
 use App\Domain\Strava\Gear\Gear;
 use App\Domain\Strava\Gear\GearCollection;
+use App\Domain\Strava\Gear\GearId;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
@@ -33,16 +34,16 @@ final readonly class DbalGearDetailsRepository implements GearDetailsRepository
         ));
     }
 
-    public function find(string $id): Gear
+    public function find(GearId $gearId): Gear
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('Gear')
             ->andWhere('gearId = :gearId')
-            ->setParameter('gearId', $id);
+            ->setParameter('gearId', $gearId);
 
         if (!$result = $queryBuilder->executeQuery()->fetchAssociative()) {
-            throw new EntityNotFound(sprintf('Gear "%s" not found', $id));
+            throw new EntityNotFound(sprintf('Gear "%s" not found', $gearId));
         }
 
         return $this->buildFromResult($result);
@@ -54,7 +55,7 @@ final readonly class DbalGearDetailsRepository implements GearDetailsRepository
     private function buildFromResult(array $result): Gear
     {
         return Gear::fromState(
-            gearId: $result['gearId'],
+            gearId: GearId::fromString($result['gearId']),
             data: Json::decode($result['data']),
             distanceInMeter: $result['distanceInMeter'],
             createdOn: SerializableDateTime::fromString($result['createdOn']),

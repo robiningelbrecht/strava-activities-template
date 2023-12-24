@@ -2,8 +2,10 @@
 
 namespace App\Domain\Strava;
 
+use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Challenge\ImportChallenges\ImportChallengesCommandHandler;
+use App\Domain\Strava\Gear\GearId;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use GuzzleHttp\Client;
@@ -102,9 +104,9 @@ class Strava
     /**
      * @return array<mixed>
      */
-    public function getActivity(int $id): array
+    public function getActivity(ActivityId $activityId): array
     {
-        return Json::decode($this->request('api/v3/activities/'.$id, 'GET', [
+        return Json::decode($this->request('api/v3/activities/'.$activityId->toUnprefixedString(), 'GET', [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer '.$this->getAccessToken(),
             ],
@@ -114,9 +116,9 @@ class Strava
     /**
      * @return array<mixed>
      */
-    public function getActivityZones(int $id): array
+    public function getActivityZones(ActivityId $activityId): array
     {
-        return Json::decode($this->request('api/v3/activities/'.$id.'/zones', 'GET', [
+        return Json::decode($this->request('api/v3/activities/'.$activityId->toUnprefixedString().'/zones', 'GET', [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer '.$this->getAccessToken(),
             ],
@@ -126,9 +128,9 @@ class Strava
     /**
      * @return array<mixed>
      */
-    public function getAllActivityStreams(int $id): array
+    public function getAllActivityStreams(ActivityId $activityId): array
     {
-        return Json::decode($this->request('api/v3/activities/'.$id.'/streams', 'GET', [
+        return Json::decode($this->request('api/v3/activities/'.$activityId->toUnprefixedString().'/streams', 'GET', [
             RequestOptions::QUERY => [
                 'keys' => implode(',', array_map(fn (StreamType $streamType) => $streamType->value, StreamType::cases())),
             ],
@@ -141,9 +143,9 @@ class Strava
     /**
      * @return array<mixed>
      */
-    public function getActivityPhotos(int $activityId): array
+    public function getActivityPhotos(ActivityId $activityId): array
     {
-        return Json::decode($this->request('api/v3/activities/'.$activityId.'/photos', 'GET', [
+        return Json::decode($this->request('api/v3/activities/'.$activityId->toUnprefixedString().'/photos', 'GET', [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer '.$this->getAccessToken(),
             ],
@@ -156,9 +158,9 @@ class Strava
     /**
      * @return array<mixed>
      */
-    public function getGear(string $id): array
+    public function getGear(GearId $gearId): array
     {
-        return Json::decode($this->request('api/v3/gear/'.$id, 'GET', [
+        return Json::decode($this->request('api/v3/gear/'.$gearId->toUnprefixedString(), 'GET', [
             RequestOptions::HEADERS => [
                 'Authorization' => 'Bearer '.$this->getAccessToken(),
             ],
