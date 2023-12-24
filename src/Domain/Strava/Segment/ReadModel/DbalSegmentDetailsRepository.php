@@ -6,6 +6,7 @@ namespace App\Domain\Strava\Segment\ReadModel;
 
 use App\Domain\Strava\Segment\Segment;
 use App\Domain\Strava\Segment\SegmentCollection;
+use App\Domain\Strava\Segment\SegmentId;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
@@ -22,16 +23,16 @@ final readonly class DbalSegmentDetailsRepository implements SegmentDetailsRepos
         $this->connection = $connectionFactory->getReadOnly();
     }
 
-    public function find(int $id): Segment
+    public function find(SegmentId $segmentId): Segment
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('Segment')
             ->andWhere('segmentId = :segmentId')
-            ->setParameter('segmentId', $id);
+            ->setParameter('segmentId', $segmentId);
 
         if (!$result = $queryBuilder->executeQuery()->fetchAssociative()) {
-            throw new EntityNotFound(sprintf('Segment "%s" not found', $id));
+            throw new EntityNotFound(sprintf('Segment "%s" not found', $segmentId));
         }
 
         return $this->buildFromResult($result);
@@ -56,7 +57,7 @@ final readonly class DbalSegmentDetailsRepository implements SegmentDetailsRepos
     private function buildFromResult(array $result): Segment
     {
         return Segment::fromState(
-            segmentId: (int) $result['segmentId'],
+            segmentId: SegmentId::fromString($result['segmentId']),
             name: Name::fromString($result['name']),
             data: Json::decode($result['data']),
         );

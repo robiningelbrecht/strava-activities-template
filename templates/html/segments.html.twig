@@ -52,7 +52,7 @@
                         {% for segment in segments %}
                             <tr data-searchables="{{ segment.getSearchables()|join(' ') }}" class="{{ cycle(['bg-white border-b dark:bg-gray-900 dark:border-gray-700', 'border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700'], loop.index0) }}">
                                 <td class="px-2 py-2 text-left">
-                                    <a href="#" data-model-content-url="segment/segment-{{ segment.getId() }}.html" class="flex items-center gap-x-1 font-medium text-blue-600 dark:text-blue-500 hover:underline" rel="nofollow">
+                                    <a href="#" data-model-content-url="segment/{{ segment.getId() }}.html" class="flex items-center gap-x-1 font-medium text-blue-600 dark:text-blue-500 hover:underline" rel="nofollow">
                                         {% if segment.getActivityType().value == 'VirtualRide' %}
                                             {{ svgZwiftLogo }}
                                         {% else %}

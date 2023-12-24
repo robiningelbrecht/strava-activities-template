@@ -15,6 +15,7 @@ use App\Domain\Strava\Ftp\WriteModel\FtpRepository;
 use App\Domain\Strava\Gear\GearId;
 use App\Domain\Strava\Gear\WriteModel\GearRepository;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
+use App\Domain\Strava\Segment\SegmentId;
 use App\Domain\Strava\Segment\WriteModel\SegmentRepository;
 use App\Infrastructure\KeyValue\Key;
 use App\Infrastructure\KeyValue\KeyValue;
@@ -171,7 +172,7 @@ trait ProvideTestData
         $segmentRepository = $this->getContainer()->get(SegmentRepository::class);
         $segmentRepository->add(
             SegmentBuilder::fromDefaults()
-                ->withId(1)
+                ->withId(SegmentId::fromUnprefixed('1'))
                 ->withName(Name::fromString('Segment One'))
                 ->withData([
                     'distance' => 100,
@@ -182,7 +183,7 @@ trait ProvideTestData
         );
         $segmentRepository->add(
             SegmentBuilder::fromDefaults()
-                ->withId(2)
+                ->withId(SegmentId::fromUnprefixed('2'))
                 ->withName(Name::fromString('Segment Two'))
                 ->withData([
                     'distance' => 110,
@@ -198,7 +199,7 @@ trait ProvideTestData
         $segmentEffortRepository->add(
             SegmentEffortBuilder::fromDefaults()
                 ->withId(1)
-                ->withSegmentId(1)
+                ->withSegmentId(SegmentId::fromUnprefixed('1'))
                 ->withActivityId(ActivityId::fromUnprefixed('9542782314'))
                 ->withData([
                     'elapsed_time' => 10.3,
@@ -210,7 +211,7 @@ trait ProvideTestData
         $segmentEffortRepository->add(
             SegmentEffortBuilder::fromDefaults()
                 ->withId(2)
-                ->withSegmentId(1)
+                ->withSegmentId(SegmentId::fromUnprefixed('1'))
                 ->withActivityId(ActivityId::fromUnprefixed('9542782314'))
                 ->withData([
                     'elapsed_time' => 9.3,
@@ -222,7 +223,7 @@ trait ProvideTestData
         $segmentEffortRepository->add(
             SegmentEffortBuilder::fromDefaults()
                 ->withId(3)
-                ->withSegmentId(2)
+                ->withSegmentId(SegmentId::fromUnprefixed('2'))
                 ->withActivityId(ActivityId::fromUnprefixed('9542782314'))
                 ->withData([
                     'elapsed_time' => 10.3,

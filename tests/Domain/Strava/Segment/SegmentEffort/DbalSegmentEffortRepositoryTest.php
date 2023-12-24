@@ -8,6 +8,7 @@ use App\Domain\Strava\Segment\SegmentEffort\ReadModel\SegmentEffortDetailsReposi
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortCollection;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\DbalSegmentEffortRepository;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
+use App\Domain\Strava\Segment\SegmentId;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\Year;
 use App\Tests\DatabaseTestCase;
@@ -55,19 +56,19 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
     {
         $segmentEffortOne = SegmentEffortBuilder::fromDefaults()
             ->withId(1)
-            ->withSegmentId(1)
+            ->withSegmentId(SegmentId::fromUnprefixed(1))
             ->build();
         $this->segmentEffortRepository->add($segmentEffortOne);
 
         $segmentEffortTwo = SegmentEffortBuilder::fromDefaults()
             ->withId(2)
-            ->withSegmentId(1)
+            ->withSegmentId(SegmentId::fromUnprefixed(1))
             ->build();
         $this->segmentEffortRepository->add($segmentEffortTwo);
 
         $segmentEffortThree = SegmentEffortBuilder::fromDefaults()
             ->withId(3)
-            ->withSegmentId(2)
+            ->withSegmentId(SegmentId::fromUnprefixed(2))
             ->build();
         $this->segmentEffortRepository->add($segmentEffortThree);
 

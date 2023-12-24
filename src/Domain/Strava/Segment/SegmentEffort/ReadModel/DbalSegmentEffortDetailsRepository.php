@@ -7,6 +7,7 @@ namespace App\Domain\Strava\Segment\SegmentEffort\ReadModel;
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffort;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortCollection;
+use App\Domain\Strava\Segment\SegmentId;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
@@ -38,7 +39,7 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
         return $this->buildFromResult($result);
     }
 
-    public function findBySegmentId(int $segmentId): SegmentEffortCollection
+    public function findBySegmentId(SegmentId $segmentId): SegmentEffortCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
@@ -74,7 +75,7 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
     {
         return SegmentEffort::fromState(
             segmentEffortId: (int) $result['segmentEffortId'],
-            segmentId: (int) $result['segmentId'],
+            segmentId: SegmentId::fromString($result['segmentId']),
             activityId: ActivityId::fromString($result['activityId']),
             startDateTime: SerializableDateTime::fromString($result['startDateTime']),
             data: Json::decode($result['data']),

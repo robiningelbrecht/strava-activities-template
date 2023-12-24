@@ -12,6 +12,7 @@ use App\Domain\Strava\Segment\Segment;
 use App\Domain\Strava\Segment\SegmentEffort\ReadModel\SegmentEffortDetailsRepository;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffort;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
+use App\Domain\Strava\Segment\SegmentId;
 use App\Domain\Strava\Segment\WriteModel\SegmentRepository;
 use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
@@ -48,7 +49,7 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
             foreach ($segmentEfforts as $activitySegmentEffort) {
                 $activitySegment = $activitySegmentEffort['segment'];
                 $segment = Segment::create(
-                    segmentId: $activitySegment['id'],
+                    segmentId: SegmentId::fromUnprefixed($activitySegment['id']),
                     name: Name::fromString($activitySegment['name']),
                     data: $activitySegment,
                 );

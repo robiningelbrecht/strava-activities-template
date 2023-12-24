@@ -268,7 +268,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             }
 
             $this->filesystem->write(
-                'build/html/segment/segment-'.$segment->getId().'.html',
+                'build/html/segment/'.$segment->getId().'.html',
                 $this->twig->load('html/segment.html.twig')->render([
                     'segment' => $segment,
                     'segmentEfforts' => $segmentEfforts,
