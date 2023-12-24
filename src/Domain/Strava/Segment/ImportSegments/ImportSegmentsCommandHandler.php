@@ -50,7 +50,7 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
             foreach ($segmentEfforts as $activitySegmentEffort) {
                 $activitySegment = $activitySegmentEffort['segment'];
                 $segment = Segment::create(
-                    segmentId: SegmentId::fromUnprefixed($activitySegment['id']),
+                    segmentId: SegmentId::fromUnprefixed((string) $activitySegment['id']),
                     name: Name::fromString($activitySegment['name']),
                     data: $activitySegment,
                 );
@@ -62,7 +62,7 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
                     $command->getOutput()->writeln(sprintf('  => Added segment "%s"', $segment->getName()));
                 }
 
-                $segmentEffortId = SegmentEffortId::fromUnprefixed($activitySegmentEffort['id']);
+                $segmentEffortId = SegmentEffortId::fromUnprefixed((string) $activitySegmentEffort['id']);
                 try {
                     $segmentEffort = $this->segmentEffortDetailsRepository->find($segmentEffortId);
                     $this->segmentEffortRepository->update($segmentEffort);
