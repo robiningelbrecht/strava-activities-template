@@ -416,16 +416,28 @@ final class Activity extends AggregateRoot
         return $this->data['map']['summary_polyline'] ?? null;
     }
 
+    public function isZwiftRide(): bool
+    {
+        if (!isset($this->data['device_name'])) {
+            return false;
+        }
+
+        return 'zwift' === strtolower($this->data['device_name']);
+    }
+
     public function getLeafletMap(): ?LeafletMap
     {
         if (!$this->getLatitude() || !$this->getLongitude()) {
             return null;
         }
         if (ActivityType::RIDE === $this->getType()) {
-            return LeafletMap::DEFAULT;
+            return LeafletMap::REAL_WORLD;
+        }
+        if (!$this->isZwiftRide()) {
+            return LeafletMap::REAL_WORLD;
         }
 
-        return LeafletMap::fromStartingCoordinate(Coordinate::createFromLatAndLng(
+        return LeafletMap::forZwiftStartingCoordinate(Coordinate::createFromLatAndLng(
             latitude: $this->getLatitude(),
             longitude: $this->getLongitude(),
         ));
