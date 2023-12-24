@@ -417,13 +417,18 @@ final class Activity extends AggregateRoot
         return $this->data['map']['summary_polyline'] ?? null;
     }
 
-    public function isZwiftRide(): bool
+    public function getDeviceName(): ?string
     {
         if (!isset($this->data['device_name'])) {
-            return false;
+            return null;
         }
 
-        return 'zwift' === strtolower($this->data['device_name']);
+        return $this->data['device_name'];
+    }
+
+    public function isZwiftRide(): bool
+    {
+        return 'zwift' === strtolower($this->getDeviceName() ?? '');
     }
 
     public function getLeafletMap(): ?LeafletMap
