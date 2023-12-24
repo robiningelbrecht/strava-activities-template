@@ -21,18 +21,18 @@ final class WeekCollection extends Collection
         SerializableDateTime $startDate,
         SerializableDateTime $now
     ): self {
-        $weeks = WeekCollection::empty();
-
         $period = new \DatePeriod(
             $startDate,
             new \DateInterval('P1W'),
             $now
         );
 
+        $weeks = [];
         foreach ($period as $date) {
-            $weeks->add(Week::fromDate(SerializableDateTime::fromDateTimeImmutable($date)));
+            $week = Week::fromDate(SerializableDateTime::fromDateTimeImmutable($date));
+            $weeks[$week->getId()] = $week;
         }
 
-        return $weeks;
+        return WeekCollection::fromArray(array_values($weeks));
     }
 }
