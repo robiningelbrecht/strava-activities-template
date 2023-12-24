@@ -345,23 +345,36 @@
             }
 
             const featureGroup = L.featureGroup();
-            data.routes.forEach((route) => {
-                L.polyline(
-                    L.Polyline.fromEncoded(route).getLatLngs(),
-                    {
-                        color: '#fc6719',
-                        weight: 3,
-                        opacity: 1,
-                        lineJoin: 'round'
-                    }
-                ).addTo(featureGroup);
+            if(data.routes){
+                data.routes.forEach((route) => {
+                    L.polyline(
+                        L.Polyline.fromEncoded(route).getLatLngs(),
+                        {
+                            color: '#fc6719',
+                            weight: 3,
+                            opacity: 1,
+                            lineJoin: 'round'
+                        }
+                    ).addTo(featureGroup);
+                });
+            }
+
+            const marker = new L.Marker([17.385044, 78.486671],{
+                title: "Start",
+                clickable: true,
+                draggable: false,
+                icon:L.icon({
+                    iconUrl: 'https://cdn2.iconfinder.com/data/icons/solidix-sports-circular/128/sports_equipment-13-512.png',
+                    iconSize: [25, 25]
+                })
             });
+            marker.addTo(featureGroup)
 
             if (data.imageOverlay) {
                 L.imageOverlay(
                     data.imageOverlay,
                     data.bounds,
-                {attribution: '&copy; <a href="https://zwift.com" rel="noreferrer noopener">Zwift',}
+                    {attribution: '&copy; <a href="https://zwift.com" rel="noreferrer noopener">Zwift',}
                 ).addTo(map);
                 map.setMaxBounds(data.bounds);
             }
