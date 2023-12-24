@@ -52,7 +52,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
             if (!$activityType = ActivityType::tryFrom($stravaActivity['type'])) {
                 continue;
             }
-            $activityId = ActivityId::fromUnprefixed($stravaActivity['id']);
+            $activityId = ActivityId::fromUnprefixed((string) $stravaActivity['id']);
             try {
                 $activity = $this->activityDetailsRepository->find($activityId);
                 $activity
