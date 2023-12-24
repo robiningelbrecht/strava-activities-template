@@ -73,7 +73,7 @@
                                     <img class="h-auto max-w-full rounded-lg lazy" src="{{ placeholderImage }}" data-src="{{ imagePath }}" alt="Activity image" />
                                 </a>
                             </div>
-                            <div data-popover id="popover-image-{{ loop.index }}" role="tooltip" class="z-[1000] w-[35rem] absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600">
+                            <div data-popover id="popover-image-{{ loop.index }}" role="tooltip" class="z-[1000] w-[35rem] absolute invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600">
                                 <img class="h-auto max-w-full rounded-lg lazy" src="{{ placeholderImage }}" data-src="{{ imagePath }}"  alt="Activity image" />
                             </div>
                         {% endfor %}
@@ -215,7 +215,7 @@
                     'maxZoom': leaflet.map.getMaxZoom(),
                     'imageOverlay': leaflet.map.getOverlayImageUrl(),
                     'bounds': leaflet.map.getBounds(),
-                }
+                    }
                 %}
                 <div class="h-[350px]" style="background-color:{{ leaflet.map.getBackgroundColor() }}" data-leaflet='{{ leafletOptions|json_encode }}'></div>
             {% else %}
