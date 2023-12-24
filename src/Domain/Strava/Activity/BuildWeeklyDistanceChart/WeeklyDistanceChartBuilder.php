@@ -170,7 +170,7 @@ final class WeeklyDistanceChartBuilder
 
         /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($this->activities as $activity) {
-            $week = $activity->getStartDate()->format(Week::WEEK_ID_FORMAT);
+            $week = $activity->getStartDate()->getYearAndWeekNumber();
             if (!array_key_exists($week, $distancePerWeek)) {
                 continue;
             }
