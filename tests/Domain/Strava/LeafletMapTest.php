@@ -28,7 +28,7 @@ class LeafletMapTest extends TestCase
     public function testFromStartingCoordinate(Coordinate $startingCoordinate, LeafletMap $expectedLeafletMap): void
     {
         $this->assertEquals(
-            LeafletMap::fromStartingCoordinate($startingCoordinate),
+            LeafletMap::forZwiftStartingCoordinate($startingCoordinate),
             $expectedLeafletMap
         );
     }
@@ -37,7 +37,7 @@ class LeafletMapTest extends TestCase
     {
         $this->expectExceptionObject(new \RuntimeException('No map found for starting coordinate [1,1]'));
 
-        LeafletMap::fromStartingCoordinate(Coordinate::createFromLatAndLng(
+        LeafletMap::forZwiftStartingCoordinate(Coordinate::createFromLatAndLng(
             Latitude::fromString('1'), Longitude::fromString('1')
         ));
     }
