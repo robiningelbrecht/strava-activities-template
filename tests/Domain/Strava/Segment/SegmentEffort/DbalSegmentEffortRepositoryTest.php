@@ -6,6 +6,7 @@ use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Segment\SegmentEffort\ReadModel\DbalSegmentEffortDetailsRepository;
 use App\Domain\Strava\Segment\SegmentEffort\ReadModel\SegmentEffortDetailsRepository;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortCollection;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortId;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\DbalSegmentEffortRepository;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
 use App\Domain\Strava\Segment\SegmentId;
@@ -49,25 +50,25 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
     public function testItShouldThrowWhenNotFound(): void
     {
         $this->expectException(EntityNotFound::class);
-        $this->segmentEffortDetailsRepository->find(1);
+        $this->segmentEffortDetailsRepository->find(SegmentEffortId::fromUnprefixed(1));
     }
 
     public function testFindBySegmentId(): void
     {
         $segmentEffortOne = SegmentEffortBuilder::fromDefaults()
-            ->withId(1)
+            ->withId(SegmentEffortId::fromUnprefixed(1))
             ->withSegmentId(SegmentId::fromUnprefixed(1))
             ->build();
         $this->segmentEffortRepository->add($segmentEffortOne);
 
         $segmentEffortTwo = SegmentEffortBuilder::fromDefaults()
-            ->withId(2)
+            ->withId(SegmentEffortId::fromUnprefixed(2))
             ->withSegmentId(SegmentId::fromUnprefixed(1))
             ->build();
         $this->segmentEffortRepository->add($segmentEffortTwo);
 
         $segmentEffortThree = SegmentEffortBuilder::fromDefaults()
-            ->withId(3)
+            ->withId(SegmentEffortId::fromUnprefixed(3))
             ->withSegmentId(SegmentId::fromUnprefixed(2))
             ->build();
         $this->segmentEffortRepository->add($segmentEffortThree);
@@ -81,19 +82,19 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
     public function testFindByActivityId(): void
     {
         $segmentEffortOne = SegmentEffortBuilder::fromDefaults()
-            ->withId(1)
+            ->withId(SegmentEffortId::fromUnprefixed(1))
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->build();
         $this->segmentEffortRepository->add($segmentEffortOne);
 
         $segmentEffortTwo = SegmentEffortBuilder::fromDefaults()
-            ->withId(2)
+            ->withId(SegmentEffortId::fromUnprefixed(2))
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->build();
         $this->segmentEffortRepository->add($segmentEffortTwo);
 
         $segmentEffortThree = SegmentEffortBuilder::fromDefaults()
-            ->withId(3)
+            ->withId(SegmentEffortId::fromUnprefixed(3))
             ->withActivityId(ActivityId::fromUnprefixed(2))
             ->build();
         $this->segmentEffortRepository->add($segmentEffortThree);

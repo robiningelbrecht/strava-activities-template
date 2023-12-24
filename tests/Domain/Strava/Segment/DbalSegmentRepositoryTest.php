@@ -5,6 +5,7 @@ namespace App\Tests\Domain\Strava\Segment;
 use App\Domain\Strava\Segment\ReadModel\DbalSegmentDetailsRepository;
 use App\Domain\Strava\Segment\ReadModel\SegmentDetailsRepository;
 use App\Domain\Strava\Segment\SegmentCollection;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortId;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
 use App\Domain\Strava\Segment\SegmentId;
 use App\Domain\Strava\Segment\WriteModel\DbalSegmentRepository;
@@ -46,13 +47,13 @@ class DbalSegmentRepositoryTest extends DatabaseTestCase
         $this->segmentRepository->add($segmentOne);
         $this->getContainer()->get(SegmentEffortRepository::class)->add(
             SegmentEffortBuilder::fromDefaults()
-            ->withId(1)
+            ->withId(SegmentEffortId::fromUnprefixed(1))
             ->withSegmentId($segmentOne->getId())
             ->build()
         );
         $this->getContainer()->get(SegmentEffortRepository::class)->add(
             SegmentEffortBuilder::fromDefaults()
-                ->withId(2)
+                ->withId(SegmentEffortId::fromUnprefixed(2))
                 ->withSegmentId($segmentOne->getId())
                 ->build()
         );
@@ -68,7 +69,7 @@ class DbalSegmentRepositoryTest extends DatabaseTestCase
         $this->segmentRepository->add($segmentThree);
         $this->getContainer()->get(SegmentEffortRepository::class)->add(
             SegmentEffortBuilder::fromDefaults()
-                ->withId(3)
+                ->withId(SegmentEffortId::fromUnprefixed(3))
                 ->withSegmentId($segmentThree->getId())
                 ->build()
         );

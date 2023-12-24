@@ -7,6 +7,7 @@ namespace App\Domain\Strava\Segment\SegmentEffort\ReadModel;
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffort;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortCollection;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortId;
 use App\Domain\Strava\Segment\SegmentId;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
@@ -24,16 +25,16 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
         $this->connection = $connectionFactory->getReadOnly();
     }
 
-    public function find(int $id): SegmentEffort
+    public function find(SegmentEffortId $segmentEffortId): SegmentEffort
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('SegmentEffort')
             ->andWhere('segmentEffortId = :segmentEffortId')
-            ->setParameter('segmentEffortId', $id);
+            ->setParameter('segmentEffortId', $segmentEffortId);
 
         if (!$result = $queryBuilder->executeQuery()->fetchAssociative()) {
-            throw new EntityNotFound(sprintf('segmentEffort "%s" not found', $id));
+            throw new EntityNotFound(sprintf('segmentEffort "%s" not found', $segmentEffortId));
         }
 
         return $this->buildFromResult($result);
@@ -74,7 +75,7 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
     private function buildFromResult(array $result): SegmentEffort
     {
         return SegmentEffort::fromState(
-            segmentEffortId: (int) $result['segmentEffortId'],
+            segmentEffortId: SegmentEffortId::fromString($result['segmentEffortId']),
             segmentId: SegmentId::fromString($result['segmentId']),
             activityId: ActivityId::fromString($result['activityId']),
             startDateTime: SerializableDateTime::fromString($result['startDateTime']),

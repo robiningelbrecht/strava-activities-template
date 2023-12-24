@@ -27,6 +27,7 @@ final class Version20231223143049 extends AbstractMigration
         $this->addSql("UPDATE Activity SET gearId = 'gear-' || gearId WHERE gearId IS NOT NULL");
         $this->addSql("UPDATE Segment SET segmentId = 'segment-' || segmentId");
         $this->addSql("UPDATE SegmentEffort SET segmentId = 'segment-' || segmentId");
+        $this->addSql("UPDATE SegmentEffort SET segmentEffortId = 'segmentEffort-' || segmentEffortId");
     }
 
     public function down(Schema $schema): void

@@ -6,12 +6,13 @@ namespace App\Tests\Domain\Strava\Segment\SegmentEffort;
 
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffort;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortId;
 use App\Domain\Strava\Segment\SegmentId;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final class SegmentEffortBuilder
 {
-    private int $segmentEffortId;
+    private SegmentEffortId $segmentEffortId;
     private SegmentId $segmentId;
     private ActivityId $activityId;
     private SerializableDateTime $startDateTime;
@@ -19,7 +20,7 @@ final class SegmentEffortBuilder
 
     private function __construct()
     {
-        $this->segmentEffortId = 1;
+        $this->segmentEffortId = SegmentEffortId::fromUnprefixed('1');
         $this->segmentId = SegmentId::fromUnprefixed('1');
         $this->activityId = ActivityId::fromUnprefixed('1');
         $this->startDateTime = SerializableDateTime::fromString('2023-10-10');
@@ -42,7 +43,7 @@ final class SegmentEffortBuilder
         );
     }
 
-    public function withId(int $id): self
+    public function withId(SegmentEffortId $id): self
     {
         $this->segmentEffortId = $id;
 

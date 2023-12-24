@@ -11,6 +11,7 @@ use App\Domain\Strava\Segment\ReadModel\SegmentDetailsRepository;
 use App\Domain\Strava\Segment\Segment;
 use App\Domain\Strava\Segment\SegmentEffort\ReadModel\SegmentEffortDetailsRepository;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffort;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortId;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
 use App\Domain\Strava\Segment\SegmentId;
 use App\Domain\Strava\Segment\WriteModel\SegmentRepository;
@@ -61,12 +62,13 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
                     $command->getOutput()->writeln(sprintf('  => Added segment "%s"', $segment->getName()));
                 }
 
+                $segmentEffortId = SegmentEffortId::fromUnprefixed($activitySegmentEffort['id']);
                 try {
-                    $segmentEffort = $this->segmentEffortDetailsRepository->find($activitySegmentEffort['id']);
+                    $segmentEffort = $this->segmentEffortDetailsRepository->find($segmentEffortId);
                     $this->segmentEffortRepository->update($segmentEffort);
                 } catch (EntityNotFound) {
                     $this->segmentEffortRepository->add(SegmentEffort::create(
-                        segmentEffortId: $activitySegmentEffort['id'],
+                        segmentEffortId: $segmentEffortId,
                         segmentId: $segment->getId(),
                         activityId: $activity->getId(),
                         startDateTime: SerializableDateTime::createFromFormat(

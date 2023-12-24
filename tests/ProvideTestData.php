@@ -14,6 +14,7 @@ use App\Domain\Strava\Ftp\FtpValue;
 use App\Domain\Strava\Ftp\WriteModel\FtpRepository;
 use App\Domain\Strava\Gear\GearId;
 use App\Domain\Strava\Gear\WriteModel\GearRepository;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortId;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
 use App\Domain\Strava\Segment\SegmentId;
 use App\Domain\Strava\Segment\WriteModel\SegmentRepository;
@@ -198,7 +199,7 @@ trait ProvideTestData
 
         $segmentEffortRepository->add(
             SegmentEffortBuilder::fromDefaults()
-                ->withId(1)
+                ->withId(SegmentEffortId::fromUnprefixed('1'))
                 ->withSegmentId(SegmentId::fromUnprefixed('1'))
                 ->withActivityId(ActivityId::fromUnprefixed('9542782314'))
                 ->withData([
@@ -210,7 +211,7 @@ trait ProvideTestData
         );
         $segmentEffortRepository->add(
             SegmentEffortBuilder::fromDefaults()
-                ->withId(2)
+                ->withId(SegmentEffortId::fromUnprefixed('2'))
                 ->withSegmentId(SegmentId::fromUnprefixed('1'))
                 ->withActivityId(ActivityId::fromUnprefixed('9542782314'))
                 ->withData([
@@ -222,7 +223,7 @@ trait ProvideTestData
         );
         $segmentEffortRepository->add(
             SegmentEffortBuilder::fromDefaults()
-                ->withId(3)
+                ->withId(SegmentEffortId::fromUnprefixed('3'))
                 ->withSegmentId(SegmentId::fromUnprefixed('2'))
                 ->withActivityId(ActivityId::fromUnprefixed('9542782314'))
                 ->withData([

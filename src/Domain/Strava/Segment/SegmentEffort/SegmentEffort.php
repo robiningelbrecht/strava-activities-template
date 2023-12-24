@@ -23,7 +23,7 @@ final class SegmentEffort
      */
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string', unique: true)]
-        private readonly int $segmentEffortId,
+        private readonly SegmentEffortId $segmentEffortId,
         #[ORM\Column(type: 'string')]
         private readonly SegmentId $segmentId,
         #[ORM\Column(type: 'string')]
@@ -39,7 +39,7 @@ final class SegmentEffort
      * @param array<mixed> $data
      */
     public static function create(
-        int $segmentEffortId,
+        SegmentEffortId $segmentEffortId,
         SegmentId $segmentId,
         ActivityId $activityId,
         SerializableDateTime $startDateTime,
@@ -58,7 +58,7 @@ final class SegmentEffort
      * @param array<mixed> $data
      */
     public static function fromState(
-        int $segmentEffortId,
+        SegmentEffortId $segmentEffortId,
         SegmentId $segmentId,
         ActivityId $activityId,
         SerializableDateTime $startDateTime,
@@ -73,7 +73,7 @@ final class SegmentEffort
         );
     }
 
-    public function getId(): int
+    public function getId(): SegmentEffortId
     {
         return $this->segmentEffortId;
     }
