@@ -135,13 +135,19 @@ For any feedback, help or feature requests, please [open a new issue](https://gi
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
 
+#### [2023-12-24]
+
+* Fix bug where rendering of HTML crashed on non-Zwift virtual activities.
+  (thanks to [pdoteter](https://github.com/pdoteter))
+
 #### [2023-12-23]
 
 * Delete orphaned activities (thanks to [mdleye](https://github.com/mdleye))
 
 #### [2023-12-21]
 
-* Split up database into multiple databases, one for each year there is data for
+* Split up database into multiple databases, one for each year there is data for.
+  (thanks to [pdoteter](https://github.com/pdoteter) for testing with huge dataset)
 
 #### [2023-12-19]
 

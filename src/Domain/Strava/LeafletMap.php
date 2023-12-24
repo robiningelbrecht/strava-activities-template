@@ -11,7 +11,7 @@ use App\Infrastructure\ValueObject\Geography\Longitude;
 
 enum LeafletMap: string
 {
-    case DEFAULT = 'default';
+    case REAL_WORLD = 'real-world';
     case ZWIFT_BOLOGNA = 'zwift-bologna';
     case ZWIFT_CRIT_CITY = 'zwift-crit-city';
     case ZWIFT_FRANCE = 'zwift-france';
@@ -27,7 +27,7 @@ enum LeafletMap: string
 
     public function getTileLayer(): ?string
     {
-        if (self::DEFAULT === $this) {
+        if (self::REAL_WORLD === $this) {
             return 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
         }
 
@@ -36,7 +36,7 @@ enum LeafletMap: string
 
     public function getOverlayImageUrl(): ?string
     {
-        if (self::DEFAULT === $this) {
+        if (self::REAL_WORLD === $this) {
             return null;
         }
 
@@ -48,7 +48,7 @@ enum LeafletMap: string
      */
     public function getBounds(): array
     {
-        if (self::DEFAULT === $this) {
+        if (self::REAL_WORLD === $this) {
             return [];
         }
 
@@ -107,7 +107,7 @@ enum LeafletMap: string
 
     public function getMaxZoom(): int
     {
-        if (self::DEFAULT === $this) {
+        if (self::REAL_WORLD === $this) {
             return 14;
         }
 
@@ -116,7 +116,7 @@ enum LeafletMap: string
 
     public function getMinZoom(): int
     {
-        if (self::DEFAULT === $this) {
+        if (self::REAL_WORLD === $this) {
             return 1;
         }
 
@@ -128,10 +128,10 @@ enum LeafletMap: string
         return '#bbbbb7';
     }
 
-    public static function fromStartingCoordinate(Coordinate $coordinate): self
+    public static function forZwiftStartingCoordinate(Coordinate $coordinate): self
     {
         foreach (self::cases() as $map) {
-            if (LeafletMap::DEFAULT === $map) {
+            if (LeafletMap::REAL_WORLD === $map) {
                 continue;
             }
             $bounds = $map->getBounds();

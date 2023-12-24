@@ -336,14 +336,15 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 
             $heartRateData = $this->activityHeartRateRepository->findTimeInSecondsPerHeartRateForActivity($activity->getId());
             $powerData = $this->activityPowerRepository->findTimeInSecondsPerWattageForActivity($activity->getId());
+            $leafletMap = $activity->getLeafletMap();
 
             $this->filesystem->write(
                 'build/html/activity/'.$activity->getId().'.html',
                 $this->twig->load('html/activity.html.twig')->render([
                     'activity' => $activity,
-                    'leaflet' => $activity->getLeafletMap() ? [
+                    'leaflet' => $leafletMap ? [
                         'routes' => [$activity->getPolylineSummary()],
-                        'map' => $activity->getLeafletMap(),
+                        'map' => $leafletMap,
                     ] : null,
                     'heartRateDistributionChart' => $heartRateData ? Json::encode(
                         HeartRateDistributionChartBuilder::fromHeartRateData(
