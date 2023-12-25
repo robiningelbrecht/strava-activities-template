@@ -52,7 +52,7 @@ jobs:
           mkdir -p database
           mkdir -p migrations
           # Run migrations.
-          bin/doctrine-migrations migrate --no-interaction
+          ./vendor/bin/doctrine-migrations migrate --no-interaction    
           
           bin/console app:strava:key-value ${{ github.event.inputs.key }} ${{ github.event.inputs.value }}
 

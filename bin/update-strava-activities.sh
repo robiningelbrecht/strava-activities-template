@@ -33,9 +33,6 @@ mv -f strava-activities-template/package.json package.json
 mv -f strava-activities-template/package-lock.json package-lock.json
 mv -f strava-activities-template/vercel.json vercel.json
 
-mv -f strava-activities-template/.github/workflows/update-ftp.yml .github/workflows/update-ftp.yml
-mv -f strava-activities-template/.github/workflows/update-key-value-store.yml .github/workflows/update-key-value-store.yml
-
 # Make sure database and migration directories exist
 mkdir -p database
 mkdir -p migrations
