@@ -42,10 +42,10 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
         $command->getOutput()->writeln('Importing activities...');
 
         $athlete = $this->strava->getAthlete();
-        $allActivities = $this->activityDetailsRepository->findAll();
-        $activitiesToDelete = array_combine(
-            $allActivities->map(fn (Activity $activity) => (string) $activity->getId()),
-            $allActivities->toArray(),
+        $allActivityIds = $this->activityDetailsRepository->findActivityIds();
+        $activityIdsDelete = array_combine(
+            $allActivityIds->map(fn (ActivityId $activityId) => (string) $activityId),
+            $allActivityIds->toArray(),
         );
 
         foreach ($this->strava->getActivities() as $stravaActivity) {
@@ -60,7 +60,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                     ->updateKudoCount($stravaActivity['kudos_count'] ?? 0)
                     ->updateGearId(GearId::fromOptionalUnprefixed($stravaActivity['gear_id'] ?? null));
                 $this->activityRepository->update($activity);
-                unset($activitiesToDelete[(string) $activity->getId()]);
+                unset($activityIdsDelete[(string) $activity->getId()]);
                 $command->getOutput()->writeln(sprintf('  => Updated activity "%s"', $activity->getName()));
             } catch (EntityNotFound) {
                 try {
@@ -110,7 +110,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                     }
 
                     $this->activityRepository->add($activity);
-                    unset($activitiesToDelete[(string) $activity->getId()]);
+                    unset($activityIdsDelete[(string) $activity->getId()]);
                     $command->getOutput()->writeln(sprintf('  => Imported activity "%s"', $activity->getName()));
                     // Try to avoid Strava rate limits.
                     $this->sleep->sweetDreams(10);
@@ -129,13 +129,15 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
             }
         }
 
-        if (empty($activitiesToDelete)) {
+        if (empty($activityIdsDelete)) {
             return;
         }
 
-        foreach ($activitiesToDelete as $activity) {
+        foreach ($activityIdsDelete as $activityId) {
+            $activity = $this->activityDetailsRepository->find($activityId);
             $activity->delete();
             $this->activityRepository->delete($activity);
+
             $command->getOutput()->writeln(sprintf('  => Deleted activity "%s"', $activity->getName()));
         }
     }
