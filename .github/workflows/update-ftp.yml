@@ -51,7 +51,7 @@ jobs:
           mkdir -p database
           mkdir -p migrations
           # Run migrations.
-          ./vendor/bin/doctrine-migrations migrate --no-interaction 
+          bin/doctrine-migrations migrate --no-interaction
           
           bin/console app:strava:update-ftp ${{ github.event.inputs.set-on-date }} ${{ github.event.inputs.ftp }}
 
