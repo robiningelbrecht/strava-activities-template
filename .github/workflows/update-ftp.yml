@@ -48,6 +48,7 @@ jobs:
       - name: Install new build file
         run: |
           curl -s https://raw.githubusercontent.com/robiningelbrecht/strava-activities-template/master/bin/update-ftp.sh -o bin/update-ftp.sh
+          chmod +x bin/update-ftp.sh
 
       - name: Update FTP
         run: bin/update-ftp.sh ${{ github.event.inputs.set-on-date }} ${{ github.event.inputs.ftp }}
