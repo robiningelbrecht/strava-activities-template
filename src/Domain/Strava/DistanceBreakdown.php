@@ -48,6 +48,10 @@ final readonly class DistanceBreakdown
 
         foreach ($this->activities as $activity) {
             /** @var Activity $activity */
+            $distance = $activity->getDistanceInKilometer();
+            if ($distance <= 0) {
+                continue;
+            }
             $distanceBreakdown = ceil($activity->getDistanceInKilometer() / $breakdownOnKm) * $breakdownOnKm;
 
             ++$statistics[$distanceBreakdown]['numberOfRides'];
