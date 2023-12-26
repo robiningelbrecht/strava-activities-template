@@ -19,4 +19,9 @@ enum ActivityType: string
             self::VIRTUAL_RIDE => 'activity-virtual-ride',
         };
     }
+
+    public function isVirtual(): bool
+    {
+        return self::RIDE !== $this;
+    }
 }
