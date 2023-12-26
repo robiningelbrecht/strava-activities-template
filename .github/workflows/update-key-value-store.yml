@@ -46,21 +46,10 @@ jobs:
           echo STRAVA_REFRESH_TOKEN=${{ secrets.STRAVA_REFRESH_TOKEN }} >> .env
           echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
 
+      - name: Install new build file
+        run: |
+          curl -s https://raw.githubusercontent.com/robiningelbrecht/strava-activities-template/master/bin/update-key-value-store.sh -o bin/update-key-value-store.sh
+          chmod +x bin/update-key-value-store.sh
+
       - name: Update KeyValue
-        run: |
-          # Make sure database and migration directories exist
-          mkdir -p database
-          mkdir -p migrations
-          # Run migrations.
-          ./vendor/bin/doctrine-migrations migrate --no-interaction    
-          
-          bin/console app:strava:key-value ${{ github.event.inputs.key }} ${{ github.event.inputs.value }}
-
-      - name: Commit and push changes
-        run: |
-          # Push changes
-          git add .
-          git status
-          git diff --staged --quiet || git commit -m"Updated KeyValue store"
-          git push
-
+        run: bin/update-key-value-store.sh ${{ github.event.inputs.key }} ${{ github.event.inputs.value }}
