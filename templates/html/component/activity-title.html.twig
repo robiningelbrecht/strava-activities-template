@@ -4,7 +4,7 @@
 
 {% autoescape false %}
     <a href="#" data-model-content-url="activity/{{ activity.getId() }}.html" class="flex items-center gap-x-1 font-medium text-blue-600 dark:text-blue-500 hover:underline" rel="nofollow">
-        {% if activity.getType().value == 'VirtualRide' %}
+        {% if activity.getType().isVirtual() %}
             {{ svgZwiftLogo }}
         {% else %}
             {{ svgBikeLogoSmall }}
