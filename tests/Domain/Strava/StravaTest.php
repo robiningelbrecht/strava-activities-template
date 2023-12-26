@@ -10,6 +10,7 @@ use App\Domain\Strava\StravaClientId;
 use App\Domain\Strava\StravaClientSecret;
 use App\Domain\Strava\StravaRefreshToken;
 use App\Infrastructure\Serialization\Json;
+use App\Tests\NullSleep;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use League\Flysystem\FilesystemOperator;
@@ -599,7 +600,8 @@ class StravaTest extends TestCase
             stravaClientId: $this->stravaClientId,
             stravaClientSecret: $this->stravaClientSecret,
             stravaRefreshToken: $this->stravaRefreshToken,
-            filesystemOperator: $this->filesystemOperator
+            filesystemOperator: $this->filesystemOperator,
+            sleep: new NullSleep()
         );
     }
 }

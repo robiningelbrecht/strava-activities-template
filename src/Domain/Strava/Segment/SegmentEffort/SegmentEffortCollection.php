@@ -16,7 +16,7 @@ final class SegmentEffortCollection extends Collection
         return SegmentEffort::class;
     }
 
-    public function getBestEffort(): SegmentEffort
+    public function getBestEffort(): ?SegmentEffort
     {
         /** @var \App\Domain\Strava\Segment\SegmentEffort\SegmentEffort $bestEffort */
         $bestEffort = $this->getFirst();

@@ -7,6 +7,7 @@ use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Challenge\ImportChallenges\ImportChallengesCommandHandler;
 use App\Domain\Strava\Gear\GearId;
 use App\Infrastructure\Serialization\Json;
+use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
@@ -23,6 +24,7 @@ class Strava
         private readonly StravaClientSecret $stravaClientSecret,
         private readonly StravaRefreshToken $stravaRefreshToken,
         private readonly FilesystemOperator $filesystemOperator,
+        private readonly Sleep $sleep
     ) {
     }
 
@@ -95,7 +97,7 @@ class Strava
             $allActivities = array_merge($allActivities, $activities);
             ++$page;
             // Try to avoid too many calls.
-            sleep(1);
+            $this->sleep->sweetDreams(1);
         } while (count($activities) > 0);
 
         return $allActivities;
