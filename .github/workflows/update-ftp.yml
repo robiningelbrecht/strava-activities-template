@@ -45,21 +45,10 @@ jobs:
           echo STRAVA_REFRESH_TOKEN=${{ secrets.STRAVA_REFRESH_TOKEN }} >> .env
           echo REPOSITORY_NAME=$GITHUB_REPOSITORY >> .env
 
-      - name: Update FTP
+      - name: Install new build file
         run: |
-          # Make sure database and migration directories exist
-          mkdir -p database
-          mkdir -p migrations
-          # Run migrations.
-          ./vendor/bin/doctrine-migrations migrate --no-interaction 
-          
-          bin/console app:strava:update-ftp ${{ github.event.inputs.set-on-date }} ${{ github.event.inputs.ftp }}
+          curl -s https://raw.githubusercontent.com/robiningelbrecht/strava-activities-template/master/bin/update-ftp.sh -o bin/update-ftp.sh
 
-      - name: Commit and push changes
-        run: |
-          # Push changes
-          git add .
-          git status
-          git diff --staged --quiet || git commit -m"Updated FTP"
-          git push
+      - name: Update FTP
+        run: bin/update-ftp.sh ${{ github.event.inputs.set-on-date }} ${{ github.event.inputs.ftp }}
 
