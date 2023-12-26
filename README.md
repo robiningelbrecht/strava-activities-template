@@ -128,6 +128,16 @@ on https://vercel.com:
 * If you get following error `App\Infrastructure\Exception\EntityNotFound: KeyValue "athlete_birthday" not found`,
   it means that you have not set your birthday. Run the "Update athlete birthday" workflow
 
+## ❌ Getting errors while updating FTP / KeyValue store?
+
+This is because I introduced breaking changes without realising it. Yeah, I know stupid.
+GitHub does not allow you to automatically update workflow files from a template, so you'll have to 
+do this manually.
+
+Update the following files in your own repository to the latest versions:
+* https://github.com/robiningelbrecht/strava-activities-template/blob/master/.github/workflows/update-ftp.yml
+* https://github.com/robiningelbrecht/strava-activities-template/blob/master/.github/workflows/update-key-value-store.yml
+
 ## 💡 Feature request?
 
 For any feedback, help or feature requests, please [open a new issue](https://github.com/robiningelbrecht/strava-activities-template/issues/new)
