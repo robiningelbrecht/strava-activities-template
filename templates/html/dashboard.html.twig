@@ -480,9 +480,9 @@
                             {% set firstActivity = trivia.getFirstActivity() %}
                             <dd class="text-sm text-gray-500 dark:text-gray-400">First ride</dd>
                             <dt class="mb-1 font-extrabold">{{ firstActivity.getStartDate().format('d-m-Y') }}</dt>
-                            <a href="{{ firstActivity.getUrl() }}" class="text-xs text-blue-600 hover:underline">
-                                {{ firstActivity.getName()|ellipses(30) }}
-                            </a>
+                            <span class="text-xs">
+                                {{ render('html/component/activity-title.html.twig', {'activity': firstActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                            </span>
                         </div>
                     </div>
                     <div class="flex flex-col items-center justify-center p-6 border border-gray-200 rounded-lg shadow  dark:border-gray-700">
@@ -490,9 +490,9 @@
                             {% set earliestActivity = trivia.getEarliestActivity() %}
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Earliest start time</dd>
                             <dt class="mb-1 font-extrabold">{{ earliestActivity.getStartDate().format('H:i') }}</dt>
-                            <a href="{{ earliestActivity.getUrl() }}" class="text-xs text-blue-600 hover:underline">
-                                {{ earliestActivity.getName()|ellipses(30) }}
-                            </a>
+                            <span class="text-xs">
+                                {{ render('html/component/activity-title.html.twig', {'activity': earliestActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                            </span>
                         </div>
                     </div>
                     <div class="flex flex-col items-center justify-center p-6 border border-gray-200 rounded-lg shadow dark:border-gray-700">
@@ -500,9 +500,9 @@
                             {% set latestActivity = trivia.getLatestActivity() %}
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Latest start time</dd>
                             <dt class="mb-1 font-extrabold">{{ latestActivity.getStartDate().format('H:i') }}</dt>
-                            <a href="{{ latestActivity.getUrl() }}" class="text-xs text-blue-600 hover:underline">
-                                {{ latestActivity.getName()|ellipses(30) }}
-                            </a>
+                            <span class="text-xs">
+                                {{ render('html/component/activity-title.html.twig', {'activity': latestActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                            </span>
                         </div>
                     </div>
                     <div class="flex flex-col items-center justify-center p-6 border border-gray-200 rounded-lg shadow dark:border-gray-700">
@@ -510,9 +510,9 @@
                         <div class="text-center">
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Longest ride</dd>
                             <dt class="mb-1 font-extrabold">{{ longestActivity.getDistanceInKilometer()|formatNumber(0) }}<span class="text-xs">km</span></dt>
-                            <a href="{{ longestActivity.getUrl() }}" class="text-xs text-blue-600 hover:underline">
-                                {{ longestActivity.getName()|ellipses(30) }}
-                            </a>
+                            <span class="text-xs">
+                                {{ render('html/component/activity-title.html.twig', {'activity': longestActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                            </span>
                         </div>
                     </div>
                     <div class="flex flex-col items-center justify-center p-6 border border-gray-200 rounded-lg shadow dark:border-gray-700">
@@ -520,9 +520,9 @@
                         <div class="text-center">
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Highest elevation</dd>
                             <dt class="mb-1 font-extrabold">{{ highestElevationActivity.getElevationInMeter()|formatNumber(0) }}<span class="text-xs">m</span></dt>
-                            <a href="{{ highestElevationActivity.getUrl() }}" class="text-xs text-blue-600 hover:underline">
-                                {{ highestElevationActivity.getName()|ellipses(30) }}
-                            </a>
+                            <span class="text-xs">
+                                {{ render('html/component/activity-title.html.twig', {'activity': highestElevationActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                            </span>
                         </div>
                     </div>
                     <div class="flex flex-col items-center justify-center p-6 border border-gray-200 rounded-lg shadow dark:border-gray-700">
@@ -530,9 +530,9 @@
                             {% set fastestActivity = trivia.getFastestActivity() %}
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Fastest ride</dd>
                             <dt class="mb-1 font-extrabold">{{ fastestActivity.getAverageSpeedInKmPerH() }}<span class="text-xs">km/h</span></dt>
-                            <a href="{{ fastestActivity.getUrl() }}" class="text-xs text-blue-600 hover:underline">
-                                {{ fastestActivity.getName()|ellipses(30) }}
-                            </a>
+                            <span class="text-xs">
+                                {{ render('html/component/activity-title.html.twig', {'activity': fastestActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                            </span>
                         </div>
                     </div>
                     <div class="flex flex-col items-center justify-center p-6 border border-gray-200 rounded-lg shadow dark:border-gray-700">
@@ -540,9 +540,9 @@
                             {% set mostKudosActivity = trivia.getMostKudotedActivity() %}
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Most kudos</dd>
                             <dt class="mb-1 font-extrabold">{{ mostKudosActivity.getKudoCount() }}</dt>
-                            <a href="{{ mostKudosActivity.getUrl() }}" class="text-xs text-blue-600 hover:underline">
-                                {{ mostKudosActivity.getName()|ellipses(30) }}
-                            </a>
+                            <span class="text-xs">
+                                {{ render('html/component/activity-title.html.twig', {'activity': mostKudosActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                            </span>
                         </div>
                     </div>
                     <div class="flex flex-col items-center justify-center p-6 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -558,7 +558,7 @@
                             <dt class="mb-1 font-extrabold">{{ mostConsecutiveDaysOfCycling|length }}</dt>
                             <div class="text-xs text-gray-500 dark:text-gray-400">
                                 {{ mostConsecutiveDaysOfCycling.getEarliestDate().format('d-m-Y') }}
-                                -
+                                <span class="font-medium">-</span>
                                 {{ mostConsecutiveDaysOfCycling.getLatestDate().format('d-m-Y') }}
                             </div>
                         </div>
