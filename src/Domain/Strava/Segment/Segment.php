@@ -124,6 +124,10 @@ final class Segment
 
     public function isStarred(): bool
     {
-        return (bool) $this->data['starred'] ?? false;
+        if (!isset($this->data['starred'])) {
+            return false;
+        }
+
+        return (bool) $this->data['starred'];
     }
 }
