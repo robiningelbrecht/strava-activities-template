@@ -62,7 +62,7 @@
                                             {% if segment.getActivityType().isVirtual() %}
                                                 {{ renderSvg('zwift-logo') }}
                                             {% else %}
-                                                {{ svgBikeLogoSmall }}
+                                                {{ renderSvg('bike') }}
                                             {% endif %}
                                             <span class="truncate">{{ segment.getName()|ellipses(50) }}</span>
                                         </a>
