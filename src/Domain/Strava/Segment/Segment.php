@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 final class Segment
 {
     private ?SegmentEffort $bestEffort = null;
+    private int $numberOfTimesRidden = 0;
 
     /**
      * @param array<mixed> $data
@@ -95,7 +96,10 @@ final class Segment
      */
     public function getSearchables(): array
     {
-        return [(string) $this->getName()];
+        return array_filter([
+                (string) $this->getName(),
+                $this->isStarred() ? 'favourite starred' : null]
+        );
     }
 
     public function getBestEffort(): ?SegmentEffort
@@ -106,5 +110,24 @@ final class Segment
     public function enrichWithBestEffort(SegmentEffort $segmentEffort): void
     {
         $this->bestEffort = $segmentEffort;
+    }
+
+    public function getNumberOfTimesRidden(): int
+    {
+        return $this->numberOfTimesRidden;
+    }
+
+    public function enrichWithNumberOfTimesRidden(int $numberOfTimesRidden): void
+    {
+        $this->numberOfTimesRidden = $numberOfTimesRidden;
+    }
+
+    public function isStarred(): bool
+    {
+        if (!isset($this->data['starred'])) {
+            return false;
+        }
+
+        return (bool) $this->data['starred'];
     }
 }
