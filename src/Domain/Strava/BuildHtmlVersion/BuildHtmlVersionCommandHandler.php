@@ -140,6 +140,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 'eddingtonNumber' => $eddington->getNumber(),
                 'completedChallenges' => count($allChallenges),
                 'totalPhotoCount' => count($allImages),
+                'lastUpdate' => $now,
             ]),
         );
 
