@@ -67,7 +67,7 @@
                                             <span class="truncate">{{ segment.getName()|ellipses(50) }}</span>
                                         </a>
                                         {% if segment.isStarred() %}
-                                            {{ svgStar }}
+                                            {{ renderSvg('star') }}
                                         {% endif %}
                                     </div>
                                 </td>
