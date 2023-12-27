@@ -33,7 +33,7 @@
                             </th>
                             <th scope="col" class="px-2 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgStar }}
+                                    {{ svgTrophy }}
                                 </div>
                             </th>
                             <th scope="col" class="px-2 py-3">
@@ -46,20 +46,30 @@
                                     {{ svgMaxGradient }}
                                 </div>
                             </th>
+                            <th scope="col" class="px-2 py-3">
+                                <div class="flex items-center justify-center">
+                                    {{ svgHashtag }}
+                                </div>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for segment in segments %}
                             <tr data-searchables="{{ segment.getSearchables()|join(' ') }}" class="{{ cycle(['bg-white border-b dark:bg-gray-900 dark:border-gray-700', 'border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700'], loop.index0) }}">
                                 <td class="px-2 py-2 text-left">
-                                    <a href="#" data-model-content-url="segment/{{ segment.getId() }}.html" class="flex items-center gap-x-1 font-medium text-blue-600 dark:text-blue-500 hover:underline" rel="nofollow">
-                                        {% if segment.getActivityType().isVirtual() %}
-                                            {{ svgZwiftLogo }}
-                                        {% else %}
-                                            {{ svgBikeLogoSmall }}
+                                    <div class="flex items-center gap-x-1">
+                                        <a href="#" data-model-content-url="segment/{{ segment.getId() }}.html" class="flex items-center gap-x-1 font-medium text-blue-600 dark:text-blue-500 hover:underline" rel="nofollow">
+                                            {% if segment.getActivityType().isVirtual() %}
+                                                {{ svgZwiftLogo }}
+                                            {% else %}
+                                                {{ svgBikeLogoSmall }}
+                                            {% endif %}
+                                            <span class="truncate">{{ segment.getName()|ellipses(50) }}</span>
+                                        </a>
+                                        {% if segment.isStarred() %}
+                                            {{ svgStar }}
                                         {% endif %}
-                                        <span class="truncate">{{ segment.getName()|ellipses(50) }}</span>
-                                    </a>
+                                    </div>
                                 </td>
                                 <td class="px-2 py-2">
                                     <div class="flex justify-center">
@@ -77,6 +87,9 @@
                                 </td>
                                 <td class="px-2 py-2">
                                     {{ segment.getMaxGradient() }}<span class="text-xs">%</span>
+                                </td>
+                                <td class="px-2 py-2">
+                                    {{ segment.getNumberOfTimesRidden() }}
                                 </td>
                             </tr>
                         {% endfor %}
