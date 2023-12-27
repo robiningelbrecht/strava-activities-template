@@ -195,6 +195,7 @@ trait ProvideTestData
                     'distance' => 100,
                     'maximum_grade' => 5.3,
                     'activity_type' => 'VirtualRide',
+                    'starred' => true,
                 ])
                 ->build()
         );
