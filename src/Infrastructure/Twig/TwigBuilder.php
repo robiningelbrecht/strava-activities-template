@@ -20,6 +20,8 @@ final readonly class TwigBuilder
         $twig->addFunction(new TwigFunction('image64', [Base64TwigExtension::class, 'image']));
         $twig->addFunction(new TwigFunction('font64', [Base64TwigExtension::class, 'font']));
         $twig->addFunction(new TwigFunction('render', [new RenderTemplateTwigExtension($twig), 'render']));
+        $twig->addFunction(new TwigFunction('renderComponent', [new RenderTemplateTwigExtension($twig), 'renderComponent']));
+        $twig->addFunction(new TwigFunction('renderSvg', [new RenderTemplateTwigExtension($twig), 'renderSvg']));
         $twig->addFilter(new TwigFilter('repeat', [StrRepeatTwigExtension::class, 'doRepeat']));
         $twig->addFilter(new TwigFilter('ellipses', [StrEllipsisTwigExtension::class, 'doEllipses']));
         $twig->addFilter(new TwigFilter('formatNumber', [FormatNumberTwigExtension::class, 'doFormat']));
