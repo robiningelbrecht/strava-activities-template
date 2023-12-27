@@ -1,4 +1,3 @@
-{% set svgHashtag = '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M10 4L7 20M17 4L14 20M5 8H20M4 16H19" stroke="#F26722" stroke-width="2" stroke-linecap="round"></path> </g></svg>' %}
 
 {% autoescape false %}
     <!-- Modal header -->
@@ -49,7 +48,7 @@
                     <div class="text-xs text-gray-500 dark:text-gray-400">kcal</div>
                 </li>
                 <li class="flex items-center gap-x-0.5 pl-2">
-                    {{ svgHashtag }}
+                    {{ renderSvg('hashtag') }}
                     <div>{{ statistics.numberOfRides }}</div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">rides</div>
                 </li>

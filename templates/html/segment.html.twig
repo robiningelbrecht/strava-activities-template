@@ -1,5 +1,3 @@
-{% set svgHashtag = '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M10 4L7 20M17 4L14 20M5 8H20M4 16H19" stroke="#F26722" stroke-width="2" stroke-linecap="round"></path> </g></svg>' %}
-
 {% autoescape false %}
     <!-- Modal header -->
     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
@@ -36,7 +34,7 @@
                     <tr>
                         <th scope="col" class="cursor-pointer px-2 py-3 bg-gray-50 dark:bg-gray-700 lg:sticky lg:left-0">
                             <div class="flex items-center justify-center">
-                                {{ svgHashtag }}
+                                {{ renderSvg('hashtag') }}
                                 {{ renderSvg('sorting-icon') }}
                             </div>
                         </th>
