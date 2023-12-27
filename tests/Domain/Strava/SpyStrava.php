@@ -72,6 +72,7 @@ class SpyStrava extends Strava
         $this->throw429IfMaxNumberOfCallsIsExceeded();
 
         return [
+            'id' => 100,
             'weight' => 68.00,
         ];
     }

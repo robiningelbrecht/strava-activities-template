@@ -15,6 +15,10 @@ use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Exception\EntityNotFound;
+use App\Infrastructure\KeyValue\Key;
+use App\Infrastructure\KeyValue\KeyValue;
+use App\Infrastructure\KeyValue\Value;
+use App\Infrastructure\KeyValue\WriteModel\KeyValueStore;
 use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\UuidFactory;
@@ -29,6 +33,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
         private OpenMeteo $openMeteo,
         private ActivityRepository $activityRepository,
         private ActivityDetailsRepository $activityDetailsRepository,
+        private KeyValueStore $keyValueStore,
         private FilesystemOperator $filesystem,
         private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
         private UuidFactory $uuidFactory,
@@ -42,6 +47,12 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
         $command->getOutput()->writeln('Importing activities...');
 
         $athlete = $this->strava->getAthlete();
+        // Store in KeyValue store, so we don't need to query Strava again.
+        $this->keyValueStore->save(KeyValue::fromState(
+            key: Key::ATHLETE_ID,
+            value: Value::fromString($athlete['id'])
+        ));
+
         $allActivityIds = $this->activityDetailsRepository->findActivityIds();
         $activityIdsDelete = array_combine(
             $allActivityIds->map(fn (ActivityId $activityId) => (string) $activityId),
