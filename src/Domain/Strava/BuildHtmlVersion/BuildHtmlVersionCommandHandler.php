@@ -82,6 +82,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $now = SerializableDateTime::fromDateTimeImmutable($this->clock->now());
         $athleteBirthday = SerializableDateTime::fromString($this->keyValueStore->find(Key::ATHLETE_BIRTHDAY)->getValue());
 
+        $athleteId = $this->keyValueStore->find(Key::ATHLETE_ID)->getValue();
         $allActivities = $this->activityDetailsRepository->findAll();
         $allChallenges = $this->challengeDetailsRepository->findAll();
         $allBikes = $this->gearDetailsRepository->findAll();
@@ -141,6 +142,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 'completedChallenges' => count($allChallenges),
                 'totalPhotoCount' => count($allImages),
                 'lastUpdate' => $now,
+                'athleteId' => $athleteId,
             ]),
         );
 

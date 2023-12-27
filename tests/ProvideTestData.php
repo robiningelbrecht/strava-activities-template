@@ -300,5 +300,10 @@ trait ProvideTestData
             value: Value::fromString('1989-08-14'),
         );
         $keyValueStore->save($keyValue);
+        $keyValue = KeyValue::fromState(
+            key: Key::ATHLETE_ID,
+            value: Value::fromString('100'),
+        );
+        $keyValueStore->save($keyValue);
     }
 }
