@@ -218,7 +218,7 @@
                     <a href="#" data-router-navigate="segments.html"
                        class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                fill="currentColor" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                             fill="currentColor" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                             <g stroke-width="0"></g>
                             <g stroke-linecap="round" stroke-linejoin="round"></g>
                             <g><path d="M217.45557,38.544a35.9967,35.9967,0,0,0-57.937,40.96679L79.5105,159.51855a36.05906,36.05906,0,0,0-40.96607,7.0254H38.544a36.00029,36.00029,0,1,0,57.93737,9.94531L176.4895,96.48145A35.99663,35.99663,0,0,0,217.45557,38.544ZM72.48584,200.48535a12.00027,12.00027,0,0,1-16.97119-16.9707h-.00049a12.00044,12.00044,0,0,1,16.97168,16.9707Zm128-128a12.01673,12.01673,0,0,1-16.969.00244l-.0022-.00244a12.0001,12.0001,0,1,1,16.97119,0Z"></path>
@@ -256,7 +256,7 @@
                 </li>
             </ul>
         </div>
-        <div class="hidden absolute bottom-0 left-0 justify-center p-4 space-x-4 w-full lg:flex bg-white dark:bg-gray-800 z-20">
+        <div class="hidden absolute lg:flex flex-col justify-center bottom-0 left-0 p-4 space-x-4 w-full bg-white dark:bg-gray-800 z-20">
             <a href="https://github.com/robiningelbrecht/strava-activities-template" target="_blank"
                data-tooltip-target="tooltip-github"
                class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:text-gray-400 dark:hover:text-white hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600">
@@ -272,6 +272,7 @@
                 GitHub repository
                 <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">Updated on {{ lastUpdate.format('d-m-Y h:i') }}</div>
         </div>
     </aside>
     <main class="p-4 md:ml-64 h-auto min-h-screen pt-20 text-gray-900 dark:text-white">
@@ -441,7 +442,7 @@
                 L.imageOverlay(
                     data.imageOverlay,
                     data.bounds,
-                {attribution: '© <a href="https://zwift.com" rel="noreferrer noopener">Zwift</a>',}
+                    {attribution: '© <a href="https://zwift.com" rel="noreferrer noopener">Zwift</a>',}
                 ).addTo(map);
                 map.setMaxBounds(data.bounds);
             }
