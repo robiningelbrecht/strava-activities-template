@@ -37,7 +37,7 @@
                     {% for image in images %}
                         <div class="mb-4 break-inside-avoid-column bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                             <a href="{{ image.getActivity().getUrl() }}" target="_blank">
-                                <img class="h-auto max-w-full rounded-t-lg lazy" data-src="{{ image.getGitHubImageUrl() }}" alt="{{ image.getActivity().getName() }}" src="{{ placeholderImage }}" />
+                                <img class="h-auto max-w-full rounded-t-lg lazy" data-src="{{ image.getGitHubImageUrl() }}" alt="{{ image.getActivity().getName() }}" src="{{ renderComponent('placeholder-image') }}" />
                             </a>
 
                             <div class="p-2 text-center">
