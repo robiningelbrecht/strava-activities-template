@@ -28,44 +28,49 @@
     <div class="p-4 md:p-5 space-y-4">
         <div class="grid grid-cols-1 gap-4">
             <div class="relative overflow-x-auto">
-                <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                <table class="sortable w-full text-sm text-center text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-2 py-3 bg-gray-50 dark:bg-gray-700 lg:sticky lg:left-0">
+                        <th scope="col" class="cursor-pointer px-2 py-3 bg-gray-50 dark:bg-gray-700 lg:sticky lg:left-0">
                             <div class="flex items-center justify-center">
                                 <svg class="w-5 h-5" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M10 4L7 20M17 4L14 20M5 8H20M4 16H19" stroke="#F26722" stroke-width="2" stroke-linecap="round"></path> </g></svg>
+                                 <svg class="w-3 h-3 ml-1.5 sort" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 24 24"><path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"></path></svg>
                             </div>
                         </th>
-                        <th scope="col" class="px-2 py-3">
+                        <th scope="col" class="cursor-pointer px-2 py-3">
                             <div class="flex items-center justify-center">
                                 <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none"><path d="M3 9H21M7 3V5M17 3V5M6 12H10V16H6V12ZM6.2 21H17.8C18.9201 21 19.4802 21 19.908 20.782C20.2843 20.5903 20.5903 20.2843 20.782 19.908C21 19.4802 21 18.9201 21 17.8V8.2C21 7.07989 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V17.8C3 18.9201 3 19.4802 3.21799 19.908C3.40973 20.2843 3.71569 20.5903 4.09202 20.782C4.51984 21 5.07989 21 6.2 21Z" stroke="#F26722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                 <svg class="w-3 h-3 ml-1.5 sort" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 24 24"><path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"></path></svg>
                             </div>
                         </th>
-                        <th scope="col" class="px-2 py-3">
+                        <th scope="col" class="no-sort px-2 py-3">
                         </th>
-                        <th scope="col" class="px-2 py-3">
+                        <th scope="col" class="cursor-pointer px-2 py-3">
                             <div class="flex items-center justify-center">
                                 <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none"><path d="M12 8V12L15 15" stroke="#F26722" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="12" r="9" stroke="#F26722" stroke-width="2"></circle></svg>
+                                 <svg class="w-3 h-3 ml-1.5 sort" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 24 24"><path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"></path></svg>
                             </div>
                         </th>
-                        <th scope="col" class="px-2 py-3">
+                        <th scope="col" class="cursor-pointer px-2 py-3">
                             <div class="flex items-center justify-center">
                                 <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none"><path d="M6.34315 17.6569C5.22433 16.538 4.4624 15.1126 4.15372 13.5607C3.84504 12.0089 4.00346 10.4003 4.60896 8.93853C5.21446 7.47672 6.23984 6.22729 7.55544 5.34824C8.87103 4.46919 10.4177 4 12 4C13.5823 4 15.129 4.46919 16.4446 5.34824C17.7602 6.22729 18.7855 7.47672 19.391 8.93853C19.9965 10.4003 20.155 12.0089 19.8463 13.5607C19.5376 15.1126 18.7757 16.538 17.6569 17.6569" stroke="#F26722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 12L16 10" stroke="#F26722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                 <svg class="w-3 h-3 ml-1.5 sort" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 24 24"><path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"></path></svg>
                             </div>
                         </th>
-                        <th scope="col" class="px-2 py-3">
+                        <th scope="col" class="cursor-pointer px-2 py-3">
                             <div class="flex items-center justify-center">
                                 <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24"><polygon fill="none" stroke="#F26722" stroke-width="2" stroke-miterlimit="10" points="8.29 1.71 18.5 1.71 13.86 9.14 17.57 9.14 7.36 20.29 9.21 12.86 5.5 12.86 8.29 1.71"></polygon></svg>
+                                 <svg class="w-3 h-3 ml-1.5 sort" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 24 24"><path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"></path></svg>
                             </div>
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                                             <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                            <td class="px-2 py-2 truncate lg:sticky lg:left-0 bg-white dark:bg-gray-900">
+                            <td data-sort="1" class="px-2 py-2 truncate lg:sticky lg:left-0 bg-white dark:bg-gray-900">
                                 1
                             </td>
-                            <td class="px-2 py-2">
+                            <td data-sort="1696896000" class="px-2 py-2">
                                 <div class="flex justify-center">
                                     <div class="w-[4.5rem]">10-10-23</div>
                                 </div>
@@ -78,13 +83,13 @@
             </a>
 
                             </td>
-                            <td class="px-2 py-2">
+                            <td data-sort="10.3" class="px-2 py-2">
                                 10s
                             </td>
-                            <td class="px-2 py-2">
+                            <td data-sort="35" class="px-2 py-2">
                                 35.0<span class="text-xs">km/h</span>
                             </td>
-                            <td class="px-2 py-2">
+                            <td data-sort="" class="px-2 py-2">
                                                                     n/a
                                                             </td>
                         </tr>
