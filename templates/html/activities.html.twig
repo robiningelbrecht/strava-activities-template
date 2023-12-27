@@ -31,8 +31,8 @@
                         <tr>
                             <th scope="col" class="px-2 py-3 cursor-pointer">
                                 <div class="flex items-center justify-center">
-                                    {{ svgCalendar }}
-                                    {{ svgSortingIcon }}
+                                    {{ renderSvg('calendar') }}
+                                    {{ renderSvg('sorting-icon') }}
                                 </div>
                             </th>
                             <th scope="col" class="no-sort px-2 py-3 bg-gray-50 dark:bg-gray-700 lg:sticky lg:left-0">
@@ -40,44 +40,44 @@
                             </th>
                             <th scope="col" class="px-6 py-3 cursor-pointer">
                                 <div class="flex items-center justify-center">
-                                    {{ svgDistance }}
-                                    {{ svgSortingIcon }}
+                                    {{ renderSvg('distance') }}
+                                    {{ renderSvg('sorting-icon') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3 cursor-pointer">
                                 <div class="flex items-center justify-center">
-                                    {{ svgElevation }}
-                                    {{ svgSortingIcon }}
+                                    {{ renderSvg('elevation') }}
+                                    {{ renderSvg('sorting-icon') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3 cursor-pointer">
                                 <div class="flex items-center justify-center">
-                                    {{ svgTime }}
-                                    {{ svgSortingIcon }}
+                                    {{ renderSvg('time') }}
+                                    {{ renderSvg('sorting-icon') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3 cursor-pointer">
                                 <div class="flex items-center justify-center">
-                                    {{ svgPower }}
-                                    {{ svgSortingIcon }}
+                                    {{ renderSvg('power') }}
+                                    {{ renderSvg('sorting-icon') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3 cursor-pointer">
                                 <div class="flex items-center justify-center">
-                                    {{ svgSpeed }}
-                                    {{ svgSortingIcon }}
+                                    {{ renderSvg('speed') }}
+                                    {{ renderSvg('sorting-icon') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3 cursor-pointer">
                                 <div class="flex items-center justify-center">
-                                    {{ svgHeartRate }}
-                                    {{ svgSortingIcon }}
+                                    {{ renderSvg('heart-rate') }}
+                                    {{ renderSvg('sorting-icon') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3 cursor-pointer">
                                 <div class="flex items-center justify-center">
-                                    {{ svgCalories }}
-                                    {{ svgSortingIcon }}
+                                    {{ renderSvg('calories') }}
+                                    {{ renderSvg('sorting-icon') }}
                                 </div>
                             </th>
                             <th scope="col" colspan="2" class="no-sort px-6 py-3">
@@ -113,7 +113,7 @@
                                     <div class="w-[4.5rem]">{{ activity.getStartDate().format('d-m-y') }}</div>
                                 </td>
                                 <td class="px-2 py-2 truncate lg:sticky lg:left-0 {{ cycle(['bg-white dark:bg-gray-900', 'bg-gray-50 dark:bg-gray-800'], loop.index0) }}">
-                                    {{ render('html/component/activity-title.html.twig', {'activity': activity, 'ellipses': 50}) }}
+                                    {{ renderComponent('activity-title', {'activity': activity, 'ellipses': 50}) }}
                                 </td>
                                 <td data-sort="{{ activity.getDistanceInKilometer() }}" class="px-6 py-2 {{ activityHighlights.getLongestDistance() == activity.getDistanceInKilometer() ? 'text-strava-orange font-bold': '' }}">
                                     {{ activity.getDistanceInKilometer()|formatNumber(0) }}<span class="text-xs">km</span>

@@ -33,22 +33,22 @@
                             </th>
                             <th scope="col" class="px-2 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgTrophy }}
+                                    {{ renderSvg('trophy') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-2 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgDistance }}
+                                    {{ renderSvg('distance') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-2 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgMaxGradient }}
+                                    {{ renderSvg('max-gradient') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-2 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgHashtag }}
+                                    {{ renderSvg('hashtag') }}
                                 </div>
                             </th>
                         </tr>
@@ -60,14 +60,14 @@
                                     <div class="flex items-center gap-x-1">
                                         <a href="#" data-model-content-url="segment/{{ segment.getId() }}.html" class="flex items-center gap-x-1 font-medium text-blue-600 dark:text-blue-500 hover:underline" rel="nofollow">
                                             {% if segment.getActivityType().isVirtual() %}
-                                                {{ svgZwiftLogo }}
+                                                {{ renderSvg('zwift-logo') }}
                                             {% else %}
-                                                {{ svgBikeLogoSmall }}
+                                                {{ renderSvg('bike') }}
                                             {% endif %}
                                             <span class="truncate">{{ segment.getName()|ellipses(50) }}</span>
                                         </a>
                                         {% if segment.isStarred() %}
-                                            {{ svgStar }}
+                                            {{ renderSvg('star') }}
                                         {% endif %}
                                     </div>
                                 </td>

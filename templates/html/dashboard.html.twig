@@ -25,37 +25,37 @@
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgDistance }}
+                                    {{ renderSvg('distance') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgElevation }}
+                                    {{ renderSvg('elevation') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgTime }}
+                                    {{ renderSvg('time') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgPower }}
+                                    {{ renderSvg('power') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgSpeed }}
+                                    {{ renderSvg('speed') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgHeartRate }}
+                                    {{ renderSvg('heart-rate') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgCalories }}
+                                    {{ renderSvg('calories') }}
                                 </div>
                             </th>
                         </tr>
@@ -67,7 +67,7 @@
                                     <div class="w-[4.5rem]">{{ activity.getStartDate().format('d-m-y') }}</div>
                                 </td>
                                 <td class="px-2 py-2 truncate sticky left-0 {{ cycle(['bg-white dark:bg-gray-900', 'bg-gray-50 dark:bg-gray-800'], loop.index0) }}">
-                                    {{ render('html/component/activity-title.html.twig', {'activity': activity, 'ellipses': 30}) }}
+                                    {{ renderComponent('activity-title', {'activity': activity, 'ellipses': 30}) }}
                                 </td>
                                 <td class="px-6 py-2 {{ activityHighlights.getLongestDistance() == activity.getDistanceInKilometer() ? 'text-strava-orange font-bold': '' }}">
                                     {{ activity.getDistanceInKilometer()|formatNumber(0) }}<span class="text-xs">km</span>
@@ -142,12 +142,12 @@
                         <tr>
                             <th scope="col" class="px-6 py-3 sticky left-0 bg-gray-50 dark:bg-gray-700">
                                 <div class="flex items-center justify-center">
-                                    {{ svgTime }}
+                                    {{ renderSvg('time') }}
                                 </div>
                             </th>
                             <th scope="col" colspan="2" class="px-2 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgPower }}
+                                    {{ renderSvg('power') }}
                                 </div>
                             </th>
                             <th>
@@ -168,7 +168,7 @@
                                     {{ powerOutput.getRelativePower() }}<span class="text-xs">w/kg</span>
                                 </td>
                                 <td class="px-6 py-2 text-left truncate">
-                                    {{ render('html/component/activity-title.html.twig', {'activity': powerOutput.getActivity()}) }}
+                                    {{ renderComponent('activity-title', {'activity': powerOutput.getActivity()}) }}
                                 </td>
                             </tr>
                         {% endfor %}
@@ -187,12 +187,12 @@
                         <tr>
                             <th scope="col" class="px-6 py-3 sticky left-0 bg-gray-50 dark:bg-gray-700">
                                 <div class="flex items-center justify-center">
-                                    {{ svgTime }}
+                                    {{ renderSvg('time') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-2 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgHeartRate }}
+                                    {{ renderSvg('heart-rate') }}
                                 </div>
                             </th>
                             <th>
@@ -210,7 +210,7 @@
                                     {{ heartRate.getRate() }}<span class="text-xs">bpm</span>
                                 </td>
                                 <td class="px-6 py-2 text-left truncate">
-                                    {{ render('html/component/activity-title.html.twig', {'activity': heartRate.getActivity()}) }}
+                                    {{ renderComponent('activity-title', {'activity': heartRate.getActivity()}) }}
                                 </td>
                             </tr>
                         {% endfor %}
@@ -277,22 +277,22 @@
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgDistance }}
+                                    {{ renderSvg('distance') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgElevation }}
+                                    {{ renderSvg('elevation') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgTime }}
+                                    {{ renderSvg('time') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgSpeed }}
+                                    {{ renderSvg('speed') }}
                                 </div>
                             </th>
                         </tr>
@@ -347,22 +347,22 @@
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgDistance }}
+                                    {{ renderSvg('distance') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgElevation }}
+                                    {{ renderSvg('elevation') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgTime }}
+                                    {{ renderSvg('time') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgSpeed }}
+                                    {{ renderSvg('speed') }}
                                 </div>
                             </th>
                         </tr>
@@ -417,22 +417,22 @@
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgDistance }}
+                                    {{ renderSvg('distance') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgElevation }}
+                                    {{ renderSvg('elevation') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgTime }}
+                                    {{ renderSvg('time') }}
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center justify-center">
-                                    {{ svgSpeed }}
+                                    {{ renderSvg('speed') }}
                                 </div>
                             </th>
                         </tr>
@@ -481,7 +481,7 @@
                             <dd class="text-sm text-gray-500 dark:text-gray-400">First ride</dd>
                             <dt class="mb-1 font-extrabold">{{ firstActivity.getStartDate().format('d-m-Y') }}</dt>
                             <span class="text-xs">
-                                {{ render('html/component/activity-title.html.twig', {'activity': firstActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                                {{ renderComponent('activity-title', {'activity': firstActivity, 'ellipses': 30, 'hideIcon': true}) }}
                             </span>
                         </div>
                     </div>
@@ -491,7 +491,7 @@
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Earliest start time</dd>
                             <dt class="mb-1 font-extrabold">{{ earliestActivity.getStartDate().format('H:i') }}</dt>
                             <span class="text-xs">
-                                {{ render('html/component/activity-title.html.twig', {'activity': earliestActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                                {{ renderComponent('activity-title', {'activity': earliestActivity, 'ellipses': 30, 'hideIcon': true}) }}
                             </span>
                         </div>
                     </div>
@@ -501,7 +501,7 @@
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Latest start time</dd>
                             <dt class="mb-1 font-extrabold">{{ latestActivity.getStartDate().format('H:i') }}</dt>
                             <span class="text-xs">
-                                {{ render('html/component/activity-title.html.twig', {'activity': latestActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                                {{ renderComponent('activity-title', {'activity': latestActivity, 'ellipses': 30, 'hideIcon': true}) }}
                             </span>
                         </div>
                     </div>
@@ -511,7 +511,7 @@
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Longest ride</dd>
                             <dt class="mb-1 font-extrabold">{{ longestActivity.getDistanceInKilometer()|formatNumber(0) }}<span class="text-xs">km</span></dt>
                             <span class="text-xs">
-                                {{ render('html/component/activity-title.html.twig', {'activity': longestActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                                {{ renderComponent('activity-title', {'activity': longestActivity, 'ellipses': 30, 'hideIcon': true}) }}
                             </span>
                         </div>
                     </div>
@@ -521,7 +521,7 @@
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Highest elevation</dd>
                             <dt class="mb-1 font-extrabold">{{ highestElevationActivity.getElevationInMeter()|formatNumber(0) }}<span class="text-xs">m</span></dt>
                             <span class="text-xs">
-                                {{ render('html/component/activity-title.html.twig', {'activity': highestElevationActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                                {{ renderComponent('activity-title', {'activity': highestElevationActivity, 'ellipses': 30, 'hideIcon': true}) }}
                             </span>
                         </div>
                     </div>
@@ -531,7 +531,7 @@
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Fastest ride</dd>
                             <dt class="mb-1 font-extrabold">{{ fastestActivity.getAverageSpeedInKmPerH() }}<span class="text-xs">km/h</span></dt>
                             <span class="text-xs">
-                                {{ render('html/component/activity-title.html.twig', {'activity': fastestActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                                {{ renderComponent('activity-title', {'activity': fastestActivity, 'ellipses': 30, 'hideIcon': true}) }}
                             </span>
                         </div>
                     </div>
@@ -541,7 +541,7 @@
                             <dd class="text-sm text-gray-500 dark:text-gray-400">Most kudos</dd>
                             <dt class="mb-1 font-extrabold">{{ mostKudosActivity.getKudoCount() }}</dt>
                             <span class="text-xs">
-                                {{ render('html/component/activity-title.html.twig', {'activity': mostKudosActivity, 'ellipses': 30, 'hideIcon': true}) }}
+                                {{ renderComponent('activity-title', {'activity': mostKudosActivity, 'ellipses': 30, 'hideIcon': true}) }}
                             </span>
                         </div>
                     </div>
