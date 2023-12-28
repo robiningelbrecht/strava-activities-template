@@ -305,8 +305,7 @@
                                     {{ segmentEffort.getElapsedTimeFormatted() }}
                                 </td>
                                 <td class="px-2 py-2">
-                                    {{ segmentEffort.getAverageSpeedInKmPerH()|formatNumber(1) }}<span
-                                            class="text-xs">km/h</span>
+                                    {{ segmentEffort.getAverageSpeedInKmPerH()|formatNumber(1) }}<span class="text-xs">km/h</span>
                                 </td>
                                 <td class="px-2 py-2">
                                     {% if segmentEffort.getAverageWatts() %}
@@ -314,8 +313,7 @@
                                     {% endif %}
                                 </td>
                                 <td class="px-2 py-2">
-                                    {{ segmentEffort.getDistanceInKilometer()|formatNumber(2) }}<span
-                                            class="text-xs">km</span>
+                                    {{ segmentEffort.getDistanceInKilometer()|formatNumber(2) }}<span class="text-xs">km</span>
                                 </td>
                             </tr>
                         {% endfor %}
