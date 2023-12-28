@@ -431,6 +431,11 @@ final class Activity extends AggregateRoot
         return 'zwift' === strtolower($this->getDeviceName() ?? '');
     }
 
+    public function isRouvyRide(): bool
+    {
+        return 'rouvy' === strtolower($this->getDeviceName() ?? '');
+    }
+
     public function getLeafletMap(): ?LeafletMap
     {
         if (!$this->getLatitude() || !$this->getLongitude()) {

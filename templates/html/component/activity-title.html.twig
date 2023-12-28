@@ -6,9 +6,15 @@
     <a href="#" data-model-content-url="activity/{{ activity.getId() }}.html" class="{{ classes|join(' ') }}" rel="nofollow">
         {% if not hideIcon %}
             {% if activity.getType().isVirtual() %}
-                {{ renderSvg('zwift-logo', {'classes': 'w-3 shrink-0'}) }}
+                {% if activity.isZwiftRide() %}
+                    {{ renderSvg('zwift-logo') }}
+                {% elseif activity.isRouvyRide() %}
+                    {{ renderSvg('rouvy-logo') }}
+                {% else %}
+                    {{ renderSvg('indoor-bike') }}
+                {% endif %}
             {% else %}
-                {{ renderSvg('bike', {'classes': 'h-4 shrink-0'}) }}
+                {{ renderSvg('bike') }}
             {% endif %}
         {% endif %}
         {% if ellipses %}
