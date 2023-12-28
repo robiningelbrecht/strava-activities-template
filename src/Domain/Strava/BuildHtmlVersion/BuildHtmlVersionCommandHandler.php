@@ -366,6 +366,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                             averagePower: $activity->getAveragePower(),
                         )->build(),
                     ) : null,
+                    'segmentEfforts' => $this->segmentEffortDetailsRepository->findByActivityId($activity->getId()),
                 ]),
             );
         }
