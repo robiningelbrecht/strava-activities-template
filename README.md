@@ -145,6 +145,11 @@ For any feedback, help or feature requests, please [open a new issue](https://gi
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
 
+#### [2023-12-28]
+
+* Show segments in activity modal
+* Several small improvements and bug fixes
+
 #### [2023-12-24]
 
 * Fix bug where rendering of HTML crashed on non-Zwift virtual activities.
