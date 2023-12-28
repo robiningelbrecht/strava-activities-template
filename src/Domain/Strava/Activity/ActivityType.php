@@ -12,14 +12,6 @@ enum ActivityType: string
         return self::RIDE === $this;
     }
 
-    public function getIcon(): string
-    {
-        return match ($this) {
-            self::RIDE => 'activity-ride',
-            self::VIRTUAL_RIDE => 'activity-virtual-ride',
-        };
-    }
-
     public function isVirtual(): bool
     {
         return self::RIDE !== $this;
