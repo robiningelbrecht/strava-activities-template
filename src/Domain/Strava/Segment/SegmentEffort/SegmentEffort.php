@@ -88,6 +88,11 @@ final class SegmentEffort
         return $this->activityId;
     }
 
+    public function getName(): string
+    {
+        return $this->data['name'];
+    }
+
     public function getStartDateTime(): SerializableDateTime
     {
         return $this->startDateTime;
@@ -117,6 +122,11 @@ final class SegmentEffort
         $averageSpeed = $this->data['distance'] / $this->getElapsedTimeInSeconds();
 
         return round($averageSpeed * 3.6, 1);
+    }
+
+    public function getDistanceInKilometer(): float
+    {
+        return $this->data['distance'] / 1000;
     }
 
     /**

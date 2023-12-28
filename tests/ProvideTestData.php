@@ -223,6 +223,7 @@ trait ProvideTestData
                     'elapsed_time' => 10.3,
                     'average_watts' => 200,
                     'distance' => 100,
+                    'name' => 'An effort',
                 ])
                 ->build()
         );
@@ -235,6 +236,7 @@ trait ProvideTestData
                     'elapsed_time' => 9.3,
                     'average_watts' => 200,
                     'distance' => 100,
+                    'name' => 'An effort',
                 ])
                 ->build()
         );
@@ -246,6 +248,7 @@ trait ProvideTestData
                 ->withData([
                     'elapsed_time' => 10.3,
                     'distance' => 100,
+                    'name' => 'An effort',
                 ])
                 ->build()
         );
