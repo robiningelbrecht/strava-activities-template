@@ -24,7 +24,7 @@ final class Segment
         #[ORM\Column(type: 'string', nullable: true)]
         private readonly Name $name,
         #[ORM\Column(type: 'json')]
-        private readonly array $data,
+        private array $data,
     ) {
     }
 
@@ -81,6 +81,21 @@ final class Segment
     public function getActivityType(): ActivityType
     {
         return ActivityType::from($this->data['activity_type']);
+    }
+
+    public function isZwiftSegment(): bool
+    {
+        return 'zwift' === strtolower($this->data['device_name'] ?? '');
+    }
+
+    public function isRouvySegment(): bool
+    {
+        return 'rouvy' === strtolower($this->data['device_name'] ?? '');
+    }
+
+    public function updateDeviceName(?string $deviceName): void
+    {
+        $this->data['device_name'] = $deviceName;
     }
 
     /**

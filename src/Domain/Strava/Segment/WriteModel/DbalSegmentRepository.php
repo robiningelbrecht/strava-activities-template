@@ -26,4 +26,16 @@ final readonly class DbalSegmentRepository implements SegmentRepository
             'data' => Json::encode($segment->getData()),
         ]);
     }
+
+    public function update(Segment $segment): void
+    {
+        $sql = 'UPDATE Segment
+        SET data = :data
+        WHERE segmentId = :segmentId';
+
+        $this->connectionFactory->getDefault()->executeStatement($sql, [
+            'segmentId' => $segment->getId(),
+            'data' => Json::encode($segment->getData()),
+        ]);
+    }
 }

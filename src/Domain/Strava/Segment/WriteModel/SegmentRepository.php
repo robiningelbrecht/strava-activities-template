@@ -9,4 +9,6 @@ use App\Domain\Strava\Segment\Segment;
 interface SegmentRepository
 {
     public function add(Segment $segment): void;
+
+    public function update(Segment $segment): void;
 }
