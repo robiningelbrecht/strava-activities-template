@@ -14,7 +14,7 @@
         <tr>
             <td>{{ activity.getStartDate().format('d-m-y') }}</td>
             <td>
-                {{ render('markdown/component/activity-title.html.twig', {'activity': activity}) }}
+                {{ render('markdown/component/activity-title.html.twig', {'activity': activity, 'ellipses': 29}) }}
             </td>
             <td align="center">{{ activity.getDistanceInKilometer()|formatNumber(0) }} <sup><sub>km</sub></sup></td>
             <td align="center">{{ activity.getElevationInMeter()|formatNumber(0) }} <sup><sub>m</sub></sup></td>
@@ -48,7 +48,7 @@
             <tr>
                 <td>{{ activity.getStartDate().format('d-m-y') }}</td>
                 <td>
-                    {{ render('markdown/component/activity-title.html.twig', {'activity': activity}) }}
+                    {{ render('markdown/component/activity-title.html.twig', {'activity': activity, 'ellipses': 29}) }}
                 </td>
                 <td align="center">{{ activity.getDistanceInKilometer()|formatNumber(0) }} <sup><sub>km</sub></sup></td>
                 <td align="center">{{ activity.getElevationInMeter()|formatNumber(0) }} <sup><sub>m</sub></sup></td>

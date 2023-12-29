@@ -9,4 +9,4 @@
     {% endif %}
 {% endif %}
 <img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/{{ logoName }}.svg" width="12" alt="{{ activity.getName() }}" title="{{ activity.getName() }}"/>
-<a href="{{ activity.getUrl() }}" title="Kcal: {{ activity.getCalories() ?: 'n/a' }} | Gear: {{ activity.getGearName() ?: 'None' }} ">{{ activity.getName()|ellipses(29) }}</a>
+<a href="{{ activity.getUrl() }}" title="Kcal: {{ activity.getCalories() ?: 'n/a' }} | Gear: {{ activity.getGearName() ?: 'None' }} ">{{ ellipses ? activity.getName()|ellipses(ellipses) : activity.getName() }}</a>
