@@ -93,11 +93,6 @@ final class Segment
         return 'rouvy' === strtolower($this->data['device_name'] ?? '');
     }
 
-    public function updateDeviceName(?string $deviceName): void
-    {
-        $this->data['device_name'] = $deviceName;
-    }
-
     /**
      * @return array<mixed>
      */

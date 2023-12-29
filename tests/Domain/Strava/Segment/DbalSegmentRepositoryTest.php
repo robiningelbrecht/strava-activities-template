@@ -32,31 +32,6 @@ class DbalSegmentRepositoryTest extends DatabaseTestCase
         );
     }
 
-    public function testUpdate(): void
-    {
-        $segment = SegmentBuilder::fromDefaults()
-            ->build();
-        $this->segmentRepository->add($segment);
-
-        $this->assertFalse(
-            $segment->isZwiftSegment()
-        );
-        $this->assertFalse(
-            $segment->isRouvySegment()
-        );
-
-        $segment->updateDeviceName('Zwift');
-        $this->segmentRepository->update($segment);
-
-        $segment = $this->segmentDetailsRepository->find($segment->getId());
-        $this->assertTrue(
-            $segment->isZwiftSegment()
-        );
-        $this->assertFalse(
-            $segment->isRouvySegment()
-        );
-    }
-
     public function testItShouldThrowWhenNotFound(): void
     {
         $this->expectException(EntityNotFound::class);

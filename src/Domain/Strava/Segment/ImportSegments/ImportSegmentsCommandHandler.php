@@ -57,8 +57,6 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
 
                 try {
                     $segment = $this->segmentDetailsRepository->find($segment->getId());
-                    $segment->updateDeviceName($activity->getDeviceName());
-                    $this->segmentRepository->update($segment);
                 } catch (EntityNotFound) {
                     $this->segmentRepository->add($segment);
                     $command->getOutput()->writeln(sprintf('  => Added segment "%s"', $segment->getName()));
