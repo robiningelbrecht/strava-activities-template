@@ -224,10 +224,7 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
             <td align="center">{{ powerOutput.getPower() }} <sup><sub>w</sub></sup></td>
             <td align="center">{{ powerOutput.getRelativePower() }} <sup><sub>w/kg</sub></sup></td>
             <td>
-                <img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/{{ activity.getType().getIcon() }}.svg" width="12" alt="virtual ride" title="virtual ride"/>
-                <a href="{{ activity.getUrl() }}">
-                    {{ activity.getName()|length > 70 ? activity.getName()|slice(0, 67) ~ '...' : activity.getName() }}
-                </a>
+                {{ render('markdown/component/activity-title.html.twig', {'activity': activity}) }}
             </td>
         </tr>
     {% endfor %}
