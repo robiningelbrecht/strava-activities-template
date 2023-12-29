@@ -60,7 +60,13 @@
                                     <div class="flex items-center gap-x-1">
                                         <a href="#" data-model-content-url="segment/{{ segment.getId() }}.html" class="flex items-center gap-x-1 font-medium text-blue-600 dark:text-blue-500 hover:underline" rel="nofollow">
                                             {% if segment.getActivityType().isVirtual() %}
-                                                {{ renderSvg('zwift-logo') }}
+                                                {% if segment.isZwiftSegment() %}
+                                                    {{ renderSvg('zwift-logo') }}
+                                                {% elseif segment.isRouvySegment() %}
+                                                    {{ renderSvg('rouvy-logo') }}
+                                                {% else %}
+                                                    {{ renderSvg('indoor-bike') }}
+                                                {% endif %}
                                             {% else %}
                                                 {{ renderSvg('bike') }}
                                             {% endif %}

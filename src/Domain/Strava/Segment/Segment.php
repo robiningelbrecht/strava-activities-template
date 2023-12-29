@@ -14,6 +14,7 @@ final class Segment
 {
     private ?SegmentEffort $bestEffort = null;
     private int $numberOfTimesRidden = 0;
+    private ?string $deviceName = null;
 
     /**
      * @param array<mixed> $data
@@ -85,17 +86,17 @@ final class Segment
 
     public function isZwiftSegment(): bool
     {
-        return 'zwift' === strtolower($this->data['device_name'] ?? '');
+        return 'zwift' === strtolower($this->deviceName ?? '');
     }
 
     public function isRouvySegment(): bool
     {
-        return 'rouvy' === strtolower($this->data['device_name'] ?? '');
+        return 'rouvy' === strtolower($this->deviceName ?? '');
     }
 
-    public function updateDeviceName(?string $deviceName): void
+    public function enrichWithDeviceName(?string $deviceName): void
     {
-        $this->data['device_name'] = $deviceName;
+        $this->deviceName = $deviceName;
     }
 
     /**

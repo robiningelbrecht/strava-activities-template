@@ -271,7 +271,10 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 
             /** @var \App\Domain\Strava\Segment\SegmentEffort\SegmentEffort $segmentEffort */
             foreach ($segmentEfforts as $segmentEffort) {
-                $segmentEffort->enrichWithActivity($allActivities->getByActivityId($segmentEffort->getActivityId()));
+                $activity = $allActivities->getByActivityId($segmentEffort->getActivityId());
+                // Hacky solution to know what type of segment this is (Zwift or Rouvy).
+                $segment->enrichWithDeviceName($activity->getDeviceName());
+                $segmentEffort->enrichWithActivity($activity);
             }
 
             $this->filesystem->write(
