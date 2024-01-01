@@ -66,7 +66,11 @@ final readonly class ChallengeConsistency
             ) >= 100;
 
             // First monday of the month until 4 weeks later, sunday.
-            $week = Week::fromDate($month->getFirstMonday());
+            $firstMonday = $month->getFirstMonday();
+            $week = Week::fromYearAndWeekNumber(
+                year: $firstMonday->getYear(),
+                weekNumber: $firstMonday->getWeekNumber()
+            );
             $hasTwoDaysOfActivity = true;
             for ($i = 0; $i < 4; ++$i) {
                 $numberOfActivities = count($this->activities->filterOnWeek($week));

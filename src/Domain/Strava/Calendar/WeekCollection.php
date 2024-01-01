@@ -29,7 +29,12 @@ final class WeekCollection extends Collection
 
         $weeks = [];
         foreach ($period as $date) {
-            $week = Week::fromDate(SerializableDateTime::fromDateTimeImmutable($date));
+            $date = SerializableDateTime::fromDateTimeImmutable($date);
+            $week = Week::fromYearAndWeekNumber(
+                year: $date->getYearAndWeekNumber()[0],
+                weekNumber: $date->getYearAndWeekNumber()[1]
+            );
+
             $weeks[$week->getId()] = $week;
         }
 

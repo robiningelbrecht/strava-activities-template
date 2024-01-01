@@ -21,9 +21,9 @@ final class ActivityCollection extends Collection
 
     public function getFirstActivityStartDate(): SerializableDateTime
     {
-        $startDate = new SerializableDateTime();
+        $startDate = null;
         foreach ($this as $activity) {
-            if ($activity->getStartDate()->isAfterOrOn($startDate)) {
+            if ($startDate && $activity->getStartDate()->isAfterOrOn($startDate)) {
                 continue;
             }
             $startDate = $activity->getStartDate();
@@ -44,7 +44,7 @@ final class ActivityCollection extends Collection
 
     public function filterOnWeek(Week $week): ActivityCollection
     {
-        return $this->filter(fn (Activity $activity) => $activity->getStartDate()->getYearAndWeekNumber() === $week->getId());
+        return $this->filter(fn (Activity $activity) => $activity->getStartDate()->getYearAndWeekNumberString() === $week->getId());
     }
 
     public function filterOnDateRange(SerializableDateTime $fromDate, SerializableDateTime $toDate): ActivityCollection
