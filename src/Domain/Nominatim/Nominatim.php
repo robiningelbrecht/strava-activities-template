@@ -31,6 +31,7 @@ final readonly class Nominatim
         );
 
         $response = Json::decode($response->getBody()->getContents());
+
         return Address::fromState($response['address']);
     }
 }

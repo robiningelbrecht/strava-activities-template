@@ -2,6 +2,7 @@
 
 namespace App\Domain\Strava\Activity\ReadModel;
 
+use App\Domain\Nominatim\Address;
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityId;
@@ -96,10 +97,13 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
      */
     private function buildFromResult(array $result): Activity
     {
+        $address = Json::decode($result['address'] ?? '[]');
+
         return Activity::fromState(
             activityId: ActivityId::fromString($result['activityId']),
             startDateTime: SerializableDateTime::fromString($result['startDateTime']),
             data: Json::decode($result['data']),
+            address: $address ? Address::fromState($address) : null,
             weather: Json::decode($result['weather'] ?? '[]'),
             gearId: GearId::fromOptionalString($result['gearId']),
         );
