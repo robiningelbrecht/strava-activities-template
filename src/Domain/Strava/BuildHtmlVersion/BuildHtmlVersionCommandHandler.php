@@ -334,6 +334,27 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             ]),
         );
 
+        $routesPerCountry = [];
+        foreach ($allActivities as $activity) {
+            if (ActivityType::RIDE !== $activity->getType()) {
+                continue;
+            }
+            if (!$polyline = $activity->getPolylineSummary()) {
+                continue;
+            }
+            if (!$countryCode = $activity->getAddress()?->getCountryCode()) {
+                continue;
+            }
+            $routesPerCountry[$countryCode][] = $polyline;
+        }
+
+        $this->filesystem->write(
+            'build/html/heatmap.html',
+            $this->twig->load('html/heatmap.html.twig')->render([
+                'routesPerCountry' => Json::encode($routesPerCountry),
+            ]),
+        );
+
         foreach ($allActivities as $activity) {
             $streams = $this->activityStreamDetailsRepository->findByActivityAndStreamTypes(
                 activityId: $activity->getId(),

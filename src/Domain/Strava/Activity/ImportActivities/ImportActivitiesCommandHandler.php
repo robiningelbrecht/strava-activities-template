@@ -2,6 +2,7 @@
 
 namespace App\Domain\Strava\Activity\ImportActivities;
 
+use App\Domain\Nominatim\Nominatim;
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\ActivityType;
@@ -20,6 +21,7 @@ use App\Infrastructure\KeyValue\KeyValue;
 use App\Infrastructure\KeyValue\Value;
 use App\Infrastructure\KeyValue\WriteModel\KeyValueStore;
 use App\Infrastructure\Time\Sleep;
+use App\Infrastructure\ValueObject\Geography\Coordinate;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\UuidFactory;
 use GuzzleHttp\Exception\ClientException;
@@ -31,6 +33,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
     public function __construct(
         private Strava $strava,
         private OpenMeteo $openMeteo,
+        private Nominatim $nominatim,
         private ActivityRepository $activityRepository,
         private ActivityDetailsRepository $activityDetailsRepository,
         private KeyValueStore $keyValueStore,
@@ -70,6 +73,18 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                     ->updateName($stravaActivity['name'])
                     ->updateKudoCount($stravaActivity['kudos_count'] ?? 0)
                     ->updateGearId(GearId::fromOptionalUnprefixed($stravaActivity['gear_id'] ?? null));
+
+                if (!$activity->getAddress() && $activityType->supportsReverseGeocoding()
+                    && $activity->getLatitude() && $activity->getLongitude()) {
+                    $reverseGeocodedAddress = $this->nominatim->reverseGeocode(Coordinate::createFromLatAndLng(
+                        latitude: $activity->getLatitude(),
+                        longitude: $activity->getLongitude(),
+                    ));
+
+                    $activity->updateAddress($reverseGeocodedAddress);
+                    $this->sleep->sweetDreams(1);
+                }
+
                 $this->activityRepository->update($activity);
                 unset($activityIdsDelete[(string) $activity->getId()]);
                 $command->getOutput()->writeln(sprintf('  => Updated activity "%s"', $activity->getName()));
@@ -118,6 +133,15 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                             $activity->getStartDate()
                         );
                         $activity->updateWeather($weather);
+                    }
+
+                    if ($activityType->supportsReverseGeocoding() && $activity->getLatitude() && $activity->getLongitude()) {
+                        $reverseGeocodedAddress = $this->nominatim->reverseGeocode(Coordinate::createFromLatAndLng(
+                            latitude: $activity->getLatitude(),
+                            longitude: $activity->getLongitude(),
+                        ));
+
+                        $activity->updateAddress($reverseGeocodedAddress);
                     }
 
                     $this->activityRepository->add($activity);

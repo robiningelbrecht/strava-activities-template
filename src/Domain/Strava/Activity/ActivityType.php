@@ -12,6 +12,11 @@ enum ActivityType: string
         return self::RIDE === $this;
     }
 
+    public function supportsReverseGeocoding(): bool
+    {
+        return self::RIDE === $this;
+    }
+
     public function isVirtual(): bool
     {
         return self::RIDE !== $this;

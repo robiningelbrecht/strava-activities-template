@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Domain\Strava\Activity;
 
+use App\Domain\Nominatim\Address;
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Gear\GearId;
@@ -16,6 +17,7 @@ final class ActivityBuilder
     private array $data;
     private array $weather;
     private ?GearId $gearId;
+    private ?Address $address;
 
     private function __construct()
     {
@@ -27,6 +29,7 @@ final class ActivityBuilder
         ];
         $this->weather = [];
         $this->gearId = null;
+        $this->address = null;
     }
 
     public static function fromDefaults(): self
@@ -40,6 +43,7 @@ final class ActivityBuilder
             activityId: $this->activityId,
             startDateTime: $this->startDateTime,
             data: $this->data,
+            address: $this->address,
             weather: $this->weather,
             gearId: $this->gearId
         );
@@ -83,6 +87,13 @@ final class ActivityBuilder
     public function withWeather(array $weather): self
     {
         $this->weather = $weather;
+
+        return $this;
+    }
+
+    public function withAddress(Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }
