@@ -64,14 +64,27 @@ class SerializableDateTime extends \DateTimeImmutable implements \JsonSerializab
         return intval($this->format('n'));
     }
 
+    public function getYear(): int
+    {
+        return (int) $this->format('Y');
+    }
+
     public function getWeekNumber(): int
     {
         return (int) $this->format('W');
     }
 
-    public function getYearAndWeekNumber(): string
+    /**
+     * @return int[]
+     */
+    public function getYearAndWeekNumber(): array
     {
-        return $this->format('Y').'-'.$this->getWeekNumber();
+        return [$this->getYear(), $this->getWeekNumber()];
+    }
+
+    public function getYearAndWeekNumberString(): string
+    {
+        return implode('-', $this->getYearAndWeekNumber());
     }
 
     public function isAfterOrOn(SerializableDateTime $that): bool

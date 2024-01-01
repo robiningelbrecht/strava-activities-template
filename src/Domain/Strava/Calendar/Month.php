@@ -34,8 +34,8 @@ final readonly class Month
     public static function fromDate(SerializableDateTime $date): self
     {
         return new self(
-            year: (int) $date->format('Y'),
-            month: (int) $date->format('n'),
+            year: $date->getYear(),
+            month: $date->getMonthWithoutLeadingZero(),
         );
     }
 

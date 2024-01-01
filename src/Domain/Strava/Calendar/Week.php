@@ -17,11 +17,13 @@ final readonly class Week
         $this->firstDay = SerializableDateTime::fromYearAndWeekNumber($this->year, $this->weekNumber);
     }
 
-    public static function fromDate(SerializableDateTime $date): self
-    {
+    public static function fromYearAndWeekNumber(
+        int $year,
+        int $weekNumber,
+    ): self {
         return new self(
-            year: (int) $date->format('Y'),
-            weekNumber: $date->getWeekNumber(),
+            year: $year,
+            weekNumber: $weekNumber,
         );
     }
 
@@ -37,6 +39,11 @@ final readonly class Week
 
     public function getNextWeek(): Week
     {
-        return Week::fromDate($this->firstDay->modify('next monday'));
+        $nextMonday = $this->firstDay->modify('next monday');
+
+        return Week::fromYearAndWeekNumber(
+            year: $nextMonday->getYear(),
+            weekNumber: $nextMonday->getWeekNumber()
+        );
     }
 }
