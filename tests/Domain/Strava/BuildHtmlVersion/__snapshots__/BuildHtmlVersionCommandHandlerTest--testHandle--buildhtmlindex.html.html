@@ -308,6 +308,7 @@
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
         const places = [];
+        let featureGroupToFitMapBoundsTo = null;
         Object.keys(routes).forEach(function (countryCode) {
             const featureGroup = L.featureGroup();
             routes[countryCode].forEach((route) => {
@@ -324,6 +325,12 @@
                 ).addTo(featureGroup);
             });
             featureGroup.addTo(map);
+
+            if (!featureGroupToFitMapBoundsTo || routes[countryCode].length > featureGroupToFitMapBoundsTo.length) {
+                // Keep track of feature group with most routes, use that one to init map bounds.
+                featureGroupToFitMapBoundsTo = featureGroup;
+            }
+
             places.push({
                 'name': countryCode,
                 'bounds': featureGroup.getBounds()
@@ -334,7 +341,7 @@
             places: places
         }).addTo(map);
 
-        map.fitBounds(places[0]['bounds']);
+        map.fitBounds(featureGroupToFitMapBoundsTo.getBounds());
     });
 
     const initElements = (rootNode) => {
