@@ -33,6 +33,9 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
         $this->getContainer()->get(ActivityRepository::class)->add(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(4))
+                ->withData([
+                    'start_latlng' => [51.2, 3.18],
+                ])
                 ->build()
         );
 
