@@ -248,6 +248,18 @@ final class Activity extends AggregateRoot
         return $this;
     }
 
+    public function getDescription(): ?string
+    {
+        return trim($this->data['description'] ?? '');
+    }
+
+    public function updateDescription(string $description): self
+    {
+        $this->data['description'] = $description;
+
+        return $this;
+    }
+
     public function getDistanceInKilometer(): float
     {
         return $this->data['distance'] / 1000;
