@@ -32,8 +32,8 @@ mv -f strava-activities-template/package.json package.json
 mv -f strava-activities-template/package-lock.json package-lock.json
 mv -f strava-activities-template/vercel.json vercel.json
 # Remove old files
-Rm -f build/html/searchable.js
-Rm -f build/html/sortable.js
+rm -f build/html/searchable.js
+rm -f build/html/sortable.js
 
 # Make sure database and migration directories exist
 mkdir -p database
