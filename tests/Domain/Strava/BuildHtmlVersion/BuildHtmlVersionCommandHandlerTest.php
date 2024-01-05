@@ -27,6 +27,10 @@ class BuildHtmlVersionCommandHandlerTest extends DatabaseTestCase
         $fileSystem = $this->getContainer()->get(FilesystemOperator::class);
         foreach ($fileSystem->getWrites() as $location => $content) {
             $this->snapshotName = $location;
+            if (str_ends_with($location, '.json')) {
+                $this->assertMatchesJsonSnapshot($content);
+                continue;
+            }
             $this->assertMatchesHtmlSnapshot($content);
         }
     }

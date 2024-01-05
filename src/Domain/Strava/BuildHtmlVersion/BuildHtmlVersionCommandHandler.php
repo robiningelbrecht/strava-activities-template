@@ -220,11 +220,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 
         $this->filesystem->write(
             'build/html/activities.html',
-            $this->twig->load('html/activities.html.twig')->render([
-                'timeIntervals' => ActivityPowerRepository::TIME_INTERVAL_IN_SECONDS,
-                'activities' => $allActivities,
-                'activityHighlights' => $activityHighlights,
-            ]),
+            $this->twig->load('html/activities.html.twig')->render(),
         );
 
         $this->filesystem->write(
@@ -260,9 +256,10 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             ]),
         );
 
+        $dataDatableRows = [];
         /** @var \App\Domain\Strava\Segment\Segment $segment */
         foreach ($allSegments as $segment) {
-            $segmentEfforts = $this->segmentEffortDetailsRepository->findBySegmentId($segment->getId());
+            $segmentEfforts = $this->segmentEffortDetailsRepository->findBySegmentIdTop10($segment->getId());
             $segment->enrichWithNumberOfTimesRidden(count($segmentEfforts));
 
             if ($bestSegmentEffort = $segmentEfforts->getBestEffort()) {
@@ -284,13 +281,30 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     'segmentEfforts' => $segmentEfforts,
                 ]),
             );
+
+            $dataDatableRows[] = [
+                'active' => true,
+                'searchables' => implode(' ', $segment->getSearchables()),
+                'sort' => [
+                    'name' => $segment->getName(),
+                    'distance' => $segment->getDistanceInKilometer(),
+                    'max-gradient' => $segment->getMaxGradient(),
+                    'ride-count' => $segment->getNumberOfTimesRidden(),
+                ],
+                'markup' => $this->twig->load('html/data-table/segment-data-table-row.html.twig')->render([
+                    'segment' => $segment,
+                ]),
+            ];
         }
 
         $this->filesystem->write(
+            'build/html/segment-data-table.json',
+            Json::encode($dataDatableRows),
+        );
+
+        $this->filesystem->write(
             'build/html/segments.html',
-            $this->twig->load('html/segments.html.twig')->render([
-                'segments' => $allSegments,
-            ]),
+            $this->twig->load('html/segments.html.twig')->render(),
         );
 
         $this->filesystem->write(
@@ -355,6 +369,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             ]),
         );
 
+        $dataDatableRows = [];
         foreach ($allActivities as $activity) {
             $streams = $this->activityStreamDetailsRepository->findByActivityAndStreamTypes(
                 activityId: $activity->getId(),
@@ -393,6 +408,31 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     'segmentEfforts' => $this->segmentEffortDetailsRepository->findByActivityId($activity->getId()),
                 ]),
             );
+
+            $dataDatableRows[] = [
+                'active' => true,
+                'searchables' => implode(' ', $activity->getSearchables()),
+                'sort' => [
+                    'start-date' => $activity->getStartDate()->getTimestamp(),
+                    'distance' => $activity->getDistanceInKilometer(),
+                    'elevation' => $activity->getElevationInMeter(),
+                    'moving-time' => $activity->getMovingTimeInSeconds(),
+                    'power' => $activity->getAveragePower(),
+                    'speed' => $activity->getAverageSpeedInKmPerH(),
+                    'heart-rate' => $activity->getAverageHeartRate(),
+                    'calories' => $activity->getCalories(),
+                ],
+                'markup' => $this->twig->load('html/data-table/activity-data-table-row.html.twig')->render([
+                    'timeIntervals' => ActivityPowerRepository::TIME_INTERVAL_IN_SECONDS,
+                    'activity' => $activity,
+                    'activityHighlights' => $activityHighlights,
+                ]),
+            ];
         }
+
+        $this->filesystem->write(
+            'build/html/activity-data-table.json',
+            Json::encode($dataDatableRows),
+        );
     }
 }

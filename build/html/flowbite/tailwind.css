@@ -2,25 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-a.active{
-    --tw-bg-opacity: 1;
-    background-color: rgb(243 244 246/var(--tw-bg-opacity));
-}
-
-.dark a.active{
-    --tw-bg-opacity: 1;
-    background-color: rgb(55 65 81/var(--tw-bg-opacity));
-    --tw-text-opacity: 1;
-    color: rgb(255 255 255/var(--tw-text-opacity));
-}
-
-
-table.sortable th[aria-sort="ascending"] svg.sort,
-table.sortable th[aria-sort="descending"] svg.sort{
-    fill: #FC4A02;
-}
-
-.leaflet-tile-pane{
+.leaflet-tile-pane {
     -webkit-filter: grayscale(100%);
     filter: grayscale(100%);
 }

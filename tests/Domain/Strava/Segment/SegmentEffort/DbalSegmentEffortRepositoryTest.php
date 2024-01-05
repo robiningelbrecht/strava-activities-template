@@ -53,7 +53,7 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
         $this->segmentEffortDetailsRepository->find(SegmentEffortId::fromUnprefixed(1));
     }
 
-    public function testFindBySegmentId(): void
+    public function testFindBySegmentIdTop10(): void
     {
         $segmentEffortOne = SegmentEffortBuilder::fromDefaults()
             ->withId(SegmentEffortId::fromUnprefixed(1))
@@ -75,7 +75,7 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             SegmentEffortCollection::fromArray([$segmentEffortOne, $segmentEffortTwo]),
-            $this->segmentEffortDetailsRepository->findBySegmentId($segmentEffortOne->getSegmentId())
+            $this->segmentEffortDetailsRepository->findBySegmentIdTop10($segmentEffortOne->getSegmentId())
         );
     }
 

@@ -17,6 +17,7 @@ rm -Rf templates/* && mv -f strava-activities-template/templates/* templates/
 rm -Rf build/html/echarts/* && mv -f strava-activities-template/build/html/echarts/* build/html/echarts/
 rm -Rf build/html/flowbite/* && mv -f strava-activities-template/build/html/flowbite/* build/html/flowbite/
 mkdir -p build/html/leaflet && rm -Rf build/html/leaflet/* && mv -f strava-activities-template/build/html/leaflet/* build/html/leaflet/
+mkdir -p build/html/data-table && rm -Rf build/html/data-table/* && mv -f strava-activities-template/build/html/data-table/* build/html/data-table/
 mv -f strava-activities-template/build/html/dark-mode-toggle.js build/html/dark-mode-toggle.js
 mv -f strava-activities-template/build/html/favicon.ico build/html/favicon.ico
 mv -f strava-activities-template/build/html/placeholder.webp build/html/placeholder.webp
@@ -32,6 +33,9 @@ mv -f strava-activities-template/composer.lock composer.lock
 mv -f strava-activities-template/package.json package.json
 mv -f strava-activities-template/package-lock.json package-lock.json
 mv -f strava-activities-template/vercel.json vercel.json
+# Remove old files
+Rm -f build/html/searchable.js
+Rm -f build/html/sortable.js
 
 # Make sure database and migration directories exist
 mkdir -p database

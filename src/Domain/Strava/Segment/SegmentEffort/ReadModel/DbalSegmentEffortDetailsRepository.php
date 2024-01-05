@@ -40,14 +40,15 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
         return $this->buildFromResult($result);
     }
 
-    public function findBySegmentId(SegmentId $segmentId): SegmentEffortCollection
+    public function findBySegmentIdTop10(SegmentId $segmentId): SegmentEffortCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('SegmentEffort')
             ->andWhere('segmentId = :segmentId')
             ->setParameter('segmentId', $segmentId)
-            ->orderBy("JSON_EXTRACT(data, '$.elapsed_time')", 'ASC');
+            ->orderBy("JSON_EXTRACT(data, '$.elapsed_time')", 'ASC')
+            ->setMaxResults(10);
 
         return SegmentEffortCollection::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),

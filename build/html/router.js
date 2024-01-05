@@ -37,9 +37,9 @@ const renderContent = async (page) => {
     app.setAttribute('data-router-current', page);
     // Manage active classes.
     menuItems.forEach(node => {
-        node.classList.remove('active')
+        node.setAttribute('aria-selected', 'false')
     });
-    document.querySelector('aside li a[data-router-navigate="'+page+'"]').classList.add('active');
+    document.querySelector('aside li a[data-router-navigate="'+page+'"]').setAttribute('aria-selected', 'true');
 
     // There might be other nav links on the newly loaded page, make sure they are registered.
     const nav =  document.querySelectorAll("nav a[data-router-navigate], main a[data-router-navigate]");
@@ -76,6 +76,9 @@ const registerNavItems = (items) => {
 
 const registerBrowserBackAndForth = () => {
     window.onpopstate = function (e) {
+        if(!e.state){
+            return;
+        }
         renderContent(e.state.route);
     };
 };

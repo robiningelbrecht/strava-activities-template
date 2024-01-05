@@ -2,7 +2,7 @@
     <!-- Modal header -->
     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
         <h3 class="flex items-center text-lg font-semibold text-gray-900 dark:text-white">
-            <span class="mx-2">{{ segment.getName() }}</span>
+            <span class="mx-2">{{ segment.getName() }} - Top 10</span>
         </h3>
         <div class="flex items-center">
             <ul class="hidden md:flex text-center mr-2 divide-x divide-gray-200 dark:divide-gray-700">
@@ -35,13 +35,11 @@
                         <th scope="col" class="cursor-pointer px-2 py-3 bg-gray-50 dark:bg-gray-700 lg:sticky lg:left-0">
                             <div class="flex items-center justify-center">
                                 {{ renderSvg('hashtag') }}
-                                {{ renderSvg('sorting-icon') }}
                             </div>
                         </th>
                         <th scope="col" class="cursor-pointer px-2 py-3">
                             <div class="flex items-center justify-center">
                                 {{ renderSvg('calendar') }}
-                                {{ renderSvg('sorting-icon') }}
                             </div>
                         </th>
                         <th scope="col" class="no-sort px-2 py-3">
@@ -49,19 +47,16 @@
                         <th scope="col" class="cursor-pointer px-2 py-3">
                             <div class="flex items-center justify-center">
                                 {{ renderSvg('time') }}
-                                {{ renderSvg('sorting-icon') }}
                             </div>
                         </th>
                         <th scope="col" class="cursor-pointer px-2 py-3">
                             <div class="flex items-center justify-center">
                                 {{ renderSvg('speed') }}
-                                {{ renderSvg('sorting-icon') }}
                             </div>
                         </th>
                         <th scope="col" class="cursor-pointer px-2 py-3">
                             <div class="flex items-center justify-center">
                                 {{ renderSvg('power') }}
-                                {{ renderSvg('sorting-icon') }}
                             </div>
                         </th>
                     </tr>
@@ -69,10 +64,10 @@
                     <tbody>
                     {% for segmentEffort in segmentEfforts %}
                         <tr class="{{ cycle(['bg-white border-b dark:bg-gray-900 dark:border-gray-700', 'border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700'], loop.index0) }}">
-                            <td data-sort="{{ loop.index }}" class="px-2 py-2 truncate lg:sticky lg:left-0 {{ cycle(['bg-white dark:bg-gray-900', 'bg-gray-50 dark:bg-gray-800'], loop.index0) }}">
+                            <td class="px-2 py-2 truncate lg:sticky lg:left-0 {{ cycle(['bg-white dark:bg-gray-900', 'bg-gray-50 dark:bg-gray-800'], loop.index0) }}">
                                 {{ loop.index }}
                             </td>
-                            <td data-sort="{{ segmentEffort.getStartDateTime().getTimestamp() }}" class="px-2 py-2">
+                            <td class="px-2 py-2">
                                 <div class="flex justify-center">
                                     <div class="w-[4.5rem]">{{ segmentEffort.getStartDateTime().format('d-m-y') }}</div>
                                 </div>
@@ -80,13 +75,13 @@
                             <td class="px-2 py-2">
                                 {{ renderComponent('activity-title', {'activity': segmentEffort.getActivity(), 'truncate': true}) }}
                             </td>
-                            <td data-sort="{{ segmentEffort.getElapsedTimeInSeconds() }}" class="px-2 py-2">
+                            <td class="px-2 py-2">
                                 {{ segmentEffort.getElapsedTimeFormatted() }}
                             </td>
-                            <td data-sort="{{ segmentEffort.getAverageSpeedInKmPerH() }}" class="px-2 py-2">
+                            <td class="px-2 py-2">
                                 {{ segmentEffort.getAverageSpeedInKmPerH()|formatNumber(1) }}<span class="text-xs">km/h</span>
                             </td>
-                            <td data-sort="{{ segmentEffort.getAverageWatts() }}" class="px-2 py-2">
+                            <td class="px-2 py-2">
                                 {% if segmentEffort.getAverageWatts() %}
                                     {{ segmentEffort.getAverageWatts()|formatNumber(1) }}<span class="text-xs">w</span>
                                 {% else %}
