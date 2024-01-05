@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin=""/>
+    <link href="data-table/clusterize.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="antialiased bg-gray-50 dark:bg-gray-900">
@@ -161,7 +162,7 @@
             <ul class="space-y-2 mb-2">
                 <li>
                     <a href="#" data-router-navigate="dashboard"
-                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 aria-selected:bg-gray-100 aria-selected:dark:bg-gray-700 group">
                         <svg aria-hidden="true"
                              class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                              fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -173,7 +174,7 @@
                 </li>
                 <li>
                     <a href="#" data-router-navigate="activities"
-                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 aria-selected:bg-gray-100 aria-selected:dark:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                              aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                              viewBox="0 0 20 16">
@@ -185,7 +186,7 @@
                 </li>
                 <li>
                     <a href="#" data-router-navigate="monthly-stats"
-                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 aria-selected:bg-gray-100 aria-selected:dark:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                              aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                              viewBox="0 0 20 20">
@@ -196,7 +197,7 @@
                 </li>
                 <li>
                     <a href="#" data-router-navigate="gear-stats"
-                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 aria-selected:bg-gray-100 aria-selected:dark:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                              aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                              viewBox="0 0 20 20">
@@ -207,7 +208,7 @@
                 </li>
                 <li>
                     <a href="#" data-router-navigate="eddington"
-                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 aria-selected:bg-gray-100 aria-selected:dark:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                              aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -219,7 +220,7 @@
                 </li>
                 <li>
                     <a href="#" data-router-navigate="segments"
-                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 aria-selected:bg-gray-100 aria-selected:dark:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                              fill="currentColor" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
                             <g stroke-width="0"></g>
@@ -232,7 +233,7 @@
                 </li>
                 <li>
                     <a href="#" data-router-navigate="heatmap"
-                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 aria-selected:bg-gray-100 aria-selected:dark:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                              viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g stroke-width="0"></g>
@@ -244,7 +245,7 @@
                 </li>
                 <li>
                     <a href="#" data-router-navigate="challenges"
-                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 aria-selected:bg-gray-100 aria-selected:dark:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                              aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                              viewBox="0 0 20 20">
@@ -259,7 +260,7 @@
                 </li>
                 <li>
                     <a href="#" data-router-navigate="photos"
-                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                       class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 aria-selected:bg-gray-100 aria-selected:dark:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                              aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                              viewBox="0 0 24 24">
@@ -350,14 +351,14 @@
 
 <script src="echarts/echarts.min.js"></script>
 <script src="lazyload.min.js"></script>
-<script src="sortable.min.js"></script>
-<script src="searchable.js"></script>
 <script src="flowbite/flowbite.js"></script>
 <script src="dark-mode-toggle.js"></script>
 <script src="router.js"></script>
 <script src="leaflet/leaflet.js"></script>
 <script src="leaflet/leaflet.polyline.encoded.js"></script>
 <script src="leaflet/leaflet.fly.to.places.js"></script>
+<script src="data-table/clusterize.min.js"></script>
+<script src="data-table/data-table.js"></script>
 
 <script>
     // Enable image lazy load.
@@ -374,6 +375,10 @@
             // Close modal when a new page is loaded.
             modal.hide();
         }
+        // Only support data table on page load, not in modals.
+        initDataTables(()=> {
+            initModals(document);
+        });
         initElements(document);
     });
     document.addEventListener('modalWasLoaded', (event) => {
@@ -438,48 +443,7 @@
         initPopovers();
         initTooltips();
         initAccordions();
-        initSearchableTables();
-
-        const modalLinks = rootNode.querySelectorAll('a[data-model-content-url]');
-        modalLinks.forEach(function (node) {
-            node.addEventListener('click', function (e) {
-                if (modal) {
-                    // Only allow one open modal at a time.
-                    modal.hide();
-                }
-                e.preventDefault();
-
-                // Show loading state.
-                modalSpinner.classList.remove('hidden');
-                modalSpinner.classList.add('flex');
-
-                modal = new Modal(modalSkeletonNode, {
-                    placement: 'bottom',
-                    closable: true,
-                    backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-[60]',
-                    onShow: async () => {
-                        const response = await fetch(node.getAttribute('data-model-content-url'));
-                        // Remove loading state.
-                        modalSpinner.classList.add('hidden');
-                        modalSpinner.classList.remove('flex');
-
-                        modalContent.innerHTML = await response.text();
-                        document.dispatchEvent(new CustomEvent('modalWasLoaded', {
-                            bubbles: true,
-                            cancelable: true,
-                            detail: {
-                                node: modalSkeletonNode,
-                            }
-                        }));
-                    },
-                    onHide: () => {
-                        modalContent.innerHTML = '';
-                    }
-                });
-
-                modal.toggle();
-            });
-        });
+        initModals(rootNode);
 
         // Render charts.
         rootNode.querySelectorAll('[data-echarts-options]').forEach(function (chartNode) {
@@ -529,6 +493,49 @@
 
             featureGroup.addTo(map);
             map.fitBounds(featureGroup.getBounds(), {maxZoom: 14});
+        });
+    };
+
+    const initModals = (rootNode) => {
+        const modalLinks = rootNode.querySelectorAll('a[data-model-content-url]');
+        modalLinks.forEach(function (node) {
+            node.addEventListener('click', function (e) {
+                if (modal) {
+                    // Only allow one open modal at a time.
+                    modal.hide();
+                }
+                e.preventDefault();
+
+                // Show loading state.
+                modalSpinner.classList.remove('hidden');
+                modalSpinner.classList.add('flex');
+
+                modal = new Modal(modalSkeletonNode, {
+                    placement: 'bottom',
+                    closable: true,
+                    backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-[60]',
+                    onShow: async () => {
+                        const response = await fetch(node.getAttribute('data-model-content-url'));
+                        // Remove loading state.
+                        modalSpinner.classList.add('hidden');
+                        modalSpinner.classList.remove('flex');
+
+                        modalContent.innerHTML = await response.text();
+                        document.dispatchEvent(new CustomEvent('modalWasLoaded', {
+                            bubbles: true,
+                            cancelable: true,
+                            detail: {
+                                node: modalSkeletonNode,
+                            }
+                        }));
+                    },
+                    onHide: () => {
+                        modalContent.innerHTML = '';
+                    }
+                });
+
+                modal.toggle();
+            });
         });
     };
 </script>
