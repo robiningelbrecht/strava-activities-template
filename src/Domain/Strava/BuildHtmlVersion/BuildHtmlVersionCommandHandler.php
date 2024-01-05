@@ -259,7 +259,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $dataDatableRows = [];
         /** @var \App\Domain\Strava\Segment\Segment $segment */
         foreach ($allSegments as $segment) {
-            $segmentEfforts = $this->segmentEffortDetailsRepository->findBySegmentIdTop10($segment->getId());
+            $segmentEfforts = $this->segmentEffortDetailsRepository->findBySegmentId($segment->getId());
             $segment->enrichWithNumberOfTimesRidden(count($segmentEfforts));
 
             if ($bestSegmentEffort = $segmentEfforts->getBestEffort()) {
@@ -278,7 +278,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 'build/html/segment/'.$segment->getId().'.html',
                 $this->twig->load('html/segment.html.twig')->render([
                     'segment' => $segment,
-                    'segmentEfforts' => $segmentEfforts,
+                    'segmentEfforts' => $segmentEfforts->slice(0, 10),
                 ]),
             );
 
