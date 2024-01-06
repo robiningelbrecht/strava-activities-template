@@ -1,7 +1,7 @@
 {% autoescape false %}
 <tr class="group odd:bg-white border-b odd:dark:bg-gray-900 odd:dark:border-gray-700 even:border-b even:bg-gray-50 even:dark:bg-gray-800 even:dark:border-gray-700">
     <td class="px-2 py-2">
-        <div class="w-[4.5rem]">{{ activity.getStartDate().format('d-m-y') }}</div>
+        {{ activity.getStartDate().format('d-m-y') }}
     </td>
     <td class="px-2 py-2 truncate lg:sticky lg:left-0 group-odd:bg-white group-odd:dark:bg-gray-900 group-even:bg-gray-50 group-even:dark:bg-gray-800">
         {{ renderComponent('activity-title', {'activity': activity, 'ellipses': 50}) }}
