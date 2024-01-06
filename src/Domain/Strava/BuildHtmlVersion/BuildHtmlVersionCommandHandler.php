@@ -259,8 +259,8 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $dataDatableRows = [];
         /** @var \App\Domain\Strava\Segment\Segment $segment */
         foreach ($allSegments as $segment) {
-            $segmentEfforts = $this->segmentEffortDetailsRepository->findBySegmentId($segment->getId());
-            $segment->enrichWithNumberOfTimesRidden(count($segmentEfforts));
+            $segmentEfforts = $this->segmentEffortDetailsRepository->findBySegmentIdTopTen($segment->getId());
+            $segment->enrichWithNumberOfTimesRidden($this->segmentEffortDetailsRepository->countBySegmentId($segment->getId()));
 
             if ($bestSegmentEffort = $segmentEfforts->getBestEffort()) {
                 $segment->enrichWithBestEffort($bestSegmentEffort);
