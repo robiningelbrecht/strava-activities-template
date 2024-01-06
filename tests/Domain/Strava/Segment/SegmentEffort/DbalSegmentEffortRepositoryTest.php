@@ -53,7 +53,7 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
         $this->segmentEffortDetailsRepository->find(SegmentEffortId::fromUnprefixed(1));
     }
 
-    public function testFindBySegmentId(): void
+    public function testFindBySegmentIdTopTen(): void
     {
         $segmentEffortOne = SegmentEffortBuilder::fromDefaults()
             ->withId(SegmentEffortId::fromUnprefixed(1))
@@ -75,7 +75,33 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
 
         $this->assertEquals(
             SegmentEffortCollection::fromArray([$segmentEffortOne, $segmentEffortTwo]),
-            $this->segmentEffortDetailsRepository->findBySegmentId($segmentEffortOne->getSegmentId())
+            $this->segmentEffortDetailsRepository->findBySegmentIdTopTen($segmentEffortOne->getSegmentId())
+        );
+    }
+
+    public function testCountBySegmentId(): void
+    {
+        $segmentEffortOne = SegmentEffortBuilder::fromDefaults()
+            ->withId(SegmentEffortId::fromUnprefixed(1))
+            ->withSegmentId(SegmentId::fromUnprefixed(1))
+            ->build();
+        $this->segmentEffortRepository->add($segmentEffortOne);
+
+        $segmentEffortTwo = SegmentEffortBuilder::fromDefaults()
+            ->withId(SegmentEffortId::fromUnprefixed(2))
+            ->withSegmentId(SegmentId::fromUnprefixed(1))
+            ->build();
+        $this->segmentEffortRepository->add($segmentEffortTwo);
+
+        $segmentEffortThree = SegmentEffortBuilder::fromDefaults()
+            ->withId(SegmentEffortId::fromUnprefixed(3))
+            ->withSegmentId(SegmentId::fromUnprefixed(2))
+            ->build();
+        $this->segmentEffortRepository->add($segmentEffortThree);
+
+        $this->assertEquals(
+            2,
+            $this->segmentEffortDetailsRepository->countBySegmentId($segmentEffortOne->getSegmentId())
         );
     }
 

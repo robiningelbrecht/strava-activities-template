@@ -40,7 +40,7 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
         return $this->buildFromResult($result);
     }
 
-    public function findBySegmentId(SegmentId $segmentId): SegmentEffortCollection
+    public function findBySegmentIdTopTen(SegmentId $segmentId): SegmentEffortCollection
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
@@ -54,6 +54,17 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
             fn (array $result) => $this->buildFromResult($result),
             $queryBuilder->executeQuery()->fetchAllAssociative()
         ));
+    }
+
+    public function countBySegmentId(SegmentId $segmentId): int
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select('COUNT(*)')
+            ->from('SegmentEffort')
+            ->andWhere('segmentId = :segmentId')
+            ->setParameter('segmentId', $segmentId);
+
+        return (int) $queryBuilder->executeQuery()->fetchOne();
     }
 
     public function findByActivityId(ActivityId $activityId): SegmentEffortCollection
