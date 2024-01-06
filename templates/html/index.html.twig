@@ -391,6 +391,7 @@
     document.addEventListener('pageWasLoaded.heatmap', () => {
         const heatmap = document.getElementById('heatmap');
         const routes = JSON.parse(heatmap.getAttribute('data-leaflet-routes'));
+        const fitMapBoundsRoutes = JSON.parse(heatmap.getAttribute('data-leaflet-fit-map-bounds-routes'));
 
         const map = L.map(heatmap, {
             scrollWheelZoom: false,
@@ -400,7 +401,6 @@
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
         const places = [];
-        let featureGroupToFitMapBoundsTo = null;
         Object.keys(routes).forEach(function (countryCode) {
             const featureGroup = L.featureGroup();
             routes[countryCode].forEach((route) => {
@@ -418,11 +418,6 @@
             });
             featureGroup.addTo(map);
 
-            if (!featureGroupToFitMapBoundsTo || routes[countryCode].length > featureGroupToFitMapBoundsTo.length) {
-                // Keep track of feature group with most routes, use that one to init map bounds.
-                featureGroupToFitMapBoundsTo = featureGroup;
-            }
-
             places.push({
                 'name': countryCode,
                 'bounds': featureGroup.getBounds()
@@ -433,7 +428,15 @@
             places: places
         }).addTo(map);
 
-        map.fitBounds(featureGroupToFitMapBoundsTo.getBounds());
+        const fitMapBoundsFeatureGroup = L.featureGroup();
+        fitMapBoundsRoutes.forEach((route)=> {
+            L.polyline(
+                L.Polyline.fromEncoded(route).getLatLngs(),
+            ).addTo(fitMapBoundsFeatureGroup);
+        });
+
+
+        map.fitBounds(fitMapBoundsFeatureGroup.getBounds());
     });
 
     const initElements = (rootNode) => {

@@ -17,4 +17,6 @@ interface ActivityDetailsRepository
     public function findActivityIds(): ActivityIdCollection;
 
     public function findUniqueGearIds(): GearIdCollection;
+
+    public function findMostRiddenState(): ?string;
 }
