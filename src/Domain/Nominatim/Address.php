@@ -27,6 +27,11 @@ final readonly class Address implements \JsonSerializable
         return $this->data['country_code'];
     }
 
+    public function getState(): string
+    {
+        return $this->data['state'];
+    }
+
     /**
      * @return array<mixed>
      */

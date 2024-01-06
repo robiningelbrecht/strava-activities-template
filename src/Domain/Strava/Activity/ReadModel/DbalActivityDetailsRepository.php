@@ -92,6 +92,18 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
         ));
     }
 
+    public function findMostRiddenState(): ?string
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select("JSON_EXTRACT(address, '$.state') as state")
+            ->from('Activity')
+            ->andWhere('state IS NOT NULL')
+            ->groupBy("JSON_EXTRACT(address, '$.state')")
+            ->orderBy('COUNT(*)', 'DESC');
+
+        return $queryBuilder->executeQuery()->fetchOne();
+    }
+
     /**
      * @param array<mixed> $result
      */

@@ -260,7 +260,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         /** @var \App\Domain\Strava\Segment\Segment $segment */
         foreach ($allSegments as $segment) {
             $segmentEfforts = $this->segmentEffortDetailsRepository->findBySegmentIdTopTen($segment->getId());
-            $segment->enrichWithNumberOfTimesRidden($this->segmentEffortDetailsRepository->countBySegmentId($segment->getId()));
+            $segment->enrichWithNumberOfTimesRidden(count($segmentEfforts));
 
             if ($bestSegmentEffort = $segmentEfforts->getBestEffort()) {
                 $segment->enrichWithBestEffort($bestSegmentEffort);
@@ -349,6 +349,8 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         );
 
         $routesPerCountry = [];
+        $routesInMostRiddenState = [];
+        $mostRiddenState = $this->activityDetailsRepository->findMostRiddenState();
         foreach ($allActivities as $activity) {
             if (ActivityType::RIDE !== $activity->getType()) {
                 continue;
@@ -360,12 +362,16 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 continue;
             }
             $routesPerCountry[$countryCode][] = $polyline;
+            if ($activity->getAddress()?->getState() === $mostRiddenState) {
+                $routesInMostRiddenState[] = $polyline;
+            }
         }
 
         $this->filesystem->write(
             'build/html/heatmap.html',
             $this->twig->load('html/heatmap.html.twig')->render([
                 'routesPerCountry' => Json::encode($routesPerCountry),
+                'routesInMostRiddenState' => Json::encode($routesInMostRiddenState),
             ]),
         );
 
