@@ -289,7 +289,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 ]),
                 searchables: $segment->getSearchables(),
                 sortValues: [
-                    'name' => $segment->getName(),
+                    'name' => (string) $segment->getName(),
                     'distance' => $segment->getDistanceInKilometer(),
                     'max-gradient' => $segment->getMaxGradient(),
                     'ride-count' => $segment->getNumberOfTimesRidden(),
