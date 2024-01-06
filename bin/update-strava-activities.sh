@@ -34,6 +34,8 @@ mv -f strava-activities-template/vercel.json vercel.json
 # Remove old files
 rm -f build/html/searchable.js
 rm -f build/html/sortable.js
+rm -f build/html/activity-data-table.json
+rm -f build/html/segment-data-table.json
 
 # Make sure database and migration directories exist
 mkdir -p database

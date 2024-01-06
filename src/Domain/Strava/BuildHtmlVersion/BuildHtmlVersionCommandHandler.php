@@ -298,7 +298,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         }
 
         $this->filesystem->write(
-            'build/html/segment-data-table.json',
+            'build/html/fetch-json/segment-data-table.json',
             Json::encode($dataDatableRows),
         );
 
@@ -437,7 +437,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         }
 
         $this->filesystem->write(
-            'build/html/activity-data-table.json',
+            'build/html/fetch-json/activity-data-table.json',
             Json::encode($dataDatableRows),
         );
     }
