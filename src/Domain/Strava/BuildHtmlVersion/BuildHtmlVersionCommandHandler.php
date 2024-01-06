@@ -48,6 +48,7 @@ use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\KeyValue\Key;
 use App\Infrastructure\KeyValue\ReadModel\KeyValueStore;
 use App\Infrastructure\Serialization\Json;
+use App\Infrastructure\ValueObject\DataTableRow;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Lcobucci\Clock\Clock;
 use League\Flysystem\FilesystemOperator;
@@ -282,23 +283,22 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 ]),
             );
 
-            $dataDatableRows[] = [
-                'active' => true,
-                'searchables' => implode(' ', $segment->getSearchables()),
-                'sort' => [
-                    'name' => $segment->getName(),
+            $dataDatableRows[] = DataTableRow::create(
+                markup: $this->twig->load('html/data-table/segment-data-table-row.html.twig')->render([
+                    'segment' => $segment,
+                ]),
+                searchables: $segment->getSearchables(),
+                sortValues: [
+                    'name' => (string) $segment->getName(),
                     'distance' => $segment->getDistanceInKilometer(),
                     'max-gradient' => $segment->getMaxGradient(),
                     'ride-count' => $segment->getNumberOfTimesRidden(),
-                ],
-                'markup' => $this->twig->load('html/data-table/segment-data-table-row.html.twig')->render([
-                    'segment' => $segment,
-                ]),
-            ];
+                ]
+            );
         }
 
         $this->filesystem->write(
-            'build/html/segment-data-table.json',
+            'build/html/fetch-json/segment-data-table.json',
             Json::encode($dataDatableRows),
         );
 
@@ -415,10 +415,14 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 ]),
             );
 
-            $dataDatableRows[] = [
-                'active' => true,
-                'searchables' => implode(' ', $activity->getSearchables()),
-                'sort' => [
+            $dataDatableRows[] = DataTableRow::create(
+                markup: $this->twig->load('html/data-table/activity-data-table-row.html.twig')->render([
+                    'timeIntervals' => ActivityPowerRepository::TIME_INTERVAL_IN_SECONDS,
+                    'activity' => $activity,
+                    'activityHighlights' => $activityHighlights,
+                ]),
+                searchables: $activity->getSearchables(),
+                sortValues: [
                     'start-date' => $activity->getStartDate()->getTimestamp(),
                     'distance' => $activity->getDistanceInKilometer(),
                     'elevation' => $activity->getElevationInMeter(),
@@ -427,17 +431,12 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     'speed' => $activity->getAverageSpeedInKmPerH(),
                     'heart-rate' => $activity->getAverageHeartRate(),
                     'calories' => $activity->getCalories(),
-                ],
-                'markup' => $this->twig->load('html/data-table/activity-data-table-row.html.twig')->render([
-                    'timeIntervals' => ActivityPowerRepository::TIME_INTERVAL_IN_SECONDS,
-                    'activity' => $activity,
-                    'activityHighlights' => $activityHighlights,
-                ]),
-            ];
+                ]
+            );
         }
 
         $this->filesystem->write(
-            'build/html/activity-data-table.json',
+            'build/html/fetch-json/activity-data-table.json',
             Json::encode($dataDatableRows),
         );
     }
