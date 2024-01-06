@@ -22,6 +22,7 @@
       <directory>src/Console</directory>
       <directory>src/Infrastructure/KeyValue</directory>
       <directory>src/Infrastructure/Repository</directory>
+      <file>src/Infrastructure/ValueObject/DataTableRow.php</file>
     </include>
   </source>
 </phpunit>
