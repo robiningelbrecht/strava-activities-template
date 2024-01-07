@@ -18,8 +18,8 @@ final readonly class DbalActivityRepository implements ActivityRepository
 
     public function add(Activity $activity): void
     {
-        $sql = 'INSERT INTO Activity (activityId, startDateTime, data, weather, gearId, address)
-        VALUES (:activityId, :startDateTime, :data, :weather, :gearId, :address)';
+        $sql = 'INSERT INTO Activity (activityId, startDateTime, data, weather, gearId, location)
+        VALUES (:activityId, :startDateTime, :data, :weather, :gearId, :location)';
 
         $this->connectionFactory->getForYear(Year::fromDate($activity->getStartDate()))->executeStatement($sql, [
             'activityId' => $activity->getId(),
@@ -27,21 +27,21 @@ final readonly class DbalActivityRepository implements ActivityRepository
             'data' => Json::encode($this->cleanData($activity->getData())),
             'weather' => Json::encode($activity->getAllWeatherData()),
             'gearId' => $activity->getGearId(),
-            'address' => Json::encode($activity->getAddress()),
+            'location' => Json::encode($activity->getLocation()),
         ]);
     }
 
     public function update(Activity $activity): void
     {
         $sql = 'UPDATE Activity 
-        SET data = :data, gearId = :gearId, address = :address
+        SET data = :data, gearId = :gearId, location = :location
         WHERE activityId = :activityId';
 
         $this->connectionFactory->getForYear(Year::fromDate($activity->getStartDate()))->executeStatement($sql, [
             'activityId' => $activity->getId(),
             'data' => Json::encode($this->cleanData($activity->getData())),
             'gearId' => $activity->getGearId(),
-            'address' => Json::encode($activity->getAddress()),
+            'location' => Json::encode($activity->getLocation()),
         ]);
     }
 

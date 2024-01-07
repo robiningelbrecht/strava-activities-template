@@ -2,7 +2,7 @@
 
 namespace App\Domain\Strava\Activity\ReadModel;
 
-use App\Domain\Nominatim\Address;
+use App\Domain\Nominatim\Location;
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityId;
@@ -95,10 +95,10 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
     public function findMostRiddenState(): ?string
     {
         $queryBuilder = $this->connection->createQueryBuilder();
-        $queryBuilder->select("JSON_EXTRACT(address, '$.state') as state")
+        $queryBuilder->select("JSON_EXTRACT(location, '$.state') as state")
             ->from('Activity')
             ->andWhere('state IS NOT NULL')
-            ->groupBy("JSON_EXTRACT(address, '$.state')")
+            ->groupBy("JSON_EXTRACT(location, '$.state')")
             ->orderBy('COUNT(*)', 'DESC');
 
         return $queryBuilder->executeQuery()->fetchOne();
@@ -109,13 +109,13 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
      */
     private function buildFromResult(array $result): Activity
     {
-        $address = Json::decode($result['address'] ?? '[]');
+        $location = Json::decode($result['location'] ?? '[]');
 
         return Activity::fromState(
             activityId: ActivityId::fromString($result['activityId']),
             startDateTime: SerializableDateTime::fromString($result['startDateTime']),
             data: Json::decode($result['data']),
-            address: $address ? Address::fromState($address) : null,
+            location: $location ? Location::fromState($location) : null,
             weather: Json::decode($result['weather'] ?? '[]'),
             gearId: GearId::fromOptionalString($result['gearId']),
         );

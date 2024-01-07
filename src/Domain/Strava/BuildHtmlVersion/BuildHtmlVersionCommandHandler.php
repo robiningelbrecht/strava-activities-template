@@ -358,11 +358,11 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             if (!$polyline = $activity->getPolylineSummary()) {
                 continue;
             }
-            if (!$countryCode = $activity->getAddress()?->getCountryCode()) {
+            if (!$countryCode = $activity->getLocation()?->getCountryCode()) {
                 continue;
             }
             $routesPerCountry[$countryCode][] = $polyline;
-            if ($activity->getAddress()?->getState() === $mostRiddenState) {
+            if ($activity->getLocation()?->getState() === $mostRiddenState) {
                 $routesInMostRiddenState[] = $polyline;
             }
         }

@@ -75,14 +75,14 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                     ->updateKudoCount($stravaActivity['kudos_count'] ?? 0)
                     ->updateGearId(GearId::fromOptionalUnprefixed($stravaActivity['gear_id'] ?? null));
 
-                if (!$activity->getAddress() && $activityType->supportsReverseGeocoding()
+                if (!$activity->getLocation() && $activityType->supportsReverseGeocoding()
                     && $activity->getLatitude() && $activity->getLongitude()) {
                     $reverseGeocodedAddress = $this->nominatim->reverseGeocode(Coordinate::createFromLatAndLng(
                         latitude: $activity->getLatitude(),
                         longitude: $activity->getLongitude(),
                     ));
 
-                    $activity->updateAddress($reverseGeocodedAddress);
+                    $activity->updateLocation($reverseGeocodedAddress);
                     $this->sleep->sweetDreams(1);
                 }
 
@@ -142,7 +142,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                             longitude: $activity->getLongitude(),
                         ));
 
-                        $activity->updateAddress($reverseGeocodedAddress);
+                        $activity->updateLocation($reverseGeocodedAddress);
                     }
 
                     $this->activityRepository->add($activity);
