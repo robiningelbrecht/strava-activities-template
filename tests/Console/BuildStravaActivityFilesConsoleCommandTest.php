@@ -8,6 +8,7 @@ use App\Infrastructure\CQRS\CommandBus;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Serialization\Json;
 use App\Tests\ConsoleCommandTestCase;
+use App\Tests\Infrastructure\Time\ResourceUsage\FixedResourceUsage;
 use PHPUnit\Framework\MockObject\MockObject;
 use Spatie\Snapshots\MatchesSnapshots;
 use Symfony\Component\Console\Command\Command;
@@ -69,7 +70,8 @@ class BuildStravaActivityFilesConsoleCommandTest extends ConsoleCommandTestCase
 
         $this->buildStravaActivityFilesConsoleCommand = new BuildStravaActivityFilesConsoleCommand(
             $this->commandBus,
-            $this->reachedStravaApiRateLimits
+            $this->reachedStravaApiRateLimits,
+            new FixedResourceUsage()
         );
     }
 

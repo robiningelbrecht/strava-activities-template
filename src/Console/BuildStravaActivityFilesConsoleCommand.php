@@ -13,6 +13,7 @@ use App\Domain\Strava\BuildReadMe\BuildReadMe;
 use App\Domain\Strava\CopyDataToReadDatabase\CopyDataToReadDatabase;
 use App\Domain\Strava\ReachedStravaApiRateLimits;
 use App\Infrastructure\CQRS\CommandBus;
+use App\Infrastructure\Time\ResourceUsage\ResourceUsage;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,13 +24,15 @@ final class BuildStravaActivityFilesConsoleCommand extends Command
 {
     public function __construct(
         private readonly CommandBus $commandBus,
-        private readonly ReachedStravaApiRateLimits $reachedStravaApiRateLimits
+        private readonly ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
+        private readonly ResourceUsage $resourceUsage,
     ) {
         parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $time_start = microtime(true);
         if ($this->reachedStravaApiRateLimits->hasReached()) {
             $output->writeln('Reached Strava API rate limits, cannot build stats yet...');
 
@@ -53,6 +56,12 @@ final class BuildStravaActivityFilesConsoleCommand extends Command
         $this->commandBus->dispatch(new BuildReadMe());
         $output->writeln('Building HTML...');
         $this->commandBus->dispatch(new BuildHtmlVersion());
+
+        $time_end = microtime(true);
+        $output->writeln(sprintf(
+            '<info>%s</info>',
+            $this->resourceUsage->format($time_end - $time_start),
+        ));
 
         return Command::SUCCESS;
     }

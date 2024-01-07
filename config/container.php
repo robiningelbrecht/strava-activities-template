@@ -52,6 +52,8 @@ use App\Infrastructure\KeyValue\ReadModel\DbalKeyValueStore as DbalKeyValueReadS
 use App\Infrastructure\KeyValue\ReadModel\KeyValueStore as KeyValueReadStore;
 use App\Infrastructure\KeyValue\WriteModel\DbalKeyValueStore as DbalKeyValueWriteStore;
 use App\Infrastructure\KeyValue\WriteModel\KeyValueStore as KeyValueWriteStore;
+use App\Infrastructure\Time\ResourceUsage\ResourceUsage;
+use App\Infrastructure\Time\ResourceUsage\SystemResourceUsage;
 use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\Time\SystemSleep;
 use App\Infrastructure\Twig\TwigBuilder;
@@ -80,6 +82,7 @@ return [
     KeyValueReadStore::class => DI\get(DbalKeyValueReadStore::class),
     OpenMeteo::class => DI\get(LiveOpenMeteo::class),
     Nominatim::class => DI\get(LiveNominatim::class),
+    ResourceUsage::class => DI\get(SystemResourceUsage::class),
     // Repositories
     AthleteWeightRepository::class => DI\autowire(ActivityBasedAthleteWeightRepository::class),
     ActivityRepository::class => DI\autowire(DbalActivityRepository::class),
