@@ -16,7 +16,7 @@ final readonly class LiveNominatim implements Nominatim
     ) {
     }
 
-    public function reverseGeocode(Coordinate $coordinate): Address
+    public function reverseGeocode(Coordinate $coordinate): Location
     {
         $response = $this->client->request(
             'GET',
@@ -32,6 +32,6 @@ final readonly class LiveNominatim implements Nominatim
 
         $response = Json::decode($response->getBody()->getContents());
 
-        return Address::fromState($response['address']);
+        return Location::fromState($response['address']);
     }
 }

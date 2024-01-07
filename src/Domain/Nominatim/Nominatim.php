@@ -8,5 +8,5 @@ use App\Infrastructure\ValueObject\Geography\Coordinate;
 
 interface Nominatim
 {
-    public function reverseGeocode(Coordinate $coordinate): Address;
+    public function reverseGeocode(Coordinate $coordinate): Location;
 }

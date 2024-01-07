@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Nominatim;
 
-final readonly class Address implements \JsonSerializable
+final readonly class Location implements \JsonSerializable
 {
     /**
      * @param array<mixed> $data
