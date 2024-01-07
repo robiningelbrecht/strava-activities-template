@@ -4,19 +4,33 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Time\ResourceUsage;
 
-final readonly class SystemResourceUsage implements ResourceUsage
+final class SystemResourceUsage implements ResourceUsage
 {
+    private ?float $timeStart = null;
+    private ?float $timeStop = null;
+
     private const SIZES = [
         'GB' => 1073741824,
         'MB' => 1048576,
         'KB' => 1024,
     ];
 
-    public function format(float $durationInMicroSeconds): string
+    public function startTimer(): void
+    {
+        $this->timeStart = microtime(true);
+    }
+
+    public function stopTimer(): void
+    {
+        $this->timeStop = microtime(true);
+    }
+
+    public function format(): string
     {
         return sprintf(
-            'Time: %ss, Memory: %s',
-            $durationInMicroSeconds / 1000,
+            'Time: %ss, Memory: %s, Peak Memory: %s',
+            round($this->timeStop - $this->timeStart, 3),
+            $this->bytesToString(memory_get_usage(true)),
             $this->bytesToString(memory_get_peak_usage(true))
         );
     }
