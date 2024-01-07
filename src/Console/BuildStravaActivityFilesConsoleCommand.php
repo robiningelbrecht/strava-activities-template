@@ -17,6 +17,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 #[AsCommand(name: 'app:strava:build-files', description: 'Build Strava files')]
 final class BuildStravaActivityFilesConsoleCommand extends Command
@@ -36,6 +37,9 @@ final class BuildStravaActivityFilesConsoleCommand extends Command
             return Command::SUCCESS;
         }
 
+        $stopwatch = new Stopwatch();
+        $stopwatch->start($this->getName());
+
         $this->commandBus->dispatch(new CopyDataToReadDatabase($output));
         $output->writeln('Building latest activities...');
         $this->commandBus->dispatch(new BuildLatestStravaActivities());
@@ -53,6 +57,13 @@ final class BuildStravaActivityFilesConsoleCommand extends Command
         $this->commandBus->dispatch(new BuildReadMe());
         $output->writeln('Building HTML...');
         $this->commandBus->dispatch(new BuildHtmlVersion());
+
+        $stopwatchEvent = $stopwatch->stop($this->getName());
+        $output->writeln(sprintf(
+            '<info>Duration: %ss, Memory usage: %sMB</info>',
+            $stopwatchEvent->getDuration() / 1000,
+            round($stopwatchEvent->getMemory() / 1000 / 1000, 2),
+        ));
 
         return Command::SUCCESS;
     }
