@@ -6,5 +6,9 @@ namespace App\Infrastructure\Time\ResourceUsage;
 
 interface ResourceUsage
 {
-    public function format(float $durationInMicroSeconds): string;
+    public function startTimer(): void;
+
+    public function stopTimer(): void;
+
+    public function format(): string;
 }

@@ -32,7 +32,7 @@ final class BuildStravaActivityFilesConsoleCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $time_start = microtime(true);
+        $this->resourceUsage->startTimer();
         if ($this->reachedStravaApiRateLimits->hasReached()) {
             $output->writeln('Reached Strava API rate limits, cannot build stats yet...');
 
@@ -57,10 +57,10 @@ final class BuildStravaActivityFilesConsoleCommand extends Command
         $output->writeln('Building HTML...');
         $this->commandBus->dispatch(new BuildHtmlVersion());
 
-        $time_end = microtime(true);
+        $this->resourceUsage->stopTimer();
         $output->writeln(sprintf(
             '<info>%s</info>',
-            $this->resourceUsage->format($time_end - $time_start),
+            $this->resourceUsage->format(),
         ));
 
         return Command::SUCCESS;
