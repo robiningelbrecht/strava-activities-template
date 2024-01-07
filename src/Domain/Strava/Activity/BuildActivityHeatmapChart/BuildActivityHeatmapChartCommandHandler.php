@@ -60,7 +60,7 @@ final readonly class BuildActivityHeatmapChartCommandHandler implements CommandH
                     'width' => 1000,
                     'height' => 180,
                     'options' => ActivityHeatmapChartBuilder::fromActivities(
-                        activities: $this->activityDetailsRepository->findAll(),
+                        activities: $allActivities,
                         now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
                     )
                         ->withoutTooltip()
