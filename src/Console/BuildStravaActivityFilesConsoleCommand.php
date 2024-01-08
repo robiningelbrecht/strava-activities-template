@@ -8,6 +8,7 @@ use App\Domain\Strava\Activity\BuildEddingtonChart\BuildEddingtonChart;
 use App\Domain\Strava\Activity\BuildLatestStravaActivities\BuildLatestStravaActivities;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\BuildWeekdayStatsChart;
 use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\BuildWeeklyDistanceChart;
+use App\Domain\Strava\Activity\BuildYearlyRidingTimeChart\BuildYearlyRidingTimeChart;
 use App\Domain\Strava\BuildHtmlVersion\BuildHtmlVersion;
 use App\Domain\Strava\BuildReadMe\BuildReadMe;
 use App\Domain\Strava\CopyDataToReadDatabase\CopyDataToReadDatabase;
@@ -52,6 +53,8 @@ final class BuildStravaActivityFilesConsoleCommand extends Command
         $this->commandBus->dispatch(new BuildActivityHeatmapChart());
         $output->writeln('Building Eddington chart...');
         $this->commandBus->dispatch(new BuildEddingtonChart());
+        $output->writeln('Building yearly riding time chart..');
+        $this->commandBus->dispatch(new BuildYearlyRidingTimeChart());
         $output->writeln('Building README...');
         $this->commandBus->dispatch(new BuildReadMe());
         $output->writeln('Building HTML...');
