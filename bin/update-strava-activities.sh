@@ -11,6 +11,7 @@ mv -f strava-activities-template/tailwind.config.js tailwind.config.js
 mv -f strava-activities-template/echart.js echart.js
 mv -f strava-activities-template/composer.json composer.json
 mv -f strava-activities-template/composer.lock composer.lock
+mv -f strava-activities-template/Makefile Makefile
 mv -f strava-activities-template/package.json package.json
 mv -f strava-activities-template/package-lock.json package-lock.json
 mv -f strava-activities-template/vercel.json vercel.json
@@ -20,6 +21,8 @@ rm -Rf migrations/* && mv -f strava-activities-template/migrations/* migrations/
 rm -Rf public/* && mv -f strava-activities-template/public/* public/
 rm -Rf src/* && mv -f strava-activities-template/src/* src/
 rm -Rf templates/* && mv -f strava-activities-template/templates/* templates/
+mkdir .docker && rm -Rf .docker/* && mv -f strava-activities-template/.docker/* .docker/
+# BIN EXECUTABLES
 mv -f strava-activities-template/bin/console bin/console
 mv -f strava-activities-template/bin/doctrine-migrations bin/doctrine-migrations
 ## HTML BUILD FILES
