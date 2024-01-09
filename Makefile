@@ -19,6 +19,9 @@ down:
 	@make dc cmd="down"
 
 ## Helpers.
+git-add:
+	@make csfix && git add .
+
 composer:
 	@make dcr cmd="composer $(arg)"
 
