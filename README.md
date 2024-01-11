@@ -142,6 +142,33 @@ Update the following files in your own repository to the latest versions:
 
 For any feedback, help or feature requests, please [open a new issue](https://github.com/robiningelbrecht/strava-activities-template/issues/new)
 
+## 💻 Local development
+
+If you want to add features or fix bugs yourself, you can do this by setting up the project on your local machine.
+Just clone this git repository and you should be good to go.
+
+The project can be run in a single `Docker` container which uses PHP. 
+There's also a `Make` file to... make things easier:
+
+```bash
+# Run a docker-compose command.
+make dc cmd="run"
+
+# Run "composer" command in the php-cli container.
+make dcr cmd="composer"
+
+# Run an app console command
+make console arg="app:some:command"
+
+# Run the test suite.
+make phpunit
+
+# Run PHPStan
+make phpstan
+```
+
+For other useful `Make` commands, check [Makefile](Makefile)
+
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
 
