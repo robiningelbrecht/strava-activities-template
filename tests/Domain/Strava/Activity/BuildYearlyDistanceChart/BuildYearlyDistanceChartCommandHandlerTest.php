@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Domain\Strava\Activity\BuildYearlyRidingTimeChart;
+namespace App\Tests\Domain\Strava\Activity\BuildYearlyDistanceChart;
 
 use App\Domain\Strava\Activity\BuildYearlyRidingTimeChart\BuildYearlyRidingTimeChart;
 use App\Infrastructure\CQRS\CommandBus;
@@ -9,7 +9,7 @@ use App\Tests\ProvideTestData;
 use League\Flysystem\FilesystemOperator;
 use Spatie\Snapshots\MatchesSnapshots;
 
-class BuildYearlyRidingTimeChartCommandHandlerTest extends DatabaseTestCase
+class BuildYearlyDistanceChartCommandHandlerTest extends DatabaseTestCase
 {
     use MatchesSnapshots;
     use ProvideTestData;

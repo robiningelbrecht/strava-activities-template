@@ -13,7 +13,7 @@ use App\Domain\Strava\Activity\BuildEddingtonChart\EddingtonChartBuilder;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStatsChartsBuilder;
 use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\WeeklyDistanceChartBuilder;
-use App\Domain\Strava\Activity\BuildYearlyRidingTimeChart\YearlyRidingTimeChartBuilder;
+use App\Domain\Strava\Activity\BuildYearlyDistanceChart\YearlyDistanceChartBuilder;
 use App\Domain\Strava\Activity\HeartRateDistributionChartBuilder;
 use App\Domain\Strava\Activity\Image\Image;
 use App\Domain\Strava\Activity\Image\ImageRepository;
@@ -217,8 +217,8 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     monthlyStatistics: $monthlyStatistics,
                     activities: $allActivities
                 ),
-                'YearlyRidingTimeChart' => Json::encode(
-                    YearlyRidingTimeChartBuilder::fromActivities($allActivities, $now)
+                'YearlyDistanceChart' => Json::encode(
+                    YearlyDistanceChartBuilder::fromActivities($allActivities, $now)
                         ->withAnimation(true)
                         ->withoutBackgroundColor()
                         ->build()
