@@ -61,9 +61,10 @@ final readonly class DistanceOverTimePerGearChartBuilder
 
         $series = [];
         $selectedSeries = [];
-
         foreach ($gears as $gear) {
-            $selectedSeries[$gear->getName()] = !$gear->isRetired();
+            $distanceInLastThreeMonths = array_sum(array_slice($distancePerGearAndMonth[(string) $gear->getId()], -3, 3));
+
+            $selectedSeries[$gear->getName()] = !$gear->isRetired() && $distanceInLastThreeMonths > 0;
             $series[] = [
                 'name' => $gear->getName(),
                 'type' => 'bar',
