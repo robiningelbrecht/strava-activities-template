@@ -2,7 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Activity\BuildYearlyDistanceChart;
 
-use App\Domain\Strava\Activity\BuildYearlyRidingTimeChart\BuildYearlyRidingTimeChart;
+use App\Domain\Strava\Activity\BuildYearlyDistanceChart\BuildYearlyDistanceChart;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
 use App\Tests\ProvideTestData;
@@ -20,7 +20,7 @@ class BuildYearlyDistanceChartCommandHandlerTest extends DatabaseTestCase
     {
         $this->provideFullTestSet();
 
-        $this->commandBus->dispatch(new BuildYearlyRidingTimeChart());
+        $this->commandBus->dispatch(new BuildYearlyDistanceChart());
 
         /** @var \App\Tests\SpyFileSystem $fileSystem */
         $fileSystem = $this->getContainer()->get(FilesystemOperator::class);
