@@ -45,3 +45,11 @@ csfix:
 
 cleanup-snapshots:
 	@make dcr cmd="find . -name __snapshots__ -type d -prune -exec rm -rf {} \; "
+
+## App shortcuts
+app-import-strava-data:
+	@make console arg="app:strava:import-data"
+
+app-build-strava-files:
+	@make console arg="app:strava:build-files"
+

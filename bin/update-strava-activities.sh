@@ -42,6 +42,8 @@ rm -f build/html/searchable.js
 rm -f build/html/sortable.js
 rm -f build/html/activity-data-table.json
 rm -f build/html/segment-data-table.json
+rm -f build/charts/chart-yearly-riding-stats.json
+rm -f build/charts/chart-yearly-riding-stats.svg
 
 # Make sure database and migration directories exist
 mkdir -p database

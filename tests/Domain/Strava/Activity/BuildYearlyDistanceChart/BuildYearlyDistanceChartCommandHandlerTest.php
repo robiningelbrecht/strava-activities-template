@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Tests\Domain\Strava\Activity\BuildYearlyRidingTimeChart;
+namespace App\Tests\Domain\Strava\Activity\BuildYearlyDistanceChart;
 
-use App\Domain\Strava\Activity\BuildYearlyRidingTimeChart\BuildYearlyRidingTimeChart;
+use App\Domain\Strava\Activity\BuildYearlyDistanceChart\BuildYearlyDistanceChart;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
 use App\Tests\ProvideTestData;
 use League\Flysystem\FilesystemOperator;
 use Spatie\Snapshots\MatchesSnapshots;
 
-class BuildYearlyRidingTimeChartCommandHandlerTest extends DatabaseTestCase
+class BuildYearlyDistanceChartCommandHandlerTest extends DatabaseTestCase
 {
     use MatchesSnapshots;
     use ProvideTestData;
@@ -20,7 +20,7 @@ class BuildYearlyRidingTimeChartCommandHandlerTest extends DatabaseTestCase
     {
         $this->provideFullTestSet();
 
-        $this->commandBus->dispatch(new BuildYearlyRidingTimeChart());
+        $this->commandBus->dispatch(new BuildYearlyDistanceChart());
 
         /** @var \App\Tests\SpyFileSystem $fileSystem */
         $fileSystem = $this->getContainer()->get(FilesystemOperator::class);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Strava\Activity\BuildYearlyRidingTimeChart;
+namespace App\Domain\Strava\Activity\BuildYearlyDistanceChart;
 
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Infrastructure\Attribute\AsCommandHandler;
@@ -14,7 +14,7 @@ use Lcobucci\Clock\Clock;
 use League\Flysystem\FilesystemOperator;
 
 #[AsCommandHandler]
-final readonly class BuildYearlyRidingTimeChartCommandHandler implements CommandHandler
+final readonly class BuildYearlyDistanceChartCommandHandler implements CommandHandler
 {
     public function __construct(
         private ActivityDetailsRepository $activityDetailsRepository,
@@ -25,15 +25,15 @@ final readonly class BuildYearlyRidingTimeChartCommandHandler implements Command
 
     public function handle(DomainCommand $command): void
     {
-        assert($command instanceof BuildYearlyRidingTimeChart);
+        assert($command instanceof BuildYearlyDistanceChart);
 
         $this->filesystem->write(
-            'build/charts/chart-yearly-riding-stats.json',
+            'build/charts/chart-yearly-distance-stats.json',
             Json::encode(
                 [
                     'width' => 1000,
                     'height' => 400,
-                    'options' => YearlyRidingTimeChartBuilder::fromActivities(
+                    'options' => YearlyDistanceChartBuilder::fromActivities(
                         activities: $this->activityDetailsRepository->findAll(),
                         now: SerializableDateTime::fromDateTimeImmutable($this->clock->now()),
                     )->build(),

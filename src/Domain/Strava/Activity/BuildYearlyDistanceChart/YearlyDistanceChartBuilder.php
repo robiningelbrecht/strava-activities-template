@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Strava\Activity\BuildYearlyRidingTimeChart;
+namespace App\Domain\Strava\Activity\BuildYearlyDistanceChart;
 
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityCollection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
-final class YearlyRidingTimeChartBuilder
+final class YearlyDistanceChartBuilder
 {
     private bool $animation;
     private ?string $backgroundColor;
@@ -91,7 +91,7 @@ final class YearlyRidingTimeChartBuilder
                         break 2;
                     }
 
-                    $runningSum += $activitiesOnThisDay->sum(fn (Activity $activity) => $activity->getMovingTimeInSeconds() / 3600);
+                    $runningSum += $activitiesOnThisDay->sum(fn (Activity $activity) => $activity->getDistanceInKilometer());
                     $series[(string) $year]['data'][] = round($runningSum);
                 }
             }
@@ -128,7 +128,7 @@ final class YearlyRidingTimeChartBuilder
             'yAxis' => [
                 [
                     'type' => 'value',
-                    'name' => 'Hours of riding',
+                    'name' => 'Distance in km',
                     'nameRotate' => 90,
                     'nameLocation' => 'middle',
                     'nameGap' => 50,
