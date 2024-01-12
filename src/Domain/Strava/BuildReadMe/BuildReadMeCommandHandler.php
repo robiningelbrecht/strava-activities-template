@@ -6,6 +6,7 @@ use App\Domain\Strava\Activity\ActivityTotals;
 use App\Domain\Strava\Activity\BuildDaytimeStatsChart\DaytimeStats;
 use App\Domain\Strava\Activity\BuildEddingtonChart\Eddington;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
+use App\Domain\Strava\Activity\BuildYearlyDistanceChart\YearlyStatistics;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityPowerRepository;
 use App\Domain\Strava\Calendar\MonthCollection;
@@ -19,6 +20,7 @@ use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use App\Infrastructure\ValueObject\Time\YearCollection;
 use Lcobucci\Clock\Clock;
 use League\Flysystem\FilesystemOperator;
 use Twig\Environment;
@@ -48,6 +50,10 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
         $allMonths = MonthCollection::create(
             startDate: $allActivities->getFirstActivityStartDate(),
             now: $now
+        );
+        $allYears = YearCollection::create(
+            startDate: $allActivities->getFirstActivityStartDate(),
+            endDate: $now
         );
         $monthlyStatistics = MonthlyStatistics::fromActivitiesAndChallenges(
             activities: $allActivities,
@@ -86,6 +92,10 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
             'weekdayStats' => WeekdayStats::fromActivities($allActivities),
             'daytimeStats' => DaytimeStats::fromActivities($allActivities),
             'distanceBreakdown' => DistanceBreakdown::fromActivities($allActivities),
+            'yearlyStatistics' => YearlyStatistics::fromActivities(
+                activities: $allActivities,
+                years: $allYears
+            ),
         ]));
     }
 }

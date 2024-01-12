@@ -15,4 +15,22 @@ class YearCollection extends Collection
     {
         return Year::class;
     }
+
+    public static function create(
+        SerializableDateTime $startDate,
+        SerializableDateTime $endDate
+    ): self {
+        $years = YearCollection::empty();
+        $period = new \DatePeriod(
+            $startDate->modify('first day of january this year'),
+            new \DateInterval('P1Y'),
+            $endDate->modify('last day of december this year')
+        );
+
+        foreach ($period as $date) {
+            $years->add(Year::fromDate(SerializableDateTime::fromDateTimeImmutable($date)));
+        }
+
+        return $years;
+    }
 }

@@ -14,6 +14,7 @@ use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStatsChartsBuilder;
 use App\Domain\Strava\Activity\BuildWeeklyDistanceChart\WeeklyDistanceChartBuilder;
 use App\Domain\Strava\Activity\BuildYearlyDistanceChart\YearlyDistanceChartBuilder;
+use App\Domain\Strava\Activity\BuildYearlyDistanceChart\YearlyStatistics;
 use App\Domain\Strava\Activity\HeartRateDistributionChartBuilder;
 use App\Domain\Strava\Activity\Image\Image;
 use App\Domain\Strava\Activity\Image\ImageRepository;
@@ -51,6 +52,7 @@ use App\Infrastructure\KeyValue\ReadModel\KeyValueStore;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\DataTableRow;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use App\Infrastructure\ValueObject\Time\YearCollection;
 use Lcobucci\Clock\Clock;
 use League\Flysystem\FilesystemOperator;
 use Twig\Environment;
@@ -98,6 +100,10 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $allMonths = MonthCollection::create(
             startDate: $allActivities->getFirstActivityStartDate(),
             now: $now
+        );
+        $allYears = YearCollection::create(
+            startDate: $allActivities->getFirstActivityStartDate(),
+            endDate: $now
         );
         $monthlyStatistics = MonthlyStatistics::fromActivitiesAndChallenges(
             activities: $allActivities,
@@ -217,11 +223,15 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     monthlyStatistics: $monthlyStatistics,
                     activities: $allActivities
                 ),
-                'YearlyDistanceChart' => Json::encode(
+                'yearlyDistanceChart' => Json::encode(
                     YearlyDistanceChartBuilder::fromActivities($allActivities, $now)
                         ->withAnimation(true)
                         ->withoutBackgroundColor()
                         ->build()
+                ),
+                'yearlyStatistics' => YearlyStatistics::fromActivities(
+                    activities: $allActivities,
+                    years: $allYears
                 ),
             ]),
         );

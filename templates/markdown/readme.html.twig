@@ -260,6 +260,33 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
 
 <img src="build/charts/chart-yearly-distance-stats.svg" alt="Yearly distance stats"/>
 
+<table>
+    <thead>
+    <tr>
+        <th>Year</th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/distance.svg" width="30" alt="distance" title="distance"/></th>
+        <th>Δ prev year</th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/elevation.svg" width="30" alt="elevation" title="elevation"/></th>
+        <th align="center"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/time.svg" width="30" alt="time" title="time"/></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for statistic in yearlyStatistics.getStatistics() %}
+        <tr>
+            <td align="center">{{ statistic.year }}</td>
+            <td align="center">{{ statistic.totalDistance|formatNumber(0) }} <sup><sub>km</sub></sup></td>
+            <td align="center">
+                {% if statistic.differenceInDistanceYearBefore is not null %}
+                    {{ statistic.differenceInDistanceYearBefore|formatNumber(0) }} <sup><sub>km</sub></sup>
+                {% endif %}
+            </td>
+            <td align="center">{{ statistic.totalElevation|formatNumber(0) }} <sup><sub>m</sub></sup></td>
+            <td align="center">{{ statistic.movingTime }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
 ## Distance breakdown
 
 <table>
