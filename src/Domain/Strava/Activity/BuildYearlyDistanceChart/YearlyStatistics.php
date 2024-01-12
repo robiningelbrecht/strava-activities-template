@@ -24,6 +24,9 @@ final readonly class YearlyStatistics
         return new self($activities, $years);
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getStatistics(): array
     {
         $statistics = [];
