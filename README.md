@@ -172,6 +172,10 @@ For other useful `Make` commands, check [Makefile](Makefile)
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
 
+#### [2023-01-13]
+
+* Added yearly stats
+
 #### [2023-01-05]
 
 * Refactored activity and segment overview to be way faster
