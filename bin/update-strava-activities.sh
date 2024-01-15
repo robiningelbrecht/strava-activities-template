@@ -21,7 +21,7 @@ rm -Rf migrations/* && mv -f strava-activities-template/migrations/* migrations/
 rm -Rf public/* && mv -f strava-activities-template/public/* public/
 rm -Rf src/* && mv -f strava-activities-template/src/* src/
 rm -Rf templates/* && mv -f strava-activities-template/templates/* templates/
-mkdir .docker && rm -Rf .docker/* && mv -f strava-activities-template/.docker/* .docker/
+mkdir -p .docker && rm -Rf .docker/* && mv -f strava-activities-template/.docker/* .docker/
 # BIN EXECUTABLES
 mv -f strava-activities-template/bin/console bin/console
 mv -f strava-activities-template/bin/doctrine-migrations bin/doctrine-migrations
