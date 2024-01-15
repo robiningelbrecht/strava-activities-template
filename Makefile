@@ -53,8 +53,3 @@ app-import-strava-data:
 app-build-strava-files:
 	@make console arg="app:strava:build-files"
 
-install-hooks: ## Install git hooks
-	rm -f .git/hooks/pre-commit
-	cp githooks/pre-commit .git/hooks/pre-commit
-	chmod +x .git/hooks/pre-commit
-
