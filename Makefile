@@ -19,9 +19,6 @@ down:
 	@make dc cmd="down"
 
 ## Helpers.
-git-add:
-	@make csfix && git add .
-
 composer:
 	@make dcr cmd="composer $(arg)"
 
@@ -38,13 +35,16 @@ phpunit:
 	@make dcr cmd="vendor/bin/phpunit $(arg)"
 
 phpstan:
-	@make dcr cmd="vendor/bin/phpstan --memory-limit=1G $(arg)"
+	vendor/bin/phpstan --memory-limit=1G $(arg)
 
 csfix:
-	@make dcr cmd="vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php"
+	vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php
 
 cleanup-snapshots:
-	@make dcr cmd="find . -name __snapshots__ -type d -prune -exec rm -rf {} \; "
+	find . -name __snapshots__ -type d -prune -exec rm -rf {} \;
+
+git-add:
+	make csfix && git add .
 
 ## App shortcuts
 app-import-strava-data:
@@ -52,4 +52,9 @@ app-import-strava-data:
 
 app-build-strava-files:
 	@make console arg="app:strava:build-files"
+
+install-hooks: ## Install git hooks
+	rm -f .git/hooks/pre-commit
+	cp githooks/pre-commit .git/hooks/pre-commit
+	chmod +x .git/hooks/pre-commit
 
