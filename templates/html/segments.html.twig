@@ -24,6 +24,17 @@
                             </div>
                             <input id="search" type="search" placeholder="Search segment..." class="table-search bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
+                        <button data-popover-target="popover-description" data-popover-placement="right" type="button">
+                            <svg class="w-4 h-4 ml-1 text-gray-400 hover:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="20" fill="none" viewBox="0 0 14 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7a3 3 0 0 1 3-3M5 19h4m0-3c0-4.1 4-4.9 4-9A6 6 0 1 0 1 7c0 4 4 5 4 9h4Z"/>
+                            </svg>
+                            <span class="sr-only">Show tip</span>
+                        </button>
+                        <div data-popover id="popover-description" role="tooltip" class="absolute z-[100] invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
+                            <p class="p-3">
+                                You can search on "<span class="font-bold">starred</span>" or "<span class="font-bold">favourite</span>" to filter on starred segments.
+                            </p>
+                        </div>
                     </form>
                     <div class="scroll-area overflow-auto max-h-[calc(100vh-240px)]">
                         <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
