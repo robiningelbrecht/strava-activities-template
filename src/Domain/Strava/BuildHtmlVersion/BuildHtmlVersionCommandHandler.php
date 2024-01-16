@@ -171,6 +171,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                         ->withAnimation(true)
                         ->withoutBackgroundColor()
                         ->withDataZoom(true)
+                        ->withAverageTimes(true)
                         ->build(),
                 ),
                 'powerOutputs' => $this->activityPowerRepository->findBest(),
