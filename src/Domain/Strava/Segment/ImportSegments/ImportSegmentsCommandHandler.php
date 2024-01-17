@@ -40,6 +40,8 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
         assert($command instanceof ImportSegments);
         $command->getOutput()->writeln('Importing segments and efforts...');
 
+        $segmentsAddedInCurrentRun = [];
+
         /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($this->activityDetailsRepository->findAll() as $activity) {
             if (!$segmentEfforts = $activity->getSegmentEfforts()) {
@@ -49,17 +51,24 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
 
             foreach ($segmentEfforts as $activitySegmentEffort) {
                 $activitySegment = $activitySegmentEffort['segment'];
+                $segmentId = SegmentId::fromUnprefixed((string) $activitySegment['id']);
+
                 $segment = Segment::create(
-                    segmentId: SegmentId::fromUnprefixed((string) $activitySegment['id']),
+                    segmentId: $segmentId,
                     name: Name::fromString($activitySegment['name']),
                     data: array_merge($activitySegment, ['device_name' => $activity->getDeviceName()]),
                 );
 
-                try {
-                    $segment = $this->segmentDetailsRepository->find($segment->getId());
-                } catch (EntityNotFound) {
-                    $this->segmentRepository->add($segment);
-                    $command->getOutput()->writeln(sprintf('  => Added segment "%s"', $segment->getName()));
+                // Do not import segments that have been imported in the current run.
+                if (!isset($segmentsAddedInCurrentRun[(string) $segmentId])) {
+                    // Check if the segment is imported in a previous run.
+                    try {
+                        $segment = $this->segmentDetailsRepository->find($segment->getId());
+                    } catch (EntityNotFound) {
+                        $this->segmentRepository->add($segment);
+                        $segmentsAddedInCurrentRun[(string) $segmentId] = $segmentId;
+                        $command->getOutput()->writeln(sprintf('  => Added segment "%s"', $segment->getName()));
+                    }
                 }
 
                 $segmentEffortId = SegmentEffortId::fromUnprefixed((string) $activitySegmentEffort['id']);
