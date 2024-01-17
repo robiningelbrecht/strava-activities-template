@@ -172,6 +172,11 @@ For other useful `Make` commands, check [Makefile](Makefile)
 ## 📓 Change Log
 All notable changes to this project will be documented in this file.
 
+#### [2023-01-17]
+
+* Added hours of riding to weekly stats chart
+* Fixed bug where importing of segments crashed on first run (thanks to [dylix](https://github.com/dylix) for reporting)
+
 #### [2023-01-13]
 
 * Added yearly stats
