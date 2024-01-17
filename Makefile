@@ -53,3 +53,8 @@ app-import-strava-data:
 app-build-strava-files:
 	@make console arg="app:strava:build-files"
 
+app-run-update:
+	@make dcr cmd="bin/update-strava-activities.sh $(arg)"
+
+app-flowbite-build:
+	npm run flowbite:build
