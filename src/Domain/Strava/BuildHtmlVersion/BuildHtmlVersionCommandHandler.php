@@ -20,6 +20,7 @@ use App\Domain\Strava\Activity\Image\Image;
 use App\Domain\Strava\Activity\Image\ImageRepository;
 use App\Domain\Strava\Activity\PowerDistributionChartBuilder;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
+use App\Domain\Strava\Activity\Stream\PowerOutputChartBuilder;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityHeartRateRepository;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityPowerRepository;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityStreamDetailsRepository;
@@ -110,6 +111,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             challenges: $allChallenges,
             months: $allMonths,
         );
+        $bestPowerOutputs = $this->activityPowerRepository->findBest();
 
         /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($allActivities as $activity) {
@@ -141,6 +143,8 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             } catch (EntityNotFound) {
             }
         }
+
+        var_dump(Json::encode(PowerOutputChartBuilder::fromBestPowerOutputs($bestPowerOutputs)->build()));
 
         $this->filesystem->write(
             'build/html/index.html',
@@ -174,7 +178,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                         ->withAverageTimes(true)
                         ->build(),
                 ),
-                'powerOutputs' => $this->activityPowerRepository->findBest(),
+                'powerOutputs' => $bestPowerOutputs,
                 'activityHeatmapChart' => Json::encode(
                     ActivityHeatmapChartBuilder::fromActivities(
                         activities: $allActivities,
