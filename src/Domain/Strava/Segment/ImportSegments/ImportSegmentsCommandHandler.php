@@ -61,6 +61,7 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
 
                 // Do not import segments that have been imported in the current run.
                 if (!isset($segmentsAddedInCurrentRun[(string) $segmentId])) {
+                    // Check if the segment is imported in a previous run.
                     try {
                         $segment = $this->segmentDetailsRepository->find($segment->getId());
                     } catch (EntityNotFound) {
