@@ -8,5 +8,7 @@ interface ActivityStreamRepository
 {
     public function add(ActivityStream $stream): void;
 
+    public function update(ActivityStream $stream): void;
+
     public function delete(ActivityStream $stream): void;
 }

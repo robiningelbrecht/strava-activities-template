@@ -10,6 +10,7 @@ use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Domain\Strava\Activity\Stream\WriteModel\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\WriteModel\DbalActivityStreamRepository;
+use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\Year;
 use App\Tests\DatabaseTestCase;
 
@@ -20,16 +21,33 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
     public function testIsImportedForActivity(): void
     {
-        $stream = DefaultStreamBuilder::fromDefaults()->build();
+        $stream = ActivityStreamBuilder::fromDefaults()->build();
         $this->activityStreamRepository->add($stream);
 
         $this->assertTrue($this->activityStreamDetailsRepository->isImportedForActivity($stream->getActivityId()));
         $this->assertFalse($this->activityStreamDetailsRepository->isImportedForActivity(ActivityId::fromUnprefixed('1')));
     }
 
+    public function testUpdate(): void
+    {
+        $stream = ActivityStreamBuilder::fromDefaults()->build();
+        $this->activityStreamRepository->add($stream);
+
+        $this->assertEmpty($stream->getBestAverages());
+
+        $stream->updateBestAverages([1 => 1]);
+        $this->activityStreamRepository->update($stream);
+
+        $streams = $this->activityStreamDetailsRepository->findByActivityId($stream->getActivityId());
+        /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $stream */
+        $stream = $streams->getFirst();
+
+        $this->assertEquals([1 => 1], $stream->getBestAverages());
+    }
+
     public function testHasOneForActivityAndStreamType(): void
     {
-        $stream = DefaultStreamBuilder::fromDefaults()->build();
+        $stream = ActivityStreamBuilder::fromDefaults()->build();
         $this->activityStreamRepository->add($stream);
 
         $this->assertTrue($this->activityStreamDetailsRepository->hasOneForActivityAndStreamType(
@@ -48,7 +66,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
     public function testFindByStreamType(): void
     {
-        $stream = DefaultStreamBuilder::fromDefaults()->build();
+        $stream = ActivityStreamBuilder::fromDefaults()->build();
         $this->activityStreamRepository->add($stream);
 
         $this->assertEquals(
@@ -59,24 +77,24 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
     public function testFindByActivityAndStreamTypes(): void
     {
-        $streamOne = DefaultStreamBuilder::fromDefaults()
+        $streamOne = ActivityStreamBuilder::fromDefaults()
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::WATTS)
             ->build();
         $this->activityStreamRepository->add($streamOne);
-        $streamTwo = DefaultStreamBuilder::fromDefaults()
+        $streamTwo = ActivityStreamBuilder::fromDefaults()
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::CADENCE)
             ->build();
         $this->activityStreamRepository->add($streamTwo);
         $this->activityStreamRepository->add(
-            DefaultStreamBuilder::fromDefaults()
+            ActivityStreamBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(1))
                 ->withStreamType(StreamType::HEART_RATE)
                 ->build()
         );
         $this->activityStreamRepository->add(
-            DefaultStreamBuilder::fromDefaults()
+            ActivityStreamBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(2))
                 ->withStreamType(StreamType::CADENCE)
                 ->build()
@@ -93,18 +111,18 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
     public function testFindByActivity(): void
     {
-        $streamOne = DefaultStreamBuilder::fromDefaults()
+        $streamOne = ActivityStreamBuilder::fromDefaults()
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::WATTS)
             ->build();
         $this->activityStreamRepository->add($streamOne);
-        $streamTwo = DefaultStreamBuilder::fromDefaults()
+        $streamTwo = ActivityStreamBuilder::fromDefaults()
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::CADENCE)
             ->build();
         $this->activityStreamRepository->add($streamTwo);
         $this->activityStreamRepository->add(
-            DefaultStreamBuilder::fromDefaults()
+            ActivityStreamBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(2))
                 ->withStreamType(StreamType::CADENCE)
                 ->build()
@@ -120,12 +138,12 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
     public function testDelete(): void
     {
-        $streamOne = DefaultStreamBuilder::fromDefaults()
+        $streamOne = ActivityStreamBuilder::fromDefaults()
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::WATTS)
             ->build();
         $this->activityStreamRepository->add($streamOne);
-        $streamTwo = DefaultStreamBuilder::fromDefaults()
+        $streamTwo = ActivityStreamBuilder::fromDefaults()
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::CADENCE)
             ->build();
@@ -145,6 +163,67 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
                 ->getForYear(Year::fromDate($streamTwo->getCreatedOn()))
                 ->executeQuery('SELECT COUNT(*) FROM ActivityStream')->fetchOne()
         );
+    }
+
+    public function testFindWithoutBestAverages(): void
+    {
+        $streamOne = ActivityStreamBuilder::fromDefaults()
+            ->withActivityId(ActivityId::fromUnprefixed(1))
+            ->withStreamType(StreamType::WATTS)
+            ->build();
+        $this->activityStreamRepository->add($streamOne);
+        $streamTwo = ActivityStreamBuilder::fromDefaults()
+            ->withActivityId(ActivityId::fromUnprefixed(1))
+            ->withStreamType(StreamType::CADENCE)
+            ->withBestAverages(['lol'])
+            ->build();
+        $this->activityStreamRepository->add($streamTwo);
+
+        $this->assertEquals(
+            ActivityStreamCollection::fromArray([$streamOne]),
+            $this->activityStreamDetailsRepository->findWithoutBestAverages()
+        );
+    }
+
+    public function testFindWithBestAverageFor(): void
+    {
+        $streamOne = ActivityStreamBuilder::fromDefaults()
+            ->withActivityId(ActivityId::fromUnprefixed(1))
+            ->withStreamType(StreamType::WATTS)
+            ->withBestAverages(['10' => 40])
+            ->build();
+        $this->activityStreamRepository->add($streamOne);
+        $streamTwo = ActivityStreamBuilder::fromDefaults()
+            ->withActivityId(ActivityId::fromUnprefixed(2))
+            ->withStreamType(StreamType::WATTS)
+            ->withBestAverages(['10' => 30])
+            ->build();
+        $this->activityStreamRepository->add($streamTwo);
+
+        $this->assertEquals(
+            $streamOne,
+            $this->activityStreamDetailsRepository->findWithBestAverageFor(10, StreamType::WATTS)
+        );
+    }
+
+    public function testFindWithBestAverageForItShouldThrowWhenNotFound(): void
+    {
+        $streamOne = ActivityStreamBuilder::fromDefaults()
+            ->withActivityId(ActivityId::fromUnprefixed(1))
+            ->withStreamType(StreamType::WATTS)
+            ->withBestAverages(['10' => 40])
+            ->build();
+        $this->activityStreamRepository->add($streamOne);
+        $streamTwo = ActivityStreamBuilder::fromDefaults()
+            ->withActivityId(ActivityId::fromUnprefixed(2))
+            ->withStreamType(StreamType::WATTS)
+            ->withBestAverages(['10' => 30])
+            ->build();
+        $this->activityStreamRepository->add($streamTwo);
+
+        $this->expectExceptionObject(new EntityNotFound('ActivityStream for average not found'));
+
+        $this->activityStreamDetailsRepository->findWithBestAverageFor(20, StreamType::WATTS);
     }
 
     protected function setUp(): void

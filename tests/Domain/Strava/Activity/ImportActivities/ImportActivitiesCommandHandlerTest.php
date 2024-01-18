@@ -11,7 +11,7 @@ use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
 use App\Tests\Domain\Strava\Activity\ActivityBuilder;
-use App\Tests\Domain\Strava\Activity\Stream\DefaultStreamBuilder;
+use App\Tests\Domain\Strava\Activity\Stream\ActivityStreamBuilder;
 use App\Tests\Domain\Strava\Segment\SegmentEffort\SegmentEffortBuilder;
 use App\Tests\Domain\Strava\SpyStrava;
 use App\Tests\SpyOutput;
@@ -72,7 +72,7 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
             ->withActivityId(ActivityId::fromUnprefixed(1000))
             ->build();
         $this->getContainer()->get(SegmentEffortRepository::class)->add($segmentEffortOne);
-        $stream = DefaultStreamBuilder::fromDefaults()
+        $stream = ActivityStreamBuilder::fromDefaults()
             ->withActivityId(ActivityId::fromUnprefixed(1000))
             ->build();
         $this->getContainer()->get(ActivityStreamRepository::class)->add($stream);

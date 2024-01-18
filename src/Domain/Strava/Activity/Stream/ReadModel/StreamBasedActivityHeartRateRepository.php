@@ -11,6 +11,7 @@ use App\Domain\Strava\Activity\Stream\HeartRate;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Domain\Strava\Athlete\HeartRateZone;
+use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\KeyValue\Key;
 use App\Infrastructure\KeyValue\ReadModel\KeyValueStore;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -40,28 +41,27 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
      */
     public function findHighest(): array
     {
-        $heartRateStreams = $this->activityStreamDetailsRepository->findByStreamType(StreamType::HEART_RATE);
-
         /** @var HeartRate[] $best */
         $best = [];
 
-        /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $stream */
-        foreach ($heartRateStreams as $stream) {
-            foreach (self::TIME_INTERVAL_IN_SECONDS as $timeIntervalInSeconds) {
-                if (!$heartRate = $stream->getBestAverageForTimeInterval($timeIntervalInSeconds)) {
-                    continue;
-                }
-                if (!isset($best[$timeIntervalInSeconds]) || $best[$timeIntervalInSeconds]->getRate() < $heartRate) {
-                    $activity = $this->activityDetailsRepository->find($stream->getActivityId());
-                    $interval = CarbonInterval::seconds($timeIntervalInSeconds);
-
-                    $best[$timeIntervalInSeconds] = HeartRate::fromState(
-                        time: (int) $interval->totalHours ? $interval->totalHours.' h' : ((int) $interval->totalMinutes ? $interval->totalMinutes.' m' : $interval->totalSeconds.' s'),
-                        rate: $heartRate,
-                        activity: $activity,
-                    );
-                }
+        foreach (self::TIME_INTERVAL_IN_SECONDS as $timeIntervalInSeconds) {
+            try {
+                $stream = $this->activityStreamDetailsRepository->findWithBestAverageFor(
+                    intervalInSeconds: $timeIntervalInSeconds,
+                    streamType: StreamType::HEART_RATE
+                );
+            } catch (EntityNotFound) {
+                continue;
             }
+
+            $activity = $this->activityDetailsRepository->find($stream->getActivityId());
+            $interval = CarbonInterval::seconds($timeIntervalInSeconds);
+
+            $best[$timeIntervalInSeconds] = HeartRate::fromState(
+                time: (int) $interval->totalHours ? $interval->totalHours.' h' : ((int) $interval->totalMinutes ? $interval->totalMinutes.' m' : $interval->totalSeconds.' s'),
+                rate: $stream->getBestAverages()[$timeIntervalInSeconds],
+                activity: $activity,
+            );
         }
 
         return $best;
