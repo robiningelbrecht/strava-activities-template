@@ -10,9 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'ActivityStream')]
 final class ActivityStream
 {
-    /** @var array<mixed> */
-    private array $bestAverageForTimeIntervals = [];
-
     /**
      * @param array<mixed>    $data
      * @param array<int, int> $bestAverages
@@ -114,19 +111,11 @@ final class ActivityStream
 
     public function calculateBestAverageForTimeInterval(int $timeIntervalInSeconds): ?int
     {
-        if (array_key_exists($timeIntervalInSeconds, $this->bestAverageForTimeIntervals)) {
-            return $this->bestAverageForTimeIntervals[$timeIntervalInSeconds];
-        }
-
         if (!$bestSequence = $this->getBestSequence($timeIntervalInSeconds)) {
-            $this->bestAverageForTimeIntervals[$timeIntervalInSeconds] = null;
-
             return null;
         }
 
-        $this->bestAverageForTimeIntervals[$timeIntervalInSeconds] = (int) round(array_sum($bestSequence) / $timeIntervalInSeconds);
-
-        return $this->bestAverageForTimeIntervals[$timeIntervalInSeconds];
+        return (int) round(array_sum($bestSequence) / $timeIntervalInSeconds);
     }
 
     /**
