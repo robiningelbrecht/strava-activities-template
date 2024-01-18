@@ -3,6 +3,7 @@
 namespace App\Domain\Strava\Activity\Stream\ReadModel;
 
 use App\Domain\Strava\Activity\ActivityId;
+use App\Domain\Strava\Activity\Stream\ActivityStream;
 use App\Domain\Strava\Activity\Stream\ActivityStreamCollection;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
@@ -18,4 +19,8 @@ interface ActivityStreamDetailsRepository
     public function findByActivityAndStreamTypes(ActivityId $activityId, StreamTypeCollection $streamTypes): ActivityStreamCollection;
 
     public function findByActivityId(ActivityId $activityId): ActivityStreamCollection;
+
+    public function findWithoutBestAverages(): ActivityStreamCollection;
+
+    public function findWithBestAverageFor(int $intervalInSeconds, StreamType $streamType): ActivityStream;
 }

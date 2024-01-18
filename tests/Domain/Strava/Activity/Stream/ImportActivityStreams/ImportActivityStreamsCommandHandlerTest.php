@@ -10,7 +10,7 @@ use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
 use App\Tests\Domain\Strava\Activity\ActivityBuilder;
-use App\Tests\Domain\Strava\Activity\Stream\DefaultStreamBuilder;
+use App\Tests\Domain\Strava\Activity\Stream\ActivityStreamBuilder;
 use App\Tests\Domain\Strava\SpyStrava;
 use App\Tests\SpyOutput;
 use League\Flysystem\FilesystemOperator;
@@ -49,7 +49,7 @@ class ImportActivityStreamsCommandHandlerTest extends DatabaseTestCase
                 ->build()
         );
         $this->getContainer()->get(ActivityStreamRepository::class)->add(
-            DefaultStreamBuilder::fromDefaults()
+            ActivityStreamBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(4))
                 ->build()
         );
