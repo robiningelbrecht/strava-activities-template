@@ -20,5 +20,15 @@ interface ActivityStream
 
     public function getCreatedOn(): SerializableDateTime;
 
-    public function getBestAverageForTimeInterval(int $timeIntervalInSeconds): ?int;
+    public function calculateBestAverageForTimeInterval(int $timeIntervalInSeconds): ?int;
+
+    /**
+     * @return array<int, int>
+     */
+    public function getBestAverages(): array;
+
+    /**
+     * @param array<int, int> $averages
+     */
+    public function updateBestAverages(array $averages): void;
 }

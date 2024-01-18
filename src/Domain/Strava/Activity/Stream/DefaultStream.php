@@ -24,7 +24,9 @@ final class DefaultStream implements ActivityStream
         #[ORM\Column(type: 'datetime_immutable')]
         private readonly SerializableDateTime $createdOn,
         #[ORM\Column(type: 'json')]
-        private readonly array $data
+        private readonly array $data,
+        #[ORM\Column(type: 'json', nullable: true)]
+        private array $bestAverages = []
     ) {
     }
 
@@ -52,13 +54,15 @@ final class DefaultStream implements ActivityStream
         ActivityId $activityId,
         StreamType $streamType,
         array $streamData,
-        SerializableDateTime $createdOn
+        SerializableDateTime $createdOn,
+        array $bestAverages,
     ): self {
         return new self(
             activityId: $activityId,
             streamType: $streamType,
             createdOn: $createdOn,
             data: $streamData,
+            bestAverages: $bestAverages
         );
     }
 
@@ -90,7 +94,17 @@ final class DefaultStream implements ActivityStream
         return $this->data;
     }
 
-    public function getBestAverageForTimeInterval(int $timeIntervalInSeconds): ?int
+    public function getBestAverages(): array
+    {
+        return $this->bestAverages;
+    }
+
+    public function updateBestAverages(array $averages): void
+    {
+        $this->bestAverages = $averages;
+    }
+
+    public function calculateBestAverageForTimeInterval(int $timeIntervalInSeconds): ?int
     {
         if (array_key_exists($timeIntervalInSeconds, $this->bestAverageForTimeIntervals)) {
             return $this->bestAverageForTimeIntervals[$timeIntervalInSeconds];

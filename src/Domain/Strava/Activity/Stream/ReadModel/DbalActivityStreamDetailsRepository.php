@@ -9,6 +9,7 @@ use App\Domain\Strava\Activity\Stream\DefaultStream;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
+use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Repository\ProvideSqlConvert;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -93,6 +94,37 @@ final readonly class DbalActivityStreamDetailsRepository implements ActivityStre
         ));
     }
 
+    public function findWithoutBestAverages(): ActivityStreamCollection
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select('*')
+            ->from('ActivityStream')
+            ->andWhere('bestAverages IS NULL');
+
+        return ActivityStreamCollection::fromArray(array_map(
+            fn (array $result) => $this->buildFromResult($result),
+            $queryBuilder->executeQuery()->fetchAllAssociative()
+        ));
+    }
+
+    public function findWithBestAverageFor(int $intervalInSeconds, StreamType $streamType): ActivityStream
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->select('*')
+            ->from('ActivityStream')
+            ->andWhere('streamType = :streamType')
+            ->setParameter('streamType', $streamType->value)
+            ->andWhere('JSON_EXTRACT(bestAverages, "$.'.$intervalInSeconds.'") IS NOT NULL')
+            ->orderBy('JSON_EXTRACT(bestAverages, "$.'.$intervalInSeconds.'")', 'DESC')
+            ->setMaxResults(1);
+
+        if (!$result = $queryBuilder->fetchAssociative()) {
+            throw new EntityNotFound('ActivityStream for average not found');
+        }
+
+        return $this->buildFromResult($result);
+    }
+
     /**
      * @param array<mixed> $result
      */
@@ -103,6 +135,7 @@ final readonly class DbalActivityStreamDetailsRepository implements ActivityStre
             streamType: StreamType::from($result['streamType']),
             streamData: Json::decode($result['data']),
             createdOn: SerializableDateTime::fromString($result['createdOn']),
+            bestAverages: Json::decode($result['bestAverages'] ?: '[]'),
         );
     }
 }

@@ -6,9 +6,9 @@ use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStream;
 use App\Domain\Strava\Activity\Stream\PowerOutput;
-use App\Domain\Strava\Activity\Stream\PowerStream;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
+use App\Infrastructure\Exception\EntityNotFound;
 use Carbon\CarbonInterval;
 
 final class StreamBasedActivityPowerRepository implements ActivityPowerRepository
@@ -34,6 +34,7 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
         $activities = $this->activityDetailsRepository->findAll();
         $powerStreams = $this->activityStreamDetailsRepository->findByStreamType(StreamType::WATTS);
 
+        /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($activities as $activity) {
             StreamBasedActivityPowerRepository::$cachedPowerOutputs[(string) $activity->getId()] = [];
             $powerStreamsForActivity = $powerStreams->filter(fn (ActivityStream $stream) => $stream->getActivityId() == $activity->getId());
@@ -44,19 +45,18 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
 
             /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $activityStream */
             $activityStream = $powerStreamsForActivity->getFirst();
-            $stream = PowerStream::fromStream($activityStream);
+            $bestAverages = $activityStream->getBestAverages();
+
             foreach (self::TIME_INTERVAL_IN_SECONDS as $timeIntervalInSeconds) {
                 $interval = CarbonInterval::seconds($timeIntervalInSeconds);
-                if (!$bestAverageForTimeInterval = $stream->getBestAverageForTimeInterval($timeIntervalInSeconds)) {
+                if (!isset($bestAverages[$timeIntervalInSeconds])) {
                     continue;
                 }
-                if (!$bestRelativeAverageForTimeInterval = $stream->getBestRelativeAverageForTimeInterval($timeIntervalInSeconds, $activity->getAthleteWeight())) {
-                    continue;
-                }
+                $bestAverageForTimeInterval = $bestAverages[$timeIntervalInSeconds];
                 StreamBasedActivityPowerRepository::$cachedPowerOutputs[(string) $activity->getId()][$timeIntervalInSeconds] = PowerOutput::fromState(
                     time: (int) $interval->totalHours ? $interval->totalHours.' h' : ((int) $interval->totalMinutes ? $interval->totalMinutes.' m' : $interval->totalSeconds.' s'),
                     power: $bestAverageForTimeInterval,
-                    relativePower: $bestRelativeAverageForTimeInterval,
+                    relativePower: round($bestAverageForTimeInterval / $activity->getAthleteWeight()->getFloat(), 2),
                 );
             }
         }
@@ -93,35 +93,29 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
      */
     public function findBest(): array
     {
-        /** @var \App\Domain\Strava\Activity\Stream\PowerStream[] $powerStreams */
-        $powerStreams = $this->activityStreamDetailsRepository->findByStreamType(StreamType::WATTS)->map(
-            fn (ActivityStream $stream) => PowerStream::fromStream($stream),
-        );
-
         /** @var PowerOutput[] $best */
         $best = [];
 
-        foreach ($powerStreams as $stream) {
-            foreach (self::TIME_INTERVAL_IN_SECONDS as $timeIntervalInSeconds) {
-                if (!$power = $stream->getBestAverageForTimeInterval($timeIntervalInSeconds)) {
-                    continue;
-                }
-                if (!isset($best[$timeIntervalInSeconds]) || $best[$timeIntervalInSeconds]->getPower() < $power) {
-                    $activity = $this->activityDetailsRepository->find($stream->getActivityId());
-                    $interval = CarbonInterval::seconds($timeIntervalInSeconds);
-
-                    if (!$bestRelativeAverageForTimeInterval = $stream->getBestRelativeAverageForTimeInterval($timeIntervalInSeconds, $activity->getAthleteWeight())) {
-                        continue;
-                    }
-
-                    $best[$timeIntervalInSeconds] = PowerOutput::fromState(
-                        time: (int) $interval->totalHours ? $interval->totalHours.' h' : ((int) $interval->totalMinutes ? $interval->totalMinutes.' m' : $interval->totalSeconds.' s'),
-                        power: $power,
-                        relativePower: $bestRelativeAverageForTimeInterval,
-                        activity: $activity,
-                    );
-                }
+        foreach (self::TIME_INTERVAL_IN_SECONDS as $timeIntervalInSeconds) {
+            try {
+                $stream = $this->activityStreamDetailsRepository->findWithBestAverageFor(
+                    intervalInSeconds: $timeIntervalInSeconds,
+                    streamType: StreamType::WATTS
+                );
+            } catch (EntityNotFound) {
+                continue;
             }
+
+            $activity = $this->activityDetailsRepository->find($stream->getActivityId());
+            $interval = CarbonInterval::seconds($timeIntervalInSeconds);
+            $bestAverageForTimeInterval = $stream->getBestAverages()[$timeIntervalInSeconds];
+
+            $best[$timeIntervalInSeconds] = PowerOutput::fromState(
+                time: (int) $interval->totalHours ? $interval->totalHours.' h' : ((int) $interval->totalMinutes ? $interval->totalMinutes.' m' : $interval->totalSeconds.' s'),
+                power: $bestAverageForTimeInterval,
+                relativePower: round($bestAverageForTimeInterval / $activity->getAthleteWeight()->getFloat(), 2),
+                activity: $activity,
+            );
         }
 
         return $best;

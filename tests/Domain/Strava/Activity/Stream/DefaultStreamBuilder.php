@@ -16,6 +16,7 @@ final class DefaultStreamBuilder
     private StreamType $streamType;
     private SerializableDateTime $createdOn;
     private array $data;
+    private array $bestAverages;
 
     private function __construct()
     {
@@ -23,6 +24,7 @@ final class DefaultStreamBuilder
         $this->streamType = StreamType::WATTS;
         $this->createdOn = SerializableDateTime::fromString('2023-10-10');
         $this->data = [];
+        $this->bestAverages = [];
     }
 
     public static function fromDefaults(): self
@@ -37,6 +39,7 @@ final class DefaultStreamBuilder
             streamType: $this->streamType,
             streamData: $this->data,
             createdOn: $this->createdOn,
+            bestAverages: $this->bestAverages,
         );
     }
 
@@ -64,6 +67,13 @@ final class DefaultStreamBuilder
     public function withData(array $data): self
     {
         $this->data = $data;
+
+        return $this;
+    }
+
+    public function withBestAverages(array $bestAverages): self
+    {
+        $this->bestAverages = $bestAverages;
 
         return $this;
     }
