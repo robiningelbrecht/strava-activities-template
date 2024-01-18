@@ -6,11 +6,10 @@ namespace App\Tests\Domain\Strava\Activity\Stream;
 
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\Stream\ActivityStream;
-use App\Domain\Strava\Activity\Stream\DefaultStream;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
-final class DefaultStreamBuilder
+final class ActivityStreamBuilder
 {
     private ActivityId $activityId;
     private StreamType $streamType;
@@ -34,7 +33,7 @@ final class DefaultStreamBuilder
 
     public function build(): ActivityStream
     {
-        return DefaultStream::fromState(
+        return ActivityStream::fromState(
             activityId: $this->activityId,
             streamType: $this->streamType,
             streamData: $this->data,

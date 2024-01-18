@@ -27,7 +27,7 @@ use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\String\Name;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\Domain\Strava\Activity\ActivityBuilder;
-use App\Tests\Domain\Strava\Activity\Stream\DefaultStreamBuilder;
+use App\Tests\Domain\Strava\Activity\Stream\ActivityStreamBuilder;
 use App\Tests\Domain\Strava\Challenge\ChallengeBuilder;
 use App\Tests\Domain\Strava\Ftp\FtpBuilder;
 use App\Tests\Domain\Strava\Gear\GearBuilder;
@@ -163,7 +163,7 @@ trait ProvideTestData
         /** @var ActivityStreamRepository $activityStreamRepository */
         $activityStreamRepository = $this->getContainer()->get(ActivityStreamRepository::class);
         $activityStreamRepository->add(
-            DefaultStreamBuilder::fromDefaults()
+            ActivityStreamBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed('9756441741'))
                 ->withStreamType(StreamType::WATTS)
                 ->withCreatedOn(SerializableDateTime::fromString('2023-09-27 19:48:21'))
@@ -172,7 +172,7 @@ trait ProvideTestData
                 ->build()
         );
         $activityStreamRepository->add(
-            DefaultStreamBuilder::fromDefaults()
+            ActivityStreamBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed('9756441741'))
                 ->withStreamType(StreamType::CADENCE)
                 ->withCreatedOn(SerializableDateTime::fromString('2023-09-27 19:48:21'))
@@ -181,7 +181,7 @@ trait ProvideTestData
                 ->build()
         );
         $activityStreamRepository->add(
-            DefaultStreamBuilder::fromDefaults()
+            ActivityStreamBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed('9756441741'))
                 ->withStreamType(StreamType::HEART_RATE)
                 ->withCreatedOn(SerializableDateTime::fromString('2023-09-27 19:48:21'))
@@ -190,7 +190,7 @@ trait ProvideTestData
                 ->build()
         );
         $activityStreamRepository->add(
-            DefaultStreamBuilder::fromDefaults()
+            ActivityStreamBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed('9830227182'))
                 ->withStreamType(StreamType::HEART_RATE)
                 ->withCreatedOn(SerializableDateTime::fromString('2023-09-27 19:48:21'))

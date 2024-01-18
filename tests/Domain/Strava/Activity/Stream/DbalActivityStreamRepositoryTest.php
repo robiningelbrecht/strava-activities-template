@@ -20,7 +20,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
     public function testIsImportedForActivity(): void
     {
-        $stream = DefaultStreamBuilder::fromDefaults()->build();
+        $stream = ActivityStreamBuilder::fromDefaults()->build();
         $this->activityStreamRepository->add($stream);
 
         $this->assertTrue($this->activityStreamDetailsRepository->isImportedForActivity($stream->getActivityId()));
@@ -29,7 +29,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
     public function testHasOneForActivityAndStreamType(): void
     {
-        $stream = DefaultStreamBuilder::fromDefaults()->build();
+        $stream = ActivityStreamBuilder::fromDefaults()->build();
         $this->activityStreamRepository->add($stream);
 
         $this->assertTrue($this->activityStreamDetailsRepository->hasOneForActivityAndStreamType(
@@ -48,7 +48,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
     public function testFindByStreamType(): void
     {
-        $stream = DefaultStreamBuilder::fromDefaults()->build();
+        $stream = ActivityStreamBuilder::fromDefaults()->build();
         $this->activityStreamRepository->add($stream);
 
         $this->assertEquals(
@@ -59,24 +59,24 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
     public function testFindByActivityAndStreamTypes(): void
     {
-        $streamOne = DefaultStreamBuilder::fromDefaults()
+        $streamOne = ActivityStreamBuilder::fromDefaults()
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::WATTS)
             ->build();
         $this->activityStreamRepository->add($streamOne);
-        $streamTwo = DefaultStreamBuilder::fromDefaults()
+        $streamTwo = ActivityStreamBuilder::fromDefaults()
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::CADENCE)
             ->build();
         $this->activityStreamRepository->add($streamTwo);
         $this->activityStreamRepository->add(
-            DefaultStreamBuilder::fromDefaults()
+            ActivityStreamBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(1))
                 ->withStreamType(StreamType::HEART_RATE)
                 ->build()
         );
         $this->activityStreamRepository->add(
-            DefaultStreamBuilder::fromDefaults()
+            ActivityStreamBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(2))
                 ->withStreamType(StreamType::CADENCE)
                 ->build()
@@ -93,18 +93,18 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
     public function testFindByActivity(): void
     {
-        $streamOne = DefaultStreamBuilder::fromDefaults()
+        $streamOne = ActivityStreamBuilder::fromDefaults()
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::WATTS)
             ->build();
         $this->activityStreamRepository->add($streamOne);
-        $streamTwo = DefaultStreamBuilder::fromDefaults()
+        $streamTwo = ActivityStreamBuilder::fromDefaults()
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::CADENCE)
             ->build();
         $this->activityStreamRepository->add($streamTwo);
         $this->activityStreamRepository->add(
-            DefaultStreamBuilder::fromDefaults()
+            ActivityStreamBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(2))
                 ->withStreamType(StreamType::CADENCE)
                 ->build()
@@ -120,12 +120,12 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
 
     public function testDelete(): void
     {
-        $streamOne = DefaultStreamBuilder::fromDefaults()
+        $streamOne = ActivityStreamBuilder::fromDefaults()
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::WATTS)
             ->build();
         $this->activityStreamRepository->add($streamOne);
-        $streamTwo = DefaultStreamBuilder::fromDefaults()
+        $streamTwo = ActivityStreamBuilder::fromDefaults()
             ->withActivityId(ActivityId::fromUnprefixed(1))
             ->withStreamType(StreamType::CADENCE)
             ->build();

@@ -3,7 +3,7 @@
 namespace App\Domain\Strava\Activity\Stream\ImportActivityStreams;
 
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
-use App\Domain\Strava\Activity\Stream\DefaultStream;
+use App\Domain\Strava\Activity\Stream\ActivityStream;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityStreamDetailsRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\WriteModel\ActivityStreamRepository;
@@ -78,7 +78,7 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
                     continue;
                 }
 
-                $stream = DefaultStream::create(
+                $stream = ActivityStream::create(
                     activityId: $activityId,
                     streamType: $streamType,
                     streamData: $stravaStream['data'],

@@ -38,7 +38,7 @@ final class ImportStravaDataConsoleCommand extends Command
         $this->commandBus->dispatch(new ImportSegments($output));
         $this->commandBus->dispatch(new ImportGear($output));
         $this->commandBus->dispatch(new ImportChallenges($output));
-        // Copy data to read db to be able to calculate stream sequences.
+        // Copy data to read db to be able to calculate stream averages.
         $this->commandBus->dispatch(new CopyDataToReadDatabase($output));
         $this->commandBus->dispatch(new CalculateBestStreamAverages($output));
 

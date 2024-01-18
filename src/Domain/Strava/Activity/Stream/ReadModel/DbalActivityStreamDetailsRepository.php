@@ -5,7 +5,6 @@ namespace App\Domain\Strava\Activity\Stream\ReadModel;
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Activity\Stream\ActivityStream;
 use App\Domain\Strava\Activity\Stream\ActivityStreamCollection;
-use App\Domain\Strava\Activity\Stream\DefaultStream;
 use App\Domain\Strava\Activity\Stream\StreamType;
 use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
@@ -130,7 +129,7 @@ final readonly class DbalActivityStreamDetailsRepository implements ActivityStre
      */
     private function buildFromResult(array $result): ActivityStream
     {
-        return DefaultStream::fromState(
+        return ActivityStream::fromState(
             activityId: ActivityId::fromString($result['activityId']),
             streamType: StreamType::from($result['streamType']),
             streamData: Json::decode($result['data']),
