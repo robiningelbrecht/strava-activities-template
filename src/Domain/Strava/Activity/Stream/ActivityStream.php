@@ -14,7 +14,8 @@ final class ActivityStream
     private array $bestAverageForTimeIntervals = [];
 
     /**
-     * @param array<mixed> $data
+     * @param array<mixed>    $data
+     * @param array<int, int> $bestAverages
      */
     private function __construct(
         #[ORM\Id, ORM\Column(type: 'string')]
@@ -48,7 +49,8 @@ final class ActivityStream
     }
 
     /**
-     * @param array<mixed> $streamData
+     * @param array<mixed>    $streamData
+     * @param array<int, int> $bestAverages
      */
     public static function fromState(
         ActivityId $activityId,
@@ -94,11 +96,17 @@ final class ActivityStream
         return $this->data;
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function getBestAverages(): array
     {
         return $this->bestAverages;
     }
 
+    /**
+     * @param array<int, int> $averages
+     */
     public function updateBestAverages(array $averages): void
     {
         $this->bestAverages = $averages;
