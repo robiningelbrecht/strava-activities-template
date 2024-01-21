@@ -43,6 +43,7 @@ final class ImportStravaDataConsoleCommand extends Command
         // Might have imported new activities, copy them to read db so other import processes are aware of them.
         $this->commandBus->dispatch(new CopyDataToReadDatabase($output));
         $this->commandBus->dispatch(new ImportActivityStreams($output));
+        // @phpstan-ignore-next-line
         if ($this->resourceUsage->maxExecutionTimeReached()) {
             $this->maxResourceUsageHasBeenReached->markAsReached();
             return Command::SUCCESS;
