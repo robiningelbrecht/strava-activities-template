@@ -37,6 +37,7 @@ final class ImportStravaDataConsoleCommand extends Command
         $this->commandBus->dispatch(new ImportActivities($output));
         if ($this->resourceUsage->maxExecutionTimeReached()) {
             $this->maxResourceUsageHasBeenReached->markAsReached();
+
             return Command::SUCCESS;
         }
 
@@ -46,6 +47,7 @@ final class ImportStravaDataConsoleCommand extends Command
         // @phpstan-ignore-next-line
         if ($this->resourceUsage->maxExecutionTimeReached()) {
             $this->maxResourceUsageHasBeenReached->markAsReached();
+
             return Command::SUCCESS;
         }
 
