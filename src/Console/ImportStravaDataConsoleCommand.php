@@ -36,6 +36,7 @@ final class ImportStravaDataConsoleCommand extends Command
         $this->commandBus->dispatch(new CopyDataToReadDatabase($output));
         $this->commandBus->dispatch(new ImportActivities($output));
         if ($this->resourceUsage->maxExecutionTimeReached()) {
+            $this->maxResourceUsageHasBeenReached->markAsReached();
             return Command::SUCCESS;
         }
 
@@ -43,6 +44,7 @@ final class ImportStravaDataConsoleCommand extends Command
         $this->commandBus->dispatch(new CopyDataToReadDatabase($output));
         $this->commandBus->dispatch(new ImportActivityStreams($output));
         if ($this->resourceUsage->maxExecutionTimeReached()) {
+            $this->maxResourceUsageHasBeenReached->markAsReached();
             return Command::SUCCESS;
         }
 
