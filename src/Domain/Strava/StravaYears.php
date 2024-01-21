@@ -22,6 +22,6 @@ class StravaYears
             $years->add(Year::fromInt($i));
         }
 
-        return $years;
+        return $years->reverse();
     }
 }
