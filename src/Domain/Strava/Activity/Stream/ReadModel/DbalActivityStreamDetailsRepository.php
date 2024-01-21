@@ -115,6 +115,7 @@ final readonly class DbalActivityStreamDetailsRepository implements ActivityStre
             ->setParameter('streamType', $streamType->value)
             ->andWhere('JSON_EXTRACT(bestAverages, "$.'.$intervalInSeconds.'") IS NOT NULL')
             ->orderBy('JSON_EXTRACT(bestAverages, "$.'.$intervalInSeconds.'")', 'DESC')
+            ->orderBy('createdOn', 'DESC')
             ->setMaxResults(1);
 
         if (!$result = $queryBuilder->fetchAssociative()) {

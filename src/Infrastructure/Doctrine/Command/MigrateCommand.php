@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Command;
 
-use App\Domain\Strava\StravaYears;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\ValueObject\Time\Year;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
 use Doctrine\Migrations\DependencyFactory;
+use Lcobucci\Clock\Clock;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -21,7 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class MigrateCommand extends Command
 {
     private readonly ConnectionFactory $connectionFactory;
-    private readonly StravaYears $stravaYears;
+    private readonly Clock $clock;
 
     public function __construct(
         private readonly ContainerInterface $container,
@@ -29,7 +29,7 @@ final class MigrateCommand extends Command
     ) {
         parent::__construct();
         $this->connectionFactory = $this->container->get(ConnectionFactory::class);
-        $this->stravaYears = $this->container->get(StravaYears::class);
+        $this->clock = $this->container->get(Clock::class);
     }
 
     protected function configure(): void
@@ -56,7 +56,10 @@ final class MigrateCommand extends Command
         $connections = [
             $this->connectionFactory->getDefault(),
             $this->connectionFactory->getReadOnly(),
-            ...$this->stravaYears->getYears()->map(fn (Year $year) => $this->connectionFactory->getForYear($year)),
+            ...array_map(
+                fn (int $year) => $this->connectionFactory->getForYear(Year::fromInt($year)),
+                range(2000, (int) $this->clock->now()->format('Y')),
+            ),
         ];
 
         foreach ($connections as $connection) {
