@@ -96,7 +96,7 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
         /** @var PowerOutput[] $best */
         $best = [];
 
-        foreach (self::TIME_INTERVAL_IN_SECONDS as $timeIntervalInSeconds) {
+        foreach (self::TIME_INTERVAL_IN_SECONDS_OVERALL as $timeIntervalInSeconds) {
             try {
                 $stream = $this->activityStreamDetailsRepository->findWithBestAverageFor(
                     intervalInSeconds: $timeIntervalInSeconds,

@@ -152,8 +152,6 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             }
         }
 
-        var_dump(Json::encode(PowerOutputChartBuilder::fromBestPowerOutputs($bestPowerOutputs)->build()));
-
         $this->filesystem->write(
             'build/html/index.html',
             $this->twig->load('html/index.html.twig')->render([
@@ -246,6 +244,10 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     activities: $allActivities,
                     years: $allYears
                 ),
+                'powerOutputChart' => PowerOutputChartBuilder::fromBestPowerOutputs($bestPowerOutputs)
+                    ->withAnimation(true)
+                    ->withoutBackgroundColor()
+                    ->build(),
             ]),
         );
 

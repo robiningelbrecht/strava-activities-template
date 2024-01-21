@@ -154,7 +154,7 @@ final class Activity extends AggregateRoot
     }
 
     /**
-     * @param PowerOutput[] $bestPowerOutputs
+     * @param array<mixed> $bestPowerOutputs
      */
     public function enrichWithBestPowerOutputs(array $bestPowerOutputs): void
     {
