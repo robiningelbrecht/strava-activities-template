@@ -1,7 +1,8 @@
 {
     "commandName": "App.Domain.Strava.Activity.ImportActivities.ImportActivities",
     "payload": {
-        "metadata": [],
-        "output": {}
+        "output": {},
+        "resourceUsage": {},
+        "metadata": []
     }
 }

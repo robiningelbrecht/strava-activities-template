@@ -12,6 +12,7 @@ use App\Tests\DatabaseTestCase;
 use App\Tests\Domain\Strava\Activity\ActivityBuilder;
 use App\Tests\Domain\Strava\Activity\Stream\ActivityStreamBuilder;
 use App\Tests\Domain\Strava\SpyStrava;
+use App\Tests\Infrastructure\Time\ResourceUsage\FixedResourceUsage;
 use App\Tests\SpyOutput;
 use League\Flysystem\FilesystemOperator;
 use Spatie\Snapshots\MatchesSnapshots;
@@ -54,7 +55,7 @@ class ImportActivityStreamsCommandHandlerTest extends DatabaseTestCase
                 ->build()
         );
 
-        $this->commandBus->dispatch(new ImportActivityStreams($output));
+        $this->commandBus->dispatch(new ImportActivityStreams($output, new FixedResourceUsage()));
 
         $this->assertMatchesTextSnapshot($output);
 

@@ -14,6 +14,7 @@ use App\Tests\Domain\Strava\Activity\ActivityBuilder;
 use App\Tests\Domain\Strava\Activity\Stream\ActivityStreamBuilder;
 use App\Tests\Domain\Strava\Segment\SegmentEffort\SegmentEffortBuilder;
 use App\Tests\Domain\Strava\SpyStrava;
+use App\Tests\Infrastructure\Time\ResourceUsage\FixedResourceUsage;
 use App\Tests\SpyOutput;
 use League\Flysystem\FilesystemOperator;
 use Spatie\Snapshots\MatchesSnapshots;
@@ -39,7 +40,7 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
                 ->build()
         );
 
-        $this->commandBus->dispatch(new ImportActivities($output));
+        $this->commandBus->dispatch(new ImportActivities($output, new FixedResourceUsage()));
 
         $this->assertMatchesTextSnapshot($output);
 
@@ -87,7 +88,7 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
                 ->build()
         );
 
-        $this->commandBus->dispatch(new ImportActivities($output));
+        $this->commandBus->dispatch(new ImportActivities($output, new FixedResourceUsage()));
 
         $this->assertMatchesTextSnapshot($output);
     }
@@ -103,7 +104,7 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
                 ->build()
         );
 
-        $this->commandBus->dispatch(new ImportActivities($output));
+        $this->commandBus->dispatch(new ImportActivities($output, new FixedResourceUsage()));
 
         $this->assertMatchesTextSnapshot($output);
     }
