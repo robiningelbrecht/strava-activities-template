@@ -33,12 +33,12 @@ final class BuildStravaActivityFilesConsoleCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->resourceUsage->startTimer();
         if ($this->maxResourceUsageHasBeenReached->hasReached()) {
             $output->writeln('Reached Strava API rate limits, cannot build stats yet...');
 
             return Command::SUCCESS;
         }
+        $this->resourceUsage->startTimer();
 
         $this->commandBus->dispatch(new CopyDataToReadDatabase($output));
         $output->writeln('Building latest activities...');
