@@ -35,6 +35,9 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
         $command->getOutput()->writeln('Importing activity streams...');
 
         foreach ($this->activityDetailsRepository->findActivityIds() as $activityId) {
+            if ($command->getResourceUsage()->maxExecutionTimeReached()) {
+                return;
+            }
             if ($this->activityStreamDetailsRepository->isImportedForActivity($activityId)) {
                 // Streams for this activity have been imported already, skip.
                 continue;

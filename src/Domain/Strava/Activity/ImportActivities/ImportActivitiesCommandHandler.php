@@ -64,6 +64,9 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
         );
 
         foreach ($this->strava->getActivities() as $stravaActivity) {
+            if ($command->getResourceUsage()->maxExecutionTimeReached()) {
+                return;
+            }
             if (!$activityType = ActivityType::tryFrom($stravaActivity['type'])) {
                 continue;
             }
