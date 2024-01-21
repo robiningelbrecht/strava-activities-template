@@ -34,6 +34,71 @@ class ImportStravaDataConsoleCommandTest extends ConsoleCommandTestCase
             ->method('maxExecutionTimeReached')
             ->willReturn(false);
 
+        $this->maxResourceUsageHasBeenReached
+            ->expects($this->never())
+            ->method('hasReached');
+
+        $this->commandBus
+            ->expects($this->any())
+            ->method('dispatch')
+            ->willReturnCallback(fn (DomainCommand $command) => $this->assertMatchesJsonSnapshot(Json::encode($command)));
+
+        $command = $this->getCommandInApplication('app:strava:import-data');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+    }
+
+    public function testExecuteMaxExecutionTimeReachedOne(): void
+    {
+        $this->maxResourceUsageHasBeenReached
+            ->expects($this->once())
+            ->method('clear');
+
+        $this->resourceUsage
+            ->expects($this->once())
+            ->method('maxExecutionTimeReached')
+            ->willReturn(true);
+
+        $this->maxResourceUsageHasBeenReached
+            ->expects($this->once())
+            ->method('markAsReached');
+
+        $this->commandBus
+            ->expects($this->any())
+            ->method('dispatch')
+            ->willReturnCallback(fn (DomainCommand $command) => $this->assertMatchesJsonSnapshot(Json::encode($command)));
+
+        $command = $this->getCommandInApplication('app:strava:import-data');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+    }
+
+    public function testExecuteMaxExecutionTimeReachedTwo(): void
+    {
+        $this->maxResourceUsageHasBeenReached
+            ->expects($this->once())
+            ->method('clear');
+
+        $matcher = $this->exactly(2);
+        $this->resourceUsage
+            ->expects($matcher)
+            ->method('maxExecutionTimeReached')
+            ->willReturnCallback(function () use ($matcher) {
+                if (1 === $matcher->numberOfInvocations()) {
+                    return false;
+                }
+
+                return true;
+            });
+
+        $this->maxResourceUsageHasBeenReached
+            ->expects($this->once())
+            ->method('markAsReached');
+
         $this->commandBus
             ->expects($this->any())
             ->method('dispatch')
