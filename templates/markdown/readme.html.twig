@@ -218,7 +218,9 @@ I burned `{{ totals.getCalories() }} calories` doing so, that's about `{{ (total
         <th align="center" colspan="2"><img src="https://raw.githubusercontent.com/robiningelbrecht/strava-activities/master/public/average-watt.svg" width="30" alt="average watts" title="average watts"/></th>
         <th></th>
     </tr>
-    {% for powerOutput in powerOutputs %}
+    {% set timeIntervals =  [5, 10, 30, 60, 300, 480, 1200, 3600] %}
+    {% for timeInterval in timeIntervals %}
+        {% set powerOutput = powerOutputs[timeInterval] %}
         {% set activity = powerOutput.getActivity() %}
         <tr>
             <td align="center">{{ powerOutput.getTime() }}</td>
