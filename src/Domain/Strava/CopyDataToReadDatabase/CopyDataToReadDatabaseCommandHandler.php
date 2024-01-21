@@ -41,14 +41,12 @@ final readonly class CopyDataToReadDatabaseCommandHandler implements CommandHand
             }
             $this->readOnlyConnection->executeStatement('DELETE FROM '.$tableName);
         }
-        $command->getOutput()->writeln('  => Emptied database');
 
         // First copy data from the default database.
         $this->copyData(
             databaseToAttach: $this->settings->get('doctrine.connections.default.path'),
             tablesToCopy: ['Ftp', 'Gear', 'KeyValue', 'Segment']
         );
-        $command->getOutput()->writeln('  => Copied general data');
 
         // Copy all activity related data from yearly databases.
         foreach ($this->stravaYears->getYears() as $year) {
@@ -56,7 +54,6 @@ final readonly class CopyDataToReadDatabaseCommandHandler implements CommandHand
                 databaseToAttach: str_replace('%YEAR%', (string) $year, $this->settings->get('doctrine.connections.year_based.path')),
                 tablesToCopy: ['Activity', 'ActivityStream', 'Challenge', 'SegmentEffort']
             );
-            $command->getOutput()->writeln(sprintf('  => Copied data for "%s"', $year));
         }
     }
 

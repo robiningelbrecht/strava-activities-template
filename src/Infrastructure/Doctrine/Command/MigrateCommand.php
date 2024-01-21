@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Doctrine\Command;
 
-use App\Domain\Strava\Activity\Activity;
-use App\Domain\Strava\Strava;
+use App\Domain\Strava\StravaYears;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
-use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Time\Year;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\ConfigurationLoader;
@@ -23,7 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class MigrateCommand extends Command
 {
     private readonly ConnectionFactory $connectionFactory;
-    private readonly Strava $strava;
+    private readonly StravaYears $stravaYears;
 
     public function __construct(
         private readonly ContainerInterface $container,
@@ -31,7 +29,7 @@ final class MigrateCommand extends Command
     ) {
         parent::__construct();
         $this->connectionFactory = $this->container->get(ConnectionFactory::class);
-        $this->strava = $this->container->get(Strava::class);
+        $this->stravaYears = $this->container->get(StravaYears::class);
     }
 
     protected function configure(): void
@@ -55,23 +53,10 @@ final class MigrateCommand extends Command
             return 3;
         }
 
-        $io->info('Fetching Strava activities to determine databases to migrate...');
-
-        $uniqueYears = array_unique(array_map(
-            fn (array $activity) => Year::fromDate(SerializableDateTime::createFromFormat(
-                Activity::DATE_TIME_FORMAT,
-                $activity['start_date_local']
-            )),
-            $this->strava->getActivities()
-        ));
-
         $connections = [
             $this->connectionFactory->getDefault(),
             $this->connectionFactory->getReadOnly(),
-            ...array_map(
-                fn (Year $year) => $this->connectionFactory->getForYear($year),
-                $uniqueYears,
-            ),
+            ...$this->stravaYears->getYears()->map(fn (Year $year) => $this->connectionFactory->getForYear($year)),
         ];
 
         foreach ($connections as $connection) {
@@ -87,8 +72,8 @@ final class MigrateCommand extends Command
             $databasePathParts = explode('/', $dependencyFactory->getConnection()->getParams()['path']);
             $databaseName = end($databasePathParts);
             if (0 === count($plan)) {
-                $io->success(sprintf(
-                    'Database "%s" already at the latest version ("%s")',
+                $io->writeln(sprintf(
+                    '<fg=black;bg=green>Database "%s" already at the latest version ("%s")</>',
                     $databaseName,
                     $version,
                 ));
@@ -104,8 +89,8 @@ final class MigrateCommand extends Command
                 $migratorConfiguration
             );
 
-            $io->success(sprintf(
-                'Successfully migrated database "%s" to version: %s',
+            $io->writeln(sprintf(
+                '<fg=black;bg=green>Successfully migrated database "%s" to version: %s</>',
                 $databaseName,
                 $version,
             ));
