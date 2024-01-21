@@ -20,6 +20,9 @@ class ConnectionFactory
     {
         $connection = $this->settings->get('doctrine.connections.year_based');
 
+        if (!str_contains($connection['path'], '%YEAR%')) {
+            throw new \RuntimeException('Connection path needs to contain a %YEAR% placeholder');
+        }
         $connection['path'] = str_replace('%YEAR%', (string) $year, $connection['path']);
 
         return DriverManager::getConnection($connection);
