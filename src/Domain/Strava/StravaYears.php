@@ -4,24 +4,28 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava;
 
+use App\Infrastructure\FileSystem\FileRepository;
 use App\Infrastructure\ValueObject\Time\Year;
 use App\Infrastructure\ValueObject\Time\YearCollection;
-use Lcobucci\Clock\Clock;
 
 class StravaYears
 {
     public function __construct(
-        private readonly Clock $clock
+        private readonly FileRepository $fileRepository
     ) {
     }
 
     public function getYears(): YearCollection
     {
+        $files = $this->fileRepository->listContents('database');
         $years = YearCollection::empty();
-        for ($i = 2000; $i <= (int) $this->clock->now()->format('Y'); ++$i) {
-            $years->add(Year::fromInt($i));
+        foreach ($files as $file) {
+            if (!preg_match('/database\/db.strava-(?<match>[\d]{4})/', $file, $match)) {
+                continue;
+            }
+            $years->add(Year::fromInt((int) $match['match']));
         }
 
-        return $years->reverse();
+        return $years;
     }
 }
