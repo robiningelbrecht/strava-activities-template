@@ -25,6 +25,15 @@ final class SystemResourceUsage implements ResourceUsage
         $this->timeStop = microtime(true);
     }
 
+    public function maxExecutionTimeReached(): bool
+    {
+        $timeElapsedInSeconds = (int) round($this->timeStop - $this->timeStart);
+
+        // GitHub jobs shut down after six hours/
+        // Let's terminate ours after 5.5 hours to be safe.
+        return $timeElapsedInSeconds > 20000;
+    }
+
     public function format(): string
     {
         return sprintf(

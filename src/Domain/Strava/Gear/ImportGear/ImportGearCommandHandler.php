@@ -6,7 +6,7 @@ use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Gear\Gear;
 use App\Domain\Strava\Gear\ReadModel\GearDetailsRepository;
 use App\Domain\Strava\Gear\WriteModel\GearRepository;
-use App\Domain\Strava\ReachedStravaApiRateLimits;
+use App\Domain\Strava\MaxResourceUsageHasBeenReached;
 use App\Domain\Strava\Strava;
 use App\Domain\Strava\StravaErrorStatusCode;
 use App\Infrastructure\Attribute\AsCommandHandler;
@@ -26,7 +26,7 @@ final readonly class ImportGearCommandHandler implements CommandHandler
         private ActivityDetailsRepository $activityDetailsRepository,
         private GearRepository $gearRepository,
         private GearDetailsRepository $gearDetailsRepository,
-        private ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
+        private MaxResourceUsageHasBeenReached $maxResourceUsageHasBeenReached,
         private Clock $clock,
         private Sleep $sleep
     ) {
@@ -51,7 +51,7 @@ final readonly class ImportGearCommandHandler implements CommandHandler
                 }
                 // This will allow initial imports with a lot of activities to proceed the next day.
                 // This occurs when we exceed Strava API rate limits or throws an unexpected error.
-                $this->reachedStravaApiRateLimits->markAsReached();
+                $this->maxResourceUsageHasBeenReached->markAsReached();
                 $command->getOutput()->writeln('<error>You probably reached Strava API rate limits. You will need to import the rest of your activities tomorrow</error>');
 
                 return;

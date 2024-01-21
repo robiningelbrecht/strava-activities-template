@@ -18,6 +18,11 @@ final readonly class FixedResourceUsage implements ResourceUsage
         // TODO: Implement stopTimer() method.
     }
 
+    public function maxExecutionTimeReached(): bool
+    {
+        return false;
+    }
+
     public function format(): string
     {
         return 'Time: 10s, Memory: 45MB';
