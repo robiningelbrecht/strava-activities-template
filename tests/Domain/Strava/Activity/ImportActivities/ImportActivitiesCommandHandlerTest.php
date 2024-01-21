@@ -49,6 +49,29 @@ class ImportActivitiesCommandHandlerTest extends DatabaseTestCase
         $this->assertMatchesJsonSnapshot($fileSystem->getWrites());
     }
 
+    public function testHandleWithMaxExecutionTimeReached(): void
+    {
+        $output = new SpyOutput();
+        $this->strava->setMaxNumberOfCallsBeforeTriggering429(1000);
+
+        $this->getContainer()->get(ActivityRepository::class)->add(
+            ActivityBuilder::fromDefaults()
+                ->withActivityId(ActivityId::fromUnprefixed(4))
+                ->build()
+        );
+
+        $this->commandBus->dispatch(new ImportActivities($output, new FixedResourceUsage(true)));
+
+        $this->assertEquals(
+            'Importing activities...',
+            (string) $output
+        );
+
+        /** @var \App\Tests\SpyFileSystem $fileSystem */
+        $fileSystem = $this->getContainer()->get(FilesystemOperator::class);
+        $this->assertEmpty($fileSystem->getWrites());
+    }
+
     public function testHandleWithActivityDelete(): void
     {
         $output = new SpyOutput();
