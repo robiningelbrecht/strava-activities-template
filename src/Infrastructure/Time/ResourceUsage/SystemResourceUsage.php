@@ -18,11 +18,22 @@ final class SystemResourceUsage implements ResourceUsage
     public function startTimer(): void
     {
         $this->timeStart = microtime(true);
+        $this->timeStop = null;
     }
 
     public function stopTimer(): void
     {
         $this->timeStop = microtime(true);
+    }
+
+    /** @phpstan-impure */
+    public function maxExecutionTimeReached(): bool
+    {
+        $timeElapsedInSeconds = (int) round(microtime(true) - $this->timeStart);
+
+        // GitHub jobs shut down after six hours/
+        // Let's terminate ours after 5.5 hours to be safe.
+        return $timeElapsedInSeconds > 20000;
     }
 
     public function format(): string

@@ -8,6 +8,11 @@ use App\Infrastructure\Time\ResourceUsage\ResourceUsage;
 
 final readonly class FixedResourceUsage implements ResourceUsage
 {
+    public function __construct(
+        private bool $maxExecutionTimeReached = false,
+    ) {
+    }
+
     public function startTimer(): void
     {
         // TODO: Implement startTimer() method.
@@ -16,6 +21,11 @@ final readonly class FixedResourceUsage implements ResourceUsage
     public function stopTimer(): void
     {
         // TODO: Implement stopTimer() method.
+    }
+
+    public function maxExecutionTimeReached(): bool
+    {
+        return $this->maxExecutionTimeReached;
     }
 
     public function format(): string

@@ -12,7 +12,7 @@ use App\Domain\Strava\Activity\BuildYearlyDistanceChart\BuildYearlyDistanceChart
 use App\Domain\Strava\BuildHtmlVersion\BuildHtmlVersion;
 use App\Domain\Strava\BuildReadMe\BuildReadMe;
 use App\Domain\Strava\CopyDataToReadDatabase\CopyDataToReadDatabase;
-use App\Domain\Strava\ReachedStravaApiRateLimits;
+use App\Domain\Strava\MaxResourceUsageHasBeenReached;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Infrastructure\Time\ResourceUsage\ResourceUsage;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -25,7 +25,7 @@ final class BuildStravaActivityFilesConsoleCommand extends Command
 {
     public function __construct(
         private readonly CommandBus $commandBus,
-        private readonly ReachedStravaApiRateLimits $reachedStravaApiRateLimits,
+        private readonly MaxResourceUsageHasBeenReached $maxResourceUsageHasBeenReached,
         private readonly ResourceUsage $resourceUsage,
     ) {
         parent::__construct();
@@ -33,12 +33,12 @@ final class BuildStravaActivityFilesConsoleCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->resourceUsage->startTimer();
-        if ($this->reachedStravaApiRateLimits->hasReached()) {
+        if ($this->maxResourceUsageHasBeenReached->hasReached()) {
             $output->writeln('Reached Strava API rate limits, cannot build stats yet...');
 
             return Command::SUCCESS;
         }
+        $this->resourceUsage->startTimer();
 
         $this->commandBus->dispatch(new CopyDataToReadDatabase($output));
         $output->writeln('Building latest activities...');

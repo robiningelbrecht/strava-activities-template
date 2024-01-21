@@ -3,7 +3,7 @@
 namespace App\Tests\Console;
 
 use App\Console\BuildStravaActivityFilesConsoleCommand;
-use App\Domain\Strava\ReachedStravaApiRateLimits;
+use App\Domain\Strava\MaxResourceUsageHasBeenReached;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Serialization\Json;
@@ -66,7 +66,7 @@ class BuildStravaActivityFilesConsoleCommandTest extends ConsoleCommandTestCase
         parent::setUp();
 
         $this->commandBus = $this->createMock(CommandBus::class);
-        $this->reachedStravaApiRateLimits = $this->createMock(ReachedStravaApiRateLimits::class);
+        $this->reachedStravaApiRateLimits = $this->createMock(MaxResourceUsageHasBeenReached::class);
 
         $this->buildStravaActivityFilesConsoleCommand = new BuildStravaActivityFilesConsoleCommand(
             $this->commandBus,
