@@ -40,6 +40,9 @@ final class PowerOutputChartBuilder
         return $this;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function build(): array
     {
         $powerOutputs = array_values(array_map(fn (PowerOutput $powerOutput) => $powerOutput->getPower(), $this->bestPowerOutputs));
