@@ -44,7 +44,7 @@ final readonly class ImportGearCommandHandler implements CommandHandler
             try {
                 $stravaGear = $this->strava->getGear($gearId);
             } catch (ClientException|RequestException $exception) {
-                if (!StravaErrorStatusCode::tryFrom(
+                if (!$exception->getResponse() || !StravaErrorStatusCode::tryFrom(
                     $exception->getResponse()->getStatusCode()
                 )) {
                     // Re-throw, we only want to catch supported error codes.

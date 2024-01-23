@@ -47,7 +47,7 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
             try {
                 $stravaStreams = $this->strava->getAllActivityStreams($activityId);
             } catch (ClientException|RequestException $exception) {
-                if (!in_array($exception->getResponse()->getStatusCode(), [404, ...array_map(
+                if (!$exception->getResponse() || !in_array($exception->getResponse()->getStatusCode(), [404, ...array_map(
                     fn (StravaErrorStatusCode $errorStatusCode) => $errorStatusCode->value,
                     StravaErrorStatusCode::cases(),
                 )])) {

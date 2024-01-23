@@ -156,7 +156,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                     // Try to avoid Strava rate limits.
                     $this->sleep->sweetDreams(10);
                 } catch (ClientException|RequestException $exception) {
-                    if (!StravaErrorStatusCode::tryFrom(
+                    if (!$exception->getResponse() || !StravaErrorStatusCode::tryFrom(
                         $exception->getResponse()->getStatusCode()
                     )) {
                         // Re-throw, we only want to catch supported error codes.
