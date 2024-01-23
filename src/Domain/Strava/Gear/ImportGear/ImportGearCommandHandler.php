@@ -16,6 +16,7 @@ use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Time\Sleep;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 use Lcobucci\Clock\Clock;
 
 #[AsCommandHandler]
@@ -42,7 +43,7 @@ final readonly class ImportGearCommandHandler implements CommandHandler
         foreach ($gearIds as $gearId) {
             try {
                 $stravaGear = $this->strava->getGear($gearId);
-            } catch (ClientException $exception) {
+            } catch (ClientException|RequestException $exception) {
                 if (!StravaErrorStatusCode::tryFrom(
                     $exception->getResponse()->getStatusCode()
                 )) {

@@ -15,6 +15,7 @@ use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\Time\Sleep;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 #[AsCommandHandler]
 final readonly class ImportActivityStreamsCommandHandler implements CommandHandler
@@ -45,7 +46,7 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
             $stravaStreams = [];
             try {
                 $stravaStreams = $this->strava->getAllActivityStreams($activityId);
-            } catch (ClientException $exception) {
+            } catch (ClientException|RequestException $exception) {
                 if (!in_array($exception->getResponse()->getStatusCode(), [404, ...array_map(
                     fn (StravaErrorStatusCode $errorStatusCode) => $errorStatusCode->value,
                     StravaErrorStatusCode::cases(),

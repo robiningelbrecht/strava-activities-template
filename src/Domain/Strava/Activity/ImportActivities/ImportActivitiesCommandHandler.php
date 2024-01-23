@@ -26,6 +26,7 @@ use App\Infrastructure\ValueObject\Geography\Coordinate;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\UuidFactory;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 use League\Flysystem\FilesystemOperator;
 
 #[AsCommandHandler]
@@ -154,7 +155,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                     $command->getOutput()->writeln(sprintf('  => Imported activity "%s"', $activity->getName()));
                     // Try to avoid Strava rate limits.
                     $this->sleep->sweetDreams(10);
-                } catch (ClientException $exception) {
+                } catch (ClientException|RequestException $exception) {
                     if (!StravaErrorStatusCode::tryFrom(
                         $exception->getResponse()->getStatusCode()
                     )) {
