@@ -167,6 +167,14 @@ class SpyStrava extends Strava
                 'completedOn' => SerializableDateTime::fromString('2023-10-01'),
             ],
             [
+                'name' => 'Challenge 1',
+                'teaser' => 'Craziest challenge ever',
+                'logo_url' => Settings::getAppRoot().'/tests/cat.webp',
+                'url' => 'https://www.strava.com',
+                'challenge_id' => '123456',
+                'completedOn' => SerializableDateTime::fromString('2023-10-01'),
+            ],
+            [
                 'name' => 'Challenge 2',
                 'teaser' => 'Craziest challenge ever',
                 'logo_url' => Settings::getAppRoot().'/tests/cat.webp',
@@ -185,7 +193,7 @@ class SpyStrava extends Strava
     public function downloadImage(string $uri): string
     {
         if ($this->triggerExceptionOnNextCall) {
-            $this->triggerExceptionOnNextCall = false;
+            // $this->triggerExceptionOnNextCall = false;
             throw new \RuntimeException('WAW ERROR');
         }
         ++$this->numberOfCallsExecuted;
