@@ -174,6 +174,14 @@ class SpyStrava extends Strava
                 'challenge_id' => '654321',
                 'completedOn' => SerializableDateTime::fromString('2023-10-01'),
             ],
+            [
+                'name' => 'Challenge 2',
+                'teaser' => 'Craziest challenge ever',
+                'logo_url' => Settings::getAppRoot().'/tests/cat.webp',
+                'url' => 'https://www.strava.com',
+                'challenge_id' => '654321',
+                'completedOn' => SerializableDateTime::fromString('2023-10-01'),
+            ],
         ];
     }
 
