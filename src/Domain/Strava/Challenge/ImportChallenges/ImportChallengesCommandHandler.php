@@ -43,6 +43,7 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
         }
 
         $challenges = [];
+        $challengesAddedInCurrentRun = [];
         try {
             $challenges = $this->strava->getChallengesOnPublicProfile();
         } catch (\Throwable $e) {
@@ -66,6 +67,12 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
                 $createdOn,
                 $stravaChallenge['name'],
             );
+
+            // Do not import challenges that have been imported in the current run.
+            if (isset($challengesAddedInCurrentRun[(string) $challengeId])) {
+                continue;
+            }
+
             try {
                 $this->challengeDetailsRepository->find($challengeId);
             } catch (EntityNotFound) {
@@ -93,6 +100,7 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
                     $challenge->updateLocalLogo($imagePath);
                 }
                 $this->challengeRepository->add($challenge);
+                $challengesAddedInCurrentRun[(string) $challengeId] = $challengeId;
                 $command->getOutput()->writeln(sprintf('  => Imported challenge "%s"', $challenge->getName()));
                 $this->sleep->sweetDreams(1); // Make sure timestamp is increased by at least one second.
             }
