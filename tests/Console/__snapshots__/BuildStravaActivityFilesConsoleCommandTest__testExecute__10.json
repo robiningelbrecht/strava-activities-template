@@ -1,6 +1,7 @@
 {
     "commandName": "App.Domain.Strava.BuildHtmlVersion.BuildHtmlVersion",
     "payload": {
+        "output": {},
         "metadata": []
     }
 }

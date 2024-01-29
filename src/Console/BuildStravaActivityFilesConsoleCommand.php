@@ -58,7 +58,7 @@ final class BuildStravaActivityFilesConsoleCommand extends Command
         $output->writeln('Building README...');
         $this->commandBus->dispatch(new BuildReadMe());
         $output->writeln('Building HTML...');
-        $this->commandBus->dispatch(new BuildHtmlVersion());
+        $this->commandBus->dispatch(new BuildHtmlVersion($output));
 
         $this->resourceUsage->stopTimer();
         $output->writeln(sprintf(
