@@ -94,10 +94,19 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $allImages = $this->imageRepository->findAll();
         $allFtps = $this->ftpDetailsRepository->findAll();
         $allSegments = $this->segmentDetailsRepository->findAll();
+
+        $command->getOutput()->writeln('  => Calculating Eddington');
         $eddington = Eddington::fromActivities($allActivities);
+
+        $command->getOutput()->writeln('  => Calculating activity highlights');
         $activityHighlights = ActivityHighlights::fromActivities($allActivities);
+
+        $command->getOutput()->writeln('  => Calculating weekday stats');
         $weekdayStats = WeekdayStats::fromActivities($allActivities);
+
+        $command->getOutput()->writeln('  => Calculating daytime stats');
         $dayTimeStats = DaytimeStats::fromActivities($allActivities);
+
         $allMonths = MonthCollection::create(
             startDate: $allActivities->getFirstActivityStartDate(),
             now: $now
@@ -106,13 +115,17 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             startDate: $allActivities->getFirstActivityStartDate(),
             endDate: $now
         );
+
+        $command->getOutput()->writeln('  => Calculating monthly stats');
         $monthlyStatistics = MonthlyStatistics::fromActivitiesAndChallenges(
             activities: $allActivities,
             challenges: $allChallenges,
             months: $allMonths,
         );
+        $command->getOutput()->writeln('  => Calculating best power outputs');
         $bestPowerOutputs = $this->activityPowerRepository->findBest();
 
+        $command->getOutput()->writeln('  => Enriching activities with data');
         /** @var \App\Domain\Strava\Activity\Activity $activity */
         foreach ($allActivities as $activity) {
             $activity->enrichWithBestPowerOutputs(
@@ -152,6 +165,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             }
         }
 
+        $command->getOutput()->writeln('  => Building index.html');
         $this->filesystem->write(
             'build/html/index.html',
             $this->twig->load('html/index.html.twig')->render([
@@ -164,6 +178,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             ]),
         );
 
+        $command->getOutput()->writeln('  => Building dashboard.html');
         $this->filesystem->write(
             'build/html/dashboard.html',
             $this->twig->load('html/dashboard.html.twig')->render([
@@ -251,11 +266,13 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             ]),
         );
 
+        $command->getOutput()->writeln('  => Building activities.html');
         $this->filesystem->write(
             'build/html/activities.html',
             $this->twig->load('html/activities.html.twig')->render(),
         );
 
+        $command->getOutput()->writeln('  => Building photos.html');
         $this->filesystem->write(
             'build/html/photos.html',
             $this->twig->load('html/photos.html.twig')->render([
@@ -265,6 +282,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             ]),
         );
 
+        $command->getOutput()->writeln('  => Building challenges.html');
         $challengesGroupedByMonth = [];
         foreach ($allChallenges as $challenge) {
             $challengesGroupedByMonth[$challenge->getCreatedOn()->format('F Y')][] = $challenge;
@@ -276,6 +294,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             ]),
         );
 
+        $command->getOutput()->writeln('  => Building eddington.html');
         $this->filesystem->write(
             'build/html/eddington.html',
             $this->twig->load('html/eddington.html.twig')->render([
@@ -289,6 +308,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             ]),
         );
 
+        $command->getOutput()->writeln('  => Building segments.html');
         $dataDatableRows = [];
         /** @var \App\Domain\Strava\Segment\Segment $segment */
         foreach ($allSegments as $segment) {
@@ -339,6 +359,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             $this->twig->load('html/segments.html.twig')->render(),
         );
 
+        $command->getOutput()->writeln('  => Building monthly-stats.html');
         $this->filesystem->write(
             'build/html/monthly-stats.html',
             $this->twig->load('html/monthly-stats.html.twig')->render([
@@ -362,6 +383,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             );
         }
 
+        $command->getOutput()->writeln('  => Building gear-stats.html');
         $this->filesystem->write(
             'build/html/gear-stats.html',
             $this->twig->load('html/gear-stats.html.twig')->render([
@@ -399,6 +421,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             }
         }
 
+        $command->getOutput()->writeln('  => Building heatmap.html');
         $this->filesystem->write(
             'build/html/heatmap.html',
             $this->twig->load('html/heatmap.html.twig')->render([
@@ -407,6 +430,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             ]),
         );
 
+        $command->getOutput()->writeln('  => Building activity.html');
         $dataDatableRows = [];
         foreach ($allActivities as $activity) {
             $heartRateData = $this->activityHeartRateRepository->findTimeInSecondsPerHeartRateForActivity($activity->getId());

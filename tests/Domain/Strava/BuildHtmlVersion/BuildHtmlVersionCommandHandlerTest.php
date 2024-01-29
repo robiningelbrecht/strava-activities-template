@@ -6,6 +6,7 @@ use App\Domain\Strava\BuildHtmlVersion\BuildHtmlVersion;
 use App\Infrastructure\CQRS\CommandBus;
 use App\Tests\DatabaseTestCase;
 use App\Tests\ProvideTestData;
+use App\Tests\SpyOutput;
 use League\Flysystem\FilesystemOperator;
 use Spatie\Snapshots\MatchesSnapshots;
 
@@ -21,7 +22,8 @@ class BuildHtmlVersionCommandHandlerTest extends DatabaseTestCase
     {
         $this->provideFullTestSet();
 
-        $this->commandBus->dispatch(new BuildHtmlVersion());
+        $output = new SpyOutput();
+        $this->commandBus->dispatch(new BuildHtmlVersion($output));
 
         /** @var \App\Tests\SpyFileSystem $fileSystem */
         $fileSystem = $this->getContainer()->get(FilesystemOperator::class);
@@ -33,6 +35,7 @@ class BuildHtmlVersionCommandHandlerTest extends DatabaseTestCase
             }
             $this->assertMatchesHtmlSnapshot($content);
         }
+        $this->assertMatchesTextSnapshot($output);
     }
 
     protected function getSnapshotId(): string
