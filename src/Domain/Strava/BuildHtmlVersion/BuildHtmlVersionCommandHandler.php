@@ -259,10 +259,10 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     activities: $allActivities,
                     years: $allYears
                 ),
-                'powerOutputChart' => PowerOutputChartBuilder::fromBestPowerOutputs($bestPowerOutputs)
+                'powerOutputChart' => !empty($bestPowerOutputs) ? PowerOutputChartBuilder::fromBestPowerOutputs($bestPowerOutputs)
                     ->withAnimation(true)
                     ->withoutBackgroundColor()
-                    ->build(),
+                    ->build() : null,
             ]),
         );
 
