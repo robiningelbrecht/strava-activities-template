@@ -1,4 +1,7 @@
 {
+    "headers": {
+        "User-Agent": "Strava Activities App"
+    },
     "query": {
         "lat": 80,
         "lon": 100,
