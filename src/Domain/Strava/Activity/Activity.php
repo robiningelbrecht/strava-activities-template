@@ -270,6 +270,13 @@ final class Activity extends AggregateRoot
         return $this->data['total_elevation_gain'];
     }
 
+    public function updateElevation(float $elevationInLMeter): self
+    {
+        $this->data['total_elevation_gain'] = $elevationInLMeter;
+
+        return $this;
+    }
+
     public function getCalories(): int
     {
         return (int) ($this->data['calories'] ?? 0);

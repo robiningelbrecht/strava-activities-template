@@ -2,9 +2,9 @@
 
 namespace App\Tests\Domain\Strava\Activity\ReadModel;
 
-use App\Domain\Strava\Activity\ActivityCollection;
+use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Activity\ActivityId;
-use App\Domain\Strava\Activity\ActivityIdCollection;
+use App\Domain\Strava\Activity\ActivityIds;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\ReadModel\DbalActivityDetailsRepository;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
@@ -58,7 +58,7 @@ class DbalActivityDetailsRepositoryTest extends DatabaseTestCase
         $this->activityRepository->add($activityThree);
 
         $this->assertEquals(
-            ActivityCollection::fromArray([$activityOne, $activityTwo, $activityThree]),
+            Activities::fromArray([$activityOne, $activityTwo, $activityThree]),
             $this->activityDetailsRepository->findAll()
         );
     }
@@ -82,7 +82,7 @@ class DbalActivityDetailsRepositoryTest extends DatabaseTestCase
         $this->activityRepository->add($activityThree);
 
         $this->assertEquals(
-            ActivityIdCollection::fromArray([
+            ActivityIds::fromArray([
                 ActivityId::fromUnprefixed(1),
                 ActivityId::fromUnprefixed(2),
                 ActivityId::fromUnprefixed(3),

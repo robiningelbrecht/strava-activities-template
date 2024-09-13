@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava\Challenge;
 
+use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Activity\Activity;
-use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Calendar\MonthCollection;
 use App\Domain\Strava\Calendar\Week;
 use App\Domain\Strava\MonthlyStatistics;
@@ -17,7 +17,7 @@ final readonly class ChallengeConsistency
     private function __construct(
         MonthCollection $months,
         private MonthlyStatistics $monthlyStatistics,
-        private ActivityCollection $activities,
+        private Activities $activities,
     ) {
         $this->months = $months->reverse();
     }
@@ -25,7 +25,7 @@ final readonly class ChallengeConsistency
     public static function create(
         MonthCollection $months,
         MonthlyStatistics $monthlyStatistics,
-        ActivityCollection $activities,
+        Activities $activities,
     ): self {
         return new self(
             months: $months,

@@ -2,18 +2,18 @@
 
 namespace App\Domain\Strava;
 
+use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Activity\Activity;
-use App\Domain\Strava\Activity\ActivityCollection;
 use App\Infrastructure\ValueObject\Time\DateCollection;
 
 final readonly class Trivia
 {
     private function __construct(
-        private ActivityCollection $activities,
+        private Activities $activities,
     ) {
     }
 
-    public static function fromActivities(ActivityCollection $activities): self
+    public static function fromActivities(Activities $activities): self
     {
         return new self($activities);
     }

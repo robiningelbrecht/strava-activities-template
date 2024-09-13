@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava\Activity\BuildYearlyDistanceChart;
 
+use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Activity\Activity;
-use App\Domain\Strava\Activity\ActivityCollection;
 use App\Infrastructure\ValueObject\Time\YearCollection;
 use Carbon\CarbonInterval;
 
 final readonly class YearlyStatistics
 {
     private function __construct(
-        private ActivityCollection $activities,
+        private Activities $activities,
         private YearCollection $years,
     ) {
     }
 
     public static function fromActivities(
-        ActivityCollection $activities,
+        Activities $activities,
         YearCollection $years
     ): self {
         return new self($activities, $years);

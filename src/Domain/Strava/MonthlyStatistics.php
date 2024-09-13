@@ -2,8 +2,8 @@
 
 namespace App\Domain\Strava;
 
+use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Activity\Activity;
-use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityType;
 use App\Domain\Strava\Calendar\Month;
 use App\Domain\Strava\Calendar\MonthCollection;
@@ -17,7 +17,7 @@ final readonly class MonthlyStatistics
     private array $statistics;
 
     private function __construct(
-        private ActivityCollection $activities,
+        private Activities $activities,
         private ChallengeCollection $challenges,
         private MonthCollection $months,
     ) {
@@ -25,7 +25,7 @@ final readonly class MonthlyStatistics
     }
 
     public static function fromActivitiesAndChallenges(
-        ActivityCollection $activities,
+        Activities $activities,
         ChallengeCollection $challenges,
         MonthCollection $months): self
     {
@@ -127,7 +127,7 @@ final readonly class MonthlyStatistics
     /**
      * @return array<mixed>
      */
-    private function getTotalsForActivities(ActivityCollection $activities): array
+    private function getTotalsForActivities(Activities $activities): array
     {
         return [
             'numberOfRides' => count($activities),

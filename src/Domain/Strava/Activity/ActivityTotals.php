@@ -8,7 +8,7 @@ use Carbon\CarbonInterval;
 final readonly class ActivityTotals
 {
     private function __construct(
-        private ActivityCollection $activities,
+        private Activities $activities,
         private SerializableDateTime $now,
     ) {
     }
@@ -82,7 +82,7 @@ final readonly class ActivityTotals
         return count(array_unique($this->activities->map(fn (Activity $activity) => $activity->getStartDate()->format('Ymd'))));
     }
 
-    public static function fromActivities(ActivityCollection $activities, SerializableDateTime $now): self
+    public static function fromActivities(Activities $activities, SerializableDateTime $now): self
     {
         return new self($activities, $now);
     }

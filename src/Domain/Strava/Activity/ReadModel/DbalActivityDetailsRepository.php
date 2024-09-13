@@ -3,10 +3,10 @@
 namespace App\Domain\Strava\Activity\ReadModel;
 
 use App\Domain\Nominatim\Location;
+use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Activity\Activity;
-use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityId;
-use App\Domain\Strava\Activity\ActivityIdCollection;
+use App\Domain\Strava\Activity\ActivityIds;
 use App\Domain\Strava\Gear\GearId;
 use App\Domain\Strava\Gear\GearIdCollection;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
@@ -17,7 +17,7 @@ use Doctrine\DBAL\Connection;
 
 final class DbalActivityDetailsRepository implements ActivityDetailsRepository
 {
-    /** @var array<int|string, \App\Domain\Strava\Activity\ActivityCollection> */
+    /** @var array<int|string, \App\Domain\Strava\Activity\Activities> */
     public static array $cachedActivities = [];
     private readonly Connection $connection;
 
@@ -42,7 +42,7 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
         return $this->buildFromResult($result);
     }
 
-    public function findAll(int $limit = null): ActivityCollection
+    public function findAll(int $limit = null): Activities
     {
         $cacheKey = $limit ?? 'all';
         if (array_key_exists($cacheKey, DbalActivityDetailsRepository::$cachedActivities)) {
@@ -59,19 +59,19 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
             fn (array $result) => $this->buildFromResult($result),
             $queryBuilder->executeQuery()->fetchAllAssociative()
         );
-        DbalActivityDetailsRepository::$cachedActivities[$cacheKey] = ActivityCollection::fromArray($activities);
+        DbalActivityDetailsRepository::$cachedActivities[$cacheKey] = Activities::fromArray($activities);
 
         return DbalActivityDetailsRepository::$cachedActivities[$cacheKey];
     }
 
-    public function findActivityIds(): ActivityIdCollection
+    public function findActivityIds(): ActivityIds
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('activityId')
             ->from('Activity')
             ->orderBy('startDateTime', 'DESC');
 
-        return ActivityIdCollection::fromArray(array_map(
+        return ActivityIds::fromArray(array_map(
             fn (string $id) => ActivityId::fromString($id),
             $queryBuilder->executeQuery()->fetchFirstColumn(),
         ));

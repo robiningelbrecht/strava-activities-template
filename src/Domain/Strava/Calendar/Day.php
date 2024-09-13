@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava\Calendar;
 
-use App\Domain\Strava\Activity\ActivityCollection;
+use App\Domain\Strava\Activity\Activities;
 
 final readonly class Day
 {
     private function __construct(
         private int $dayNumber,
         private bool $isCurrentMonth,
-        private ActivityCollection $activities,
+        private Activities $activities,
     ) {
     }
 
     public static function create(
         int $dayNumber,
         bool $isCurrentMonth,
-        ActivityCollection $activities,
+        Activities $activities,
     ): self {
         return new self(
             dayNumber: $dayNumber,
@@ -37,7 +37,7 @@ final readonly class Day
         return $this->isCurrentMonth;
     }
 
-    public function getActivities(): ActivityCollection
+    public function getActivities(): Activities
     {
         return $this->activities;
     }

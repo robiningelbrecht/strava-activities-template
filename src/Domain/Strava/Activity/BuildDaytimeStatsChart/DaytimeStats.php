@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava\Activity\BuildDaytimeStatsChart;
 
+use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Activity\Activity;
-use App\Domain\Strava\Activity\ActivityCollection;
 use Carbon\CarbonInterval;
 
 final readonly class DaytimeStats
 {
     private function __construct(
-        private ActivityCollection $activities,
+        private Activities $activities,
     ) {
     }
 
     public static function fromActivities(
-        ActivityCollection $activities,
+        Activities $activities,
     ): self {
         return new self($activities);
     }

@@ -5,7 +5,7 @@ namespace App\Domain\Strava\Activity;
 final readonly class ActivityHighlights
 {
     private function __construct(
-        private ActivityCollection $activities,
+        private Activities $activities,
     ) {
     }
 
@@ -57,7 +57,7 @@ final readonly class ActivityHighlights
         return $activityWithMaxMovingTime->getMovingTimeFormatted();
     }
 
-    public static function fromActivities(ActivityCollection $activities): self
+    public static function fromActivities(Activities $activities): self
     {
         return new self($activities);
     }

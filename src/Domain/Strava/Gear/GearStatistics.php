@@ -2,20 +2,20 @@
 
 namespace App\Domain\Strava\Gear;
 
+use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Activity\Activity;
-use App\Domain\Strava\Activity\ActivityCollection;
 use Carbon\CarbonInterval;
 
 final readonly class GearStatistics
 {
     private function __construct(
-        private ActivityCollection $activities,
+        private Activities $activities,
         private GearCollection $bikes,
     ) {
     }
 
     public static function fromActivitiesAndGear(
-        ActivityCollection $activities,
+        Activities $activities,
         GearCollection $bikes): self
     {
         return new self($activities, $bikes);

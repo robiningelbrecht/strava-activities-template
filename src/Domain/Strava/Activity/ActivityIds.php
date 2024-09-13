@@ -6,7 +6,7 @@ namespace App\Domain\Strava\Activity;
 
 use App\Infrastructure\ValueObject\Collection;
 
-final class ActivityIdCollection extends Collection
+final class ActivityIds extends Collection
 {
     public function getItemClassName(): string
     {

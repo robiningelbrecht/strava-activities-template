@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava\Gear;
 
-use App\Domain\Strava\Activity\ActivityCollection;
+use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Calendar\Month;
 use App\Domain\Strava\Calendar\MonthCollection;
 
@@ -12,14 +12,14 @@ final readonly class DistanceOverTimePerGearChartBuilder
 {
     private function __construct(
         private GearCollection $gears,
-        private ActivityCollection $activities,
+        private Activities $activities,
         private MonthCollection $months,
     ) {
     }
 
     public static function fromGearAndActivities(
         GearCollection $gearCollection,
-        ActivityCollection $activityCollection,
+        Activities $activityCollection,
         MonthCollection $months
     ): self {
         return new self(
