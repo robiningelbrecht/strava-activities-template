@@ -143,7 +143,7 @@ abstract class Collection implements \Countable, \IteratorAggregate, \JsonSerial
         return max($this->map(fn ($item): int|float => $closure($item)));
     }
 
-    public function filter(\Closure $closure = null): static
+    public function filter(?\Closure $closure = null): static
     {
         if (is_null($closure)) {
             return static::fromArray(array_filter($this->items));
@@ -161,7 +161,7 @@ abstract class Collection implements \Countable, \IteratorAggregate, \JsonSerial
         return static::fromArray($this->items);
     }
 
-    public function slice(int $offset, int $length = null, bool $preserve_keys = false): static
+    public function slice(int $offset, ?int $length = null, bool $preserve_keys = false): static
     {
         return static::fromArray(
             array_slice($this->items, $offset, $length, $preserve_keys)

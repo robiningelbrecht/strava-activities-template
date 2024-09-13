@@ -10,7 +10,7 @@ use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 /**
  * @extends Collection<Month>
  */
-final class MonthCollection extends Collection
+final class Months extends Collection
 {
     public function getItemClassName(): string
     {
@@ -19,9 +19,9 @@ final class MonthCollection extends Collection
 
     public static function create(
         SerializableDateTime $startDate,
-        SerializableDateTime $now
+        SerializableDateTime $now,
     ): self {
-        $months = MonthCollection::empty();
+        $months = Months::empty();
         $period = new \DatePeriod(
             $startDate->modify('first day of this month'),
             new \DateInterval('P1M'),

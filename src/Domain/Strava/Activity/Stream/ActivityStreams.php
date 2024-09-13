@@ -9,7 +9,7 @@ use App\Infrastructure\ValueObject\Collection;
 /**
  * @extends Collection<ActivityStream>
  */
-class ActivityStreamCollection extends Collection
+class ActivityStreams extends Collection
 {
     public function getItemClassName(): string
     {

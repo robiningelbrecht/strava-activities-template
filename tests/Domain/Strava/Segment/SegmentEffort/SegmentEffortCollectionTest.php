@@ -2,7 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Segment\SegmentEffort;
 
-use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortCollection;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEfforts;
 use PHPUnit\Framework\TestCase;
 
 class SegmentEffortCollectionTest extends TestCase
@@ -16,7 +16,7 @@ class SegmentEffortCollectionTest extends TestCase
                 'distance' => 100,
             ])
             ->build();
-        $collection = SegmentEffortCollection::fromArray([
+        $collection = SegmentEfforts::fromArray([
             SegmentEffortBuilder::fromDefaults()
                 ->withData([
                     'elapsed_time' => 9.3,

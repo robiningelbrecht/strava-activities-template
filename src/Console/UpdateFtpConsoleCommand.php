@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class UpdateFtpConsoleCommand extends Command
 {
     public function __construct(
-        private readonly FtpRepository $ftpRepository
+        private readonly FtpRepository $ftpRepository,
     ) {
         parent::__construct();
     }

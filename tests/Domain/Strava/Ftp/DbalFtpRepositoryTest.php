@@ -2,7 +2,7 @@
 
 namespace App\Tests\Domain\Strava\Ftp;
 
-use App\Domain\Strava\Ftp\FtpCollection;
+use App\Domain\Strava\Ftp\Ftps;
 use App\Domain\Strava\Ftp\FtpValue;
 use App\Domain\Strava\Ftp\ReadModel\DbalFtpDetailsRepository;
 use App\Domain\Strava\Ftp\ReadModel\FtpDetailsRepository;
@@ -118,7 +118,7 @@ class DbalFtpRepositoryTest extends DatabaseTestCase
         $this->ftpRepository->save($ftpFour);
 
         $this->assertEquals(
-            FtpCollection::fromArray([$ftpOne, $ftpTwo, $ftpThree, $ftpFour]),
+            Ftps::fromArray([$ftpOne, $ftpTwo, $ftpThree, $ftpFour]),
             $this->ftpDetailsRepository->findAll()
         );
     }

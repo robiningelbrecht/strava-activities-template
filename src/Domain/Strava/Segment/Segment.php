@@ -113,8 +113,8 @@ final class Segment
     public function getSearchables(): array
     {
         return array_filter([
-                (string) $this->getName(),
-                $this->isStarred() ? 'favourite starred' : null]
+            (string) $this->getName(),
+            $this->isStarred() ? 'favourite starred' : null]
         );
     }
 

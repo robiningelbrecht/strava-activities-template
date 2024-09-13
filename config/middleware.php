@@ -13,7 +13,7 @@ return function (App $app) {
         $settings->get('slim.logErrorDetails'),
     );
 
-    /** @var \Slim\Handlers\ErrorHandler $errorHandler */
+    /** @var Slim\Handlers\ErrorHandler $errorHandler */
     $errorHandler = $errorMiddleware->getDefaultErrorHandler();
     $errorHandler->registerErrorRenderer('text/html', ErrorRenderer::class);
 };

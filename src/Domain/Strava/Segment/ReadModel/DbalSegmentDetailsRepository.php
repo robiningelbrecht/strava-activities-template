@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Domain\Strava\Segment\ReadModel;
 
 use App\Domain\Strava\Segment\Segment;
-use App\Domain\Strava\Segment\SegmentCollection;
 use App\Domain\Strava\Segment\SegmentId;
+use App\Domain\Strava\Segment\Segments;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
@@ -18,7 +18,7 @@ final readonly class DbalSegmentDetailsRepository implements SegmentDetailsRepos
     private Connection $connection;
 
     public function __construct(
-        ConnectionFactory $connectionFactory
+        ConnectionFactory $connectionFactory,
     ) {
         $this->connection = $connectionFactory->getReadOnly();
     }
@@ -38,14 +38,14 @@ final readonly class DbalSegmentDetailsRepository implements SegmentDetailsRepos
         return $this->buildFromResult($result);
     }
 
-    public function findAll(): SegmentCollection
+    public function findAll(): Segments
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*', '(SELECT COUNT(*) FROM SegmentEffort WHERE SegmentEffort.segmentId = Segment.segmentId) as countCompleted')
             ->from('Segment')
             ->orderBy('countCompleted', 'DESC');
 
-        return SegmentCollection::fromArray(array_map(
+        return Segments::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),
             $queryBuilder->executeQuery()->fetchAllAssociative()
         ));

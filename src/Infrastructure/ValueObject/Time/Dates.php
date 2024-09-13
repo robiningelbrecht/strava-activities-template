@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\ValueObject\Time;
 
-final class DateCollection implements \Countable
+final class Dates implements \Countable
 {
     /** @var \App\Infrastructure\ValueObject\Time\SerializableDateTime[] */
     private array $datesIndexedByDate;
@@ -45,10 +45,10 @@ final class DateCollection implements \Countable
         return \min($this->datesIndexedByDate);
     }
 
-    public function getLongestConsecutiveDateRange(): DateCollection
+    public function getLongestConsecutiveDateRange(): Dates
     {
         if (0 === count($this->datesIndexedByDate)) {
-            return DateCollection::empty();
+            return Dates::empty();
         }
         $mostConsecutiveDates = [];
         $currentConsecutiveDates = [];
@@ -68,7 +68,7 @@ final class DateCollection implements \Countable
             }
         }
 
-        return DateCollection::fromDates($mostConsecutiveDates);
+        return Dates::fromDates($mostConsecutiveDates);
     }
 
     public function count(): int

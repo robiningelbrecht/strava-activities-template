@@ -31,7 +31,7 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
         private SegmentRepository $segmentRepository,
         private SegmentDetailsRepository $segmentDetailsRepository,
         private SegmentEffortRepository $segmentEffortRepository,
-        private SegmentEffortDetailsRepository $segmentEffortDetailsRepository
+        private SegmentEffortDetailsRepository $segmentEffortDetailsRepository,
     ) {
     }
 
@@ -42,7 +42,7 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
 
         $segmentsAddedInCurrentRun = [];
 
-        /** @var \App\Domain\Strava\Activity\Activity $activity */
+        /** @var Activity $activity */
         foreach ($this->activityDetailsRepository->findAll() as $activity) {
             if (!$segmentEfforts = $activity->getSegmentEfforts()) {
                 // No segments or we already imported and deleted them from the activity.

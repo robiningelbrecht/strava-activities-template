@@ -14,7 +14,7 @@ final readonly class LiveOpenMeteo implements OpenMeteo
 {
     public function __construct(
         private Client $client,
-        private Clock $clock
+        private Clock $clock,
     ) {
     }
 

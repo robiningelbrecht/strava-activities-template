@@ -18,7 +18,7 @@ final readonly class PowerOutput
         string $time,
         int $power,
         float $relativePower,
-        Activity $activity = null,
+        ?Activity $activity = null,
     ): self {
         return new self(
             time: $time,

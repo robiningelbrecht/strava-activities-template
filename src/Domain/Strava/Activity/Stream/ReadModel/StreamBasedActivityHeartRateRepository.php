@@ -9,7 +9,7 @@ use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStream;
 use App\Domain\Strava\Activity\Stream\HeartRate;
 use App\Domain\Strava\Activity\Stream\StreamType;
-use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
+use App\Domain\Strava\Activity\Stream\StreamTypes;
 use App\Domain\Strava\Athlete\HeartRateZone;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\KeyValue\Key;
@@ -81,9 +81,9 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
 
         $streams = $this->activityStreamDetailsRepository->findByActivityAndStreamTypes(
             activityId: $activityId,
-            streamTypes: StreamTypeCollection::fromArray([StreamType::HEART_RATE])
+            streamTypes: StreamTypes::fromArray([StreamType::HEART_RATE])
         );
-        /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $stream */
+        /** @var ActivityStream $stream */
         $stream = $streams->getByStreamType(StreamType::HEART_RATE);
         $heartRateStreamForActivity = array_count_values($stream->getData());
         ksort($heartRateStreamForActivity);
@@ -124,7 +124,7 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
                 continue;
             }
 
-            /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $stream */
+            /** @var ActivityStream $stream */
             $stream = $heartRateStreamsForActivity->getFirst();
             foreach (HeartRateZone::cases() as $heartRateZone) {
                 [$minHeartRate, $maxHeartRate] = $heartRateZone->getMinMaxRange($athleteMaxHeartRate);

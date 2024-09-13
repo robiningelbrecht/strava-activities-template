@@ -21,7 +21,7 @@ final class PowerOutputChartBuilder
      * @param \App\Domain\Strava\Activity\Stream\PowerOutput[] $bestPowerOutputs
      */
     public static function fromBestPowerOutputs(
-        array $bestPowerOutputs
+        array $bestPowerOutputs,
     ): self {
         return new self($bestPowerOutputs);
     }

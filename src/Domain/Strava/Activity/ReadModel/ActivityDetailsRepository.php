@@ -2,21 +2,21 @@
 
 namespace App\Domain\Strava\Activity\ReadModel;
 
+use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Activity\Activity;
-use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityId;
-use App\Domain\Strava\Activity\ActivityIdCollection;
-use App\Domain\Strava\Gear\GearIdCollection;
+use App\Domain\Strava\Activity\ActivityIds;
+use App\Domain\Strava\Gear\GearIds;
 
 interface ActivityDetailsRepository
 {
     public function find(ActivityId $activityId): Activity;
 
-    public function findAll(int $limit = null): ActivityCollection;
+    public function findAll(?int $limit = null): Activities;
 
-    public function findActivityIds(): ActivityIdCollection;
+    public function findActivityIds(): ActivityIds;
 
-    public function findUniqueGearIds(): GearIdCollection;
+    public function findUniqueGearIds(): GearIds;
 
     public function findMostRiddenState(): ?string;
 }

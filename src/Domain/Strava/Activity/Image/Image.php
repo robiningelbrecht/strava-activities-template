@@ -14,7 +14,7 @@ final readonly class Image
 
     public static function create(
         string $gitHubImageLocation,
-        Activity $activity
+        Activity $activity,
     ): self {
         return new self(
             gitHubImageLocation: $gitHubImageLocation,

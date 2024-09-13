@@ -32,7 +32,7 @@ abstract readonly class FloatLiteral implements \JsonSerializable
         return new static((float) \trim($string));
     }
 
-    public static function fromOptionalString(string $string = null): ?static
+    public static function fromOptionalString(?string $string = null): ?static
     {
         if (is_null($string)) {
             return null;

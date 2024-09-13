@@ -9,12 +9,12 @@ use App\Domain\Strava\Calendar\Week;
 use App\Infrastructure\ValueObject\Collection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Time\Year;
-use App\Infrastructure\ValueObject\Time\YearCollection;
+use App\Infrastructure\ValueObject\Time\Years;
 
 /**
  * @extends Collection<Activity>
  */
-final class ActivityCollection extends Collection
+final class Activities extends Collection
 {
     public function getItemClassName(): string
     {
@@ -34,27 +34,27 @@ final class ActivityCollection extends Collection
         return $startDate;
     }
 
-    public function filterOnDate(SerializableDateTime $date): ActivityCollection
+    public function filterOnDate(SerializableDateTime $date): Activities
     {
         return $this->filter(fn (Activity $activity) => $activity->getStartDate()->format('Ymd') === $date->format('Ymd'));
     }
 
-    public function filterOnMonth(Month $month): ActivityCollection
+    public function filterOnMonth(Month $month): Activities
     {
         return $this->filter(fn (Activity $activity) => $activity->getStartDate()->format(Month::MONTH_ID_FORMAT) === $month->getId());
     }
 
-    public function filterOnWeek(Week $week): ActivityCollection
+    public function filterOnWeek(Week $week): Activities
     {
         return $this->filter(fn (Activity $activity) => $activity->getStartDate()->getYearAndWeekNumberString() === $week->getId());
     }
 
-    public function filterOnDateRange(SerializableDateTime $fromDate, SerializableDateTime $toDate): ActivityCollection
+    public function filterOnDateRange(SerializableDateTime $fromDate, SerializableDateTime $toDate): Activities
     {
         return $this->filter(fn (Activity $activity) => $activity->getStartDate()->isAfterOrOn($fromDate) && $activity->getStartDate()->isBeforeOrOn($toDate));
     }
 
-    public function filterOnActivityType(ActivityType $activityType): ActivityCollection
+    public function filterOnActivityType(ActivityType $activityType): Activities
     {
         return $this->filter(fn (Activity $activity) => $activityType === $activity->getType());
     }
@@ -63,16 +63,16 @@ final class ActivityCollection extends Collection
     {
         $activities = $this->filter(fn (Activity $activity) => $activityId == $activity->getId())->toArray();
 
-        /** @var \App\Domain\Strava\Activity\Activity $activity */
+        /** @var Activity $activity */
         $activity = reset($activities);
 
         return $activity;
     }
 
-    public function getUniqueYears(): YearCollection
+    public function getUniqueYears(): Years
     {
-        $years = YearCollection::empty();
-        /** @var \App\Domain\Strava\Activity\Activity $activity */
+        $years = Years::empty();
+        /** @var Activity $activity */
         foreach ($this as $activity) {
             $activityYear = Year::fromInt($activity->getStartDate()->getYear());
             if ($years->has($activityYear)) {

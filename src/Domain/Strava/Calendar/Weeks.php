@@ -10,7 +10,7 @@ use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 /**
  * @extends Collection<Week>
  */
-final class WeekCollection extends Collection
+final class Weeks extends Collection
 {
     public function getItemClassName(): string
     {
@@ -19,7 +19,7 @@ final class WeekCollection extends Collection
 
     public static function create(
         SerializableDateTime $startDate,
-        SerializableDateTime $now
+        SerializableDateTime $now,
     ): self {
         $period = new \DatePeriod(
             $startDate,
@@ -38,6 +38,6 @@ final class WeekCollection extends Collection
             $weeks[$week->getId()] = $week;
         }
 
-        return WeekCollection::fromArray(array_values($weeks));
+        return Weeks::fromArray(array_values($weeks));
     }
 }

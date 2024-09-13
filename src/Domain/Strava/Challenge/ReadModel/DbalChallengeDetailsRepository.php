@@ -3,8 +3,8 @@
 namespace App\Domain\Strava\Challenge\ReadModel;
 
 use App\Domain\Strava\Challenge\Challenge;
-use App\Domain\Strava\Challenge\ChallengeCollection;
 use App\Domain\Strava\Challenge\ChallengeId;
+use App\Domain\Strava\Challenge\Challenges;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
@@ -16,19 +16,19 @@ final readonly class DbalChallengeDetailsRepository implements ChallengeDetailsR
     private Connection $connection;
 
     public function __construct(
-        ConnectionFactory $connectionFactory
+        ConnectionFactory $connectionFactory,
     ) {
         $this->connection = $connectionFactory->getReadOnly();
     }
 
-    public function findAll(): ChallengeCollection
+    public function findAll(): Challenges
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('Challenge')
             ->orderBy('createdOn', 'DESC');
 
-        return ChallengeCollection::fromArray(array_map(
+        return Challenges::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),
             $queryBuilder->executeQuery()->fetchAllAssociative()
         ));

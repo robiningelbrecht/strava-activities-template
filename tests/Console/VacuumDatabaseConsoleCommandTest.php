@@ -6,7 +6,7 @@ use App\Console\VacuumDatabaseConsoleCommand;
 use App\Domain\Strava\StravaYears;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\ValueObject\Time\Year;
-use App\Infrastructure\ValueObject\Time\YearCollection;
+use App\Infrastructure\ValueObject\Time\Years;
 use App\Tests\ConsoleCommandTestCase;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
@@ -41,7 +41,7 @@ class VacuumDatabaseConsoleCommandTest extends ConsoleCommandTestCase
         $this->stravaYears
             ->expects($this->once())
             ->method('getYears')
-            ->willReturn(YearCollection::fromArray([Year::fromInt(2023)]));
+            ->willReturn(Years::fromArray([Year::fromInt(2023)]));
 
         $connection = $this->createMock(Connection::class);
         $this->connectionFactory
@@ -103,7 +103,7 @@ class VacuumDatabaseConsoleCommandTest extends ConsoleCommandTestCase
         $this->stravaYears
             ->expects($this->once())
             ->method('getYears')
-            ->willReturn(YearCollection::fromArray([Year::fromInt(2023)]));
+            ->willReturn(Years::fromArray([Year::fromInt(2023)]));
 
         $connection = $this->createMock(Connection::class);
         $this->connectionFactory
@@ -154,7 +154,7 @@ class VacuumDatabaseConsoleCommandTest extends ConsoleCommandTestCase
         $this->stravaYears
             ->expects($this->once())
             ->method('getYears')
-            ->willReturn(YearCollection::fromArray([Year::fromInt(2023)]));
+            ->willReturn(Years::fromArray([Year::fromInt(2023)]));
 
         $connection = $this->createMock(Connection::class);
         $this->connectionFactory

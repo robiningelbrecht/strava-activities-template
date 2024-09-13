@@ -9,7 +9,7 @@ use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Environment\Settings;
 use App\Infrastructure\ValueObject\Time\Year;
-use App\Infrastructure\ValueObject\Time\YearCollection;
+use App\Infrastructure\ValueObject\Time\Years;
 use App\Tests\CommandHandlerTestCase;
 use App\Tests\SpyOutput;
 use Doctrine\DBAL\Connection;
@@ -40,7 +40,7 @@ class CopyDataToReadDatabaseCommandHandlerTest extends CommandHandlerTestCase
         $this->stravaYears
             ->expects($this->once())
             ->method('getYears')
-            ->willReturn(YearCollection::fromArray([Year::fromInt(2023), Year::fromInt(2024)]));
+            ->willReturn(Years::fromArray([Year::fromInt(2023), Year::fromInt(2024)]));
 
         $this->copyDataToReadDatabaseCommandHandler->handle(new CopyDataToReadDatabase($output));
         $this->assertMatchesJsonSnapshot($snapshots);

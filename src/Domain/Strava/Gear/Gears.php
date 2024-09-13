@@ -9,7 +9,7 @@ use App\Infrastructure\ValueObject\Collection;
 /**
  * @extends Collection<Gear>
  */
-final class GearCollection extends Collection
+final class Gears extends Collection
 {
     public function getItemClassName(): string
     {

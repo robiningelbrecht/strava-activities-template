@@ -15,7 +15,7 @@ class ClassAttributeResolver
     public function resolve(
         string $attributeClassName,
         array $restrictToDirectories = [],
-        string $classAttributeCacheDir = null): array
+        ?string $classAttributeCacheDir = null): array
     {
         $appRoot = Settings::getAppRoot();
 

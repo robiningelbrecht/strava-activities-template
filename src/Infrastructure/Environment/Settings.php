@@ -6,7 +6,7 @@ class Settings
 {
     public function __construct(
         /** @var array<mixed> $settings */
-        private readonly array $settings
+        private readonly array $settings,
     ) {
     }
 

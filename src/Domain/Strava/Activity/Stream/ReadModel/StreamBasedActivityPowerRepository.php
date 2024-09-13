@@ -7,7 +7,7 @@ use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStream;
 use App\Domain\Strava\Activity\Stream\PowerOutput;
 use App\Domain\Strava\Activity\Stream\StreamType;
-use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
+use App\Domain\Strava\Activity\Stream\StreamTypes;
 use App\Infrastructure\Exception\EntityNotFound;
 use Carbon\CarbonInterval;
 
@@ -18,7 +18,7 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
 
     public function __construct(
         private readonly ActivityDetailsRepository $activityDetailsRepository,
-        private readonly ActivityStreamDetailsRepository $activityStreamDetailsRepository
+        private readonly ActivityStreamDetailsRepository $activityStreamDetailsRepository,
     ) {
     }
 
@@ -43,7 +43,7 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
                 continue;
             }
 
-            /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $activityStream */
+            /** @var ActivityStream $activityStream */
             $activityStream = $powerStreamsForActivity->getFirst();
             $bestAverages = $activityStream->getBestAverages();
 
@@ -78,9 +78,9 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
 
         $streams = $this->activityStreamDetailsRepository->findByActivityAndStreamTypes(
             activityId: $activityId,
-            streamTypes: StreamTypeCollection::fromArray([StreamType::WATTS])
+            streamTypes: StreamTypes::fromArray([StreamType::WATTS])
         );
-        /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $stream */
+        /** @var ActivityStream $stream */
         $stream = $streams->getByStreamType(StreamType::WATTS);
         $powerStreamForActivity = array_count_values(array_filter($stream->getData(), fn (mixed $item) => !is_null($item)));
         ksort($powerStreamForActivity);

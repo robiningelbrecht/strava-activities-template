@@ -10,7 +10,7 @@ use League\Flysystem\StorageAttributes;
 final readonly class SystemFileRepository implements FileRepository
 {
     public function __construct(
-        private FilesystemOperator $filesystemOperator
+        private FilesystemOperator $filesystemOperator,
     ) {
     }
 

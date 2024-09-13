@@ -12,7 +12,7 @@ use Doctrine\DBAL\DriverManager;
 class ConnectionFactory
 {
     public function __construct(
-        private readonly Settings $settings
+        private readonly Settings $settings,
     ) {
     }
 

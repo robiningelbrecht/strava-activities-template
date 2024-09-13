@@ -6,8 +6,8 @@ namespace App\Domain\Strava\Segment\SegmentEffort\ReadModel;
 
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffort;
-use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortCollection;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortId;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEfforts;
 use App\Domain\Strava\Segment\SegmentId;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
@@ -20,7 +20,7 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
     private Connection $connection;
 
     public function __construct(
-        ConnectionFactory $connectionFactory
+        ConnectionFactory $connectionFactory,
     ) {
         $this->connection = $connectionFactory->getReadOnly();
     }
@@ -40,7 +40,7 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
         return $this->buildFromResult($result);
     }
 
-    public function findBySegmentIdTopTen(SegmentId $segmentId): SegmentEffortCollection
+    public function findBySegmentIdTopTen(SegmentId $segmentId): SegmentEfforts
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
@@ -50,7 +50,7 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
             ->orderBy("JSON_EXTRACT(data, '$.elapsed_time')", 'ASC')
             ->setMaxResults(10);
 
-        return SegmentEffortCollection::fromArray(array_map(
+        return SegmentEfforts::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),
             $queryBuilder->executeQuery()->fetchAllAssociative()
         ));
@@ -67,7 +67,7 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
         return (int) $queryBuilder->executeQuery()->fetchOne();
     }
 
-    public function findByActivityId(ActivityId $activityId): SegmentEffortCollection
+    public function findByActivityId(ActivityId $activityId): SegmentEfforts
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
@@ -75,7 +75,7 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
             ->andWhere('activityId = :activityId')
             ->setParameter('activityId', $activityId);
 
-        return SegmentEffortCollection::fromArray(array_map(
+        return SegmentEfforts::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),
             $queryBuilder->executeQuery()->fetchAllAssociative()
         ));

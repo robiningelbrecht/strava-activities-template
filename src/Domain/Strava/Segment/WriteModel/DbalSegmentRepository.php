@@ -11,7 +11,7 @@ use App\Infrastructure\Serialization\Json;
 final readonly class DbalSegmentRepository implements SegmentRepository
 {
     public function __construct(
-        private ConnectionFactory $connectionFactory
+        private ConnectionFactory $connectionFactory,
     ) {
     }
 

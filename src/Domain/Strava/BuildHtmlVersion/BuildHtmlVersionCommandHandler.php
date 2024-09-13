@@ -25,13 +25,13 @@ use App\Domain\Strava\Activity\Stream\ReadModel\ActivityHeartRateRepository;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityPowerRepository;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityStreamDetailsRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
-use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
+use App\Domain\Strava\Activity\Stream\StreamTypes;
 use App\Domain\Strava\Athlete\HeartRateZone;
 use App\Domain\Strava\Athlete\ReadModel\AthleteWeightRepository;
 use App\Domain\Strava\Athlete\TimeInHeartRateZoneChartBuilder;
 use App\Domain\Strava\Calendar\Calendar;
 use App\Domain\Strava\Calendar\Month;
-use App\Domain\Strava\Calendar\MonthCollection;
+use App\Domain\Strava\Calendar\Months;
 use App\Domain\Strava\Challenge\ChallengeConsistency;
 use App\Domain\Strava\Challenge\ReadModel\ChallengeDetailsRepository;
 use App\Domain\Strava\DistanceBreakdown;
@@ -53,7 +53,7 @@ use App\Infrastructure\KeyValue\ReadModel\KeyValueStore;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\DataTableRow;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
-use App\Infrastructure\ValueObject\Time\YearCollection;
+use App\Infrastructure\ValueObject\Time\Years;
 use Lcobucci\Clock\Clock;
 use League\Flysystem\FilesystemOperator;
 use Twig\Environment;
@@ -107,11 +107,11 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $command->getOutput()->writeln('  => Calculating daytime stats');
         $dayTimeStats = DaytimeStats::fromActivities($allActivities);
 
-        $allMonths = MonthCollection::create(
+        $allMonths = Months::create(
             startDate: $allActivities->getFirstActivityStartDate(),
             now: $now
         );
-        $allYears = YearCollection::create(
+        $allYears = Years::create(
             startDate: $allActivities->getFirstActivityStartDate(),
             endDate: $now
         );
@@ -134,7 +134,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 
             $streams = $this->activityStreamDetailsRepository->findByActivityAndStreamTypes(
                 activityId: $activity->getId(),
-                streamTypes: StreamTypeCollection::fromArray([StreamType::CADENCE])
+                streamTypes: StreamTypes::fromArray([StreamType::CADENCE])
             );
 
             if ($cadenceStream = $streams->getByStreamType(StreamType::CADENCE)) {

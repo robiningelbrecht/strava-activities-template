@@ -2,8 +2,8 @@
 
 namespace App\Tests\Domain\Strava\Challenge;
 
-use App\Domain\Strava\Challenge\ChallengeCollection;
 use App\Domain\Strava\Challenge\ChallengeId;
+use App\Domain\Strava\Challenge\Challenges;
 use App\Domain\Strava\Challenge\ReadModel\ChallengeDetailsRepository;
 use App\Domain\Strava\Challenge\ReadModel\DbalChallengeDetailsRepository;
 use App\Domain\Strava\Challenge\WriteModel\ChallengeRepository;
@@ -48,7 +48,7 @@ class DbalChallengeRepositoryTest extends DatabaseTestCase
         $this->challengeRepository->add($challengeTwo);
 
         $this->assertEquals(
-            ChallengeCollection::fromArray([$challengeTwo, $challengeOne]),
+            Challenges::fromArray([$challengeTwo, $challengeOne]),
             $this->challengeDetailsRepository->findAll()
         );
     }

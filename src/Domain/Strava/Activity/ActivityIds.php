@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Strava\Gear;
+namespace App\Domain\Strava\Activity;
 
 use App\Infrastructure\ValueObject\Collection;
 
-final class GearIdCollection extends Collection
+final class ActivityIds extends Collection
 {
     public function getItemClassName(): string
     {
-        return GearId::class;
+        return ActivityId::class;
     }
 }

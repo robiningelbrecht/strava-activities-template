@@ -7,7 +7,7 @@ namespace App\Domain\Strava\Ftp;
 final readonly class FtpValue implements \Stringable, \JsonSerializable
 {
     private function __construct(
-        private int $value
+        private int $value,
     ) {
         if ($this->value < 1) {
             throw new \InvalidArgumentException('Minimum FTP of 1 expected');

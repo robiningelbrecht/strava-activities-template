@@ -10,13 +10,13 @@ final class EddingtonChartBuilder
     private ?array $tooltip;
 
     private function __construct(
-        private readonly Eddington $eddington
+        private readonly Eddington $eddington,
     ) {
         $this->animation = false;
         $this->backgroundColor = '#ffffff';
         $this->tooltip = [
             'trigger' => 'axis',
-       ];
+        ];
     }
 
     public static function fromEddington(Eddington $eddington): self

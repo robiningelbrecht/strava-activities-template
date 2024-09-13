@@ -24,7 +24,7 @@ class Strava
         private readonly StravaClientSecret $stravaClientSecret,
         private readonly StravaRefreshToken $stravaRefreshToken,
         private readonly FilesystemOperator $filesystemOperator,
-        private readonly Sleep $sleep
+        private readonly Sleep $sleep,
     ) {
     }
 

@@ -2,13 +2,13 @@
 
 namespace App\Domain\Strava;
 
+use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Activity\Activity;
-use App\Domain\Strava\Activity\ActivityCollection;
 use App\Domain\Strava\Activity\ActivityType;
 use App\Domain\Strava\Calendar\Month;
-use App\Domain\Strava\Calendar\MonthCollection;
+use App\Domain\Strava\Calendar\Months;
 use App\Domain\Strava\Challenge\Challenge;
-use App\Domain\Strava\Challenge\ChallengeCollection;
+use App\Domain\Strava\Challenge\Challenges;
 use Carbon\CarbonInterval;
 
 final readonly class MonthlyStatistics
@@ -17,17 +17,17 @@ final readonly class MonthlyStatistics
     private array $statistics;
 
     private function __construct(
-        private ActivityCollection $activities,
-        private ChallengeCollection $challenges,
-        private MonthCollection $months,
+        private Activities $activities,
+        private Challenges $challenges,
+        private Months $months,
     ) {
         $this->statistics = $this->buildStatistics();
     }
 
     public static function fromActivitiesAndChallenges(
-        ActivityCollection $activities,
-        ChallengeCollection $challenges,
-        MonthCollection $months): self
+        Activities $activities,
+        Challenges $challenges,
+        Months $months): self
     {
         return new self(
             activities: $activities,
@@ -42,7 +42,7 @@ final readonly class MonthlyStatistics
     private function buildStatistics(): array
     {
         $statistics = [];
-        /** @var \App\Domain\Strava\Calendar\Month $month */
+        /** @var Month $month */
         foreach ($this->months as $month) {
             $statistics[$month->getId()] = [
                 'id' => $month->getId(),
@@ -127,7 +127,7 @@ final readonly class MonthlyStatistics
     /**
      * @return array<mixed>
      */
-    private function getTotalsForActivities(ActivityCollection $activities): array
+    private function getTotalsForActivities(Activities $activities): array
     {
         return [
             'numberOfRides' => count($activities),

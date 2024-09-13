@@ -5,7 +5,7 @@ namespace App\Domain\Strava\Activity;
 final readonly class ActivityHighlights
 {
     private function __construct(
-        private ActivityCollection $activities,
+        private Activities $activities,
     ) {
     }
 
@@ -42,7 +42,7 @@ final readonly class ActivityHighlights
     public function getLongestMovingTimeFormatted(): ?string
     {
         $activityWithMaxMovingTime = null;
-        /** @var \App\Domain\Strava\Activity\Activity $activity */
+        /** @var Activity $activity */
         foreach ($this->activities as $activity) {
             if ($activity->getMovingTimeInSeconds() < $activityWithMaxMovingTime?->getMovingTimeInSeconds()) {
                 continue;
@@ -57,7 +57,7 @@ final readonly class ActivityHighlights
         return $activityWithMaxMovingTime->getMovingTimeFormatted();
     }
 
-    public static function fromActivities(ActivityCollection $activities): self
+    public static function fromActivities(Activities $activities): self
     {
         return new self($activities);
     }

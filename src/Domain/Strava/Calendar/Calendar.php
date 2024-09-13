@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava\Calendar;
 
-use App\Domain\Strava\Activity\ActivityCollection;
+use App\Domain\Strava\Activity\Activities;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final readonly class Calendar
 {
     private function __construct(
         private Month $month,
-        private ActivityCollection $activities
+        private Activities $activities,
     ) {
     }
 
     public static function create(
         Month $month,
-        ActivityCollection $activities
+        Activities $activities,
     ): self {
         return new self(
             month: $month,
@@ -30,13 +30,13 @@ final readonly class Calendar
         return $this->month;
     }
 
-    public function getDays(): DayCollection
+    public function getDays(): Days
     {
         $previousMonth = $this->month->getPreviousMonth();
         $nextMonth = $this->month->getNextMonth();
         $numberOfDaysInPreviousMonth = $previousMonth->getNumberOfDays();
 
-        $days = DayCollection::empty();
+        $days = Days::empty();
         for ($i = 1; $i < $this->month->getWeekDayOfFirstDay(); ++$i) {
             // Prepend with days of previous month.
             $dayNumber = $numberOfDaysInPreviousMonth - ($this->month->getWeekDayOfFirstDay() - $i - 1);

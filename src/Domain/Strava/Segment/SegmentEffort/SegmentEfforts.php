@@ -9,7 +9,7 @@ use App\Infrastructure\ValueObject\Collection;
 /**
  * @extends Collection<SegmentEffort>
  */
-final class SegmentEffortCollection extends Collection
+final class SegmentEfforts extends Collection
 {
     public function getItemClassName(): string
     {
@@ -18,9 +18,9 @@ final class SegmentEffortCollection extends Collection
 
     public function getBestEffort(): ?SegmentEffort
     {
-        /** @var \App\Domain\Strava\Segment\SegmentEffort\SegmentEffort $bestEffort */
+        /** @var SegmentEffort $bestEffort */
         $bestEffort = $this->getFirst();
-        /** @var \App\Domain\Strava\Segment\SegmentEffort\SegmentEffort $segmentEffort */
+        /** @var SegmentEffort $segmentEffort */
         foreach ($this as $segmentEffort) {
             if ($segmentEffort->getElapsedTimeInSeconds() >= $bestEffort->getElapsedTimeInSeconds()) {
                 continue;

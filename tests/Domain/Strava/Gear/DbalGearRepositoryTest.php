@@ -2,8 +2,8 @@
 
 namespace App\Tests\Domain\Strava\Gear;
 
-use App\Domain\Strava\Gear\GearCollection;
 use App\Domain\Strava\Gear\GearId;
+use App\Domain\Strava\Gear\Gears;
 use App\Domain\Strava\Gear\ReadModel\DbalGearDetailsRepository;
 use App\Domain\Strava\Gear\ReadModel\GearDetailsRepository;
 use App\Domain\Strava\Gear\WriteModel\DbalGearRepository;
@@ -55,7 +55,7 @@ class DbalGearRepositoryTest extends DatabaseTestCase
         $this->gearRepository->add($gearThree);
 
         $this->assertEquals(
-            GearCollection::fromArray([$gearTwo, $gearOne, $gearThree]),
+            Gears::fromArray([$gearTwo, $gearOne, $gearThree]),
             $this->gearDetailsRepository->findAll()
         );
     }

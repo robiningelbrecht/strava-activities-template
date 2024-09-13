@@ -6,19 +6,19 @@ namespace App\Domain\Strava;
 
 use App\Infrastructure\FileSystem\FileRepository;
 use App\Infrastructure\ValueObject\Time\Year;
-use App\Infrastructure\ValueObject\Time\YearCollection;
+use App\Infrastructure\ValueObject\Time\Years;
 
 class StravaYears
 {
     public function __construct(
-        private readonly FileRepository $fileRepository
+        private readonly FileRepository $fileRepository,
     ) {
     }
 
-    public function getYears(): YearCollection
+    public function getYears(): Years
     {
         $files = $this->fileRepository->listContents('database');
-        $years = YearCollection::empty();
+        $years = Years::empty();
         foreach ($files as $file) {
             if (!preg_match('/database\/db.strava-(?<match>[\d]{4})/', $file, $match)) {
                 continue;

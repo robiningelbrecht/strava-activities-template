@@ -2,9 +2,9 @@
 
 namespace App\Domain\Strava\Activity\BuildWeeklyDistanceChart;
 
-use App\Domain\Strava\Activity\ActivityCollection;
+use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Calendar\Week;
-use App\Domain\Strava\Calendar\WeekCollection;
+use App\Domain\Strava\Calendar\Weeks;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final class WeeklyDistanceChartBuilder
@@ -15,7 +15,7 @@ final class WeeklyDistanceChartBuilder
     private bool $withAverageTimes;
 
     private function __construct(
-        private readonly ActivityCollection $activities,
+        private readonly Activities $activities,
         private readonly SerializableDateTime $now,
     ) {
         $this->animation = false;
@@ -24,7 +24,7 @@ final class WeeklyDistanceChartBuilder
         $this->withAverageTimes = false;
     }
 
-    public static function fromActivities(ActivityCollection $activities, SerializableDateTime $now): self
+    public static function fromActivities(Activities $activities, SerializableDateTime $now): self
     {
         return new self($activities, $now);
     }
@@ -62,7 +62,7 @@ final class WeeklyDistanceChartBuilder
      */
     public function build(): array
     {
-        $weeks = WeekCollection::create(
+        $weeks = Weeks::create(
             startDate: $this->activities->getFirstActivityStartDate(),
             now: $this->now
         );
@@ -204,12 +204,12 @@ final class WeeklyDistanceChartBuilder
     /**
      * @return array<mixed>
      */
-    private function getData(WeekCollection $weeks): array
+    private function getData(Weeks $weeks): array
     {
         $distancePerWeek = [];
         $timePerWeek = [];
 
-        /** @var \App\Domain\Strava\Calendar\Week $week */
+        /** @var Week $week */
         foreach ($weeks as $week) {
             $distancePerWeek[$week->getId()] = 0;
             $timePerWeek[$week->getId()] = 0;

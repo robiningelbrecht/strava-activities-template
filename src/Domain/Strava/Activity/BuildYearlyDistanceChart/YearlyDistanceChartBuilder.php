@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Strava\Activity\BuildYearlyDistanceChart;
 
+use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Activity\Activity;
-use App\Domain\Strava\Activity\ActivityCollection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final class YearlyDistanceChartBuilder
@@ -14,14 +14,14 @@ final class YearlyDistanceChartBuilder
     private ?string $backgroundColor;
 
     private function __construct(
-        private readonly ActivityCollection $activities,
+        private readonly Activities $activities,
         private readonly SerializableDateTime $now,
     ) {
         $this->animation = false;
         $this->backgroundColor = '#ffffff';
     }
 
-    public static function fromActivities(ActivityCollection $activities, SerializableDateTime $now): self
+    public static function fromActivities(Activities $activities, SerializableDateTime $now): self
     {
         return new self($activities, $now);
     }

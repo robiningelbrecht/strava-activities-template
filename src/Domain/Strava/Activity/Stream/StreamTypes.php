@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Strava\Ftp;
+namespace App\Domain\Strava\Activity\Stream;
 
 use App\Infrastructure\ValueObject\Collection;
 
 /**
- * @extends Collection<Ftp>
+ * @extends Collection<StreamType>
  */
-class FtpCollection extends Collection
+class StreamTypes extends Collection
 {
     public function getItemClassName(): string
     {
-        return Ftp::class;
+        return StreamType::class;
     }
 }

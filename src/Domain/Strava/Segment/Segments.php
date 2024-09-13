@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Strava\Calendar;
+namespace App\Domain\Strava\Segment;
 
 use App\Infrastructure\ValueObject\Collection;
 
 /**
- * @extends Collection<Day>
+ * @extends Collection<Segment>
  */
-final class DayCollection extends Collection
+final class Segments extends Collection
 {
     public function getItemClassName(): string
     {
-        return Day::class;
+        return Segment::class;
     }
 }

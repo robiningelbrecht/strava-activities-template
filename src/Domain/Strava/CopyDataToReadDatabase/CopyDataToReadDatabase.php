@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CopyDataToReadDatabase extends DomainCommand
 {
     public function __construct(
-        private readonly OutputInterface $output
+        private readonly OutputInterface $output,
     ) {
     }
 
