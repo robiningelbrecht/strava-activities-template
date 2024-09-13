@@ -82,10 +82,19 @@ class Gear
         return $this->data['retired'] ?? false;
     }
 
-    public function updateDistance(float $distance, float $convertedDistance): void
+    public function updateIsRetired(bool $isRetired): self
+    {
+        $this->data['retired'] = $isRetired;
+
+        return $this;
+    }
+
+    public function updateDistance(float $distance, float $convertedDistance): self
     {
         $this->distanceInMeter = (int) $distance;
         $this->data['converted_distance'] = $convertedDistance;
+
+        return $this;
     }
 
     public function getCreatedOn(): SerializableDateTime
