@@ -83,7 +83,7 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
             activityId: $activityId,
             streamTypes: StreamTypeCollection::fromArray([StreamType::HEART_RATE])
         );
-        /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $stream */
+        /** @var ActivityStream $stream */
         $stream = $streams->getByStreamType(StreamType::HEART_RATE);
         $heartRateStreamForActivity = array_count_values($stream->getData());
         ksort($heartRateStreamForActivity);
@@ -124,7 +124,7 @@ final class StreamBasedActivityHeartRateRepository implements ActivityHeartRateR
                 continue;
             }
 
-            /** @var \App\Domain\Strava\Activity\Stream\ActivityStream $stream */
+            /** @var ActivityStream $stream */
             $stream = $heartRateStreamsForActivity->getFirst();
             foreach (HeartRateZone::cases() as $heartRateZone) {
                 [$minHeartRate, $maxHeartRate] = $heartRateZone->getMinMaxRange($athleteMaxHeartRate);

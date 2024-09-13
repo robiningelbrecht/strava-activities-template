@@ -26,7 +26,7 @@ final readonly class BuildActivityHeatmapChartCommandHandler implements CommandH
         private FtpDetailsRepository $ftpDetailsRepository,
         private KeyValueStore $keyValueStore,
         private FilesystemOperator $filesystem,
-        private Clock $clock
+        private Clock $clock,
     ) {
     }
 

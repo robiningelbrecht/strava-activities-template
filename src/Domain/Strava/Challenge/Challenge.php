@@ -17,7 +17,7 @@ final class Challenge
         #[ORM\Column(type: 'datetime_immutable')]
         private readonly SerializableDateTime $createdOn,
         #[ORM\Column(type: 'json')]
-        private array $data
+        private array $data,
     ) {
     }
 
@@ -27,7 +27,7 @@ final class Challenge
     public static function fromState(
         ChallengeId $challengeId,
         SerializableDateTime $createdOn,
-        array $data
+        array $data,
     ): self {
         return new self(
             challengeId: $challengeId,
@@ -42,7 +42,7 @@ final class Challenge
     public static function create(
         ChallengeId $challengeId,
         SerializableDateTime $createdOn,
-        array $data
+        array $data,
     ): self {
         return new self(
             challengeId: $challengeId,

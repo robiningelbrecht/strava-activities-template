@@ -42,7 +42,7 @@ final readonly class MonthlyStatistics
     private function buildStatistics(): array
     {
         $statistics = [];
-        /** @var \App\Domain\Strava\Calendar\Month $month */
+        /** @var Month $month */
         foreach ($this->months as $month) {
             $statistics[$month->getId()] = [
                 'id' => $month->getId(),

@@ -18,7 +18,7 @@ final readonly class DbalSegmentDetailsRepository implements SegmentDetailsRepos
     private Connection $connection;
 
     public function __construct(
-        ConnectionFactory $connectionFactory
+        ConnectionFactory $connectionFactory,
     ) {
         $this->connection = $connectionFactory->getReadOnly();
     }

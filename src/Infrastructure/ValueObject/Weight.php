@@ -5,7 +5,7 @@ namespace App\Infrastructure\ValueObject;
 class Weight
 {
     private function __construct(
-        private readonly float $weight
+        private readonly float $weight,
     ) {
     }
 

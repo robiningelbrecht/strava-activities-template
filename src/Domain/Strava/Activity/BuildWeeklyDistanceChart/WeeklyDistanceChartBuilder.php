@@ -209,7 +209,7 @@ final class WeeklyDistanceChartBuilder
         $distancePerWeek = [];
         $timePerWeek = [];
 
-        /** @var \App\Domain\Strava\Calendar\Week $week */
+        /** @var Week $week */
         foreach ($weeks as $week) {
             $distancePerWeek[$week->getId()] = 0;
             $timePerWeek[$week->getId()] = 0;

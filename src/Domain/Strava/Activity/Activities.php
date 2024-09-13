@@ -63,7 +63,7 @@ final class Activities extends Collection
     {
         $activities = $this->filter(fn (Activity $activity) => $activityId == $activity->getId())->toArray();
 
-        /** @var \App\Domain\Strava\Activity\Activity $activity */
+        /** @var Activity $activity */
         $activity = reset($activities);
 
         return $activity;
@@ -72,7 +72,7 @@ final class Activities extends Collection
     public function getUniqueYears(): YearCollection
     {
         $years = YearCollection::empty();
-        /** @var \App\Domain\Strava\Activity\Activity $activity */
+        /** @var Activity $activity */
         foreach ($this as $activity) {
             $activityYear = Year::fromInt($activity->getStartDate()->getYear());
             if ($years->has($activityYear)) {

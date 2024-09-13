@@ -22,7 +22,7 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
     private readonly Connection $connection;
 
     public function __construct(
-        ConnectionFactory $connectionFactory
+        ConnectionFactory $connectionFactory,
     ) {
         $this->connection = $connectionFactory->getReadOnly();
     }
@@ -42,7 +42,7 @@ final class DbalActivityDetailsRepository implements ActivityDetailsRepository
         return $this->buildFromResult($result);
     }
 
-    public function findAll(int $limit = null): Activities
+    public function findAll(?int $limit = null): Activities
     {
         $cacheKey = $limit ?? 'all';
         if (array_key_exists($cacheKey, DbalActivityDetailsRepository::$cachedActivities)) {

@@ -20,7 +20,7 @@ final readonly class DbalSegmentEffortDetailsRepository implements SegmentEffort
     private Connection $connection;
 
     public function __construct(
-        ConnectionFactory $connectionFactory
+        ConnectionFactory $connectionFactory,
     ) {
         $this->connection = $connectionFactory->getReadOnly();
     }

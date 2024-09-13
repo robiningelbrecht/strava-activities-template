@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class UpdateKeyValueConsoleCommand extends Command
 {
     public function __construct(
-        private readonly KeyValueStore $keyValueStore
+        private readonly KeyValueStore $keyValueStore,
     ) {
         parent::__construct();
     }

@@ -11,13 +11,13 @@ final readonly class Calendar
 {
     private function __construct(
         private Month $month,
-        private Activities $activities
+        private Activities $activities,
     ) {
     }
 
     public static function create(
         Month $month,
-        Activities $activities
+        Activities $activities,
     ): self {
         return new self(
             month: $month,

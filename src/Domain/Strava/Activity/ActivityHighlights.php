@@ -42,7 +42,7 @@ final readonly class ActivityHighlights
     public function getLongestMovingTimeFormatted(): ?string
     {
         $activityWithMaxMovingTime = null;
-        /** @var \App\Domain\Strava\Activity\Activity $activity */
+        /** @var Activity $activity */
         foreach ($this->activities as $activity) {
             if ($activity->getMovingTimeInSeconds() < $activityWithMaxMovingTime?->getMovingTimeInSeconds()) {
                 continue;

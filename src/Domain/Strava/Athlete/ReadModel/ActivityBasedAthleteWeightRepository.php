@@ -16,7 +16,7 @@ final readonly class ActivityBasedAthleteWeightRepository implements AthleteWeig
     private Connection $connection;
 
     public function __construct(
-        ConnectionFactory $connectionFactory
+        ConnectionFactory $connectionFactory,
     ) {
         $this->connection = $connectionFactory->getReadOnly();
     }

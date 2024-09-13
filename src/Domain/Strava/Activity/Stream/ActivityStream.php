@@ -24,7 +24,7 @@ final class ActivityStream
         #[ORM\Column(type: 'json')]
         private readonly array $data,
         #[ORM\Column(type: 'json', nullable: true)]
-        private array $bestAverages = []
+        private array $bestAverages = [],
     ) {
     }
 
@@ -35,7 +35,7 @@ final class ActivityStream
         ActivityId $activityId,
         StreamType $streamType,
         array $streamData,
-        SerializableDateTime $createdOn
+        SerializableDateTime $createdOn,
     ): self {
         return new self(
             activityId: $activityId,

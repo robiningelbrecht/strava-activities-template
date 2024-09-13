@@ -19,7 +19,7 @@ final readonly class YearlyStatistics
 
     public static function fromActivities(
         Activities $activities,
-        YearCollection $years
+        YearCollection $years,
     ): self {
         return new self($activities, $years);
     }

@@ -10,7 +10,7 @@ use Twig\TwigFunction;
 final readonly class TwigBuilder
 {
     public function __construct(
-        private FilesystemLoader $filesystemLoader
+        private FilesystemLoader $filesystemLoader,
     ) {
     }
 

@@ -12,7 +12,7 @@ interface ActivityDetailsRepository
 {
     public function find(ActivityId $activityId): Activity;
 
-    public function findAll(int $limit = null): Activities;
+    public function findAll(?int $limit = null): Activities;
 
     public function findActivityIds(): ActivityIds;
 

@@ -13,7 +13,7 @@ final readonly class DbalActivityStreamRepository implements ActivityStreamRepos
     use ProvideSqlConvert;
 
     public function __construct(
-        private ConnectionFactory $connectionFactory
+        private ConnectionFactory $connectionFactory,
     ) {
     }
 

@@ -23,7 +23,7 @@ final class ImportStravaDataConsoleCommand extends Command
     public function __construct(
         private readonly CommandBus $commandBus,
         private readonly MaxResourceUsageHasBeenReached $maxResourceUsageHasBeenReached,
-        private readonly ResourceUsage $resourceUsage
+        private readonly ResourceUsage $resourceUsage,
     ) {
         parent::__construct();
     }

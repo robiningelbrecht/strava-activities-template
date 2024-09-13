@@ -29,7 +29,7 @@ final readonly class ImportGearCommandHandler implements CommandHandler
         private GearDetailsRepository $gearDetailsRepository,
         private MaxResourceUsageHasBeenReached $maxResourceUsageHasBeenReached,
         private Clock $clock,
-        private Sleep $sleep
+        private Sleep $sleep,
     ) {
     }
 

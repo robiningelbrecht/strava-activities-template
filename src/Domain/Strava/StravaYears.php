@@ -11,7 +11,7 @@ use App\Infrastructure\ValueObject\Time\YearCollection;
 class StravaYears
 {
     public function __construct(
-        private readonly FileRepository $fileRepository
+        private readonly FileRepository $fileRepository,
     ) {
     }
 

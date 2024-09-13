@@ -12,7 +12,7 @@ use App\Infrastructure\ValueObject\Time\Year;
 final readonly class DbalSegmentEffortRepository implements SegmentEffortRepository
 {
     public function __construct(
-        private ConnectionFactory $connectionFactory
+        private ConnectionFactory $connectionFactory,
     ) {
     }
 

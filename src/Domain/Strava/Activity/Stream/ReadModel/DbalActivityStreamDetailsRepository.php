@@ -21,7 +21,7 @@ final readonly class DbalActivityStreamDetailsRepository implements ActivityStre
     private Connection $connection;
 
     public function __construct(
-        ConnectionFactory $connectionFactory
+        ConnectionFactory $connectionFactory,
     ) {
         $this->connection = $connectionFactory->getReadOnly();
     }

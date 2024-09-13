@@ -72,7 +72,7 @@ final readonly class ImportActivityStreamsCommandHandler implements CommandHandl
 
             $stravaStreams = array_filter(
                 $stravaStreams,
-                fn (array $stravaStream) => StreamType::tryFrom($stravaStream['type'])
+                fn (array $stravaStream): bool => !is_null(StreamType::tryFrom($stravaStream['type']))
             );
             if (empty($stravaStreams)) {
                 // We need this hack for activities that do not have streams.

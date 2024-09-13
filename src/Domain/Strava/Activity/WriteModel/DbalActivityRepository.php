@@ -12,7 +12,7 @@ final readonly class DbalActivityRepository implements ActivityRepository
 {
     public function __construct(
         private ConnectionFactory $connectionFactory,
-        private EventBus $eventBus
+        private EventBus $eventBus,
     ) {
     }
 

@@ -57,7 +57,7 @@ final class Activity extends AggregateRoot
         ActivityId $activityId,
         SerializableDateTime $startDateTime,
         array $data,
-        GearId $gearId = null,
+        ?GearId $gearId = null,
     ): self {
         return new self(
             activityId: $activityId,
@@ -75,9 +75,9 @@ final class Activity extends AggregateRoot
         ActivityId $activityId,
         SerializableDateTime $startDateTime,
         array $data,
-        Location $location = null,
+        ?Location $location = null,
         array $weather = [],
-        GearId $gearId = null,
+        ?GearId $gearId = null,
     ): self {
         return new self(
             activityId: $activityId,
@@ -131,7 +131,7 @@ final class Activity extends AggregateRoot
         return $this->gearId;
     }
 
-    public function updateGearId(GearId $gearId = null): self
+    public function updateGearId(?GearId $gearId = null): self
     {
         $this->gearId = $gearId;
 
@@ -511,7 +511,7 @@ final class Activity extends AggregateRoot
         return $this->location;
     }
 
-    public function updateLocation(Location $location = null): void
+    public function updateLocation(?Location $location = null): void
     {
         $this->location = $location;
     }

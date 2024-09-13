@@ -18,7 +18,7 @@ class YearCollection extends Collection
 
     public static function create(
         SerializableDateTime $startDate,
-        SerializableDateTime $endDate
+        SerializableDateTime $endDate,
     ): self {
         $years = YearCollection::empty();
         $period = new \DatePeriod(

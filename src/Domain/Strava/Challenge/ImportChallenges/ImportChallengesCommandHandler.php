@@ -26,7 +26,7 @@ final readonly class ImportChallengesCommandHandler implements CommandHandler
         private ChallengeDetailsRepository $challengeDetailsRepository,
         private FilesystemOperator $filesystem,
         private UuidFactory $uuidFactory,
-        private Sleep $sleep
+        private Sleep $sleep,
     ) {
     }
 

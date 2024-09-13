@@ -7,7 +7,7 @@ use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 final readonly class ActivityBasedImageRepository implements ImageRepository
 {
     public function __construct(
-        private ActivityDetailsRepository $activityDetailsRepository
+        private ActivityDetailsRepository $activityDetailsRepository,
     ) {
     }
 

@@ -19,7 +19,7 @@ final class MonthCollection extends Collection
 
     public static function create(
         SerializableDateTime $startDate,
-        SerializableDateTime $now
+        SerializableDateTime $now,
     ): self {
         $months = MonthCollection::empty();
         $period = new \DatePeriod(

@@ -54,7 +54,7 @@ abstract class ConventionBasedEventListener implements EventListener
             throw new \RuntimeException(sprintf('Event listener %s not tagged with attribute', get_class($this)));
         }
 
-        /** @var \App\Infrastructure\Eventing\EventListener\EventListenerType $type */
+        /** @var EventListenerType $type */
         $type = $attributes[0]->newInstance()->getType();
 
         return $type->getEventProcessingMethodPrefix();

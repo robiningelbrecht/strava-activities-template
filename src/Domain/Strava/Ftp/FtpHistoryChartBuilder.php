@@ -21,7 +21,7 @@ final class FtpHistoryChartBuilder
 
     public static function fromFtps(
         FtpCollection $ftps,
-        SerializableDateTime $now
+        SerializableDateTime $now,
     ): self {
         return new self(
             ftps: $ftps,

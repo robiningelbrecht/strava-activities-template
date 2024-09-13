@@ -14,7 +14,7 @@ final readonly class BuildWeekdayStatsChartCommandHandler implements CommandHand
 {
     public function __construct(
         private ActivityDetailsRepository $activityDetailsRepository,
-        private FilesystemOperator $filesystem
+        private FilesystemOperator $filesystem,
     ) {
     }
 

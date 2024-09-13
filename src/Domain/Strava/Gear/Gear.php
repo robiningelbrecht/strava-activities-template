@@ -19,7 +19,7 @@ class Gear
         #[ORM\Column(type: 'integer')]
         private int $distanceInMeter,
         #[ORM\Column(type: 'json')]
-        private array $data
+        private array $data,
     ) {
     }
 
@@ -30,7 +30,7 @@ class Gear
         GearId $gearId,
         array $data,
         int $distanceInMeter,
-        SerializableDateTime $createdOn
+        SerializableDateTime $createdOn,
     ): self {
         return new self(
             gearId: $gearId,
@@ -47,7 +47,7 @@ class Gear
         GearId $gearId,
         array $data,
         int $distanceInMeter,
-        SerializableDateTime $createdOn
+        SerializableDateTime $createdOn,
     ): self {
         return new self(
             gearId: $gearId,

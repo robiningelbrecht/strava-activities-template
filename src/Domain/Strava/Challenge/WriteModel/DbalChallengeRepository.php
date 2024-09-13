@@ -10,7 +10,7 @@ use App\Infrastructure\ValueObject\Time\Year;
 final readonly class DbalChallengeRepository implements ChallengeRepository
 {
     public function __construct(
-        private ConnectionFactory $connectionFactory
+        private ConnectionFactory $connectionFactory,
     ) {
     }
 

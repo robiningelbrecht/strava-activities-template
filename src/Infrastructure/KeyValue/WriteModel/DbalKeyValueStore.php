@@ -10,7 +10,7 @@ use App\Infrastructure\KeyValue\KeyValue;
 final readonly class DbalKeyValueStore implements KeyValueStore
 {
     public function __construct(
-        private ConnectionFactory $connectionFactory
+        private ConnectionFactory $connectionFactory,
     ) {
     }
 

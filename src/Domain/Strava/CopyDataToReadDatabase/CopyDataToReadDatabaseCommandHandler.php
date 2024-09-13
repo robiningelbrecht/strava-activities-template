@@ -23,7 +23,7 @@ final readonly class CopyDataToReadDatabaseCommandHandler implements CommandHand
     public function __construct(
         ConnectionFactory $connectionFactory,
         private Settings $settings,
-        private StravaYears $stravaYears
+        private StravaYears $stravaYears,
     ) {
         $this->readOnlyConnection = $connectionFactory->getReadOnly();
         $this->schemaManager = $connectionFactory->getDefault()->createSchemaManager();

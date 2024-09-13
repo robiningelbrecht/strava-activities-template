@@ -20,7 +20,7 @@ final readonly class DistanceOverTimePerGearChartBuilder
     public static function fromGearAndActivities(
         GearCollection $gearCollection,
         Activities $activityCollection,
-        MonthCollection $months
+        MonthCollection $months,
     ): self {
         return new self(
             gears: $gearCollection,
@@ -38,10 +38,10 @@ final readonly class DistanceOverTimePerGearChartBuilder
 
         $xAxisValues = [];
         $distancePerGearAndMonth = [];
-        /** @var \App\Domain\Strava\Calendar\Month $month */
+        /** @var Month $month */
         foreach ($this->months as $month) {
             $xAxisValues[] = $month->getLabel();
-            /** @var \App\Domain\Strava\Gear\Gear $gear */
+            /** @var Gear $gear */
             foreach ($gears as $gear) {
                 $distancePerGearAndMonth[(string) $gear->getId()][$month->getId()] = 0;
             }

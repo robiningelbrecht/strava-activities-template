@@ -19,7 +19,7 @@ final class WeekCollection extends Collection
 
     public static function create(
         SerializableDateTime $startDate,
-        SerializableDateTime $now
+        SerializableDateTime $now,
     ): self {
         $period = new \DatePeriod(
             $startDate,

@@ -13,7 +13,7 @@ use App\Infrastructure\KeyValue\Value;
 final readonly class DbalKeyValueStore implements KeyValueStore
 {
     public function __construct(
-        private ConnectionFactory $connectionFactory
+        private ConnectionFactory $connectionFactory,
     ) {
     }
 

@@ -8,7 +8,7 @@ use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 final readonly class DbalFtpRepository implements FtpRepository
 {
     public function __construct(
-        private ConnectionFactory $connectionFactory
+        private ConnectionFactory $connectionFactory,
     ) {
     }
 
