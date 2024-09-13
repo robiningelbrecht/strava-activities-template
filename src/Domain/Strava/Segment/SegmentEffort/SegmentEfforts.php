@@ -9,7 +9,7 @@ use App\Infrastructure\ValueObject\Collection;
 /**
  * @extends Collection<SegmentEffort>
  */
-final class SegmentEffortCollection extends Collection
+final class SegmentEfforts extends Collection
 {
     public function getItemClassName(): string
     {

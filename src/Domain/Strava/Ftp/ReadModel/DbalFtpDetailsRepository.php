@@ -3,7 +3,7 @@
 namespace App\Domain\Strava\Ftp\ReadModel;
 
 use App\Domain\Strava\Ftp\Ftp;
-use App\Domain\Strava\Ftp\FtpCollection;
+use App\Domain\Strava\Ftp\Ftps;
 use App\Domain\Strava\Ftp\FtpValue;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
@@ -20,14 +20,14 @@ final readonly class DbalFtpDetailsRepository implements FtpDetailsRepository
         $this->connection = $connectionFactory->getReadOnly();
     }
 
-    public function findAll(): FtpCollection
+    public function findAll(): Ftps
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('Ftp')
             ->orderBy('setOn', 'ASC');
 
-        return FtpCollection::fromArray(array_map(
+        return Ftps::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),
             $queryBuilder->executeQuery()->fetchAllAssociative()
         ));

@@ -12,7 +12,7 @@ final class FtpHistoryChartBuilder
     private ?string $backgroundColor;
 
     private function __construct(
-        private readonly FtpCollection $ftps,
+        private readonly Ftps $ftps,
         private readonly SerializableDateTime $now,
     ) {
         $this->animation = false;
@@ -20,7 +20,7 @@ final class FtpHistoryChartBuilder
     }
 
     public static function fromFtps(
-        FtpCollection $ftps,
+        Ftps $ftps,
         SerializableDateTime $now,
     ): self {
         return new self(

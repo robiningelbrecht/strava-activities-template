@@ -10,13 +10,13 @@ final readonly class GearStatistics
 {
     private function __construct(
         private Activities $activities,
-        private GearCollection $bikes,
+        private Gears $bikes,
     ) {
     }
 
     public static function fromActivitiesAndGear(
         Activities $activities,
-        GearCollection $bikes): self
+        Gears $bikes): self
     {
         return new self($activities, $bikes);
     }

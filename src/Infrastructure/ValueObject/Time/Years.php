@@ -9,7 +9,7 @@ use App\Infrastructure\ValueObject\Collection;
 /**
  * @extends Collection<Year>
  */
-class YearCollection extends Collection
+class Years extends Collection
 {
     public function getItemClassName(): string
     {
@@ -20,7 +20,7 @@ class YearCollection extends Collection
         SerializableDateTime $startDate,
         SerializableDateTime $endDate,
     ): self {
-        $years = YearCollection::empty();
+        $years = Years::empty();
         $period = new \DatePeriod(
             $startDate->modify('first day of january this year'),
             new \DateInterval('P1Y'),

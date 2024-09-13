@@ -30,13 +30,13 @@ final readonly class Calendar
         return $this->month;
     }
 
-    public function getDays(): DayCollection
+    public function getDays(): Days
     {
         $previousMonth = $this->month->getPreviousMonth();
         $nextMonth = $this->month->getNextMonth();
         $numberOfDaysInPreviousMonth = $previousMonth->getNumberOfDays();
 
-        $days = DayCollection::empty();
+        $days = Days::empty();
         for ($i = 1; $i < $this->month->getWeekDayOfFirstDay(); ++$i) {
             // Prepend with days of previous month.
             $dayNumber = $numberOfDaysInPreviousMonth - ($this->month->getWeekDayOfFirstDay() - $i - 1);

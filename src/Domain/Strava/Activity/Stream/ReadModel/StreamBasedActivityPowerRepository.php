@@ -7,7 +7,7 @@ use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\Stream\ActivityStream;
 use App\Domain\Strava\Activity\Stream\PowerOutput;
 use App\Domain\Strava\Activity\Stream\StreamType;
-use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
+use App\Domain\Strava\Activity\Stream\StreamTypes;
 use App\Infrastructure\Exception\EntityNotFound;
 use Carbon\CarbonInterval;
 
@@ -78,7 +78,7 @@ final class StreamBasedActivityPowerRepository implements ActivityPowerRepositor
 
         $streams = $this->activityStreamDetailsRepository->findByActivityAndStreamTypes(
             activityId: $activityId,
-            streamTypes: StreamTypeCollection::fromArray([StreamType::WATTS])
+            streamTypes: StreamTypes::fromArray([StreamType::WATTS])
         );
         /** @var ActivityStream $stream */
         $stream = $streams->getByStreamType(StreamType::WATTS);

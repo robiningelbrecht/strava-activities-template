@@ -4,10 +4,10 @@ namespace App\Tests\Domain\Strava\Segment;
 
 use App\Domain\Strava\Segment\ReadModel\DbalSegmentDetailsRepository;
 use App\Domain\Strava\Segment\ReadModel\SegmentDetailsRepository;
-use App\Domain\Strava\Segment\SegmentCollection;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortId;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
 use App\Domain\Strava\Segment\SegmentId;
+use App\Domain\Strava\Segment\Segments;
 use App\Domain\Strava\Segment\WriteModel\DbalSegmentRepository;
 use App\Domain\Strava\Segment\WriteModel\SegmentRepository;
 use App\Infrastructure\Exception\EntityNotFound;
@@ -75,7 +75,7 @@ class DbalSegmentRepositoryTest extends DatabaseTestCase
         );
 
         $this->assertEquals(
-            SegmentCollection::fromArray([$segmentOne, $segmentThree, $segmentTwo]),
+            Segments::fromArray([$segmentOne, $segmentThree, $segmentTwo]),
             $this->segmentDetailsRepository->findAll()
         );
     }

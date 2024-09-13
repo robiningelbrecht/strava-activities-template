@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Strava\Segment;
+namespace App\Domain\Strava\Ftp;
 
 use App\Infrastructure\ValueObject\Collection;
 
 /**
- * @extends Collection<Segment>
+ * @extends Collection<Ftp>
  */
-final class SegmentCollection extends Collection
+class Ftps extends Collection
 {
     public function getItemClassName(): string
     {
-        return Segment::class;
+        return Ftp::class;
     }
 }

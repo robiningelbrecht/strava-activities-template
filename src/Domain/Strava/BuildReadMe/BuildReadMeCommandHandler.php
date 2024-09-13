@@ -9,7 +9,7 @@ use App\Domain\Strava\Activity\BuildWeekdayStatsChart\WeekdayStats;
 use App\Domain\Strava\Activity\BuildYearlyDistanceChart\YearlyStatistics;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityPowerRepository;
-use App\Domain\Strava\Calendar\MonthCollection;
+use App\Domain\Strava\Calendar\Months;
 use App\Domain\Strava\Challenge\ChallengeConsistency;
 use App\Domain\Strava\Challenge\ReadModel\ChallengeDetailsRepository;
 use App\Domain\Strava\DistanceBreakdown;
@@ -20,7 +20,7 @@ use App\Infrastructure\Attribute\AsCommandHandler;
 use App\Infrastructure\CQRS\CommandHandler\CommandHandler;
 use App\Infrastructure\CQRS\DomainCommand;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
-use App\Infrastructure\ValueObject\Time\YearCollection;
+use App\Infrastructure\ValueObject\Time\Years;
 use Lcobucci\Clock\Clock;
 use League\Flysystem\FilesystemOperator;
 use Twig\Environment;
@@ -47,11 +47,11 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
         $allActivities = $this->activityDetailsRepository->findAll();
         $allChallenges = $this->challengeDetailsRepository->findAll();
         $allBikes = $this->gearDetailsRepository->findAll();
-        $allMonths = MonthCollection::create(
+        $allMonths = Months::create(
             startDate: $allActivities->getFirstActivityStartDate(),
             now: $now
         );
-        $allYears = YearCollection::create(
+        $allYears = Years::create(
             startDate: $allActivities->getFirstActivityStartDate(),
             endDate: $now
         );

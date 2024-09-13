@@ -3,8 +3,8 @@
 namespace App\Domain\Strava\Gear\ReadModel;
 
 use App\Domain\Strava\Gear\Gear;
-use App\Domain\Strava\Gear\GearCollection;
 use App\Domain\Strava\Gear\GearId;
+use App\Domain\Strava\Gear\Gears;
 use App\Infrastructure\Doctrine\Connection\ConnectionFactory;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
@@ -21,14 +21,14 @@ final readonly class DbalGearDetailsRepository implements GearDetailsRepository
         $this->connection = $connectionFactory->getReadOnly();
     }
 
-    public function findAll(): GearCollection
+    public function findAll(): Gears
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('Gear')
             ->orderBy('distanceInMeter', 'DESC');
 
-        return GearCollection::fromArray(array_map(
+        return Gears::fromArray(array_map(
             fn (array $result) => $this->buildFromResult($result),
             $queryBuilder->executeQuery()->fetchAllAssociative()
         ));

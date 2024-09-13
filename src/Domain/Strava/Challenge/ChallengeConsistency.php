@@ -6,16 +6,16 @@ namespace App\Domain\Strava\Challenge;
 
 use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Activity\Activity;
-use App\Domain\Strava\Calendar\MonthCollection;
+use App\Domain\Strava\Calendar\Months;
 use App\Domain\Strava\Calendar\Week;
 use App\Domain\Strava\MonthlyStatistics;
 
 final readonly class ChallengeConsistency
 {
-    private MonthCollection $months;
+    private Months $months;
 
     private function __construct(
-        MonthCollection $months,
+        Months $months,
         private MonthlyStatistics $monthlyStatistics,
         private Activities $activities,
     ) {
@@ -23,7 +23,7 @@ final readonly class ChallengeConsistency
     }
 
     public static function create(
-        MonthCollection $months,
+        Months $months,
         MonthlyStatistics $monthlyStatistics,
         Activities $activities,
     ): self {
@@ -34,7 +34,7 @@ final readonly class ChallengeConsistency
         );
     }
 
-    public function getMonths(): MonthCollection
+    public function getMonths(): Months
     {
         return $this->months;
     }

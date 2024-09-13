@@ -3,11 +3,11 @@
 namespace App\Tests\Domain\Strava\Activity\Stream;
 
 use App\Domain\Strava\Activity\ActivityId;
-use App\Domain\Strava\Activity\Stream\ActivityStreamCollection;
+use App\Domain\Strava\Activity\Stream\ActivityStreams;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityStreamDetailsRepository;
 use App\Domain\Strava\Activity\Stream\ReadModel\DbalActivityStreamDetailsRepository;
 use App\Domain\Strava\Activity\Stream\StreamType;
-use App\Domain\Strava\Activity\Stream\StreamTypeCollection;
+use App\Domain\Strava\Activity\Stream\StreamTypes;
 use App\Domain\Strava\Activity\Stream\WriteModel\ActivityStreamRepository;
 use App\Domain\Strava\Activity\Stream\WriteModel\DbalActivityStreamRepository;
 use App\Infrastructure\Exception\EntityNotFound;
@@ -70,7 +70,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
         $this->activityStreamRepository->add($stream);
 
         $this->assertEquals(
-            ActivityStreamCollection::fromArray([$stream]),
+            ActivityStreams::fromArray([$stream]),
             $this->activityStreamDetailsRepository->findByStreamType($stream->getStreamType())
         );
     }
@@ -101,10 +101,10 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
         );
 
         $this->assertEquals(
-            ActivityStreamCollection::fromArray([$streamTwo, $streamOne]),
+            ActivityStreams::fromArray([$streamTwo, $streamOne]),
             $this->activityStreamDetailsRepository->findByActivityAndStreamTypes(
                 activityId: ActivityId::fromUnprefixed(1),
-                streamTypes: StreamTypeCollection::fromArray([StreamType::WATTS, StreamType::CADENCE])
+                streamTypes: StreamTypes::fromArray([StreamType::WATTS, StreamType::CADENCE])
             )
         );
     }
@@ -129,7 +129,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
         );
 
         $this->assertEquals(
-            ActivityStreamCollection::fromArray([$streamTwo, $streamOne]),
+            ActivityStreams::fromArray([$streamTwo, $streamOne]),
             $this->activityStreamDetailsRepository->findByActivityId(
                 activityId: ActivityId::fromUnprefixed(1),
             )
@@ -180,7 +180,7 @@ class DbalActivityStreamRepositoryTest extends DatabaseTestCase
         $this->activityStreamRepository->add($streamTwo);
 
         $this->assertEquals(
-            ActivityStreamCollection::fromArray([$streamOne]),
+            ActivityStreams::fromArray([$streamOne]),
             $this->activityStreamDetailsRepository->findWithoutBestAverages()
         );
     }

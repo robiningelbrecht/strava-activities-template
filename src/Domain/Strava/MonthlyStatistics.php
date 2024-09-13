@@ -6,9 +6,9 @@ use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Activity\Activity;
 use App\Domain\Strava\Activity\ActivityType;
 use App\Domain\Strava\Calendar\Month;
-use App\Domain\Strava\Calendar\MonthCollection;
+use App\Domain\Strava\Calendar\Months;
 use App\Domain\Strava\Challenge\Challenge;
-use App\Domain\Strava\Challenge\ChallengeCollection;
+use App\Domain\Strava\Challenge\Challenges;
 use Carbon\CarbonInterval;
 
 final readonly class MonthlyStatistics
@@ -18,16 +18,16 @@ final readonly class MonthlyStatistics
 
     private function __construct(
         private Activities $activities,
-        private ChallengeCollection $challenges,
-        private MonthCollection $months,
+        private Challenges $challenges,
+        private Months $months,
     ) {
         $this->statistics = $this->buildStatistics();
     }
 
     public static function fromActivitiesAndChallenges(
         Activities $activities,
-        ChallengeCollection $challenges,
-        MonthCollection $months): self
+        Challenges $challenges,
+        Months $months): self
     {
         return new self(
             activities: $activities,

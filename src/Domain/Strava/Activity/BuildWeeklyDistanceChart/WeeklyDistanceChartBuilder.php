@@ -4,7 +4,7 @@ namespace App\Domain\Strava\Activity\BuildWeeklyDistanceChart;
 
 use App\Domain\Strava\Activity\Activities;
 use App\Domain\Strava\Calendar\Week;
-use App\Domain\Strava\Calendar\WeekCollection;
+use App\Domain\Strava\Calendar\Weeks;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final class WeeklyDistanceChartBuilder
@@ -62,7 +62,7 @@ final class WeeklyDistanceChartBuilder
      */
     public function build(): array
     {
-        $weeks = WeekCollection::create(
+        $weeks = Weeks::create(
             startDate: $this->activities->getFirstActivityStartDate(),
             now: $this->now
         );
@@ -204,7 +204,7 @@ final class WeeklyDistanceChartBuilder
     /**
      * @return array<mixed>
      */
-    private function getData(WeekCollection $weeks): array
+    private function getData(Weeks $weeks): array
     {
         $distancePerWeek = [];
         $timePerWeek = [];

@@ -10,7 +10,7 @@ use App\Domain\Strava\Activity\ReadModel\DbalActivityDetailsRepository;
 use App\Domain\Strava\Activity\WriteModel\ActivityRepository;
 use App\Domain\Strava\Activity\WriteModel\DbalActivityRepository;
 use App\Domain\Strava\Gear\GearId;
-use App\Domain\Strava\Gear\GearIdCollection;
+use App\Domain\Strava\Gear\GearIds;
 use App\Infrastructure\Eventing\EventBus;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
@@ -118,7 +118,7 @@ class DbalActivityDetailsRepositoryTest extends DatabaseTestCase
             ->build());
 
         $this->assertEquals(
-            GearIdCollection::fromArray([GearId::fromUnprefixed(1), GearId::fromUnprefixed(2)]),
+            GearIds::fromArray([GearId::fromUnprefixed(1), GearId::fromUnprefixed(2)]),
             $this->activityDetailsRepository->findUniqueGearIds()
         );
     }

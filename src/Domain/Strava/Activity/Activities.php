@@ -9,7 +9,7 @@ use App\Domain\Strava\Calendar\Week;
 use App\Infrastructure\ValueObject\Collection;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Time\Year;
-use App\Infrastructure\ValueObject\Time\YearCollection;
+use App\Infrastructure\ValueObject\Time\Years;
 
 /**
  * @extends Collection<Activity>
@@ -69,9 +69,9 @@ final class Activities extends Collection
         return $activity;
     }
 
-    public function getUniqueYears(): YearCollection
+    public function getUniqueYears(): Years
     {
-        $years = YearCollection::empty();
+        $years = Years::empty();
         /** @var Activity $activity */
         foreach ($this as $activity) {
             $activityYear = Year::fromInt($activity->getStartDate()->getYear());

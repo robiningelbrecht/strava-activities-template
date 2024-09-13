@@ -5,8 +5,8 @@ namespace App\Tests\Domain\Strava\Segment\SegmentEffort;
 use App\Domain\Strava\Activity\ActivityId;
 use App\Domain\Strava\Segment\SegmentEffort\ReadModel\DbalSegmentEffortDetailsRepository;
 use App\Domain\Strava\Segment\SegmentEffort\ReadModel\SegmentEffortDetailsRepository;
-use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortCollection;
 use App\Domain\Strava\Segment\SegmentEffort\SegmentEffortId;
+use App\Domain\Strava\Segment\SegmentEffort\SegmentEfforts;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\DbalSegmentEffortRepository;
 use App\Domain\Strava\Segment\SegmentEffort\WriteModel\SegmentEffortRepository;
 use App\Domain\Strava\Segment\SegmentId;
@@ -74,7 +74,7 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
         $this->segmentEffortRepository->add($segmentEffortThree);
 
         $this->assertEquals(
-            SegmentEffortCollection::fromArray([$segmentEffortOne, $segmentEffortTwo]),
+            SegmentEfforts::fromArray([$segmentEffortOne, $segmentEffortTwo]),
             $this->segmentEffortDetailsRepository->findBySegmentIdTopTen($segmentEffortOne->getSegmentId())
         );
     }
@@ -126,7 +126,7 @@ class DbalSegmentEffortRepositoryTest extends DatabaseTestCase
         $this->segmentEffortRepository->add($segmentEffortThree);
 
         $this->assertEquals(
-            SegmentEffortCollection::fromArray([$segmentEffortOne, $segmentEffortTwo]),
+            SegmentEfforts::fromArray([$segmentEffortOne, $segmentEffortTwo]),
             $this->segmentEffortDetailsRepository->findByActivityId($segmentEffortOne->getActivityId())
         );
     }
