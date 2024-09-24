@@ -46,7 +46,7 @@ final readonly class BuildReadMeCommandHandler implements CommandHandler
         $now = SerializableDateTime::fromDateTimeImmutable($this->clock->now());
         $allActivities = $this->activityDetailsRepository->findAll();
         $allChallenges = $this->challengeDetailsRepository->findAll();
-        $allBikes = $this->gearDetailsRepository->findAll();
+        $allBikes = $this->gearDetailsRepository->findAll()->sortByIsRetired();
         $allMonths = Months::create(
             startDate: $allActivities->getFirstActivityStartDate(),
             now: $now
