@@ -38,6 +38,7 @@ use App\Domain\Strava\DistanceBreakdown;
 use App\Domain\Strava\Ftp\FtpHistoryChartBuilder;
 use App\Domain\Strava\Ftp\ReadModel\FtpDetailsRepository;
 use App\Domain\Strava\Gear\DistanceOverTimePerGearChartBuilder;
+use App\Domain\Strava\Gear\DistancePerMonthPerGearChartBuilder;
 use App\Domain\Strava\Gear\GearStatistics;
 use App\Domain\Strava\Gear\ReadModel\GearDetailsRepository;
 use App\Domain\Strava\MonthlyStatistics;
@@ -90,7 +91,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $athleteId = $this->keyValueStore->find(Key::ATHLETE_ID)->getValue();
         $allActivities = $this->activityDetailsRepository->findAll();
         $allChallenges = $this->challengeDetailsRepository->findAll();
-        $allBikes = $this->gearDetailsRepository->findAll()->sortByIsRetired();
+        $allBikes = $this->gearDetailsRepository->findAll();
         $allImages = $this->imageRepository->findAll();
         $allFtps = $this->ftpDetailsRepository->findAll();
         $allSegments = $this->segmentDetailsRepository->findAll();
@@ -391,11 +392,18 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                     activities: $allActivities,
                     bikes: $allBikes
                 ),
-                'distanceOverTimePerGearChart' => Json::encode(
-                    DistanceOverTimePerGearChartBuilder::fromGearAndActivities(
+                'distancePerMonthPerGearChart' => Json::encode(
+                    DistancePerMonthPerGearChartBuilder::fromGearAndActivities(
                         gearCollection: $allBikes,
                         activityCollection: $allActivities,
                         months: $allMonths,
+                    )->build()
+                ),
+                'distanceOverTimePerBike' => Json::encode(
+                    DistanceOverTimePerGearChartBuilder::fromGearAndActivities(
+                        gearCollection: $allBikes,
+                        activityCollection: $allActivities,
+                        now: $now,
                     )->build()
                 ),
             ]),
