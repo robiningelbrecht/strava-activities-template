@@ -90,7 +90,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
         $athleteId = $this->keyValueStore->find(Key::ATHLETE_ID)->getValue();
         $allActivities = $this->activityDetailsRepository->findAll();
         $allChallenges = $this->challengeDetailsRepository->findAll();
-        $allBikes = $this->gearDetailsRepository->findAll();
+        $allBikes = $this->gearDetailsRepository->findAll()->sortByIsRetired();
         $allImages = $this->imageRepository->findAll();
         $allFtps = $this->ftpDetailsRepository->findAll();
         $allSegments = $this->segmentDetailsRepository->findAll();
@@ -396,8 +396,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                         gearCollection: $allBikes,
                         activityCollection: $allActivities,
                         months: $allMonths,
-                    )
-                        ->build()
+                    )->build()
                 ),
             ]),
         );
