@@ -15,4 +15,15 @@ final class Segments extends Collection
     {
         return Segment::class;
     }
+
+    public function getAlpeDuZwiftSegment(): ?Segment
+    {
+        foreach ($this as $segment) {
+            if ($segment->getId() == SegmentId::fromUnprefixed('17267489')) {
+                return $segment;
+            }
+        }
+
+        return null;
+    }
 }
