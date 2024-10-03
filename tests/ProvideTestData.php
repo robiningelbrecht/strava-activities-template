@@ -223,6 +223,18 @@ trait ProvideTestData
                 ])
                 ->build()
         );
+        $segmentRepository->add(
+            SegmentBuilder::fromDefaults()
+                ->withId(SegmentId::fromUnprefixed('17267489'))
+                ->withName(Name::fromString('Alpe du Zwift'))
+                ->withData([
+                    'distance' => 100,
+                    'maximum_grade' => 5.3,
+                    'activity_type' => 'VirtualRide',
+                    'starred' => true,
+                ])
+                ->build()
+        );
 
         /** @var SegmentEffortRepository $segmentEffortRepository */
         $segmentEffortRepository = $this->getContainer()->get(SegmentEffortRepository::class);
@@ -231,6 +243,19 @@ trait ProvideTestData
             SegmentEffortBuilder::fromDefaults()
                 ->withId(SegmentEffortId::fromUnprefixed('1'))
                 ->withSegmentId(SegmentId::fromUnprefixed('1'))
+                ->withActivityId(ActivityId::fromUnprefixed('9542782314'))
+                ->withData([
+                    'elapsed_time' => 10.3,
+                    'average_watts' => 200,
+                    'distance' => 100,
+                    'name' => 'An effort',
+                ])
+                ->build()
+        );
+        $segmentEffortRepository->add(
+            SegmentEffortBuilder::fromDefaults()
+                ->withId(SegmentEffortId::fromUnprefixed('alpe-du-zwift'))
+                ->withSegmentId(SegmentId::fromUnprefixed('17267489'))
                 ->withActivityId(ActivityId::fromUnprefixed('9542782314'))
                 ->withData([
                     'elapsed_time' => 10.3,

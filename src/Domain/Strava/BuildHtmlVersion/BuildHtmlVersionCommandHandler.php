@@ -20,6 +20,7 @@ use App\Domain\Strava\Activity\Image\Image;
 use App\Domain\Strava\Activity\Image\ImageRepository;
 use App\Domain\Strava\Activity\PowerDistributionChartBuilder;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
+use App\Domain\Strava\Activity\ReadModel\AlpeDuZwiftActivityRepository;
 use App\Domain\Strava\Activity\Stream\PowerOutputChartBuilder;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityHeartRateRepository;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityPowerRepository;
@@ -64,6 +65,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 {
     public function __construct(
         private ActivityDetailsRepository $activityDetailsRepository,
+        private AlpeDuZwiftActivityRepository $alpeDuZwiftActivityRepository,
         private ChallengeDetailsRepository $challengeDetailsRepository,
         private GearDetailsRepository $gearDetailsRepository,
         private ImageRepository $imageRepository,
@@ -90,6 +92,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 
         $athleteId = $this->keyValueStore->find(Key::ATHLETE_ID)->getValue();
         $allActivities = $this->activityDetailsRepository->findAll();
+        $alpeDuZwiftAttempts = $this->alpeDuZwiftActivityRepository->findActivityIds();
         $allChallenges = $this->challengeDetailsRepository->findAll();
         $allBikes = $this->gearDetailsRepository->findAll();
         $allImages = $this->imageRepository->findAll();
@@ -176,6 +179,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 'totalPhotoCount' => count($allImages),
                 'lastUpdate' => $now,
                 'athleteId' => $athleteId,
+                'hasAlpeDuZwiftSegments' => !$alpeDuZwiftAttempts->isEmpty(),
             ]),
         );
 
@@ -436,6 +440,14 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 'routesInMostRiddenState' => Json::encode($routesInMostRiddenState),
             ]),
         );
+
+        if (!$alpeDuZwiftAttempts->isEmpty()) {
+            $command->getOutput()->writeln('  => Building alpe-du-zwift.html');
+            $this->filesystem->write(
+                'build/html/alpe-du-zwift.html',
+                $this->twig->load('html/alpe-du-zwift.html.twig')->render(),
+            );
+        }
 
         $command->getOutput()->writeln('  => Building activity.html');
         $dataDatableRows = [];

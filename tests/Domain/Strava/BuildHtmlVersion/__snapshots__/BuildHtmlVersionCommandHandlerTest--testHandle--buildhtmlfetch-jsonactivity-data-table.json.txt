@@ -15,4 +15,5 @@
   => Building monthly-stats.html
   => Building gear-stats.html
   => Building heatmap.html
+  => Building alpe-du-zwift.html
   => Building activity.html
