@@ -20,7 +20,6 @@ use App\Domain\Strava\Activity\Image\Image;
 use App\Domain\Strava\Activity\Image\ImageRepository;
 use App\Domain\Strava\Activity\PowerDistributionChartBuilder;
 use App\Domain\Strava\Activity\ReadModel\ActivityDetailsRepository;
-use App\Domain\Strava\Activity\ReadModel\AlpeDuZwiftActivityRepository;
 use App\Domain\Strava\Activity\Stream\PowerOutputChartBuilder;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityHeartRateRepository;
 use App\Domain\Strava\Activity\Stream\ReadModel\ActivityPowerRepository;
@@ -44,6 +43,7 @@ use App\Domain\Strava\Gear\GearStatistics;
 use App\Domain\Strava\Gear\ReadModel\GearDetailsRepository;
 use App\Domain\Strava\MonthlyStatistics;
 use App\Domain\Strava\Segment\ReadModel\SegmentDetailsRepository;
+use App\Domain\Strava\Segment\Segment;
 use App\Domain\Strava\Segment\SegmentEffort\ReadModel\SegmentEffortDetailsRepository;
 use App\Domain\Strava\Trivia;
 use App\Infrastructure\Attribute\AsCommandHandler;
@@ -65,7 +65,6 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 {
     public function __construct(
         private ActivityDetailsRepository $activityDetailsRepository,
-        private AlpeDuZwiftActivityRepository $alpeDuZwiftActivityRepository,
         private ChallengeDetailsRepository $challengeDetailsRepository,
         private GearDetailsRepository $gearDetailsRepository,
         private ImageRepository $imageRepository,
@@ -92,12 +91,12 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 
         $athleteId = $this->keyValueStore->find(Key::ATHLETE_ID)->getValue();
         $allActivities = $this->activityDetailsRepository->findAll();
-        $alpeDuZwiftAttempts = $this->alpeDuZwiftActivityRepository->findActivityIds();
         $allChallenges = $this->challengeDetailsRepository->findAll();
         $allBikes = $this->gearDetailsRepository->findAll();
         $allImages = $this->imageRepository->findAll();
         $allFtps = $this->ftpDetailsRepository->findAll();
         $allSegments = $this->segmentDetailsRepository->findAll();
+        $alpeDuZwiftSegment = $allSegments->getAlpeDuZwiftSegment();
 
         $command->getOutput()->writeln('  => Calculating Eddington');
         $eddington = Eddington::fromActivities($allActivities);
@@ -179,7 +178,7 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
                 'totalPhotoCount' => count($allImages),
                 'lastUpdate' => $now,
                 'athleteId' => $athleteId,
-                'hasAlpeDuZwiftSegments' => !$alpeDuZwiftAttempts->isEmpty(),
+                'hasAlpeDuZwiftSegments' => $alpeDuZwiftSegment,
             ]),
         );
 
@@ -315,9 +314,9 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
 
         $command->getOutput()->writeln('  => Building segments.html');
         $dataDatableRows = [];
-        /** @var \App\Domain\Strava\Segment\Segment $segment */
+        /** @var Segment $segment */
         foreach ($allSegments as $segment) {
-            $segmentEfforts = $this->segmentEffortDetailsRepository->findBySegmentIdTopTen($segment->getId());
+            $segmentEfforts = $this->segmentEffortDetailsRepository->findBySegmentId($segment->getId(), 10);
             $segment->enrichWithNumberOfTimesRidden($this->segmentEffortDetailsRepository->countBySegmentId($segment->getId()));
 
             if ($bestSegmentEffort = $segmentEfforts->getBestEffort()) {
@@ -441,11 +440,20 @@ final readonly class BuildHtmlVersionCommandHandler implements CommandHandler
             ]),
         );
 
-        if (!$alpeDuZwiftAttempts->isEmpty()) {
+        if ($alpeDuZwiftSegment) {
             $command->getOutput()->writeln('  => Building alpe-du-zwift.html');
+
+            $segmentEfforts = $this->segmentEffortDetailsRepository->findBySegmentId($alpeDuZwiftSegment->getId());
+            foreach ($segmentEfforts as $segmentEffort) {
+                $activity = $allActivities->getByActivityId($segmentEffort->getActivityId());
+                $segmentEffort->enrichWithActivity($activity);
+            }
+
             $this->filesystem->write(
                 'build/html/alpe-du-zwift.html',
-                $this->twig->load('html/alpe-du-zwift.html.twig')->render(),
+                $this->twig->load('html/alpe-du-zwift.html.twig')->render([
+                    'segmentEfforts' => $segmentEfforts,
+                ]),
             );
         }
 
