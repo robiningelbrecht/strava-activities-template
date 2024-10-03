@@ -105,7 +105,7 @@ final class WeeklyDistanceChartBuilder
         $series[] = array_merge_recursive(
             $serie,
             [
-                'name' => 'Average distance / week',
+                'name' => 'Distance / week',
                 'data' => $data[0],
                 'yAxisIndex' => 0,
                 'label' => [
@@ -118,7 +118,7 @@ final class WeeklyDistanceChartBuilder
             $series[] = array_merge_recursive(
                 $serie,
                 [
-                    'name' => 'Average time / week',
+                    'name' => 'Time / week',
                     'data' => $data[1],
                     'yAxisIndex' => 1,
                     'label' => [
