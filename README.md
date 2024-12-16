@@ -15,6 +15,9 @@
 
 # Strava activities template
 
+This repository is deprecated. Please use the new docker image: 
+[https://github.com/robiningelbrecht/strava-statistics](https://github.com/robiningelbrecht/strava-statistics)
+
 This repository contains the template code to generate your own Strava statistics pages.
 Just follow the steps below. If you experience any issues with any of the steps,
 feel free to [open an issue](https://github.com/robiningelbrecht/strava-activities-template/issues/new). I'll be glad to help you out 💅.
