@@ -77,7 +77,7 @@ rm -Rf database/db.strava-read
 bin/doctrine-migrations migrate --no-interaction
 
 # Update strava stats.
-bin/console app:strava:import-data
+#bin/console app:strava:import-data
 bin/console app:strava:build-files
 
 # Vacuum database
@@ -85,7 +85,7 @@ bin/console app:strava:vacuum
 
 # Generate charts
 npm ci
-node echart.js
+#node echart.js
 
 # Push changes
 git add .
