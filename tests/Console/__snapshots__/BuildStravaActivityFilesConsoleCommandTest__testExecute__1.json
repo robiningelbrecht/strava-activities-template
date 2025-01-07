@@ -1,7 +1,6 @@
 {
-    "commandName": "App.Domain.Strava.CopyDataToReadDatabase.CopyDataToReadDatabase",
+    "commandName": "App.Domain.Strava.BuildReadMe.BuildReadMe",
     "payload": {
-        "metadata": [],
-        "output": {}
+        "metadata": []
     }
 }
